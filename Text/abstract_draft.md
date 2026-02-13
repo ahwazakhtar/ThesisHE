@@ -1,0 +1,13 @@
+# Abstract
+
+**Title:** The Lagged Financial Burden of Climate Shocks: Evidence from US Healthcare Markets (1996–2025)
+
+**Objectives:** This study aims to quantify the delayed financial impacts of climate "shocks"—specifically drought and temperature anomalies—on the US healthcare economy. We investigate how environmental stressors impact health insurance premiums, medical debt incidence, and systemic expenditures over a 30-year horizon.
+
+**Methods:** We constructed a state-level panel dataset (1996–2025) integrating NOAA climate data with financial metrics from MEPS-IC, the Urban Institute, and CMS. Exposure variables were binned into "shocks" using state-specific Z-scores for temperature and PDSI thresholds for drought to capture local extremes. The analytical framework employed a Distributed Lag Fixed-Effects (FE) model with state and year effects, utilizing 0, 1, and 2-year lags to capture delayed transmission channels. Standard errors were clustered by state to account for regional autocorrelation.
+
+**Results:** Estimates reveal significant lagged transmission from climate stress to financial fragility. Severe drought events correlate with an $18.50 (p=0.056) increase in real annual employee premiums after one year, and a 0.68 percentage point increase (p<0.001) in the population share with medical debt after two years. Temperature shocks demonstrated heterogeneous impacts: cold snaps (Z < -1.5) were associated with a 1.08 percentage point increase in medical debt incidence one year later (p<0.002), yet correlated with a $40.71 reduction in premium burdens in the same lag period. Heat shocks (Z > 1.5) showed a significant negative correlation with premiums at a two-year lag ($48.59, p<0.05). Systemic expenditures remained driven primarily by income and unemployment rather than climate variables.
+
+**Discussion:** Climate-driven financial shocks in healthcare are persistent rather than immediate. The 1-year lag in premium adjustments likely reflects the annual actuarial cycle, while the 2-year lag in medical debt suggests cumulative exhaustion of household assets following climate stress. Divergent temperature results may indicate shifts in healthcare utilization or employer benefit adjustments in response to extreme weather. These findings highlight the need for policymakers and insurers to integrate environmental lag structures into financial risk assessments to shield populations from the "long tail" of climate-related healthcare inflation.
+
+**Keywords:** Climate Change, Health Economics, Medical Debt, Insurance Premiums, Environmental Policy

@@ -1,0 +1,9 @@
+*
+*.txt
+*.csv
+*.xlsx
+*.xls
+!*/
+!*.md
+!*.r
+!.gitignore
