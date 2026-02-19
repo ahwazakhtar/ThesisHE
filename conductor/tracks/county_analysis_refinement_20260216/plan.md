@@ -3,7 +3,7 @@
 ## Phase 0: Pipeline Standardization & Critical Fixes
 
 - [ ] **Task: Fix Critical Pipeline Inconsistencies**
-    - [ ] Align NOAA missing-value thresholds to `<= -9.9` in `process_county_climate.R`.
+    - [x] Align NOAA missing-value thresholds to `<=` -9.9` in `process_county_climate.R`. [d99c564]
     - [ ] Standardize MEPS I/O to `Data/MEPS_Data_IC/` across all scripts.
     - [ ] Archive orphaned `process_medical_debt_county.R` and verify `process_zip_county_map.R` as canonical.
     - [ ] Resolve `Unemployment_Rate` absence in `create_county_master.R` (source BLS data or update controls).
