@@ -1,5 +1,18 @@
 # Implementation Plan: County-Level Analysis Refinement
 
+## Phase 0: Pipeline Standardization & Critical Fixes
+
+- [ ] **Task: Fix Critical Pipeline Inconsistencies**
+    - [ ] Align NOAA missing-value thresholds to `<= -9.9` in `process_county_climate.R`.
+    - [ ] Standardize MEPS I/O to `Data/MEPS_Data_IC/` across all scripts.
+    - [ ] Archive orphaned `process_medical_debt_county.R` and verify `process_zip_county_map.R` as canonical.
+    - [ ] Resolve `Unemployment_Rate` absence in `create_county_master.R` (source BLS data or update controls).
+- [ ] **Task: Align State and County Methodologies**
+    - [ ] Migrate `run_analysis.R` (State) from `plm` to `fixest`.
+    - [ ] Standardize temperature aggregation to annual mean in `process_state_climate.R`.
+    - [ ] Align AQI variable construction (z-scores) across both pipelines.
+    - [ ] Update NOAA state-code mapping for DC/Hawaii in `process_county_climate.R`.
+
 ## Phase 1: Data Integration & Baseline Refinement
 
 - [ ] **Task: Update climate Z-score calculation logic**
