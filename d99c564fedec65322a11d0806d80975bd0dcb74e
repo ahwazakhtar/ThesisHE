@@ -1,0 +1,9 @@
+Task: Align NOAA missing-value thresholds to <= -9.9 in process_county_climate.R.
+
+Summary: Updated the process_county_climate.R script to handle variable-specific missing value codes for NOAA data, as the previous implementation used a single incorrect threshold. Refactored the script into a testable function and added a unit test to verify the correctness of the new logic for precipitation, temperature, and drought indices.
+
+Files Modified:
+- Code/process_county_climate.R
+- Code/tests/test_process_county_climate.R (new)
+- Code/tests/testthat.R (new)
+- run_tests.R (new)
