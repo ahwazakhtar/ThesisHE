@@ -2,7 +2,7 @@
 # Models:
 # 1. Spec A (Adaptation): Z-Scores (Temp/Precip)
 # 2. Spec B (Burden): Absolute Extremes (CDD/HDD Quintiles)
-# Both specs include State-Level Drought (PDSI)
+# Both specs include County-Level Drought (PDSI/PHDI/PMDI)
 # All models run both WITH and WITHOUT AQI shocks.
 
 library(dplyr)
@@ -35,8 +35,9 @@ available_controls <- intersect(controls, names(df))
 
 # Spec 1: Relative Shocks (Climate only)
 vars_spec1_base <- c(
-  "pdsi_sum", "Drought_Lag1", "Drought_Lag2",
-  "Is_Extreme_Drought", "Is_Extreme_Drought_Lag1", 
+  "pdsi_val", "PDSI_Lag1", "PDSI_Lag2",
+  "phdi_val", "PHDI_Lag1", "PHDI_Lag2",
+  "pmdi_val", "PMDI_Lag1", "PMDI_Lag2",
   "Z_Temp", "Z_Temp_Lag1", "Z_Temp_Lag2",
   "Z_Precip", "Z_Precip_Lag1", "Z_Precip_Lag2"
 )
@@ -46,8 +47,9 @@ vars_spec1_aqi <- c(vars_spec1_base, "AQI_Shock", "AQI_Shock_Lag1", "AQI_Shock_L
 
 # Spec 2: Absolute Burden (High CDD/HDD)
 vars_spec2_base <- c(
-  "pdsi_sum", "Drought_Lag1", "Drought_Lag2",
-  "Is_Extreme_Drought", 
+  "pdsi_val", "PDSI_Lag1", "PDSI_Lag2",
+  "phdi_val", "PHDI_Lag1", "PHDI_Lag2",
+  "pmdi_val", "PMDI_Lag1", "PMDI_Lag2",
   "High_CDD", "High_CDD_Lag1", "High_CDD_Lag2",
   "High_HDD", "High_HDD_Lag1", "High_HDD_Lag2"
 )
@@ -155,8 +157,9 @@ if ("rating_area_id" %in% names(df) && "Population" %in% names(df) && !all(is.na
   cat("Aggregating to Rating Area Level (Population Weighted)...\n")
   
   # Aggregate numeric cols by Rating Area + Year
-  cols_to_agg <- c(outcomes, available_controls, 
-                   "Z_Temp", "Z_Precip", "High_CDD", "High_HDD")
+  cols_to_agg <- c(outcomes, available_controls,
+                   "Z_Temp", "Z_Precip", "High_CDD", "High_HDD",
+                   "pdsi_val", "phdi_val", "pmdi_val")
   if("AQI_Shock" %in% names(df)) cols_to_agg <- c(cols_to_agg, "AQI_Shock")
 
   df_ra <- df %>%
@@ -164,17 +167,12 @@ if ("rating_area_id" %in% names(df) && "Population" %in% names(df) && !all(is.na
     group_by(rating_area_id, Year, State) %>%
     summarize(
       # Weight these by Population
-      across(all_of(cols_to_agg), 
+      across(all_of(cols_to_agg),
              ~ weighted.mean(., w = Population, na.rm = TRUE)),
-      
+
       # Sum Population
       Population = sum(Population, na.rm = TRUE),
-      
-      # State-level vars are constant within RA-Year (usually)
-      across(c("pdsi_sum", "Drought_Lag1", "Drought_Lag2", 
-               "Is_Extreme_Drought", "Is_Extreme_Drought_Lag1"), 
-             ~ first(.)),
-             
+
       .groups = "drop"
     ) %>%
     # Re-calculate Lags
@@ -184,7 +182,10 @@ if ("rating_area_id" %in% names(df) && "Population" %in% names(df) && !all(is.na
       Z_Temp_Lag1 = lag(Z_Temp, 1), Z_Temp_Lag2 = lag(Z_Temp, 2),
       Z_Precip_Lag1 = lag(Z_Precip, 1), Z_Precip_Lag2 = lag(Z_Precip, 2),
       High_CDD_Lag1 = lag(High_CDD, 1), High_CDD_Lag2 = lag(High_CDD, 2),
-      High_HDD_Lag1 = lag(High_HDD, 1), High_HDD_Lag2 = lag(High_HDD, 2)
+      High_HDD_Lag1 = lag(High_HDD, 1), High_HDD_Lag2 = lag(High_HDD, 2),
+      PDSI_Lag1 = lag(pdsi_val, 1), PDSI_Lag2 = lag(pdsi_val, 2),
+      PHDI_Lag1 = lag(phdi_val, 1), PHDI_Lag2 = lag(phdi_val, 2),
+      PMDI_Lag1 = lag(pmdi_val, 1), PMDI_Lag2 = lag(pmdi_val, 2)
     )
   
   if("AQI_Shock" %in% names(df_ra)) {

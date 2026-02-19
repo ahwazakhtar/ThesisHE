@@ -20,7 +20,7 @@ process_noaa_data <- function(file_list, output_path) {
     "37" = "Rhode Island", "38" = "South Carolina", "39" = "South Dakota", "40" = "Tennessee",
     "41" = "Texas", "42" = "Utah", "43" = "Vermont", "44" = "Virginia",
     "45" = "Washington", "46" = "West Virginia", "47" = "Wisconsin", "48" = "Wyoming",
-    "50" = "Alaska", "51" = "Hawaii"
+    "50" = "Alaska", "51" = "Hawaii", "11" = "District of Columbia"
   )
   
   state_fips_map <- c(
@@ -96,18 +96,20 @@ process_noaa_data <- function(file_list, output_path) {
       # Z-Scores
       Z_Temp = (temp_val - mean(temp_val, na.rm = TRUE)) / sd(temp_val, na.rm = TRUE),
       Z_Precip = (precip_val - mean(precip_val, na.rm = TRUE)) / sd(precip_val, na.rm = TRUE),
-      Z_PDSI = (pdsi_val - mean(pdsi_val, na.rm=TRUE)) / sd(pdsi_val, na.rm=TRUE),
 
       # CDD/HDD Quintiles
       High_CDD = ifelse(ntile(cdd_val, 5) == 5, 1, 0),
       High_HDD = ifelse(ntile(hdd_val, 5) == 5, 1, 0),
-      
+
       # Distributed Lags (0-2)
       Z_Temp_Lag1 = lag(Z_Temp, 1), Z_Temp_Lag2 = lag(Z_Temp, 2),
       Z_Precip_Lag1 = lag(Z_Precip, 1), Z_Precip_Lag2 = lag(Z_Precip, 2),
       High_CDD_Lag1 = lag(High_CDD, 1), High_CDD_Lag2 = lag(High_CDD, 2),
       High_HDD_Lag1 = lag(High_HDD, 1), High_HDD_Lag2 = lag(High_HDD, 2),
-      Z_PDSI_Lag1 = lag(Z_PDSI, 1), Z_PDSI_Lag2 = lag(Z_PDSI, 2)
+      # PDSI/PHDI/PMDI are already standardized indices; lag directly
+      PDSI_Lag1 = lag(pdsi_val, 1), PDSI_Lag2 = lag(pdsi_val, 2),
+      PHDI_Lag1 = lag(phdi_val, 1), PHDI_Lag2 = lag(phdi_val, 2),
+      PMDI_Lag1 = lag(pmdi_val, 1), PMDI_Lag2 = lag(pmdi_val, 2)
     ) %>%
     ungroup()
   
