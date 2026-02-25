@@ -2,6 +2,48 @@
 
 ---
 
+## 2026-02-25
+
+### `CLAUDE.md`
+
+**Created — session start/end protocol and full project context**
+- New file providing Claude Code with automatic session orientation: reads active track's `plan.md` at session start and identifies the next uncompleted task.
+- Includes full directory structure table, data sources table, script run order, and conductor system conventions — merged from `GEMINI.md` so Claude has all context in one load.
+- Session End Protocol added: triggers on "wrap up" / "we're done" and instructs Claude to update `changelog.md`, `GEMINI.md`, and `CLAUDE.md` before committing, then clear the session edit log.
+- Project-specific notes: R-only project, `testthat` for testing, all planning docs go in `Plans/`, MEPS data path is `Data/MEPS_Data_IC/`.
+
+---
+
+### `.claude/settings.json`
+
+**Created — project-level Claude Code hooks configuration**
+- `PostToolUse` hook on `Edit|Write`: fires `.claude/hooks/track_edits.py` after every file edit to silently log changed paths to `.claude/session_edits.log`.
+- `UserPromptSubmit` hook: fires `.claude/hooks/detect_wrapup.py` on every prompt to detect session-end keywords and automatically inject the edit log + `git diff --stat` into Claude's context.
+
+---
+
+### `.claude/hooks/track_edits.py`
+
+**Created — automatic file change logger**
+- Reads `PostToolUse` JSON payload from stdin, extracts `file_path`, appends `HH:MM:SS  <path>` to `.claude/session_edits.log`.
+
+---
+
+### `.claude/hooks/detect_wrapup.py`
+
+**Created — session-end keyword detector**
+- Reads `UserPromptSubmit` payload, checks for wrap-up keywords (wrap up, end session, we're done, finish up, done for today, etc.).
+- On match: reads `.claude/session_edits.log` and runs `git diff HEAD --stat`, prints both to stdout so they are injected into Claude's context before the Session End Protocol runs.
+
+---
+
+### `.gitignore`
+
+**Added `.claude/session_edits.log` exclusion**
+- Temp session log is ephemeral and should not be committed.
+
+---
+
 ## 2026-02-19
 
 ### `Code/process_county_climate.R`

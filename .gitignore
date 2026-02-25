@@ -7,3 +7,6 @@
 !*.md
 !*.r
 !.gitignore
+.claude/session_edits.log
+!.claude/settings.json
+!.claude/hooks/*.py
