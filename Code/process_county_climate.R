@@ -135,7 +135,11 @@ process_noaa_data <- function(file_list, output_path) {
       # PDSI/PHDI/PMDI are already standardized indices; lag directly
       PDSI_Lag1 = lag(pdsi_val, 1), PDSI_Lag2 = lag(pdsi_val, 2),
       PHDI_Lag1 = lag(phdi_val, 1), PHDI_Lag2 = lag(phdi_val, 2),
-      PMDI_Lag1 = lag(pmdi_val, 1), PMDI_Lag2 = lag(pmdi_val, 2)
+      PMDI_Lag1 = lag(pmdi_val, 1), PMDI_Lag2 = lag(pmdi_val, 2),
+      # Extreme drought indicator: PDSI <= -4 (NOAA/Palmer threshold for extreme drought)
+      Is_Extreme_Drought      = as.integer(!is.na(pdsi_val) & pdsi_val <= -4),
+      Is_Extreme_Drought_Lag1 = lag(Is_Extreme_Drought, 1),
+      Is_Extreme_Drought_Lag2 = lag(Is_Extreme_Drought, 2)
     ) %>%
     select(-temp_base_mean, -temp_base_sd, -precip_base_mean, -precip_base_sd) %>%
     ungroup()

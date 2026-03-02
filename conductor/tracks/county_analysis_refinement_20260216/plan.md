@@ -20,14 +20,15 @@
 - [x] **Task: Update climate Z-score calculation logic**
     - [x] Write tests to verify Z-score calculation using a specific baseline period (1990–2000).
     - [x] Modify `Code/process_county_climate.R` to calculate means and SDs using only 1990–2000 data and apply to full period. (Note: Z-score computation lives here, not in `create_county_master.R`; year filter changed from 1996 → 1990.)
-- [ ] **Task: Integrate socioeconomic outcome variables**
-    - [ ] Identify and download/read county-level data for hours worked and income.
-    - [ ] Write tests to ensure successful merge and data integrity (e.g., no unexpected NAs).
-    - [ ] Update the county-level master dataset with these new outcomes.
-- [ ] **Task: Generate descriptive statistics and visualizations**
-    - [ ] Create scripts to calculate summary statistics for all key variables.
-    - [ ] Generate time-series plots showing trends in climate shocks and health/economic outcomes.
-    - [ ] Document trends in a new analysis report.
+- [x] **Task: Integrate socioeconomic outcome variables** [90c7eea]
+    - [x] Sources: BEA CAINC1 (per capita income) + Census ACS 5-yr (median HH income, B19013_001E; civilian employed, B23025_004E). BEA CAEMP25N not available via Regional API.
+    - [x] 16 passing tests (FIPS validation, CPI adjustment, suppression handling, ACS absence rows).
+    - [x] create_county_master.R updated to join intermediate_socioeconomic.rds.
+- [x] **Task: Generate descriptive statistics and visualizations**
+    - [x] Created `Code/run_descriptive_stats.R` with summary stats for 18 key variables.
+    - [x] Generated 3 time-series plots: climate shock prevalence, health outcomes, income trends (in `Analysis/plots/`).
+    - [x] Documented trends in `Analysis/descriptive_stats_report.md`.
+    - [x] Fixed pipeline: NASHP hospital data re-processed (was silently skipped), `Is_Extreme_Drought` added to `process_county_climate.R`, intermediate and master rebuilt.
 - [ ] **Task: Conductor - User Manual Verification 'Data Integration & Baseline Refinement' (Protocol in workflow.md)**
 
 ## Phase 2: Event Study & Econometric Modeling
