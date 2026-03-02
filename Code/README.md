@@ -1,51 +1,75 @@
 # Code Directory
 
-This folder contains all R scripts for the acquisition, processing, and analysis of environmental and health finance data.
+This folder contains all R scripts for data download, processing, dataset assembly, and econometric analysis.
 
-## Directory Structure
+## Unified Runner
 
-```text
-Code/
-├── shared/ (Data Acquisition)
-│   ├── download_climate_data.R      # Fetches NOAA ClimDiv data
-│   ├── download_meps_data.R         # Fetches MEPS-IC Excel tables
-│   └── download_state_policy_data.R  # Fetches Macro (FRED) and Policy (KFF) data
-│
-├── state_level/ (State Pipeline)
-│   ├── process_aqi_data.R           # Population-weighted AQI aggregation
-│   ├── process_state_climate.R      # Consolidates state climate indices
-│   ├── process_medical_debt.R       # Processes state medical debt
-│   ├── process_cms_health_exp.R     # Processes CMS NHE expenditures
-│   ├── scrape_meps_html_base.R      # Robust scraper for MEPS-IC tables
-│   ├── extract_local_meps.R         # Extracts local MEPS Excel data
-│   ├── create_state_master.R        # Merges all state components
-│   ├── analysis_pre_processing.R    # Generates shocks and lags
-│   └── run_analysis.R               # Runs state Fixed-Effects models
-│
-├── county_level/ (County Pipeline)
-│   ├── process_county_aqi.R         # AQI shocks via FIPS lookup
-│   ├── process_county_climate.R     # NOAA county climate parsing
-│   ├── process_county_population.R  # SEER annual population processing
-│   ├── process_medical_debt_county.R # Cleans county medical debt
-│   ├── process_zip_county_map.R     # Maps hospital costs (NASHP) to counties
-│   ├── process_rating_area_map.R    # Maps premiums (Rating Areas) to counties
-│   ├── create_county_master.R       # Merges all county components
-│   └── run_county_analysis.R        # Runs county Fixed-Effects models
-│
-└── archive/                         # Superseded and diagnostic scripts
+Use the unified orchestration entrypoint to run only the phases you want:
+
+```bash
+Rscript Code/run_pipeline.R --pipeline all
 ```
 
-## Key Workflows
+### Common examples
 
-### State-Level Workflow
-1.  **Download:** `download_*.R`
-2.  **Process:** `process_state_*.R`, `scrape_meps_html_base.R`, `extract_local_meps.R`, `process_aqi_data.R`
-3.  **Merge:** `create_state_master.R`
-4.  **Feature Engineering:** `analysis_pre_processing.R`
-5.  **Analyze:** `run_analysis.R`
+```bash
+# Process + merge + analysis only (no downloads), state pipeline
+Rscript Code/run_pipeline.R --pipeline state --skip-download --from process --to analysis
 
-### County-Level Workflow
-1.  **Download:** `download_*.R`
-2.  **Process:** `process_county_*.R`, `process_zip_county_map.R`, `process_rating_area_map.R`
-3.  **Merge:** `create_county_master.R`
-4.  **Analyze:** `run_county_analysis.R` (Shocks and Lags are handled within this script)
+# County processing and merge only
+Rscript Code/run_pipeline.R --pipeline county --phases process,merge
+
+# Preview what would run without executing scripts
+Rscript Code/run_pipeline.R --pipeline all --skip-download --to merge --dry-run
+
+# Print selected steps and exit
+Rscript Code/run_pipeline.R --pipeline county --phases process,analysis --list-steps
+```
+
+### Supported flags
+
+- `--pipeline state|county|all`
+- `--phases download,process,merge,analysis`
+- `--skip-download`
+- `--from <phase>`
+- `--to <phase>`
+- `--strict TRUE|FALSE`
+- `--list-steps`
+- `--dry-run`
+- `--help`
+
+## Script Groups
+
+### Download (State)
+- `download_climate_data.R`
+- `download_state_policy_data.R`
+- `scrape_meps_html_base.R`
+
+### Process (State)
+- `extract_local_meps.R` (runs only when local Excel files are present)
+- `process_state_climate.R`
+- `process_aqi_data.R`
+- `process_medical_debt.R`
+- `process_cms_health_exp.R`
+
+### Merge + Analysis (State)
+- `create_state_master.R`
+- `analysis_pre_processing.R`
+- `run_analysis.R`
+
+### Process (County)
+- `process_county_population.R`
+- `process_county_climate.R`
+- `process_county_aqi.R`
+- `process_zip_county_map.R`
+- `process_rating_area_map.R`
+
+### Merge + Analysis (County)
+- `create_county_master.R`
+- `run_county_analysis.R`
+
+## Notes
+
+- The runner uses fail-fast dependency checks by default (`--strict TRUE`).
+- Existing scripts are still runnable directly with `Rscript Code/<script>.R`.
+- `process_medical_debt_county.R` remains available for standalone use but is not in the default county pipeline because `process_zip_county_map.R` produces the richer county debt + hospital output consumed by `create_county_master.R`.

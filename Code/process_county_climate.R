@@ -3,6 +3,14 @@ library(dplyr)
 library(tidyr)
 library(readr)
 
+if (!exists("%||%")) {
+  `%||%` <- function(x, y) {
+    if (is.null(x)) return(y)
+    if (length(x) == 1 && is.atomic(x) && is.na(x)) return(y)
+    x
+  }
+}
+
 # This function encapsulates the data processing logic, making it testable.
 process_noaa_data <- function(file_list, output_path) {
   
@@ -116,10 +124,12 @@ process_noaa_data <- function(file_list, output_path) {
   saveRDS(full_climate_feat, output_path)
   cat(paste0("Success! Climate data saved to: ", output_path, "
 "))
+
+  invisible(list(outputs = c(output_path), rows = nrow(full_climate_feat)))
 }
 
-if (sys.nframe() == 0) {
-  files <- list(
+run_process_county_climate <- function(config = list()) {
+  files <- config$files %||% list(
     cdd = "Data/Climate_Data/County level/climdiv-cddccy-v1.0.0-20260107",
     hdd = "Data/Climate_Data/County level/climdiv-hddccy-v1.0.0-20260107",
     precip = "Data/Climate_Data/County level/climdiv-pcpncy-v1.0.0-20260107",
@@ -128,6 +138,11 @@ if (sys.nframe() == 0) {
     phdi = "Data/Climate_Data/County level/climdiv-phdicy-v1.0.0-20260205",
     pmdi = "Data/Climate_Data/County level/climdiv-pmdicy-v1.0.0-20260205"
   )
-  output_rds <- "Data/intermediate_climate.rds"
+  output_rds <- config$output_rds %||% "Data/intermediate_climate.rds"
+
   process_noaa_data(files, output_rds)
+}
+
+if (sys.nframe() == 0) {
+  run_process_county_climate()
 }
