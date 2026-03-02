@@ -159,7 +159,8 @@ rm -f .claude/session_edits.log
 - MEPS data lives in `Data/MEPS_Data_IC/` — use this path consistently across all scripts.
 - Both state and county regressions use `fixest::feols`. Do not use `plm` or `sandwich`.
 - `process_aqi_data.R` (state AQI) depends on county AQI intermediate (`intermediate_aqi.rds`) and population intermediate (`intermediate_pop.rds`). Always run `process_county_aqi.R` and `process_county_population.R` first.
-- State climate data starts at 1990 (not 1996) to cover the 1990–2000 pre-study baseline for z-score anchoring.
+- Both state and county climate data load from 1990 to cover the 1990–2000 pre-study baseline for Z-score anchoring. County climate previously filtered at 1996 — corrected to 1990.
+- Z_Temp and Z_Precip in `process_county_climate.R` are anchored to per-county means/SDs computed over 1990–2000 only. The baseline stats are joined in before the mutate and dropped from the output RDS.
 - AQI variables are continuous measures (Median AQI population-weighted, Max AQI, pollutant day percentages). No z-score or binary quintile transformation — AQI uses hard EPA thresholds.
 - When inspecting NOAA named-vector key mappings, always check for duplicate keys — R silently returns the first match, making later entries dead code.
 - `process_zip_county_map.R` is the sole canonical county debt/cost processor. `process_medical_debt_county.R` is archived.

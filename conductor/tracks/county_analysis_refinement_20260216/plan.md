@@ -17,10 +17,9 @@
 
 ## Phase 1: Data Integration & Baseline Refinement
 
-- [ ] **Task: Update climate Z-score calculation logic**
-    - [ ] Write tests to verify Z-score calculation using a specific baseline period.
-    - [ ] Modify `Code/create_county_master.R` to calculate means and SDs using only pre-1996 data.
-    - [ ] Apply these parameters to calculate Z-scores for the entire study period.
+- [x] **Task: Update climate Z-score calculation logic**
+    - [x] Write tests to verify Z-score calculation using a specific baseline period (1990–2000).
+    - [x] Modify `Code/process_county_climate.R` to calculate means and SDs using only 1990–2000 data and apply to full period. (Note: Z-score computation lives here, not in `create_county_master.R`; year filter changed from 1996 → 1990.)
 - [ ] **Task: Integrate socioeconomic outcome variables**
     - [ ] Identify and download/read county-level data for hours worked and income.
     - [ ] Write tests to ensure successful merge and data integrity (e.g., no unexpected NAs).

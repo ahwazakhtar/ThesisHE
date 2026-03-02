@@ -63,7 +63,8 @@ process_noaa_data <- function(file_list, output_path) {
                        col_types = "ccciidddddddddddd",
                        show_col_types = FALSE)
     
-    df_raw <- df_raw %>% filter(Year >= 1996)
+    # Load from 1990 to include the 1990-2000 pre-study baseline for Z-score anchoring.
+    df_raw <- df_raw %>% filter(Year >= 1990)
     
     df_raw$StateName <- noaa_state_codes[df_raw$NOAA_State]
     df_raw$StateFIPS <- state_fips_map[df_raw$StateName]
@@ -99,13 +100,28 @@ process_noaa_data <- function(file_list, output_path) {
   
   full_climate <- Reduce(function(x, y) full_join(x, y, by = c("fips_code", "Year")), processed_list)
   
+  # Compute per-county baseline means/SDs using the 1990-2000 reference period.
+  # Applying a fixed pre-study baseline prevents the Z-score distribution from shifting
+  # as the study period extends, and aligns with the state-level pipeline methodology.
+  baseline_stats <- full_climate %>%
+    filter(Year >= 1990, Year <= 2000) %>%
+    group_by(fips_code) %>%
+    summarize(
+      temp_base_mean   = mean(temp_val,   na.rm = TRUE),
+      temp_base_sd     = sd(temp_val,     na.rm = TRUE),
+      precip_base_mean = mean(precip_val, na.rm = TRUE),
+      precip_base_sd   = sd(precip_val,   na.rm = TRUE),
+      .groups = "drop"
+    )
+
   full_climate_feat <- full_climate %>%
+    left_join(baseline_stats, by = "fips_code") %>%
     group_by(fips_code) %>%
     arrange(Year) %>%
     mutate(
-      # Z-Scores
-      Z_Temp = (temp_val - mean(temp_val, na.rm = TRUE)) / sd(temp_val, na.rm = TRUE),
-      Z_Precip = (precip_val - mean(precip_val, na.rm = TRUE)) / sd(precip_val, na.rm = TRUE),
+      # Z-Scores anchored to 1990-2000 baseline (not full-sample mean/SD)
+      Z_Temp   = (temp_val   - temp_base_mean)   / temp_base_sd,
+      Z_Precip = (precip_val - precip_base_mean) / precip_base_sd,
 
       # CDD/HDD Quintiles
       High_CDD = ifelse(ntile(cdd_val, 5) == 5, 1, 0),
@@ -121,6 +137,7 @@ process_noaa_data <- function(file_list, output_path) {
       PHDI_Lag1 = lag(phdi_val, 1), PHDI_Lag2 = lag(phdi_val, 2),
       PMDI_Lag1 = lag(pmdi_val, 1), PMDI_Lag2 = lag(pmdi_val, 2)
     ) %>%
+    select(-temp_base_mean, -temp_base_sd, -precip_base_mean, -precip_base_sd) %>%
     ungroup()
   
   saveRDS(full_climate_feat, output_path)
