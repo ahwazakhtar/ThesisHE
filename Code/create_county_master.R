@@ -4,13 +4,14 @@ library(tidyr)
 library(readr)
 
 # Paths
-path_med_debt <- "Data/medical_debt_county.csv"
-path_premiums <- "Data/premiums_county.csv"
-path_cpi <- "Data/State_Policy_Data/us_cpi_annual.csv"
-path_pop_rds <- "Data/intermediate_pop.rds"
+path_med_debt   <- "Data/medical_debt_county.csv"
+path_premiums   <- "Data/premiums_county.csv"
+path_cpi        <- "Data/State_Policy_Data/us_cpi_annual.csv"
+path_pop_rds    <- "Data/intermediate_pop.rds"
 path_climate_rds <- "Data/intermediate_climate.rds"
-path_aqi_rds <- "Data/intermediate_aqi.rds"
-output_path <- "Data/county_level_master.csv"
+path_aqi_rds    <- "Data/intermediate_aqi.rds"
+path_socio_rds  <- "Data/intermediate_socioeconomic.rds"
+output_path     <- "Data/county_level_master.csv"
 
 cat("Consolidating County-Level Master Dataset...\n")
 
@@ -18,10 +19,12 @@ cat("Consolidating County-Level Master Dataset...\n")
 if (!file.exists(path_pop_rds)) stop("Run Code/process_county_population.R first.")
 if (!file.exists(path_climate_rds)) stop("Run Code/process_county_climate.R first.")
 if (!file.exists(path_aqi_rds)) stop("Run Code/process_county_aqi.R first.")
+if (!file.exists(path_socio_rds)) stop("Run Code/download_county_socioeconomic.R then Code/process_county_socioeconomic.R first.")
 
-df_pop <- readRDS(path_pop_rds)
+df_pop     <- readRDS(path_pop_rds)
 df_climate <- readRDS(path_climate_rds)
-df_aqi <- readRDS(path_aqi_rds)
+df_aqi     <- readRDS(path_aqi_rds)
+df_socio   <- readRDS(path_socio_rds)
 
 # 2. Load Other Datasets --------------------------------------------------
 cat("Loading Outcomes & Policy Data...\n")
@@ -41,8 +44,15 @@ master <- df_med_debt %>%
 # 4. AQI Join (FIPS-based) ------------------------------------------------
 # Join using fips_code and Year
 master <- master %>%
-  left_join(df_aqi %>% select(fips_code, Year, AQI_Shock, AQI_Shock_Lag1, AQI_Shock_Lag2), 
+  left_join(df_aqi %>% select(fips_code, Year, AQI_Shock, AQI_Shock_Lag1, AQI_Shock_Lag2),
             by = c("fips_code", "Year"))
+
+# 4b. Socioeconomic Outcomes Join -----------------------------------------
+# PCPI_Real: BEA per capita personal income (2023 dollars, 2001+)
+# Total_Employment: BEA total jobs count (2001+)
+# Med_HH_Income_Real: ACS 5-yr median household income (2023 dollars, 2009+)
+master <- master %>%
+  left_join(df_socio, by = c("fips_code", "Year"))
 
 # 5. Inflation Adjustment (Base 2023) -------------------------------------
 cat("Adjusting Inflation (Base 2023)...\n")
