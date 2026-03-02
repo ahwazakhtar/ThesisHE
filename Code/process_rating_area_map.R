@@ -114,36 +114,28 @@ process_year <- function(zip_file) {
     df_cw <- df_cw %>% rename(rating_area_id = Rating.Area.ID)
   }
   
-  # Standardize Rating Area ID in Rates to match Crosswalk
-  # Crosswalk IDs are usually "AK01", "AL01".
-  # Plan IDs might be just "Area 1" in older files, or "AK01".
-  # We assume for now they match or are clean enough (2014+ usually standard)
-  # But often plan files have "Rating Area 1" -> needs conversion to "ST01"
-  # Let's clean df_agg$AREA
-  
+  # Normalize AREA to crosswalk format "ST##".
+  # Crosswalk uses "AK01" style; older plan files use "Rating Area N" style.
   df_agg <- df_agg %>%
     mutate(
-      # If AREA is like "Rating Area 1", convert to "1"
+      # Strip "Rating Area " prefix to get the numeric part (e.g. "Rating Area 1" -> "1")
       AREA_Clean = str_replace(AREA, "Rating Area ", ""),
-      # Pad with zero if single digit? Usually "Rating Area 1" -> "ST01"
-      # But usually the ID is "ST" + "01"
-      # Let's inspect: 2025 file had "AK01". Crosswalk has "AK01". Perfect.
-      # If mismatch occurs, the join will fail (NA).
-      # We assume standard "ST##" format for now.
-      rating_area_id = AREA # Assuming it's already "ST##"
+      # Normalize to crosswalk format "ST##": if AREA was "Rating Area N", build from ST + zero-padded number;
+      # otherwise it's already in "ST##" format (2014+ standard files).
+      rating_area_id = if_else(
+        str_detect(AREA, "^Rating Area "),
+        paste0(ST, sprintf("%02d", as.integer(AREA_Clean))),
+        AREA
+      )
     )
-  
-  # C. Join
-  # We join Crosswalk -> Rates
-  # Key: rating_area_id
-  
-  # Ensure fips_code is padded to 5 digits
+
+  # C. Join crosswalk to rates on normalized rating_area_id
   df_cw$fips_code <- sprintf("%05d", as.numeric(df_cw$fips_code))
-  
+
   df_merged <- df_cw %>%
-    select(fips_code, rating_area_id) %>% # Select essential cols (State extracted later)
-    distinct() %>% # Remove duplicates if any
-    left_join(df_agg, by = c("rating_area_id" = "AREA")) %>% # Join
+    select(fips_code, rating_area_id) %>%
+    distinct() %>%
+    left_join(df_agg, by = "rating_area_id") %>%
     mutate(
       Year = year,
       State = substr(rating_area_id, 1, 2)
