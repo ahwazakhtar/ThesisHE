@@ -8,6 +8,30 @@ plan_dir <- "Data/HIX_Data/plan details"
 crosswalk_dir <- "Data/HIX_Data/crosswalk"
 output_path <- "Data/premiums_county.csv"
 
+# Normalize mixed rating area formats to crosswalk-compatible "ST##" IDs.
+normalize_rating_area_id <- function(st, area) {
+  st <- as.character(st)
+  area <- trimws(as.character(area))
+  normalized <- area
+
+  # Example: "Rating Area 1" -> "ST01"
+  rating_area_text <- str_detect(area, regex("^Rating\\s*Area", ignore_case = TRUE))
+  if (any(rating_area_text, na.rm = TRUE)) {
+    area_num <- str_extract(area[rating_area_text], "\\d+")
+    normalized[rating_area_text] <- paste0(st[rating_area_text], sprintf("%02d", as.integer(area_num)))
+  }
+
+  # Example: "CA1" -> "CA01"
+  short_code <- str_detect(normalized, "^[A-Za-z]{2}\\d{1,2}$")
+  if (any(short_code, na.rm = TRUE)) {
+    state_prefix <- toupper(str_sub(normalized[short_code], 1, 2))
+    area_num <- str_extract(normalized[short_code], "\\d+")
+    normalized[short_code] <- paste0(state_prefix, sprintf("%02d", as.integer(area_num)))
+  }
+
+  normalized
+}
+
 # 2. Helper Function to Process Single Year -------------------------------
 process_year <- function(zip_file) {
   year <- as.integer(str_extract(basename(zip_file), "\\d{4}"))
@@ -58,15 +82,27 @@ process_year <- function(zip_file) {
   if (!"ST" %in% cols && "StateCode" %in% cols) {
     df_plans <- df_plans %>% rename(ST = StateCode)
   }
+
+  required_cols <- c("ST", "AREA", "METAL", "RATE")
+  missing_cols <- setdiff(required_cols, colnames(df_plans))
+  if (length(missing_cols) > 0) {
+    warning(paste("  Missing required columns:", paste(missing_cols, collapse = ", ")))
+    return(NULL)
+  }
   
   # Filter and Aggregate
-  # We need Silver and Bronze
+  # We need Silver and Bronze-level plans.
+  # Some years label bronze-level plans as "Expanded_bronze".
   # Rate needs to be numeric
   df_agg <- df_plans %>%
-    mutate(RATE = as.numeric(RATE)) %>%
-    filter(!is.na(RATE), RATE > 0, METAL %in% c("Silver", "Bronze", "Silver ", "Bronze ")) %>% 
-    # Clean Metal strings just in case
-    mutate(METAL = trimws(METAL)) %>%
+    mutate(
+      RATE = as.numeric(RATE),
+      METAL = trimws(as.character(METAL)),
+      METAL = str_replace_all(METAL, "_", " "),
+      METAL = str_to_title(str_to_lower(METAL)),
+      METAL = if_else(METAL == "Expanded Bronze", "Bronze", METAL)
+    ) %>%
+    filter(!is.na(RATE), RATE > 0, METAL %in% c("Silver", "Bronze")) %>%
     group_by(ST, AREA, METAL) %>%
     summarize(
       # Benchmark Silver = 2nd Lowest Cost Silver Plan
@@ -115,19 +151,8 @@ process_year <- function(zip_file) {
   }
   
   # Normalize AREA to crosswalk format "ST##".
-  # Crosswalk uses "AK01" style; older plan files use "Rating Area N" style.
   df_agg <- df_agg %>%
-    mutate(
-      # Strip "Rating Area " prefix to get the numeric part (e.g. "Rating Area 1" -> "1")
-      AREA_Clean = str_replace(AREA, "Rating Area ", ""),
-      # Normalize to crosswalk format "ST##": if AREA was "Rating Area N", build from ST + zero-padded number;
-      # otherwise it's already in "ST##" format (2014+ standard files).
-      rating_area_id = if_else(
-        str_detect(AREA, "^Rating Area "),
-        paste0(ST, sprintf("%02d", as.integer(AREA_Clean))),
-        AREA
-      )
-    )
+    mutate(rating_area_id = normalize_rating_area_id(ST, AREA))
 
   # C. Join crosswalk to rates on normalized rating_area_id
   df_cw$fips_code <- sprintf("%05d", as.numeric(df_cw$fips_code))
@@ -145,32 +170,38 @@ process_year <- function(zip_file) {
   return(df_merged)
 }
 
-# 3. Main Loop ------------------------------------------------------------
-zip_files <- list.files(plan_dir, pattern = "\\.zip$", full.names = TRUE)
-all_premiums <- list()
+run_process_rating_area_map <- function() {
+  # 3. Main Loop ----------------------------------------------------------
+  zip_files <- list.files(plan_dir, pattern = "\\.zip$", full.names = TRUE)
+  all_premiums <- list()
 
-for (f in zip_files) {
-  res <- process_year(f)
-  if (!is.null(res)) {
-    all_premiums[[length(all_premiums) + 1]] <- res
+  for (f in zip_files) {
+    res <- process_year(f)
+    if (!is.null(res)) {
+      all_premiums[[length(all_premiums) + 1]] <- res
+    }
+  }
+
+  # 4. Consolidate and Export ---------------------------------------------
+  if (length(all_premiums) > 0) {
+    final_df <- do.call(rbind, all_premiums)
+    
+    # Filter out rows where we failed to map premiums (optional)
+    # final_df <- final_df %>% filter(!is.na(Benchmark_Silver))
+    
+    write.csv(final_df, output_path, row.names = FALSE)
+    cat(paste0("
+Success! Premium data saved to: ", output_path, "
+"))
+    cat(paste0("Total Records: ", nrow(final_df), "
+"))
+  } else {
+    cat("
+Error: No data processed.
+")
   }
 }
 
-# 4. Consolidate and Export -----------------------------------------------
-if (length(all_premiums) > 0) {
-  final_df <- do.call(rbind, all_premiums)
-  
-  # Filter out rows where we failed to map premiums (optional)
-  # final_df <- final_df %>% filter(!is.na(Benchmark_Silver))
-  
-  write.csv(final_df, output_path, row.names = FALSE)
-  cat(paste0("
-Success! Premium data saved to: ", output_path, "
-"))
-  cat(paste0("Total Records: ", nrow(final_df), "
-"))
-} else {
-  cat("
-Error: No data processed.
-")
+if (Sys.getenv("PROCESS_RATING_AREA_MAP_SKIP_MAIN") != "1") {
+  run_process_rating_area_map()
 }
