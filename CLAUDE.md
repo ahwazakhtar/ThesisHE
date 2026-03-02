@@ -161,6 +161,12 @@ rm -f .claude/session_edits.log
 - `process_aqi_data.R` (state AQI) depends on county AQI intermediate (`intermediate_aqi.rds`) and population intermediate (`intermediate_pop.rds`). Always run `process_county_aqi.R` and `process_county_population.R` first.
 - Both state and county climate data load from 1990 to cover the 1990–2000 pre-study baseline for Z-score anchoring. County climate previously filtered at 1996 — corrected to 1990.
 - Z_Temp and Z_Precip in `process_county_climate.R` are anchored to per-county means/SDs computed over 1990–2000 only. The baseline stats are joined in before the mutate and dropped from the output RDS.
+- `Is_Extreme_Drought` (PDSI ≤ −4) is computed in `process_county_climate.R` with Lag1/Lag2. Do not look for it in `create_county_master.R`.
+- County socioeconomic pipeline: `download_county_socioeconomic.R` → `process_county_socioeconomic.R` → `Data/intermediate_socioeconomic.rds`. Outputs: `PCPI_Real` (BEA CAINC1), `Med_HH_Income_Real` (ACS B19013_001E), `Civilian_Employed` (ACS B23025_004E). ACS covers 2011–2023; BEA covers 1990–2023. API keys in `~/.Renviron` (BEA_API_KEY, CENSUS_API_KEY).
+- ACS variable names require the `E` suffix (estimate): `B19013_001E`, `B23025_004E`. Plain `B19013_001` returns a 400 error.
+- BEA CAEMP25N county employment is NOT available via the Regional API. Use ACS B23025_004E as proxy.
+- Hospital bad debt/charity data: sourced from NASHP HCT Excel file via `process_zip_county_map.R`. ~23% missing (counties with no hospital reports). One negative Hosp_Charity_Total value (−$408M) — winsorize before regression.
+- County master (`county_level_master.csv`): 53 columns, 41,376 rows, 3,155 counties, 2011–2023.
 - AQI variables are continuous measures (Median AQI population-weighted, Max AQI, pollutant day percentages). No z-score or binary quintile transformation — AQI uses hard EPA thresholds.
 - When inspecting NOAA named-vector key mappings, always check for duplicate keys — R silently returns the first match, making later entries dead code.
 - `process_zip_county_map.R` is the sole canonical county debt/cost processor. `process_medical_debt_county.R` is archived.

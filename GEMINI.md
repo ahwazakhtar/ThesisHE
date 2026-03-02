@@ -2,9 +2,9 @@
 
 This is a research project (likely a thesis) focused on the aggregation and analysis of United States health, climate, and economic data. The project relies on R for data acquisition and subsequent analysis. The primary goal is constructing a multi-dimensional dataset spanning several years (mostly ~2011-2026) to investigate relationships between environmental factors (Climate, AQI), health costs (HIX premiums, Hospital costs, Medical debt), and policy.
 
-**Status Update (Feb 2026):**
+**Status Update (Mar 2026):**
 *   **State-Level Analysis:** Completed. Found significant evidence that **Extreme Drought (2-year lag)** and **Cold Shocks (1-year lag)** increase Medical Debt and Insurance Premiums.
-*   **County-Level Analysis:** **In Progress.** Data processing scripts for Zip-to-County mapping and population weighting are implemented. Regional (State) drought and local (County) climate shocks (Z-scores) and absolute burdens (HDD/CDD) are being modeled.
+*   **County-Level Analysis:** **Phase 1 complete.** Z-score baseline anchored (1990–2000), socioeconomic outcomes integrated (BEA PCPI + ACS median HH income + ACS civilian employed), descriptive stats and plots generated. Phase 2 (event study and econometric modeling) is next.
 
 # Directory Structure
 
@@ -77,6 +77,8 @@ Based on `Data/data sources.txt` and script inspection:
     2.  **Consolidation:** Run `Code/create_state_master.R` to merge datasets and adjust for inflation.
     3.  **Feature Engineering:** Run `Code/analysis_pre_processing.R` to generate climate shocks (bins) and lags.
     4.  **Analysis:** Run `Code/run_analysis.R` to execute the Fixed-Effects models.
-    5.  **Review:** Examine the statistical results in `Analysis/` and the research abstract in `Text/`.
+    5.  **County Socioeconomic Data:** Run `Code/download_county_socioeconomic.R` then `Code/process_county_socioeconomic.R` to populate `Data/intermediate_socioeconomic.rds`.
+    6.  **Descriptive Stats:** Run `Code/run_descriptive_stats.R` to regenerate `Analysis/descriptive_stats_summary.csv` and plots in `Analysis/plots/`.
+    7.  **Review:** Examine the statistical results in `Analysis/` and the research abstract in `Text/`.
 
 ANY planning document must go into the `Plans/' folder.

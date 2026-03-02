@@ -2,7 +2,111 @@
 
 ---
 
-## 2026-03-02
+## 2026-03-02 (Session 2)
+
+### `Code/process_county_climate.R`
+
+**Z-score baseline anchored to 1990–2000 (was full-sample mean/SD)**
+- Year filter changed from `>= 1996` to `>= 1990` to load the baseline window.
+- Per-county baseline means/SDs computed via a separate `summarize()` on `Year 1990–2000`, joined in, then dropped from the output RDS.
+- `Is_Extreme_Drought`, `Is_Extreme_Drought_Lag1`, `Is_Extreme_Drought_Lag2` added (PDSI ≤ −4 threshold). These were present in an older intermediate but absent from the current script; now restored.
+- Climate intermediate regenerated: 53 columns including pdsi_val, phdi_val, pmdi_val and all lags.
+
+---
+
+### `Code/tests/test_process_county_climate.R`
+
+**3 new Z-score baseline tests added**
+- Verifies baseline years use 1990–2000 mean/SD (not full-sample).
+- Verifies post-baseline Z-scores differ from full-sample normalization when temps diverge.
+- Verifies each county gets its own independent baseline.
+- All 8 tests pass.
+
+---
+
+### `Code/download_county_socioeconomic.R` (new)
+
+**Downloads county-level income and employment data**
+- BEA CAINC1 (LineCode 3): per capita personal income, all counties, all years via BEA Regional API.
+- Census ACS 5-year: median HH income (B19013_001E) + civilian employed count (B23025_004E), 2011–2023.
+- Note: BEA CAEMP25N county employment not available via Regional API; ACS B23025_004E used as proxy.
+- API keys stored in `~/.Renviron` (BEA_API_KEY, CENSUS_API_KEY) — not committed.
+
+---
+
+### `Code/process_county_socioeconomic.R` (new)
+
+**Processes BEA + ACS downloads into `Data/intermediate_socioeconomic.rds`**
+- Filters BEA to CPI-covered years via inner join (drops pre-1990 and post-2023 rows; eliminates ~37% NA rate).
+- Drops US/state aggregate FIPS (00000, *000).
+- ACS suppressed values (−666666666) set to NA.
+- Left-joins ACS on BEA spine so pre-2009 BEA rows are retained with NA ACS columns.
+- Output columns: `fips_code`, `Year`, `PCPI_Real`, `Med_HH_Income_Real`, `Civilian_Employed` (all 2023 dollars).
+- Guard option (`socioeconomic.test_mode`) prevents auto-run when sourced by tests.
+
+---
+
+### `Code/tests/test_process_county_socioeconomic.R` (new)
+
+**16 passing tests covering the full processing pipeline**
+- FIPS validation (rejects US/state aggregates, malformed codes).
+- CPI inflation adjustment correctness.
+- Zero PCPI_Real NAs after inner CPI join.
+- ACS suppression (−666666666) → NA.
+- ACS-absent years retain BEA row with NA ACS columns (left join verified).
+- Output RDS path correctness.
+
+---
+
+### `Code/create_county_master.R`
+
+**Joined socioeconomic intermediate + fixed hospital data path**
+- Added `path_socio_rds` and load of `intermediate_socioeconomic.rds`.
+- Added join section for `PCPI_Real`, `Med_HH_Income_Real`, `Civilian_Employed`.
+- Rebuilt master now has 53 columns (up from 41) and 41,376 rows.
+- Hospital bad debt/charity/revenue now included (NASHP was silently skipped on prior runs due to stale `medical_debt_county.csv`).
+
+---
+
+### `Code/process_zip_county_map.R`
+
+**Re-run to populate hospital columns (no code change)**
+- Previous output was missing Hosp_BadDebt_Total, Hosp_Charity_Total, Hosp_Revenue_Total because the script had been run before NASHP crosswalk was in place.
+- Re-running produced 31,437 hospital county-year rows (23.1% NA in master — counties with no hospital reports).
+- Discovered negative Hosp_Charity_Total min (−$408M): one county-year has a correction/reversal; noted in descriptive report for winsorization before regression.
+
+---
+
+### `Code/run_descriptive_stats.R` (new)
+
+**Summary statistics and time-series visualizations**
+- Summary stats CSV (`Analysis/descriptive_stats_summary.csv`): N, mean, SD, min, P25, median, P75, max, NA% for 18 key variables.
+- Three ggplot2 time-series plots saved to `Analysis/plots/`:
+  - `ts_climate_shocks.png`: % counties with extreme heat, cold, drought per year.
+  - `ts_outcomes.png`: Medical debt share, uninsured rate, silver premium trends.
+  - `ts_income.png`: BEA per capita income and ACS median HH income trends.
+- Key finding: temperature Z-score mean of +0.89 vs 1990–2000 baseline confirms systematic county-level warming during 2011–2023.
+
+---
+
+### `Analysis/descriptive_stats_report.md` (new)
+
+**Written summary of descriptive findings**
+- Panel overview, per-variable stats, trend narratives for climate, health, and income sections.
+- Data quality notes flagging AQI sparse coverage, hospital missing data, and the negative charity care outlier.
+
+---
+
+### `conductor/tracks/county_analysis_refinement_20260216/plan.md`
+
+**Phase 1 complete — all three substantive tasks marked `[x]`**
+- Z-score baseline task: corrected script reference (was `create_county_master.R`, is `process_county_climate.R`).
+- Socioeconomic task: noted BEA CAEMP25N unavailability via API; ACS employed count substituted.
+- Descriptive stats task: noted pipeline fixes discovered during this task.
+
+---
+
+## 2026-03-02 (Session 1)
 
 ### `Analysis/script_inconsistencies_report.md` (pre-existing, read-only)
 
