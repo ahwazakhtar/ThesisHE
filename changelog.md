@@ -2,6 +2,121 @@
 
 ---
 
+## 2026-03-02
+
+### `Analysis/script_inconsistencies_report.md` (pre-existing, read-only)
+
+**Audited — all 15 inconsistencies verified against live scripts**
+- Confirmed which issues were already fixed, which were newly discovered (state NOAA threshold, broken DC key, rating area join), and which remained open.
+- Three items added to `plan.md` that were absent: state NOAA blanket threshold, `AREA_Clean` unused in rating area join, broken DC duplicate key.
+
+---
+
+### `Code/process_state_climate.R`
+
+**Fixed NOAA missing-value threshold (was blanket `<= -9.9` for all variables)**
+- Temperature now uses `<= -99.90`, CDD/HDD use `<= -9999`, PDSI uses `<= -99.99`, precip stays at `<= -9.99`.
+- Blanket threshold was silently flagging legitimate cold temperatures (e.g. Alaska/Montana January means) and extreme drought PDSI values as missing.
+
+**Temperature aggregation changed from sum to mean**
+- Annual temperature was being summed across 12 months, producing values ~12× larger than the county pipeline's annual mean. Output column renamed from `temp_sum` to `temp_mean`.
+- CDD, HDD, precip, and PDSI remain as sums — those are cumulative quantities.
+
+**Year filter extended from 1996 to 1990**
+- Required to cover the 1990–2000 pre-study baseline window used for temperature z-score anchoring in `analysis_pre_processing.R`.
+
+---
+
+### `Code/process_rating_area_map.R`
+
+**Fixed silent all-NA premium join for older plan file formats**
+- `AREA_Clean` (which stripped the "Rating Area N" prefix) was being computed but discarded; `rating_area_id` was set to the raw `AREA` string.
+- Fix: detect `"^Rating Area "` format and build `"ST##"` from `ST` column + zero-padded number; otherwise keep the existing `"ST##"` value. Join now uses the normalised `rating_area_id` on both sides.
+- Stale comment block removed.
+
+---
+
+### `Code/archive/download_meps_data.R`
+
+**Paths updated to `Data/MEPS_Data_IC/`**
+- Script was the source of the MEPS directory split (wrote to `Data/MEPS_Data/`). It has been archived; paths corrected so it can be safely revived without re-introducing the split.
+
+---
+
+### `Code/process_medical_debt_county.R`
+
+**Archived — moved to `Code/archive/`**
+- Was an orphaned script producing a simpler Urban Institute-only table at the same output path as `process_zip_county_map.R`. Whichever ran last would silently overwrite the other's output.
+- `process_zip_county_map.R` is now the sole canonical county debt/cost processor.
+
+---
+
+### `Code/run_county_analysis.R`
+
+**`Unemployment_Rate` removed from controls**
+- No county-level unemployment series has been sourced. Leaving it in `controls` caused `intersect()` to silently drop it from every regression with no warning.
+- Comment added documenting the omission and pointing to BLS LAUS integration planned in Phase 1.
+
+---
+
+### `Code/process_county_aqi.R`
+
+**Full rewrite — expanded AQI measures, dropped z-score shock**
+- Now outputs per FIPS-year: `Median_AQI`, `Max_AQI`, `Days_AQI` (denominator), `Days_CO/NO2/Ozone/PM25/PM10`, `Days_Unhealthy` (Unhealthy + Very Unhealthy + Hazardous), and percentage equivalents (`Pct_*`).
+- Distributed lags (Lag1, Lag2) generated for all key measures at processing time.
+- `AQI_Shock` (county-demeaned z-score) dropped: AQI has hard EPA thresholds; history coverage is incomplete, making z-scoring unreliable.
+- `StateName` (full state name) retained in intermediate so state aggregation can group correctly.
+
+---
+
+### `Code/process_aqi_data.R`
+
+**Full rewrite — now aggregates from county intermediate with population weights**
+- Previously read raw zip files and computed an unweighted county mean. Now depends on `intermediate_aqi.rds` (from `process_county_aqi.R`) and `intermediate_pop.rds` (from `process_county_population.R`).
+- State-level measures: population-weighted mean of `Median_AQI` (`AQI_Median_Wtd`), state-max of `Max_AQI` (`AQI_Max_State`), and summed pollutant day totals with state-level percentage equivalents.
+- Pipeline dependency: `process_county_aqi.R` must run before `process_aqi_data.R`.
+
+---
+
+### `Code/analysis_pre_processing.R`
+
+**Temperature z-score anchored to 1990–2000 pre-study baseline**
+- Previously computed z-scores against the full sample mean (look-ahead bias). Now uses only `Year >= 1990 & Year <= 2000` for `temp_hist_mean` and `temp_hist_sd`.
+- Intermediate variable names changed from `temp_mean`/`temp_sd` to `temp_hist_mean`/`temp_hist_sd` to avoid a naming collision with the incoming `temp_mean` column from `process_state_climate.R`.
+
+**`is_high_aqi` binary quintile removed; replaced with continuous AQI state variables**
+- `is_high_aqi`, `aqi_80th`, and all references to `aqi_mean` removed.
+- `vars_to_lag` updated to include the new state AQI measures (`AQI_Median_Wtd`, `AQI_Max_State`, `Pct_PM25_State`, etc.) if present.
+
+---
+
+### `Code/run_analysis.R`
+
+**Migrated from `plm` + `sandwich` to `fixest`**
+- `plm()` + `vcovHC()` + `coeftest()` replaced with `feols(dep ~ vars | State + Year, cluster = ~State)`.
+- Result extraction updated: `coeftable(fem)` for coefficients, `r2(fem, "wr2")` for within-R².
+- Separate plain formula retained for the VIF pooled-OLS check (which cannot use the `|` FE syntax).
+- AQI predictor block updated to use new continuous state AQI variables with their lags.
+
+---
+
+### `Code/process_county_climate.R`
+
+**Removed broken DC duplicate key from `noaa_state_codes`**
+- A previous fix appended `"11" = "District of Columbia"` after `"11" = "Illinois"`. In R, named-vector lookup returns the first match, so the DC entry was dead code.
+- Replaced with a comment explaining DC is absent from NOAA county-level climate divisional files.
+
+---
+
+### `conductor/tracks/county_analysis_refinement_20260216/plan.md`
+
+**Phase 0 fully complete**
+- All six "Fix Critical Pipeline Inconsistencies" subtasks marked `[x]`.
+- All four "Align State and County Methodologies" subtasks marked `[x]`.
+- Three new subtasks added and resolved: state NOAA threshold, rating area join, broken DC key.
+
+---
+
 ## 2026-02-25
 
 ### `CLAUDE.md`

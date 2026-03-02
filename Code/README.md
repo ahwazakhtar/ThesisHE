@@ -60,7 +60,7 @@ Rscript Code/run_pipeline.R --pipeline county --phases process,analysis --list-s
 ### Process (County)
 - `process_county_population.R`
 - `process_county_climate.R`
-- `process_county_aqi.R`
+- `process_county_aqi.R` ← must run before `process_aqi_data.R`
 - `process_zip_county_map.R`
 - `process_rating_area_map.R`
 
@@ -72,4 +72,7 @@ Rscript Code/run_pipeline.R --pipeline county --phases process,analysis --list-s
 
 - The runner uses fail-fast dependency checks by default (`--strict TRUE`).
 - Existing scripts are still runnable directly with `Rscript Code/<script>.R`.
-- `process_medical_debt_county.R` remains available for standalone use but is not in the default county pipeline because `process_zip_county_map.R` produces the richer county debt + hospital output consumed by `create_county_master.R`.
+- `process_aqi_data.R` (state AQI) depends on `intermediate_aqi.rds` produced by `process_county_aqi.R` and `intermediate_pop.rds` produced by `process_county_population.R`. Run county processing scripts before state AQI aggregation.
+- `process_medical_debt_county.R` has been archived to `Code/archive/`. `process_zip_county_map.R` is the sole canonical county debt/cost processor writing to `Data/medical_debt_county.csv`.
+- State climate data (`process_state_climate.R`) starts at 1990 to cover the 1990–2000 pre-study baseline used for temperature z-score anchoring. The study/regression period remains 2011 onwards.
+- State regressions (`run_analysis.R`) use `fixest::feols` with state-clustered SEs, matching the county pipeline.

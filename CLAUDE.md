@@ -29,7 +29,7 @@ This is an academic econometrics thesis investigating relationships between envi
 | `Code/download_*.R` | Acquisition scripts (climate, HIX, MEPS, policy) |
 | `Code/create_state_master.R` | Consolidates state-level panel |
 | `Code/analysis_pre_processing.R` | Feature engineering for state-level analysis |
-| `Code/run_analysis.R` | State-level Fixed-Effects models (`plm`) |
+| `Code/run_analysis.R` | State-level Fixed-Effects models (`fixest`) |
 | `Code/process_zip_county_map.R` | Maps Zip-level data to counties via crosswalk |
 | `Code/process_rating_area_map.R` | Maps HIX premiums from Rating Areas to Counties |
 | `Code/create_county_master.R` | Builds county-level master panel, Z-scores, CDD/HDD bins |
@@ -157,3 +157,9 @@ rm -f .claude/session_edits.log
 - Tests use `testthat`. Coverage target >80% for new code.
 - All planning documents go in `Plans/`.
 - MEPS data lives in `Data/MEPS_Data_IC/` — use this path consistently across all scripts.
+- Both state and county regressions use `fixest::feols`. Do not use `plm` or `sandwich`.
+- `process_aqi_data.R` (state AQI) depends on county AQI intermediate (`intermediate_aqi.rds`) and population intermediate (`intermediate_pop.rds`). Always run `process_county_aqi.R` and `process_county_population.R` first.
+- State climate data starts at 1990 (not 1996) to cover the 1990–2000 pre-study baseline for z-score anchoring.
+- AQI variables are continuous measures (Median AQI population-weighted, Max AQI, pollutant day percentages). No z-score or binary quintile transformation — AQI uses hard EPA thresholds.
+- When inspecting NOAA named-vector key mappings, always check for duplicate keys — R silently returns the first match, making later entries dead code.
+- `process_zip_county_map.R` is the sole canonical county debt/cost processor. `process_medical_debt_county.R` is archived.
