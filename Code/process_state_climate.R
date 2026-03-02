@@ -56,8 +56,18 @@ parse_noaa_file <- function(file_path, var_name) {
                      times = month.abb, 
                      direction = "long")
   
-  # Handle NOAA missing values (-9.99, -99.9, -99.99)
-  long_df$Value[long_df$Value <= -9.9] <- NA
+  # Handle NOAA missing values using variable-specific sentinel thresholds.
+  # Blanket -9.9 incorrectly flags legitimate cold temps (e.g. -12F Alaska Jan)
+  # and extreme drought PDSI values (range ~-6 to +6) as missing.
+  if (var_name == "precip") {
+    long_df$Value[long_df$Value <= -9.99] <- NA
+  } else if (var_name == "temp") {
+    long_df$Value[long_df$Value <= -99.90] <- NA
+  } else if (var_name %in% c("cdd", "hdd")) {
+    long_df$Value[long_df$Value <= -9999] <- NA
+  } else if (var_name == "pdsi") {
+    long_df$Value[long_df$Value <= -99.99] <- NA
+  }
   
   # Aggregate by State and Year
   # 1. Sum of values

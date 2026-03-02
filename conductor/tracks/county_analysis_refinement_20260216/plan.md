@@ -4,6 +4,8 @@
 
 - [ ] **Task: Fix Critical Pipeline Inconsistencies**
     - [x] Align NOAA missing-value thresholds to `<=` -9.9` in `process_county_climate.R`. [d99c564]
+    - [x] Fix NOAA missing-value threshold in `process_state_climate.R`: still applies blanket `<= -9.9` to all variables (temp, CDD, HDD, drought indices); use variable-specific thresholds matching the county script.
+    - [ ] Fix `process_rating_area_map.R`: `AREA_Clean` (stripped "Rating Area N" → "N") is computed but never used — `rating_area_id = AREA` retains the raw string, causing silent all-NA premium joins for plan years that use the "Rating Area N" format.
     - [ ] Standardize MEPS I/O to `Data/MEPS_Data_IC/` across all scripts.
     - [ ] Archive orphaned `process_medical_debt_county.R` and verify `process_zip_county_map.R` as canonical.
     - [ ] Resolve `Unemployment_Rate` absence in `create_county_master.R` (source BLS data or update controls).
@@ -11,7 +13,7 @@
     - [ ] Migrate `run_analysis.R` (State) from `plm` to `fixest`.
     - [ ] Standardize temperature aggregation to annual mean in `process_state_climate.R`.
     - [ ] Align AQI variable construction (z-scores) across both pipelines.
-    - [ ] Update NOAA state-code mapping for DC/Hawaii in `process_county_climate.R`.
+    - [ ] Fix NOAA state-code mapping for DC in `process_county_climate.R`: the current fix appended `"11" = "District of Columbia"` after `"11" = "Illinois"` in the same named vector — R returns the first match, so DC is still silently dropped. Needs a distinct NOAA county-file code for DC or a post-join correction.
 
 ## Phase 1: Data Integration & Baseline Refinement
 
