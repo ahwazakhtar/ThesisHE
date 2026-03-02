@@ -30,7 +30,11 @@ df$State <- as.factor(df$State)
 # 3. Model Specifications -------------------------------------------------
 
 # Common Controls
-controls <- c("Household_Income_2023", "Uninsured_Rate", "Unemployment_Rate") 
+# Note: Unemployment_Rate is excluded — no county-level unemployment series has
+# been sourced yet (BLS LAUS integration is planned in Phase 1). Adding it here
+# while absent from the master would cause intersect() to silently drop it from
+# all regressions with no warning.
+controls <- c("Household_Income_2023", "Uninsured_Rate")
 available_controls <- intersect(controls, names(df))
 
 # Spec 1: Relative Shocks (Climate only)

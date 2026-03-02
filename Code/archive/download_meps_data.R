@@ -2,8 +2,8 @@
 # Focused on "Out-of-Pocket" proxy measures: Employee Contributions and Deductibles.
 
 # 1. Setup Directories ----------------------------------------------------
-dir.create("Data/MEPS_Data", showWarnings = FALSE)
-dir.create("Data/MEPS_Data/Excel", showWarnings = FALSE)
+dir.create("Data/MEPS_Data_IC", showWarnings = FALSE)
+dir.create("Data/MEPS_Data_IC/Excel", showWarnings = FALSE)
 
 # Load required packages
 if (!require("readxl", quietly = TRUE)) {
@@ -44,7 +44,7 @@ for (yr in years) {
     st_nospace <- gsub(" ", "", st)
     fname <- paste0(st_nospace, yr, ext)
     url <- paste0(base_url, yr, "/", fname)
-    dest_file <- paste0("Data/MEPS_Data/Excel/", fname)
+    dest_file <- paste0("Data/MEPS_Data_IC/Excel/", fname)
     
     # Skip if exists
     if (file.exists(dest_file)) {
@@ -74,7 +74,7 @@ if (do_consolidation) {
   
   # List both .xls and .xlsx
   # Note: Escaping backslashes for R string inside this script
-  excel_files <- list.files("Data/MEPS_Data/Excel", pattern = "\\.xls[x]?$", full.names = TRUE)
+  excel_files <- list.files("Data/MEPS_Data_IC/Excel", pattern = "\\.xls[x]?$", full.names = TRUE)
   all_data_list <- list()
   
   for (f in excel_files) {
@@ -150,8 +150,8 @@ if (do_consolidation) {
   
   if (length(all_data_list) > 0) {
     final_df <- do.call(rbind, all_data_list)
-    write.csv(final_df, "Data/MEPS_Data/meps_ic_state_consolidated.csv", row.names = FALSE)
-    cat("Success! Consolidated data saved to: Data/MEPS_Data/meps_ic_state_consolidated.csv\n")
+    write.csv(final_df, "Data/MEPS_Data_IC/meps_ic_state_consolidated.csv", row.names = FALSE)
+    cat("Success! Consolidated data saved to: Data/MEPS_Data_IC/meps_ic_state_consolidated.csv\n")
     print(head(final_df))
   } else {
     cat("No data extracted.\n")
