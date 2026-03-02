@@ -27,14 +27,23 @@ df <- df %>%
   )
 
 # B. Temperature Shocks (State-Specific Z-Scores)
-# We need to calculate the Mean and SD for each state to establish the "norm"
+# Baseline mean and SD are estimated from 1990-2000 only to avoid look-ahead
+# bias and anchor shocks to a stable pre-study climatology. process_state_climate.R
+# starts at 1990 to make this window available.
+baseline_start_year <- 1990
+baseline_end_year   <- 2000
+
 df <- df %>%
   group_by(State) %>%
   mutate(
-    temp_mean = mean(temp_sum, na.rm = TRUE),
-    temp_sd   = sd(temp_sum, na.rm = TRUE),
-    temp_z    = (temp_sum - temp_mean) / temp_sd,
-    
+    temp_hist_mean = mean(temp_mean[Year >= baseline_start_year & Year <= baseline_end_year], na.rm = TRUE),
+    temp_hist_sd   = sd(temp_mean[Year >= baseline_start_year & Year <= baseline_end_year],   na.rm = TRUE),
+    temp_z = if_else(
+      !is.na(temp_hist_sd) & temp_hist_sd > 0,
+      (temp_mean - temp_hist_mean) / temp_hist_sd,
+      NA_real_
+    ),
+
     # Define Shocks: Z > 1.5 (Heat) or Z < -1.5 (Cold)
     is_heat_shock = ifelse(!is.na(temp_z) & temp_z > 1.5, 1, 0),
     is_cold_shock = ifelse(!is.na(temp_z) & temp_z < -1.5, 1, 0)
@@ -51,26 +60,22 @@ df <- df %>%
   ) %>%
   ungroup()
 
-# D. Air Quality Shocks (AQI Top Quintile)
-# We determine the 80th percentile of AQI *within* each state
-df <- df %>%
-  group_by(State) %>%
-  mutate(
-    aqi_80th = if("aqi_mean" %in% names(.)) quantile(aqi_mean, probs = 0.80, na.rm = TRUE) else NA,
-    is_high_aqi = if("aqi_mean" %in% names(.)) ifelse(!is.na(aqi_mean) & aqi_mean >= aqi_80th, 1, 0) else 0
-  ) %>%
-  ungroup()
+# D. Air Quality — AQI variables from process_aqi_data.R enter regressions
+# directly as continuous measures (population-weighted median, max, pollutant
+# day percentages). No binary transformation applied here.
 
 # 3. Distributed Lag Generation -------------------------------------------
-cat("Generating Distributed Lags (0, 1, 2 years)...
-")
+cat("Generating Distributed Lags (0, 1, 2 years)...\n")
 
-# Helper function to create lags for a list of variables
-vars_to_lag <- c("is_extreme_drought", "is_severe_drought", 
-                 "is_heat_shock", "is_cold_shock", 
-                 "is_high_cdd", "is_high_aqi", "pdsi_sum", "temp_z")
+vars_to_lag <- c("is_extreme_drought", "is_severe_drought",
+                 "is_heat_shock", "is_cold_shock",
+                 "is_high_cdd", "pdsi_sum", "temp_z")
 
-if("aqi_mean" %in% names(df)) vars_to_lag <- c(vars_to_lag, "aqi_mean")
+# Add state AQI variables if present (produced by process_aqi_data.R)
+aqi_state_vars <- c("AQI_Median_Wtd", "AQI_Max_State",
+                    "Pct_PM25_State", "Pct_PM10_State", "Pct_Ozone_State",
+                    "Pct_CO_State", "Pct_NO2_State", "Pct_Unhealthy_State")
+vars_to_lag <- c(vars_to_lag, intersect(aqi_state_vars, names(df)))
 
 # We must group by State to ensure lags don't bleed across states
 df_lags <- df %>%

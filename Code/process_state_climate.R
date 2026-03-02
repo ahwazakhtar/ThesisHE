@@ -46,7 +46,8 @@ parse_noaa_file <- function(file_path, var_name) {
   df$State <- state_codes[sprintf("%03d", df$StateCode)]
   
   # Filter years and remove invalid states
-  df <- df[!is.na(df$State) & df$Year >= 1996 & df$Year <= 2025, ]
+  # Start at 1990 to include the 1990-2000 pre-study baseline window.
+  df <- df[!is.na(df$State) & df$Year >= 1990 & df$Year <= 2025, ]
   
   # Reshape to long to handle missing values and summing
   long_df <- reshape(df, 
@@ -69,18 +70,20 @@ parse_noaa_file <- function(file_path, var_name) {
     long_df$Value[long_df$Value <= -99.99] <- NA
   }
   
-  # Aggregate by State and Year
-  # 1. Sum of values
-  # 2. Count of missing months
-  agg <- aggregate(Value ~ State + Year, data = long_df, 
-                   FUN = function(x) sum(x, na.rm = TRUE), 
+  # Aggregate by State and Year.
+  # Temperature: annual mean (standard interpretable value; county pipeline also uses mean).
+  # All others: sum (precip totals; CDD/HDD are cumulative degree-day counts; PDSI summed).
+  agg_fn <- if (var_name == "temp") function(x) mean(x, na.rm = TRUE) else function(x) sum(x, na.rm = TRUE)
+  agg <- aggregate(Value ~ State + Year, data = long_df,
+                   FUN = agg_fn,
                    na.action = na.pass)
-  
-  missing_counts <- aggregate(Value ~ State + Year, data = long_df, 
-                              FUN = function(x) sum(is.na(x)), 
+
+  missing_counts <- aggregate(Value ~ State + Year, data = long_df,
+                              FUN = function(x) sum(is.na(x)),
                               na.action = na.pass)
-  
-  names(agg)[3] <- paste0(var_name, "_sum")
+
+  col_suffix <- if (var_name == "temp") "_mean" else "_sum"
+  names(agg)[3] <- paste0(var_name, col_suffix)
   names(missing_counts)[3] <- paste0(var_name, "_missing_months")
   
   merge(agg, missing_counts, by = c("State", "Year"))

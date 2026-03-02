@@ -1,4 +1,5 @@
-# R script to process EPA AQI Data and aggregate to state level.
+# R script to aggregate county AQI data to state level (population-weighted).
+# Depends on: process_county_aqi.R, process_county_population.R
 
 library(dplyr)
 
@@ -11,62 +12,48 @@ if (!exists("%||%")) {
 }
 
 run_process_aqi_data <- function(config = list()) {
-  aqi_dir <- config$aqi_dir %||% "Data/AQIdata"
-  lookup_path <- config$lookup_path %||% "Data/AQIdata/states_and_counties.csv"
-  output_path <- config$output_path %||% "Data/state_aqi_consolidated.csv"
+  county_aqi_rds <- config$county_aqi_rds %||% "Data/intermediate_aqi.rds"
+  pop_rds        <- config$pop_rds        %||% "Data/intermediate_pop.rds"
+  output_path    <- config$output_path    %||% "Data/state_aqi_consolidated.csv"
 
-  cat("Processing AQI Data (State Aggregation)...\n")
+  cat("Aggregating County AQI to State Level (Population-Weighted)...\n")
 
-  if (!dir.exists(aqi_dir)) stop("AQI directory not found: ", aqi_dir)
-  if (!file.exists(lookup_path)) stop("FIPS lookup file not found at: ", lookup_path)
+  if (!file.exists(county_aqi_rds)) stop("Run process_county_aqi.R first: ", county_aqi_rds)
+  if (!file.exists(pop_rds))        stop("Run process_county_population.R first: ", pop_rds)
 
-  df_lookup <- read.csv(lookup_path, colClasses = "character") %>%
-    mutate(
-      County_Join = tolower(trimws(County.Name)),
-      StateName = State.Name
+  df_aqi <- readRDS(county_aqi_rds)
+  df_pop <- readRDS(pop_rds) %>% select(fips_code, Year, Population)
+
+  # Join population; fall back to weight = 1 for counties with no pop data
+  df <- df_aqi %>%
+    left_join(df_pop, by = c("fips_code", "Year")) %>%
+    mutate(Pop_Wt = coalesce(as.numeric(Population), 1))
+
+  state_aqi <- df %>%
+    group_by(State = StateName, Year) %>%
+    summarize(
+      # Population-weighted mean of county median AQI
+      AQI_Median_Wtd       = weighted.mean(Median_AQI, w = Pop_Wt, na.rm = TRUE),
+      # Worst county reading in the state
+      AQI_Max_State        = max(Max_AQI, na.rm = TRUE),
+      # Pollutant day totals (summed across counties)
+      Days_AQI_Total       = sum(Days_AQI,       na.rm = TRUE),
+      Days_CO_Total        = sum(Days_CO,         na.rm = TRUE),
+      Days_NO2_Total       = sum(Days_NO2,        na.rm = TRUE),
+      Days_Ozone_Total     = sum(Days_Ozone,      na.rm = TRUE),
+      Days_PM25_Total      = sum(Days_PM25,       na.rm = TRUE),
+      Days_PM10_Total      = sum(Days_PM10,       na.rm = TRUE),
+      Days_Unhealthy_Total = sum(Days_Unhealthy,  na.rm = TRUE),
+      .groups = "drop"
     ) %>%
-    distinct(StateName, County_Join)
-
-  aqi_files <- list.files(aqi_dir, pattern = "\\.zip$", full.names = TRUE)
-  if (length(aqi_files) == 0) stop("No AQI zip files found in: ", aqi_dir)
-
-  all_aqi_list <- list()
-  idx <- 1L
-  for (f in aqi_files) {
-    year <- as.integer(gsub("[^0-9]", "", basename(f)))
-    csv_name <- paste0("annual_aqi_by_county_", year, ".csv")
-    cat("  Processing Year:", year, "\n")
-
-    con <- unz(f, csv_name)
-    df_aqi <- tryCatch(
-      read.csv(con, stringsAsFactors = FALSE),
-      error = function(e) NULL
+    mutate(
+      Pct_CO_State        = if_else(Days_AQI_Total > 0, Days_CO_Total        / Days_AQI_Total * 100, 0),
+      Pct_NO2_State       = if_else(Days_AQI_Total > 0, Days_NO2_Total       / Days_AQI_Total * 100, 0),
+      Pct_Ozone_State     = if_else(Days_AQI_Total > 0, Days_Ozone_Total     / Days_AQI_Total * 100, 0),
+      Pct_PM25_State      = if_else(Days_AQI_Total > 0, Days_PM25_Total      / Days_AQI_Total * 100, 0),
+      Pct_PM10_State      = if_else(Days_AQI_Total > 0, Days_PM10_Total      / Days_AQI_Total * 100, 0),
+      Pct_Unhealthy_State = if_else(Days_AQI_Total > 0, Days_Unhealthy_Total / Days_AQI_Total * 100, 0)
     )
-    if (is.null(df_aqi)) next
-
-    if (!all(c("State", "County", "Year", "Median.AQI") %in% names(df_aqi))) {
-      warning("Skipping file with unexpected schema: ", basename(f), call. = FALSE)
-      next
-    }
-
-    df_aqi_clean <- df_aqi %>%
-      mutate(
-        County_Join = tolower(trimws(County)),
-        StateName = State
-      ) %>%
-      inner_join(df_lookup, by = c("StateName", "County_Join")) %>%
-      select(State = StateName, Year, Median.AQI)
-
-    all_aqi_list[[idx]] <- df_aqi_clean
-    idx <- idx + 1L
-  }
-
-  if (length(all_aqi_list) == 0) stop("No AQI records were parsed from zip files.")
-
-  df_all_aqi <- bind_rows(all_aqi_list)
-  state_aqi <- df_all_aqi %>%
-    group_by(State, Year) %>%
-    summarize(aqi_mean = mean(Median.AQI, na.rm = TRUE), .groups = "drop")
 
   write.csv(state_aqi, output_path, row.names = FALSE)
   cat("Success! State AQI consolidated to:", output_path, "\n")

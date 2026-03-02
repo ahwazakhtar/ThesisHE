@@ -28,7 +28,9 @@ process_noaa_data <- function(file_list, output_path) {
     "37" = "Rhode Island", "38" = "South Carolina", "39" = "South Dakota", "40" = "Tennessee",
     "41" = "Texas", "42" = "Utah", "43" = "Vermont", "44" = "Virginia",
     "45" = "Washington", "46" = "West Virginia", "47" = "Wisconsin", "48" = "Wyoming",
-    "50" = "Alaska", "51" = "Hawaii", "11" = "District of Columbia"
+    "50" = "Alaska", "51" = "Hawaii"
+    # DC (FIPS 11) does not appear in NOAA county-level climate divisional files.
+    # Code "11" in these files is Illinois. DC county climate data is absent.
   )
   
   state_fips_map <- c(

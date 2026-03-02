@@ -9,11 +9,11 @@
     - [x] Standardize MEPS I/O to `Data/MEPS_Data_IC/` across all scripts.
     - [x] Archive orphaned `process_medical_debt_county.R` and verify `process_zip_county_map.R` as canonical.
     - [x] Resolve `Unemployment_Rate` absence in `create_county_master.R` (source BLS data or update controls).
-- [ ] **Task: Align State and County Methodologies**
-    - [ ] Migrate `run_analysis.R` (State) from `plm` to `fixest`.
-    - [ ] Standardize temperature aggregation to annual mean in `process_state_climate.R`.
-    - [ ] Align AQI variable construction (z-scores) across both pipelines.
-    - [ ] Fix NOAA state-code mapping for DC in `process_county_climate.R`: the current fix appended `"11" = "District of Columbia"` after `"11" = "Illinois"` in the same named vector — R returns the first match, so DC is still silently dropped. Needs a distinct NOAA county-file code for DC or a post-join correction.
+- [x] **Task: Align State and County Methodologies**
+    - [x] Migrate `run_analysis.R` (State) from `plm` to `fixest`.
+    - [x] Standardize temperature aggregation to annual mean in `process_state_climate.R`.
+    - [x] Align AQI variable construction across both pipelines: replaced binary quintile `is_high_aqi` with continuous measures (population-weighted median, max, pollutant day percentages); state AQI aggregation now depends on county intermediate + population weights.
+    - [x] Fix NOAA state-code mapping for DC in `process_county_climate.R`: removed broken duplicate key; added comment that DC is absent from county-level NOAA climate divisional files.
 
 ## Phase 1: Data Integration & Baseline Refinement
 
