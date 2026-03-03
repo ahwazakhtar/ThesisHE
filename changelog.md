@@ -2,6 +2,18 @@
 
 ---
 
+## 2026-03-03 (Session 3, continued)
+
+### `Code/run_analysis.R`
+
+**Fixed broken VIF diagnostics (state-level)**
+- Previous `calculate_vif()` used `model.matrix(model)[,-1]` which incorrectly stripped the first predictor (not an intercept) from the `feols` within-transformed matrix — all VIFs silently returned NA.
+- Fixed to use `model.matrix()` directly without column removal, consistent with the county VIF approach.
+- Removed the redundant `f_vif`/`lm` pooled path; VIF now computed on the `feols` within-transformed matrix.
+- Also flagged: `is_extreme_drought_peak` (pdsi_min-based) added this session may be highly correlated with `is_extreme_drought` (pdsi_mean-based) — actual VIF values will confirm severity once state pipeline is re-run.
+
+---
+
 ## 2026-03-03 (Session 3)
 
 ### `Code/run_county_analysis.R`

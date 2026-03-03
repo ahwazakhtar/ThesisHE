@@ -56,24 +56,21 @@ deps <- c(
 
 # 3. Helper Functions -----------------------------------------------------
 
-# Custom VIF function (since 'car' package might not be available)
+# VIF via auxiliary OLS on within-transformed predictor matrix.
+# Note: model.matrix() on a feols object returns the demeaned matrix with NO
+# intercept column — do NOT use [,-1] or you drop the first predictor.
 calculate_vif <- function(model) {
-  if(any(is.na(coef(model)))) return(NA) # Handle singular fits
-  v <- tryCatch({
-    # Approximation using R-squared of aux regressions
-    X <- model.matrix(model)[,-1] # Remove Intercept
-    if(ncol(X) < 2) return(NA)
-    vifs <- numeric(ncol(X))
-    names(vifs) <- colnames(X)
-    for(i in 1:ncol(X)) {
-      y_aux <- X[,i]
-      x_aux <- X[,-i]
-      r2 <- summary(lm(y_aux ~ x_aux))$r.squared
-      vifs[i] <- 1 / (1 - r2)
+  if (is.null(model) || any(is.na(coef(model)))) return(NULL)
+  tryCatch({
+    X <- model.matrix(model)
+    if (is.null(X) || ncol(X) < 2) return(NULL)
+    vifs <- setNames(numeric(ncol(X)), colnames(X))
+    for (i in seq_len(ncol(X))) {
+      r2 <- summary(lm(X[, i] ~ X[, -i]))$r.squared
+      vifs[i] <- if (r2 < 1) 1 / (1 - r2) else Inf
     }
-    return(vifs)
-  }, error = function(e) { return(NA) })
-  return(v)
+    vifs
+  }, error = function(e) NULL)
 }
 
 # 4. Execution Loop -------------------------------------------------------
@@ -96,19 +93,17 @@ for (dep in deps) {
     next
   }
   
-  # Two separate formulas: feols uses | for FEs; lm (VIF) needs plain formula
-  f_vif <- as.formula(paste(dep, "~", rhs_formula))
-  f_fe  <- as.formula(paste(dep, "~", rhs_formula, "| State + Year"))
+  f_fe <- as.formula(paste(dep, "~", rhs_formula, "| State + Year"))
 
   # A. Two-way FE with state-clustered SEs (fixest)
   fem <- feols(f_fe, data = model_data, cluster = ~State)
 
-  # B. VIF Check (pooled OLS approximation on raw predictors)
-  vif_model <- lm(f_vif, data = model_data)
-  vifs <- calculate_vif(vif_model)
-  
+  # B. VIF on within-transformed predictor matrix from the FE model.
+  # Uses feols model.matrix() which is already demeaned — no intercept to strip.
+  vifs <- calculate_vif(fem)
+
   cat(paste0("\nDependent Variable: ", dep, "\n"))
-  print(vifs)
+  if (!is.null(vifs)) print(round(vifs, 2)) else cat("VIF: could not compute\n")
   cat("\n---------------------------------------\n")
   
   # D. Extract Results
