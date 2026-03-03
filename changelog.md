@@ -2,6 +2,66 @@
 
 ---
 
+## 2026-03-03 (Session 4)
+
+### `Code/run_event_study.R`
+
+**Added combined shock diff-in-diff models**
+- Constructed `Any_Shock` (OR of individual shocks), `Shock_Count`, `Compound_Shock` (count >= 2) indicators.
+- `Any_Shock` runs through existing DL and LP loops automatically.
+- New compound LP section: additive decomposition (`Any_Shock + Compound_Shock`) and dose-response (`Shock_Count`).
+- Compound shock support is thin (~2.2%) — flagged as exploratory with diagnostics.
+
+**Econometric remediation (E1–E8)**
+- E1: Renamed from "event study" to "dynamic panel impulse-response to recurring shocks" in script header.
+- E2: Added `LP_ShockHistory` robustness variant with lagged shock controls (t-1, t-2). 192 new coefficient rows + 8 comparison plots.
+- E4: Fixed "additive + interaction" comment mislabel → "additive decomposition."
+- E5: Added RA-clustered SE variants for compound premium LP specs.
+- E6: Added compound-shock support diagnostics table and caveat framing.
+- E7: Documented placebo-horizon timing choice in LP section comments.
+- E8: Fixed test naming drift (`_Lag1/_Lag2` → `_Lag1_es/_Lag2_es` in Test 4).
+
+**Added AQI shock indicator (High_AQI_Max)**
+- `High_AQI_Max = 1 if Max_AQI > 100` (EPA "Unhealthy for Sensitive Groups" threshold).
+- 10,949 events (~9.2% prevalence). Runs through DL, LP, LP_ShockHistory, and RA clustering.
+- Combined indicators (`Any_Shock`, `Shock_Count`) now include 4 shocks.
+- Median AQI > 100 rejected (only 6 obs).
+
+**Dose-response plots redesigned**
+- Replaced single-coefficient horizon plot with multi-dose visual showing predicted effects at Shock_Count = 1, 2, 3.
+
+### `Code/synthesize_event_study.R` (new)
+
+- Reads `event_study_coefs.csv` (1,020 rows) and produces:
+  - `Analysis/event_study_synthesis.md`: narrative summary with 6 key findings.
+  - `Analysis/event_study_tables.csv` and `event_study_full_results.csv`.
+  - 3 synthesis plots: significance heatmap, dynamic profile panel, cross-method robustness panel.
+- Covers: contemporaneous effects, dynamic profiles, pre-trend checks, DL/LP consistency, shock-history robustness, compound decomposition, population weighting sensitivity.
+
+### `Code/create_county_master.R`
+
+- Added `Median_AQI` and `Max_AQI` to AQI join (previously only `AQI_Shock` columns were pulled through).
+- Used `any_of()` for backward-compatible column selection.
+
+### `Code/tests/test_run_event_study.R`
+
+- Updated Tests 6–7 for 4-shock framework (added `High_AQI_Max`).
+- Test 7 now expects `Shock_Count = 4` when all shocks active.
+
+### `Plans/event_study_econometric_issues.md`
+
+- All 8 issues (E1–E8) marked Done or N/A.
+
+### Key findings from synthesis
+
+- **High_HDD → Benchmark_Silver_Real**: +$42 (p<0.01 DL, p=0.01 LP) — strongest contemporaneous effect.
+- **Building effects**: `High_HDD → Medical_Debt_Share` and `Hosp_BadDebt_PerCapita` grow from h=0 to h=3.
+- **Compound premium amplification**: `Compound_Shock → Benchmark_Silver_Real` +$33.6 (p=0.018).
+- **Pre-trend warning**: `Is_Extreme_Drought → Benchmark_Silver_Real` fails pre-trend at h=-2.
+- Shock-history robustness generally stable (same sign >75%); some instability for `High_HDD` on secondary outcomes.
+
+---
+
 ## 2026-03-03 (Session 3, continued)
 
 ### `Code/run_analysis.R`
