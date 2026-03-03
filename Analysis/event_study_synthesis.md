@@ -1,11 +1,11 @@
 # Dynamic Panel Impulse-Response: Synthesis of Results
 
-Generated: 2026-03-03 14:17 
+Generated: 2026-03-03 14:35 
 
 ## Overview
 
-- **Total coefficient estimates:** 852 across 142 unique specifications
-- **Shocks:** Any_Shock, Compound_Shock, High_CDD, High_HDD, Is_Extreme_Drought, Shock_Count
+- **Total coefficient estimates:** 1020 across 170 unique specifications
+- **Shocks:** Any_Shock, Compound_Shock, High_AQI_Max, High_CDD, High_HDD, Is_Extreme_Drought, Shock_Count
 - **Outcomes:** Benchmark_Silver_Real, Hosp_BadDebt_PerCapita, Medical_Debt_Median_2023, Medical_Debt_Share
 - **Approaches:** DL, DL_RA_Cluster, LP, LP_Compound_Additive, LP_Compound_Additive_RA, LP_Dose_Response, LP_Dose_Response_RA, LP_RA_Cluster, LP_ShockHistory
 - **Horizon window:** h = {-2, -1 (ref), 0, +1, +2, +3}
@@ -28,10 +28,14 @@ Generated: 2026-03-03 14:17
 | High_HDD | Benchmark_Silver_Real | 42.8996*** | 41.7414** |
 | High_HDD | Medical_Debt_Median_2023 | -10.2388 | -2.0654 |
 | High_HDD | Hosp_BadDebt_PerCapita | 1.4675 | 0.4011 |
-| Any_Shock | Medical_Debt_Share | 0.0014 | 0.0012 |
-| Any_Shock | Benchmark_Silver_Real | 9.6927 | 11.2409 |
-| Any_Shock | Medical_Debt_Median_2023 | -0.6604 | -0.4190 |
-| Any_Shock | Hosp_BadDebt_PerCapita | 0.5852 | 0.5532 |
+| High_AQI_Max | Medical_Debt_Share | 0.0008 | 0.0005 |
+| High_AQI_Max | Benchmark_Silver_Real | 6.3637 | 5.8670 |
+| High_AQI_Max | Medical_Debt_Median_2023 | 1.1634 | 0.3838 |
+| High_AQI_Max | Hosp_BadDebt_PerCapita | 0.8880 | 0.8179 |
+| Any_Shock | Medical_Debt_Share | 0.0020 | 0.0022 |
+| Any_Shock | Benchmark_Silver_Real | 8.6647 | 7.4465 |
+| Any_Shock | Medical_Debt_Median_2023 | 9.1522 | 7.3535 |
+| Any_Shock | Hosp_BadDebt_PerCapita | 0.3824 | 1.0107 |
 
 ## Key Finding 2: Dynamic Profiles
 
@@ -39,10 +43,14 @@ Classification of how effects evolve from h=0 to h=3 (LP, Unweighted):
 
 | Shock | Outcome | Pattern | Peak Horizon | h=0 Est | h=3 Est |
 |-------|---------|---------|-------------|---------|--------|
-| Any_Shock | Benchmark_Silver_Real | **insignificant** | h=0 | 11.2409 | -3.0135 |
-| Any_Shock | Hosp_BadDebt_PerCapita | **insignificant** | h=2 | 0.5532 | 0.8336 |
-| Any_Shock | Medical_Debt_Median_2023 | **insignificant** | h=2 | -0.4190 | 10.2989 |
-| Any_Shock | Medical_Debt_Share | **building** | h=2 | 0.0012 | 0.0039 |
+| Any_Shock | Benchmark_Silver_Real | **insignificant** | h=0 | 7.4465 | -1.5181 |
+| Any_Shock | Hosp_BadDebt_PerCapita | **insignificant** | h=2 | 1.0107 | 0.0722 |
+| Any_Shock | Medical_Debt_Median_2023 | **insignificant** | h=0 | 7.3535 | 3.2522 |
+| Any_Shock | Medical_Debt_Share | **building** | h=2 | 0.0022 | 0.0057 |
+| High_AQI_Max | Benchmark_Silver_Real | **insignificant** | h=0 | 5.8670 | -2.8022 |
+| High_AQI_Max | Hosp_BadDebt_PerCapita | **insignificant** | h=0 | 0.8179 | -0.0803 |
+| High_AQI_Max | Medical_Debt_Median_2023 | **insignificant** | h=3 | 0.3838 | 10.4967 |
+| High_AQI_Max | Medical_Debt_Share | **insignificant** | h=2 | 0.0005 | 0.0016 |
 | High_CDD | Benchmark_Silver_Real | **insignificant** | h=3 | 0.4991 | -3.8722 |
 | High_CDD | Hosp_BadDebt_PerCapita | **insignificant** | h=3 | 0.5690 | -1.6771 |
 | High_CDD | Medical_Debt_Median_2023 | **insignificant** | h=2 | -1.0225 | 20.4573 |
@@ -65,10 +73,16 @@ Pattern definitions:
 
 ## Key Finding 3: Pre-Trend Validity
 
-**WARNING:** 2 pre-trend failure(s) detected at h=-2 (p < 0.05):
+**WARNING:** 8 pre-trend failure(s) detected at h=-2 (p < 0.05):
 
 - Is_Extreme_Drought -> Benchmark_Silver_Real (DL): est=36.1877, p=0.0003
+- High_AQI_Max -> Medical_Debt_Share (DL): est=0.0029, p=0.0001
+- High_AQI_Max -> Benchmark_Silver_Real (DL): est=8.2727, p=0.0401
+- Any_Shock -> Medical_Debt_Share (DL): est=0.0020, p=0.0469
 - Is_Extreme_Drought -> Benchmark_Silver_Real (LP): est=33.5879, p=0.0264
+- High_AQI_Max -> Medical_Debt_Share (LP): est=0.0023, p=0.0067
+- High_AQI_Max -> Benchmark_Silver_Real (LP): est=9.5027, p=0.0221
+- Any_Shock -> Medical_Debt_Share (LP): est=0.0029, p=0.0286
 
 ## Key Finding 4: Cross-Method Robustness
 
@@ -76,10 +90,14 @@ DL vs LP sign agreement and correlation (h >= 0, Unweighted):
 
 | Shock | Outcome | Same Sign % | Correlation |
 |-------|---------|------------|-------------|
-| Any_Shock | Benchmark_Silver_Real | 100% | 0.983 |
-| Any_Shock | Hosp_BadDebt_PerCapita | 100% | 0.963 |
-| Any_Shock | Medical_Debt_Median_2023 | 75% | 0.645 |
-| Any_Shock | Medical_Debt_Share | 50% | -0.355 |
+| Any_Shock | Benchmark_Silver_Real | 75% | 0.998 |
+| Any_Shock | Hosp_BadDebt_PerCapita | 75% | 0.899 |
+| Any_Shock | Medical_Debt_Median_2023 | 50% | 0.498 |
+| Any_Shock | Medical_Debt_Share | 100% | -0.369 |
+| High_AQI_Max | Benchmark_Silver_Real | 75% | 1.000 |
+| High_AQI_Max | Hosp_BadDebt_PerCapita | 75% | 0.554 |
+| High_AQI_Max | Medical_Debt_Median_2023 | 75% | 0.444 |
+| High_AQI_Max | Medical_Debt_Share | 100% | 0.099 |
 | High_CDD | Benchmark_Silver_Real | 50% | 0.966 |
 | High_CDD | Hosp_BadDebt_PerCapita | 75% | 0.806 |
 | High_CDD | Medical_Debt_Median_2023 | 50% | 0.835 |
@@ -99,10 +117,14 @@ Adding lagged shock controls (t-1, t-2) to LP does not substantially alter resul
 
 | Shock | Outcome | Mean % Change | Same Sign % |
 |-------|---------|--------------|-------------|
-| Any_Shock | Benchmark_Silver_Real | 5.7% | 100% |
-| Any_Shock | Hosp_BadDebt_PerCapita | 31.5% | 75% |
-| Any_Shock | Medical_Debt_Median_2023 | 6.9% | 100% |
-| Any_Shock | Medical_Debt_Share | 3.6% | 100% |
+| Any_Shock | Benchmark_Silver_Real | 53.9% | 100% |
+| Any_Shock | Hosp_BadDebt_PerCapita | 104.8% | 75% |
+| Any_Shock | Medical_Debt_Median_2023 | 53.1% | 100% |
+| Any_Shock | Medical_Debt_Share | 4.7% | 100% |
+| High_AQI_Max | Benchmark_Silver_Real | 8.6% | 100% |
+| High_AQI_Max | Hosp_BadDebt_PerCapita | 16.5% | 100% |
+| High_AQI_Max | Medical_Debt_Median_2023 | 40.5% | 100% |
+| High_AQI_Max | Medical_Debt_Share | 5.2% | 100% |
 | High_CDD | Benchmark_Silver_Real | 12.7% | 100% |
 | High_CDD | Hosp_BadDebt_PerCapita | 5.5% | 100% |
 | High_CDD | Medical_Debt_Median_2023 | 6.4% | 100% |
@@ -136,10 +158,10 @@ Adding lagged shock controls (t-1, t-2) to LP does not substantially alter resul
 | High_HDD | Benchmark_Silver_Real | 41.7414 | 15.6768 | 0.0106 |
 | High_HDD | Medical_Debt_Median_2023 | -2.0654 | 16.1800 | 0.8990 |
 | High_HDD | Hosp_BadDebt_PerCapita | 0.4011 | 1.5681 | 0.7992 |
-| Any_Shock | Medical_Debt_Share | 0.0012 | 0.0016 | 0.4546 |
-| Any_Shock | Benchmark_Silver_Real | 11.2409 | 8.9767 | 0.2167 |
-| Any_Shock | Medical_Debt_Median_2023 | -0.4190 | 9.7920 | 0.9661 |
-| Any_Shock | Hosp_BadDebt_PerCapita | 0.5532 | 1.1977 | 0.6463 |
+| Any_Shock | Medical_Debt_Share | 0.0022 | 0.0014 | 0.1262 |
+| Any_Shock | Benchmark_Silver_Real | 7.4465 | 5.8934 | 0.2123 |
+| Any_Shock | Medical_Debt_Median_2023 | 7.3535 | 8.5805 | 0.3955 |
+| Any_Shock | Hosp_BadDebt_PerCapita | 1.0107 | 1.3668 | 0.4631 |
 
 ### Compound Shock Decomposition (h=0)
 
@@ -150,18 +172,18 @@ From the dose-response spec: `Shock_Count` = marginal effect per additional shoc
 
 | Shock | Outcome | Approach | Estimate | SE | p-value |
 |-------|---------|----------|----------|------|--------|
-| Any_Shock | Medical_Debt_Share | LP_Compound_Additive | 0.0014 | 0.0016 | 0.3613 |
-| Compound_Shock | Medical_Debt_Share | LP_Compound_Additive | -0.0043 | 0.0027 | 0.1189 |
-| Shock_Count | Medical_Debt_Share | LP_Dose_Response | 0.0006 | 0.0015 | 0.6718 |
-| Any_Shock | Benchmark_Silver_Real | LP_Compound_Additive | 9.0894 | 8.9416 | 0.3146 |
-| Compound_Shock | Benchmark_Silver_Real | LP_Compound_Additive | 33.6092 | 13.7478 | 0.0183 |
-| Shock_Count | Benchmark_Silver_Real | LP_Dose_Response | 12.6161 | 7.6757 | 0.1069 |
-| Any_Shock | Medical_Debt_Median_2023 | LP_Compound_Additive | 0.8168 | 9.4967 | 0.9318 |
-| Compound_Shock | Medical_Debt_Median_2023 | LP_Compound_Additive | -26.5273 | 16.7451 | 0.1199 |
-| Shock_Count | Medical_Debt_Median_2023 | LP_Dose_Response | -2.1433 | 9.1298 | 0.8154 |
-| Any_Shock | Hosp_BadDebt_PerCapita | LP_Compound_Additive | 0.4748 | 1.2172 | 0.6982 |
-| Compound_Shock | Hosp_BadDebt_PerCapita | LP_Compound_Additive | 1.4523 | 2.0519 | 0.4826 |
-| Shock_Count | Hosp_BadDebt_PerCapita | LP_Dose_Response | 0.6097 | 1.0187 | 0.5524 |
+| Any_Shock | Medical_Debt_Share | LP_Compound_Additive | 0.0016 | 0.0012 | 0.1721 |
+| Compound_Shock | Medical_Debt_Share | LP_Compound_Additive | 0.0005 | 0.0011 | 0.6128 |
+| Shock_Count | Medical_Debt_Share | LP_Dose_Response | 0.0007 | 0.0009 | 0.4193 |
+| Any_Shock | Benchmark_Silver_Real | LP_Compound_Additive | 5.8482 | 4.8519 | 0.2341 |
+| Compound_Shock | Benchmark_Silver_Real | LP_Compound_Additive | 10.8666 | 3.3732 | 0.0023 |
+| Shock_Count | Benchmark_Silver_Real | LP_Dose_Response | 8.2216 | 3.2576 | 0.0150 |
+| Any_Shock | Medical_Debt_Median_2023 | LP_Compound_Additive | 10.5140 | 8.2070 | 0.2064 |
+| Compound_Shock | Medical_Debt_Median_2023 | LP_Compound_Additive | -4.4643 | 6.7174 | 0.5096 |
+| Shock_Count | Medical_Debt_Median_2023 | LP_Dose_Response | 0.8504 | 5.2631 | 0.8723 |
+| Any_Shock | Hosp_BadDebt_PerCapita | LP_Compound_Additive | 0.1486 | 1.1907 | 0.9012 |
+| Compound_Shock | Hosp_BadDebt_PerCapita | LP_Compound_Additive | 0.5931 | 1.0818 | 0.5861 |
+| Shock_Count | Hosp_BadDebt_PerCapita | LP_Dose_Response | 0.3220 | 0.7889 | 0.6850 |
 
 ## Artifacts
 

@@ -112,11 +112,39 @@ for (o in outcomes) {
     ungroup()
 }
 
-# 3b. Combined Shock Indicators --------------------------------------------
+# 3b. AQI Shock Indicator --------------------------------------------------
+
+if ("Max_AQI" %in% names(df)) {
+  df$High_AQI_Max <- as.integer(df$Max_AQI > 100)
+  cat(sprintf("High_AQI_Max: %d events out of %d non-NA obs (%.1f%%)\n",
+              sum(df$High_AQI_Max == 1, na.rm = TRUE),
+              sum(!is.na(df$High_AQI_Max)),
+              100 * mean(df$High_AQI_Max == 1, na.rm = TRUE)))
+  shocks <- c(shocks, "High_AQI_Max")
+
+  # Build leads/lags for AQI shock
+  df <- df %>%
+    group_by(fips_code) %>%
+    arrange(Year) %>%
+    mutate(
+      High_AQI_Max_Lead1 = dplyr::lead(High_AQI_Max, 1),
+      High_AQI_Max_Lead2 = dplyr::lead(High_AQI_Max, 2),
+      High_AQI_Max_Lag1_es  = dplyr::lag(High_AQI_Max, 1),
+      High_AQI_Max_Lag2_es  = dplyr::lag(High_AQI_Max, 2),
+      High_AQI_Max_Lag3  = dplyr::lag(High_AQI_Max, 3)
+    ) %>%
+    ungroup()
+} else {
+  cat("WARNING: Max_AQI not found in data — skipping AQI shock.\n")
+}
+
+# 3c. Combined Shock Indicators --------------------------------------------
 
 cat("\nConstructing combined shock indicators...\n")
-df$Any_Shock      <- as.integer(df$Is_Extreme_Drought == 1 | df$High_CDD == 1 | df$High_HDD == 1)
-df$Shock_Count    <- as.integer(df$Is_Extreme_Drought) + as.integer(df$High_CDD) + as.integer(df$High_HDD)
+aqi_flag <- if ("High_AQI_Max" %in% names(df)) df$High_AQI_Max == 1 else FALSE
+df$Any_Shock      <- as.integer(df$Is_Extreme_Drought == 1 | df$High_CDD == 1 | df$High_HDD == 1 | aqi_flag)
+df$Shock_Count    <- as.integer(df$Is_Extreme_Drought) + as.integer(df$High_CDD) + as.integer(df$High_HDD) +
+                     (if ("High_AQI_Max" %in% names(df)) as.integer(df$High_AQI_Max) else 0L)
 df$Compound_Shock <- as.integer(df$Shock_Count >= 2)
 
 cat("\n--- Shock Co-occurrence Table ---\n")

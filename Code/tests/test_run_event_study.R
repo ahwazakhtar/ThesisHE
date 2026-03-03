@@ -177,16 +177,19 @@ test_that("Lead/lag does not cross county boundaries", {
 # ===========================================================================
 # Test 6: Combined shock indicator construction
 # ===========================================================================
-test_that("Any_Shock, Shock_Count, Compound_Shock are correct", {
+test_that("Any_Shock, Shock_Count, Compound_Shock are correct (4 shocks incl AQI)", {
   syn <- data.frame(
-    Is_Extreme_Drought = c(0, 1, 0, 1, 1, 0),
-    High_CDD           = c(0, 0, 1, 1, 0, 0),
-    High_HDD           = c(0, 0, 0, 0, 1, 0),
+    Is_Extreme_Drought = c(0, 1, 0, 1, 1, 0, 0),
+    High_CDD           = c(0, 0, 1, 1, 0, 0, 0),
+    High_HDD           = c(0, 0, 0, 0, 1, 0, 0),
+    High_AQI_Max       = c(0, 0, 0, 0, 0, 1, 0),
     stringsAsFactors = FALSE
   )
 
-  syn$Any_Shock      <- as.integer(syn$Is_Extreme_Drought == 1 | syn$High_CDD == 1 | syn$High_HDD == 1)
-  syn$Shock_Count    <- as.integer(syn$Is_Extreme_Drought) + as.integer(syn$High_CDD) + as.integer(syn$High_HDD)
+  syn$Any_Shock      <- as.integer(syn$Is_Extreme_Drought == 1 | syn$High_CDD == 1 |
+                                    syn$High_HDD == 1 | syn$High_AQI_Max == 1)
+  syn$Shock_Count    <- as.integer(syn$Is_Extreme_Drought) + as.integer(syn$High_CDD) +
+                        as.integer(syn$High_HDD) + as.integer(syn$High_AQI_Max)
   syn$Compound_Shock <- as.integer(syn$Shock_Count >= 2)
 
   # Row 1: all zero
@@ -204,22 +207,29 @@ test_that("Any_Shock, Shock_Count, Compound_Shock are correct", {
   expect_equal(syn$Shock_Count[4], 2L)
   expect_equal(syn$Compound_Shock[4], 1L)
 
-  # Row 5: drought + HDD (triple check)
+  # Row 5: drought + HDD
   expect_equal(syn$Shock_Count[5], 2L)
   expect_equal(syn$Compound_Shock[5], 1L)
+
+  # Row 6: AQI only
+  expect_equal(syn$Any_Shock[6], 1L)
+  expect_equal(syn$Shock_Count[6], 1L)
+  expect_equal(syn$Compound_Shock[6], 0L)
 })
 
 # ===========================================================================
 # Test 7: All three shocks active simultaneously
 # ===========================================================================
-test_that("All three shocks = Shock_Count 3, Compound 1, Any 1", {
-  syn <- data.frame(Is_Extreme_Drought = 1, High_CDD = 1, High_HDD = 1)
-  syn$Any_Shock      <- as.integer(syn$Is_Extreme_Drought == 1 | syn$High_CDD == 1 | syn$High_HDD == 1)
-  syn$Shock_Count    <- as.integer(syn$Is_Extreme_Drought) + as.integer(syn$High_CDD) + as.integer(syn$High_HDD)
+test_that("All four shocks = Shock_Count 4, Compound 1, Any 1", {
+  syn <- data.frame(Is_Extreme_Drought = 1, High_CDD = 1, High_HDD = 1, High_AQI_Max = 1)
+  syn$Any_Shock      <- as.integer(syn$Is_Extreme_Drought == 1 | syn$High_CDD == 1 |
+                                    syn$High_HDD == 1 | syn$High_AQI_Max == 1)
+  syn$Shock_Count    <- as.integer(syn$Is_Extreme_Drought) + as.integer(syn$High_CDD) +
+                        as.integer(syn$High_HDD) + as.integer(syn$High_AQI_Max)
   syn$Compound_Shock <- as.integer(syn$Shock_Count >= 2)
 
   expect_equal(syn$Any_Shock[1], 1L)
-  expect_equal(syn$Shock_Count[1], 3L)
+  expect_equal(syn$Shock_Count[1], 4L)
   expect_equal(syn$Compound_Shock[1], 1L)
 })
 
