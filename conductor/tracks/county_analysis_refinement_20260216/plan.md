@@ -30,7 +30,9 @@
     - [x] Documented trends in `Analysis/descriptive_stats_report.md`.
     - [x] Fixed pipeline: NASHP hospital data re-processed (was silently skipped), `Is_Extreme_Drought` added to `process_county_climate.R`, intermediate and master rebuilt.
     - [x] Re-ran and upgraded descriptive outputs to publication standard: weighted and unweighted tables, tail and winsorized moments, missingness diagnostics, correlation matrix, period-comparison table, and manuscript figures (`fig1-fig3`) on 2026-03-02.
-- [ ] **Task: Conductor - User Manual Verification 'Data Integration & Baseline Refinement' (Protocol in workflow.md)**
+- [x] **Task: Conductor - User Manual Verification 'Data Integration & Baseline Refinement' (Protocol in workflow.md)** [707fa14]
+
+## Phase 1 [checkpoint: 707fa14]
 
 ## Phase 2: Event Study & Econometric Modeling
 
@@ -61,3 +63,4 @@
 ## Optional End-Step Robustness (Defer Until Final Pass)
 
 - [ ] Optional: simplify distributed lag blocks (e.g., cumulative lag sums or reduced lag sets) and report sensitivity versus the current unrestricted lag-by-lag primary specs.
+- [ ] Optional: Verify `is_extreme_drought_peak` (pdsi_min-based) VIF against `is_extreme_drought` (pdsi_mean-based) in state model after re-running full state pipeline. If VIF > 10 on the 6-variable drought binary block, replace `is_extreme_drought` with `is_extreme_drought_peak` rather than including both, or test as alternative specs. State VIF diagnostics in `Analysis/vif_diagnostics.txt` (previously broken — fixed 2026-03-03).
