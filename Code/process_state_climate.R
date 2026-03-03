@@ -71,9 +71,10 @@ parse_noaa_file <- function(file_path, var_name) {
   }
   
   # Aggregate by State and Year.
-  # Temperature: annual mean (standard interpretable value; county pipeline also uses mean).
-  # All others: sum (precip totals; CDD/HDD are cumulative degree-day counts; PDSI summed).
-  agg_fn <- if (var_name == "temp") function(x) mean(x, na.rm = TRUE) else function(x) sum(x, na.rm = TRUE)
+  # Temperature and PDSI: annual mean (level-consistent annual index).
+  # PDSI also gets annual minimum (worst drought month) for shock identification.
+  # Others: annual sums (precip totals; CDD/HDD are cumulative degree-day counts).
+  agg_fn <- if (var_name %in% c("temp", "pdsi")) function(x) mean(x, na.rm = TRUE) else function(x) sum(x, na.rm = TRUE)
   agg <- aggregate(Value ~ State + Year, data = long_df,
                    FUN = agg_fn,
                    na.action = na.pass)
@@ -82,11 +83,22 @@ parse_noaa_file <- function(file_path, var_name) {
                               FUN = function(x) sum(is.na(x)),
                               na.action = na.pass)
 
-  col_suffix <- if (var_name == "temp") "_mean" else "_sum"
+  col_suffix <- if (var_name %in% c("temp", "pdsi")) "_mean" else "_sum"
   names(agg)[3] <- paste0(var_name, col_suffix)
   names(missing_counts)[3] <- paste0(var_name, "_missing_months")
-  
-  merge(agg, missing_counts, by = c("State", "Year"))
+
+  result <- merge(agg, missing_counts, by = c("State", "Year"))
+
+  # For PDSI: also compute annual minimum (worst drought reached within the year).
+  if (var_name == "pdsi") {
+    agg_min <- aggregate(Value ~ State + Year, data = long_df,
+                         FUN = function(x) min(x, na.rm = TRUE),
+                         na.action = na.pass)
+    names(agg_min)[3] <- "pdsi_min"
+    result <- merge(result, agg_min, by = c("State", "Year"))
+  }
+
+  result
 }
 
 # 3. Execution ------------------------------------------------------------

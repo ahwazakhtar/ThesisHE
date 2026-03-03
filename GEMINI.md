@@ -4,7 +4,7 @@ This is a research project (likely a thesis) focused on the aggregation and anal
 
 **Status Update (Mar 2026):**
 *   **State-Level Analysis:** Completed. Found significant evidence that **Extreme Drought (2-year lag)** and **Cold Shocks (1-year lag)** increase Medical Debt and Insurance Premiums.
-*   **County-Level Analysis:** **Phase 1 complete.** Z-score baseline anchored (1990–2000), socioeconomic outcomes integrated (BEA PCPI + ACS median HH income + ACS civilian employed), descriptive stats and plots generated. Phase 2 (event study and econometric modeling) is next.
+*   **County-Level Analysis:** **Phase 1 complete; econometric soundness remediation complete.** Drought multicollinearity resolved (PDSI-only primary specs), debt reporting exclusions corrected (CO 2023 only), AQI weighting tightened (strict pop weights, no fallback), rating-area SE clustering added for premium outcomes. Phase 2 (event study and econometric modeling) is next.
 
 # Directory Structure
 
@@ -17,7 +17,7 @@ Contains R scripts used to automate the downloading and processing of raw data.
 - `process_zip_county_map.R`: **New.** Maps Zip-level hospital costs and Urban Institute medical debt to counties using master crosswalks.
 - `process_rating_area_map.R`: Maps HIX premiums from Rating Areas to Counties.
 - `create_county_master.R`: **New.** Consolidates county-level master dataset, processes SEER population data, and generates local climate shocks (Z-scores) and binned absolute extremes (CDD/HDD).
-- `run_county_analysis.R`: **New.** Executes county-level FE models with state-level clustering, including unweighted and population-weighted specifications.
+- `run_county_analysis.R`: **New.** Executes county-level FE models with state-level clustering, including unweighted and population-weighted specifications. For premium outcomes, also produces rating-area-clustered SE variants (`*_RA_Cluster`) to account for within-rating-area residual correlation.
 
 ## `Data/`
 The core storage for raw and processed datasets.

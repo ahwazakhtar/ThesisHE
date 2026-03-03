@@ -29,9 +29,20 @@
     - [x] Generated 3 time-series plots: climate shock prevalence, health outcomes, income trends (in `Analysis/plots/`).
     - [x] Documented trends in `Analysis/descriptive_stats_report.md`.
     - [x] Fixed pipeline: NASHP hospital data re-processed (was silently skipped), `Is_Extreme_Drought` added to `process_county_climate.R`, intermediate and master rebuilt.
+    - [x] Re-ran and upgraded descriptive outputs to publication standard: weighted and unweighted tables, tail and winsorized moments, missingness diagnostics, correlation matrix, period-comparison table, and manuscript figures (`fig1-fig3`) on 2026-03-02.
 - [ ] **Task: Conductor - User Manual Verification 'Data Integration & Baseline Refinement' (Protocol in workflow.md)**
 
 ## Phase 2: Event Study & Econometric Modeling
+
+- [x] **Task: Add rating-area clustered SE variants for premium models** [rating area clustering added to run_county_analysis.R; premium outcomes get *_RA_Cluster model variants alongside state-clustered primaries]
+
+- [ ] **Task: Econometric Soundness Remediation (Pre-Event-Study Gate)**
+    - [ ] **Deferred for now:** Enforce one-row-per-county-year (`fips_code`, `Year`) in county master by resolving split-county multi-rating-area premium joins.
+    - [x] **Next 1:** Fix state drought construction mismatch (`pdsi_sum` thresholding as if level PDSI); switched to level-consistent annual metric (`pdsi_mean`/`pdsi_level`) and regenerated state analysis inputs.
+    - [x] **Next 2:** Remove outcome-sample anchoring of county regressions to medical-debt base table; make merge strategy outcome-neutral and document outcome-specific analysis samples. Implemented outcome-neutral key skeleton in `create_county_master.R`; added model/spec/weighting sample diagnostics export in `run_county_analysis.R` (`Analysis/county_sample_diagnostics.csv`) and re-ran county pipeline on 2026-03-03.
+    - [x] **Next 3:** Apply medical debt reporting-rule exclusion/policy flags directly in county regression stack (not only descriptive stats) for debt outcomes. Implemented AGENTS.md-consistent policy window (`CO 2023` only) in `run_county_analysis.R`, added debt-policy fields to `Analysis/county_sample_diagnostics.csv`, and aligned descriptive pipeline (`run_descriptive_stats.R`) to the same window on 2026-03-03.
+    - [x] **Next 4:** Tighten state AQI aggregation weights by removing `Pop_Wt = 1` fallback; define explicit behavior for missing population and document sample impact. Implemented strict population-weighted AQI aggregation in `process_aqi_data.R` (missing population is dropped; if no weighted counties remain in a state-year, primary AQI is `NA`), added equal-weight robustness series (`AQI_Median_EW`), and exported diagnostics to `Analysis/state_aqi_weight_diagnostics.csv` (918 state-years, 102 with no primary AQI value, concentrated in 2024-2025 where population is unavailable).
+    - [x] **Next 5:** Add county-model multicollinearity diagnostics (VIF/condition checks) and a documented pruning strategy for drought-index blocks. Completed diagnostics after PDSI-only pruning in primary county specs: no collinearity warnings, max VIF ~5.33, and condition numbers ~2.55-5.33 across outcomes/specs; `PHDI/PMDI` retained for optional robustness runs.
 
 - [ ] **Task: Implement Event Study models for individual shocks**
     - [ ] Define event windows for heat, drought, and precipitation shocks.
@@ -46,3 +57,7 @@
     - [ ] Create event study coefficient plots (e.g., using `iplot` from `fixest`).
     - [ ] Update `Analysis/regression_results_summary.csv` and summary reports.
 - [ ] **Task: Conductor - User Manual Verification 'Event Study & Econometric Modeling' (Protocol in workflow.md)**
+
+## Optional End-Step Robustness (Defer Until Final Pass)
+
+- [ ] Optional: simplify distributed lag blocks (e.g., cumulative lag sums or reduced lag sets) and report sensitivity versus the current unrestricted lag-by-lag primary specs.

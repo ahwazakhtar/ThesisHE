@@ -35,9 +35,41 @@ df_cpi <- read.csv(path_cpi, stringsAsFactors = FALSE)
 # 3. Merge ----------------------------------------------------------------
 cat("Merging...\n")
 
-# Master Join
-master <- df_med_debt %>%
-  left_join(df_premiums, by = c("fips_code", "Year", "State")) %>%
+# Build an outcome-neutral key skeleton to avoid anchoring all analyses
+# to medical debt coverage. This preserves county-years that only appear in
+# premiums/climate/AQI/socioeconomic sources.
+keys_med <- df_med_debt %>% select(fips_code, Year)
+keys_prem <- df_premiums %>% select(fips_code, Year)
+keys_climate <- df_climate %>% select(fips_code, Year)
+keys_pop <- df_pop %>% select(fips_code, Year)
+keys_aqi <- df_aqi %>% select(fips_code, Year)
+keys_socio <- df_socio %>% select(fips_code, Year)
+
+master_keys <- bind_rows(keys_med, keys_prem, keys_climate, keys_pop, keys_aqi, keys_socio) %>%
+  distinct()
+
+# County state lookup (fips_code -> State) from available source state labels.
+state_lookup <- bind_rows(
+  df_med_debt %>% select(fips_code, State),
+  df_premiums %>% select(fips_code, State)
+) %>%
+  filter(!is.na(State), State != "") %>%
+  group_by(fips_code) %>%
+  summarize(State = dplyr::first(State), .groups = "drop")
+
+drop_state <- function(df) {
+  if ("State" %in% names(df)) {
+    df %>% select(-State)
+  } else {
+    df
+  }
+}
+
+# Master Join (outcome-neutral skeleton + source tables)
+master <- master_keys %>%
+  left_join(state_lookup, by = "fips_code") %>%
+  left_join(drop_state(df_med_debt), by = c("fips_code", "Year")) %>%
+  left_join(drop_state(df_premiums), by = c("fips_code", "Year")) %>%
   left_join(df_climate, by = c("fips_code", "Year")) %>%
   left_join(df_pop, by = c("fips_code", "Year"))
 

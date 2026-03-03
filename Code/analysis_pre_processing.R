@@ -18,13 +18,35 @@ cat("Generating Climate Shocks...
 ")
 
 # A. Drought Intensity (PDSI)
-# Thresholds: < -4 (Extreme), -4 to -3 (Severe), > 3 (Wet)
+# Thresholds use annual mean PDSI levels:
+#   < -4 (Extreme), -4 to -3 (Severe), > 3 (Extremely Wet).
+# Preferred input is `pdsi_mean`. For legacy files with only `pdsi_sum`,
+# convert to an annual level by dividing by observed months.
+if (!"pdsi_mean" %in% names(df) && !"pdsi_sum" %in% names(df)) {
+  stop("Missing both `pdsi_mean` and legacy `pdsi_sum` in state master.")
+}
+
+df$pdsi_mean_input <- if ("pdsi_mean" %in% names(df)) as.numeric(df$pdsi_mean) else NA_real_
+df$pdsi_sum_input  <- if ("pdsi_sum"  %in% names(df)) as.numeric(df$pdsi_sum)  else NA_real_
+
 df <- df %>%
   mutate(
-    is_extreme_drought = ifelse(!is.na(pdsi_sum) & pdsi_sum < -4, 1, 0),
-    is_severe_drought  = ifelse(!is.na(pdsi_sum) & pdsi_sum >= -4 & pdsi_sum < -3, 1, 0),
-    is_extremely_wet   = ifelse(!is.na(pdsi_sum) & pdsi_sum > 3, 1, 0)
-  )
+    pdsi_obs_months = ifelse(
+      "pdsi_missing_months" %in% names(.),
+      pmax(12 - as.numeric(pdsi_missing_months), 1),
+      12
+    ),
+    pdsi_level = coalesce(pdsi_mean_input, pdsi_sum_input / pdsi_obs_months),
+    is_extreme_drought = ifelse(!is.na(pdsi_level) & pdsi_level < -4, 1, 0),
+    is_severe_drought  = ifelse(!is.na(pdsi_level) & pdsi_level >= -4 & pdsi_level < -3, 1, 0),
+    is_extremely_wet   = ifelse(!is.na(pdsi_level) & pdsi_level > 3, 1, 0),
+    # Annual minimum PDSI: worst drought month reached within the year.
+    # Captures transient drought peaks that the annual mean smooths over.
+    # Threshold mirrors PDSI extreme drought classification (< -4).
+    pdsi_min_level = if ("pdsi_min" %in% names(.)) as.numeric(pdsi_min) else NA_real_,
+    is_extreme_drought_peak = ifelse(!is.na(pdsi_min_level) & pdsi_min_level < -4, 1, 0)
+  ) %>%
+  select(-pdsi_obs_months, -pdsi_mean_input, -pdsi_sum_input)
 
 # B. Temperature Shocks (State-Specific Z-Scores)
 # Baseline mean and SD are estimated from 1990-2000 only to avoid look-ahead
@@ -69,10 +91,11 @@ cat("Generating Distributed Lags (0, 1, 2 years)...\n")
 
 vars_to_lag <- c("is_extreme_drought", "is_severe_drought",
                  "is_heat_shock", "is_cold_shock",
-                 "is_high_cdd", "pdsi_sum", "temp_z")
+                 "is_high_cdd", "pdsi_level", "temp_z",
+                 "pdsi_min_level", "is_extreme_drought_peak")
 
 # Add state AQI variables if present (produced by process_aqi_data.R)
-aqi_state_vars <- c("AQI_Median_Wtd", "AQI_Max_State",
+aqi_state_vars <- c("AQI_Median_Wtd", "AQI_Median_EW", "AQI_Max_State",
                     "Pct_PM25_State", "Pct_PM10_State", "Pct_Ozone_State",
                     "Pct_CO_State", "Pct_NO2_State", "Pct_Unhealthy_State")
 vars_to_lag <- c(vars_to_lag, intersect(aqi_state_vars, names(df)))

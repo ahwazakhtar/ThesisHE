@@ -21,6 +21,9 @@ df <- read.csv(input_path, stringsAsFactors = FALSE)
 climate_vars <- c(
   "is_extreme_drought", "is_extreme_drought_lag1", "is_extreme_drought_lag2",
   "is_severe_drought", "is_severe_drought_lag1", "is_severe_drought_lag2",
+  # Peak drought: binary indicator based on annual minimum PDSI (worst month < -4).
+  # Complements the mean-based indicator by capturing transient within-year peaks.
+  "is_extreme_drought_peak", "is_extreme_drought_peak_lag1", "is_extreme_drought_peak_lag2",
   "is_heat_shock", "is_heat_shock_lag1", "is_heat_shock_lag2",
   "is_cold_shock", "is_cold_shock_lag1", "is_cold_shock_lag2",
   "is_high_cdd", "is_high_cdd_lag1", "is_high_cdd_lag2"

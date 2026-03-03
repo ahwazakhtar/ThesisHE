@@ -2,6 +2,71 @@
 
 ---
 
+## 2026-03-03 (Session 3)
+
+### `Code/run_county_analysis.R`
+
+**Added rating-area clustered SE variants for premium outcomes**
+- Methodological decision: counties within the same rating area share identical premiums by construction, creating mechanical within-rating-area residual correlation. State-level clustering (used for all other outcomes) nests rating areas but is imprecise for this.
+- For `Benchmark_Silver_Real` and `Lowest_Bronze_Real` only, `run_models()` now also fits all four specs clustered at `rating_area_id` level. Results are stored as `*_RA_Cluster` list entries and printed in the output file.
+- The existing RA-aggregation robustness block is unchanged.
+- Data context: median rating area = 4 counties; 33.5% of RA × year cells are 1-to-1; max is 177.
+
+**Debt reporting-rule exclusion corrected**
+- Previous code (from prior session) excluded all years for CO, MN, NY. Verified via web research: CO HB23-1126 effective Aug 7 2023 affects only the 2023 August snapshot; NY effective Dec 2023 (postdates snapshot); MN effective Oct 2024 (outside panel). Corrected to CO 2023 only via `debt_reporting_policy` data frame. Recovers ~2,600 valid county-year observations for MN and NY.
+
+**Drought multicollinearity resolved**
+- Primary specs now use `drought_vars_primary` (pdsi_val + Lag1/Lag2 only). The previous 9-variable PDSI/PHDI/PMDI block caused severe VIF inflation. Full block retained as `drought_vars_robust_full` for optional robustness specs.
+
+**Sample diagnostics added**
+- `build_sample_diag()` computes N, counties, states, year range per outcome-spec combination. Written to `Analysis/county_sample_diagnostics.csv`. Supports outcome-neutral master merge verification (Next 2).
+
+---
+
+### `Code/run_descriptive_stats.R`
+
+**Debt reporting exclusion corrected**
+- Migrated from blanket state exclusion to `debt_reporting_policy` table (CO 2023 only), consistent with `run_county_analysis.R`.
+
+---
+
+### `Code/process_aqi_data.R`
+
+**Strict population weighting; `Pop_Wt=1` fallback removed**
+- Counties missing population data are now excluded from `AQI_Median_Wtd` rather than assigned weight=1. Equal-weight `AQI_Median_EW` series added as robustness. Diagnostics (N_Counties_AQI, N_Dropped_Missing_Pop, Drop_Share, Wtd vs EW difference) written to `Analysis/state_aqi_weight_diagnostics.csv`.
+
+---
+
+### `Code/process_state_climate.R`
+
+**Added annual minimum PDSI (`pdsi_min`)**
+- Aggregates minimum monthly PDSI value per state-year in addition to existing `pdsi_mean`. Captures worst within-year drought peak that the mean smooths over.
+
+---
+
+### `Code/analysis_pre_processing.R`
+
+**Added `is_extreme_drought_peak` and `pdsi_min_level`**
+- `pdsi_min_level`: annual minimum PDSI level derived from `pdsi_min`.
+- `is_extreme_drought_peak`: binary indicator (pdsi_min < −4), capturing transient within-year drought peaks.
+- Both added to distributed lag generation (lag1, lag2).
+
+---
+
+### `Code/run_analysis.R`
+
+**Added `is_extreme_drought_peak` to state regression**
+- `is_extreme_drought_peak` + lag1/lag2 added to `climate_vars`, complementing the mean-based `is_extreme_drought`.
+
+---
+
+### `Code/create_county_master.R`
+
+**Outcome-neutral master merge (Next 2)**
+- Merge skeleton now built from union of all source key sets (medical debt, premiums, climate, population, AQI, socioeconomic) rather than anchoring to medical debt rows. Counties present in premiums or climate but absent from debt are retained with NA debt values.
+
+---
+
 ## 2026-03-02 (Session 2)
 
 ### `Code/process_county_climate.R`
