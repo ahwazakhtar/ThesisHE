@@ -64,9 +64,10 @@
     - [x] E7: Document placebo-horizon timing choice (contemporaneous controls with lagged outcome) in script comments.
     - [x] E6: Add compound-shock support diagnostics (effective N per horizon/outcome) and caveat framing.
     - [x] Dose-response plots: Replace single-coefficient LP horizon plot with multi-dose visual (predicted effect at Shock_Count=1,2,3 per horizon).
-- [ ] **Task: Document and Visualize Regression Results**
-    - [ ] Generate Stargazer/Modelsummary tables for the new models.
-    - [ ] Update `Analysis/regression_results_summary.csv` and summary reports.
+- [x] **Task: Document and Visualize Regression Results**
+    - [x] Generate synthesis tables (`event_study_tables.csv`, `event_study_full_results.csv`) and narrative summary (`event_study_synthesis.md`).
+    - [x] Synthesis plots: significance heatmap, dynamic profile panel, cross-method robustness panel.
+    - [x] Coefficient synthesis: contemporaneous effects, dynamic profiles, pre-trend checks, DL/LP consistency, shock-history robustness, compound decomposition, population weighting sensitivity.
 - [ ] **Task: Conductor - User Manual Verification 'Event Study & Econometric Modeling' (Protocol in workflow.md)**
 
 ## Optional End-Step Robustness (Defer Until Final Pass)
