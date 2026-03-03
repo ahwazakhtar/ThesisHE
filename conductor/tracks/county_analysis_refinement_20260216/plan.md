@@ -46,17 +46,17 @@
     - [x] **Next 4:** Tighten state AQI aggregation weights by removing `Pop_Wt = 1` fallback; define explicit behavior for missing population and document sample impact. Implemented strict population-weighted AQI aggregation in `process_aqi_data.R` (missing population is dropped; if no weighted counties remain in a state-year, primary AQI is `NA`), added equal-weight robustness series (`AQI_Median_EW`), and exported diagnostics to `Analysis/state_aqi_weight_diagnostics.csv` (918 state-years, 102 with no primary AQI value, concentrated in 2024-2025 where population is unavailable).
     - [x] **Next 5:** Add county-model multicollinearity diagnostics (VIF/condition checks) and a documented pruning strategy for drought-index blocks. Completed diagnostics after PDSI-only pruning in primary county specs: no collinearity warnings, max VIF ~5.33, and condition numbers ~2.55-5.33 across outcomes/specs; `PHDI/PMDI` retained for optional robustness runs.
 
-- [ ] **Task: Implement Event Study models for individual shocks**
-    - [ ] Define event windows for heat, drought, and precipitation shocks.
-    - [ ] Write tests to verify the construction of lead/lag indicators for the event study.
-    - [ ] Execute Fixed-Effects regressions for each shock type and outcome (Premiums, Medical Debt, Hours, Income).
-- [ ] **Task: Implement Combined Shock Diff-in-Diff study**
-    - [ ] Define "any shock" treatment criteria.
-    - [ ] Write tests for the diff-in-diff indicator logic.
-    - [ ] Execute regressions and extract coefficients/standard errors.
+- [x] **Task: Implement Event Study models for individual shocks**
+    - [x] Define event windows for heat, drought, and precipitation shocks. [h={-2,-1,0,+1,+2,+3}]
+    - [x] Write tests to verify the construction of lead/lag indicators for the event study. [`Code/tests/test_run_event_study.R`, 5 tests]
+    - [x] Execute Fixed-Effects regressions for each shock type and outcome. [`Code/run_event_study.R`: Approach A (Dynamic DL) + Approach B (Local Projections), 3 shocks × 4 outcomes × 6 horizons × 2 weightings + RA cluster variants; 360 coefficient rows in `Analysis/event_study_coefs.csv`]
+    - [x] Generate event study coefficient plots. [30 PNGs: es_*, lp_*, es_comparison_* in `Analysis/plots/`]
+- [~] **Task: Implement Combined Shock Diff-in-Diff study**
+    - [x] Define "any shock" treatment criteria. [Any_Shock = OR of 3 individual shocks; Compound_Shock = Shock_Count >= 2]
+    - [x] Write tests for the diff-in-diff indicator logic. [Tests 6-7 in test_run_event_study.R]
+    - [x] Execute regressions and extract coefficients/standard errors. [Any_Shock in DL+LP loops; Compound LP additive + dose-response specs]
 - [ ] **Task: Document and Visualize Regression Results**
     - [ ] Generate Stargazer/Modelsummary tables for the new models.
-    - [ ] Create event study coefficient plots (e.g., using `iplot` from `fixest`).
     - [ ] Update `Analysis/regression_results_summary.csv` and summary reports.
 - [ ] **Task: Conductor - User Manual Verification 'Event Study & Econometric Modeling' (Protocol in workflow.md)**
 
