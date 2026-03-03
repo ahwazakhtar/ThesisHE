@@ -13,6 +13,7 @@ input_path <- "Data/county_level_master.csv"
 output_file <- "Analysis/county_analysis_results.txt"
 output_csv <- "Analysis/county_regression_coefs.csv"
 sample_diag_csv <- "Analysis/county_sample_diagnostics.csv"
+vif_output_path <- "Analysis/county_vif_diagnostics.txt"
 
 cat("Loading Data...\n")
 df <- read.csv(input_path)
@@ -136,6 +137,23 @@ vars_spec2_aqi <- c(vars_spec2_base, "AQI_Shock", "AQI_Shock_Lag1", "AQI_Shock_L
 
 # 4. Helper Functions -----------------------------------------------------
 
+# VIF via auxiliary OLS regressions (no external package required).
+# Returns a named numeric vector of VIFs, or NULL on failure.
+# Used on the demeaned/within predictor matrix from a fitted feols model.
+calculate_vif <- function(model) {
+  tryCatch({
+    if (is.null(model) || any(is.na(coef(model)))) return(NULL)
+    X <- model.matrix(model)
+    if (is.null(X) || ncol(X) < 2) return(NULL)
+    vifs <- setNames(numeric(ncol(X)), colnames(X))
+    for (i in seq_len(ncol(X))) {
+      r2 <- summary(lm(X[, i] ~ X[, -i]))$r.squared
+      vifs[i] <- if (r2 < 1) 1 / (1 - r2) else Inf
+    }
+    vifs
+  }, error = function(e) NULL)
+}
+
 # Helper to run feols safely
 safe_feols <- function(f, data, cluster, weights = NULL) {
   tryCatch({
@@ -241,12 +259,19 @@ run_models <- function(outcome_var, weight_var = NULL) {
     m1_base_ra <- m1_aqi_ra <- m2_base_ra <- m2_aqi_ra <- NULL
   }
 
+  # VIF diagnostics on the primary unweighted Spec1 model only.
+  # Computed via auxiliary OLS on the within-transformed predictor matrix.
+  # High VIF (>10) on drought vars would indicate residual multicollinearity
+  # even after pruning to PDSI-only. Logged to county_vif_diagnostics.txt.
+  vif_result <- if (!is.null(m1_base)) calculate_vif(m1_base) else NULL
+
   return(list(
     Spec1_Base = m1_base, Spec1_AQI = m1_aqi,
     Spec2_Base = m2_base, Spec2_AQI = m2_aqi,
     Spec1_Base_RA_Cluster = m1_base_ra, Spec1_AQI_RA_Cluster = m1_aqi_ra,
     Spec2_Base_RA_Cluster = m2_base_ra, Spec2_AQI_RA_Cluster = m2_aqi_ra,
-    Sample_Diagnostics = sample_diag
+    Sample_Diagnostics = sample_diag,
+    VIF_Spec1_Base = vif_result
   ))
 }
 
@@ -254,6 +279,13 @@ run_models <- function(outcome_var, weight_var = NULL) {
 outcomes <- c("Medical_Debt_Share", "Medical_Debt_Median_2023", "Benchmark_Silver_Real", "Hosp_BadDebt_PerCapita")
 results_list <- list()
 sample_diag_list <- list()
+
+vif_log_lines <- c(
+  "--- County-Level Multicollinearity Diagnostics (VIF) ---",
+  "Model: Spec1_Base (primary drought: PDSI only), unweighted, cluster=State",
+  "VIF > 10 = severe; VIF 5-10 = moderate concern",
+  ""
+)
 
 sink(output_file)
 cat("=================================================\n")
@@ -291,6 +323,13 @@ for (y in outcomes) {
     }
     if (!is.null(res$Sample_Diagnostics)) {
       sample_diag_list[[length(sample_diag_list) + 1]] <- res$Sample_Diagnostics
+    }
+    if (!is.null(res$VIF_Spec1_Base)) {
+      vif_log_lines <- c(vif_log_lines,
+        paste0("Outcome: ", y, " (Unweighted)"),
+        capture.output(print(round(res$VIF_Spec1_Base, 2))),
+        ""
+      )
     }
     results_list[[paste0(y, "_Unweighted")]] <- res
   }
@@ -427,6 +466,12 @@ if ("rating_area_id" %in% names(df) && "Population" %in% names(df) && !all(is.na
 }
 
 sink()
+
+# Write VIF diagnostics log
+if (length(vif_log_lines) > 4) {
+  writeLines(vif_log_lines, vif_output_path)
+  cat(paste0("VIF diagnostics saved to: ", vif_output_path, "\n"))
+}
 
 # Export sample diagnostics
 if (length(sample_diag_list) > 0) {
