@@ -51,10 +51,19 @@
     - [x] Write tests to verify the construction of lead/lag indicators for the event study. [`Code/tests/test_run_event_study.R`, 5 tests]
     - [x] Execute Fixed-Effects regressions for each shock type and outcome. [`Code/run_event_study.R`: Approach A (Dynamic DL) + Approach B (Local Projections), 3 shocks × 4 outcomes × 6 horizons × 2 weightings + RA cluster variants; 360 coefficient rows in `Analysis/event_study_coefs.csv`]
     - [x] Generate event study coefficient plots. [30 PNGs: es_*, lp_*, es_comparison_* in `Analysis/plots/`]
-- [~] **Task: Implement Combined Shock Diff-in-Diff study**
+- [x] **Task: Implement Combined Shock Diff-in-Diff study**
     - [x] Define "any shock" treatment criteria. [Any_Shock = OR of 3 individual shocks; Compound_Shock = Shock_Count >= 2]
     - [x] Write tests for the diff-in-diff indicator logic. [Tests 6-7 in test_run_event_study.R]
     - [x] Execute regressions and extract coefficients/standard errors. [Any_Shock in DL+LP loops; Compound LP additive + dose-response specs]
+- [x] **Task: Event Study Econometric Remediation** (ref: `Plans/event_study_econometric_issues.md`)
+    - [x] E4: Fix "additive + interaction" comment mislabel in compound LP section.
+    - [x] E8: Fix test naming drift (`_Lag1/_Lag2` → `_Lag1_es/_Lag2_es` in Test 4).
+    - [x] E1: Rename design language from "event study" to "dynamic panel impulse-response" in script headers, comments, and output filenames.
+    - [x] E2: Add shock-history controls to LP specs as robustness variant; compare against no-history baseline. [192 LP_ShockHistory rows; 8 robustness comparison plots]
+    - [x] E5: Add rating-area clustered SE variants for compound premium LP specs. [LP_Compound_Additive_RA + LP_Dose_Response_RA]
+    - [x] E7: Document placebo-horizon timing choice (contemporaneous controls with lagged outcome) in script comments.
+    - [x] E6: Add compound-shock support diagnostics (effective N per horizon/outcome) and caveat framing.
+    - [x] Dose-response plots: Replace single-coefficient LP horizon plot with multi-dose visual (predicted effect at Shock_Count=1,2,3 per horizon).
 - [ ] **Task: Document and Visualize Regression Results**
     - [ ] Generate Stargazer/Modelsummary tables for the new models.
     - [ ] Update `Analysis/regression_results_summary.csv` and summary reports.

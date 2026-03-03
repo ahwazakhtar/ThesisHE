@@ -1,7 +1,11 @@
-# Event Study Models for County-Level Climate Shocks
+# Dynamic Panel Impulse-Response Models for County-Level Climate Shocks
+# These are responses to recurring binary shock indicators, not canonical
+# staggered-adoption event studies. Treatment is not absorbing — counties
+# can enter and exit shock status across years.
+#
 # Approach A: Dynamic Distributed Lag (single regression with leads/lags)
 # Approach B: Local Projections (Jordà 2005, separate regression per horizon)
-# Event window: h = {-2, -1, 0, +1, +2, +3}, reference h=-1 for Approach A
+# Horizon window: h = {-2, -1, 0, +1, +2, +3}, reference h=-1 for Approach A
 
 # 1. Setup ----------------------------------------------------------------
 library(dplyr)
@@ -266,6 +270,12 @@ sink()
 cat("DL model summaries saved to:", output_results, "\n")
 
 # 6. Approach B — Local Projections ---------------------------------------
+# Note on negative horizons (h < 0): The dependent variable is y_{t+h}
+# (i.e., past outcomes), while controls remain at time t. This is a standard
+# LP pre-trend check: significant coefficients at h < 0 suggest the shock
+# is predicted by prior outcome movements (failure of strict exogeneity).
+# Controls are not time-shifted because the identification question is
+# whether *current* shock assignment correlates with *past* outcome levels.
 
 cat("\n=== Approach B: Local Projections ===\n")
 coefs_lp <- list()
@@ -289,6 +299,14 @@ for (s in shocks) {
       rhs <- rhs[rhs %in% names(df)]
       f <- as.formula(paste(dep_col, "~", paste(rhs, collapse = " + "), "| fips_code + Year"))
 
+      # Robustness: LP with shock-history controls (lags of shock at t-1, t-2)
+      # Isolates the h-horizon effect of shock_t from persistence of recent shocks
+      shock_hist <- c(paste0(s, "_Lag1_es"), paste0(s, "_Lag2_es"))
+      shock_hist <- shock_hist[shock_hist %in% names(df)]
+      rhs_hist <- c(s, shock_hist, controls)
+      rhs_hist <- rhs_hist[rhs_hist %in% names(df)]
+      f_hist <- as.formula(paste(dep_col, "~", paste(rhs_hist, collapse = " + "), "| fips_code + Year"))
+
       for (wt in c("Unweighted", "Population")) {
         wt_arg <- if (wt == "Population" && "Population" %in% names(df)) "Population" else NULL
         if (wt == "Population" && is.null(wt_arg)) next
@@ -297,6 +315,14 @@ for (s in shocks) {
         if (!is.null(m)) {
           coefs_lp[[length(coefs_lp) + 1]] <- extract_coef(
             m, s, s, o, h, "LP", wt, nobs(m)
+          )
+        }
+
+        # LP with shock history controls
+        m_hist <- safe_feols(f_hist, df, "State", wt_arg)
+        if (!is.null(m_hist)) {
+          coefs_lp[[length(coefs_lp) + 1]] <- extract_coef(
+            m_hist, s, s, o, h, "LP_ShockHistory", wt, nobs(m_hist)
           )
         }
 
@@ -328,7 +354,7 @@ for (o in outcomes) {
     }
     if (!dep_col %in% names(df)) next
 
-    # Spec 1: Additive + interaction (Any_Shock + Compound_Shock)
+    # Spec 1: Additive decomposition (Any_Shock baseline + Compound_Shock increment)
     rhs1 <- c("Any_Shock", "Compound_Shock", controls)
     rhs1 <- rhs1[rhs1 %in% names(df)]
     f1 <- as.formula(paste(dep_col, "~", paste(rhs1, collapse = " + "), "| fips_code + Year"))
@@ -357,6 +383,23 @@ for (o in outcomes) {
       if (!is.null(m2)) {
         coefs_compound[[length(coefs_compound) + 1]] <- extract_coef(
           m2, "Shock_Count", "Shock_Count", o, h, "LP_Dose_Response", wt, nobs(m2))
+      }
+
+      # RA clustering for premium outcomes (compound specs)
+      if (o == "Benchmark_Silver_Real" && "rating_area_id" %in% names(df)) {
+        m1_ra <- safe_feols(f1, df, "rating_area_id", wt_arg)
+        if (!is.null(m1_ra)) {
+          N1_ra <- nobs(m1_ra)
+          coefs_compound[[length(coefs_compound) + 1]] <- extract_coef(
+            m1_ra, "Any_Shock", "Any_Shock", o, h, "LP_Compound_Additive_RA", wt, N1_ra)
+          coefs_compound[[length(coefs_compound) + 1]] <- extract_coef(
+            m1_ra, "Compound_Shock", "Compound_Shock", o, h, "LP_Compound_Additive_RA", wt, N1_ra)
+        }
+        m2_ra <- safe_feols(f2, df, "rating_area_id", wt_arg)
+        if (!is.null(m2_ra)) {
+          coefs_compound[[length(coefs_compound) + 1]] <- extract_coef(
+            m2_ra, "Shock_Count", "Shock_Count", o, h, "LP_Dose_Response_RA", wt, nobs(m2_ra))
+        }
       }
     }
   }
@@ -450,15 +493,65 @@ for (o in outcomes) {
   cs_sub <- compound_plot_data %>%
     filter(shock == "Compound_Shock", outcome == o, approach == "LP_Compound_Additive")
   make_es_plot(cs_sub,
-               paste("Compound Shock (additive) ->", o),
+               paste("Compound Shock (additive increment) ->", o),
                paste0("lp_Compound_Shock_", o, ".png"))
 
-  # Shock_Count dose-response
+  # Dose-response: show predicted effect at Shock_Count = 1, 2, 3
   sc_sub <- compound_plot_data %>%
     filter(shock == "Shock_Count", outcome == o, approach == "LP_Dose_Response")
-  make_es_plot(sc_sub,
-               paste("Shock Count (dose-response) ->", o),
-               paste0("lp_Shock_Count_", o, ".png"))
+  if (nrow(sc_sub) > 0) {
+    dose_data <- bind_rows(
+      sc_sub %>% mutate(dose = "1 shock", estimate = estimate * 1,
+                        ci_low = ci_low * 1, ci_high = ci_high * 1),
+      sc_sub %>% mutate(dose = "2 shocks", estimate = estimate * 2,
+                        ci_low = ci_low * 2, ci_high = ci_high * 2),
+      sc_sub %>% mutate(dose = "3 shocks", estimate = estimate * 3,
+                        ci_low = ci_low * 3, ci_high = ci_high * 3)
+    )
+    dose_data$dose <- factor(dose_data$dose, levels = c("1 shock", "2 shocks", "3 shocks"))
+
+    p <- ggplot(dose_data, aes(x = horizon, y = estimate, color = dose)) +
+      geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
+      geom_vline(xintercept = -0.5, linetype = "dotted", color = "gray70") +
+      geom_pointrange(aes(ymin = ci_low, ymax = ci_high),
+                      position = position_dodge(width = 0.3), size = 0.5) +
+      scale_x_continuous(breaks = h_min:h_max) +
+      scale_color_manual(values = c("1 shock" = "#2166AC", "2 shocks" = "#B2182B",
+                                    "3 shocks" = "#4DAF4A")) +
+      labs(title = paste("Dose-Response: Shock Count ->", o),
+           subtitle = "Predicted effect at 1, 2, and 3 simultaneous shocks (linear model)",
+           x = "Horizon (years)", y = "Predicted Effect", color = "Dose") +
+      theme_minimal(base_size = 12) +
+      theme(plot.background = element_rect(fill = "white", color = NA),
+            panel.background = element_rect(fill = "white", color = NA))
+    ggsave(file.path(plot_dir, paste0("lp_Shock_Count_", o, ".png")),
+           p, width = 8, height = 5, dpi = 150, bg = "white")
+  }
+}
+
+# LP with shock-history robustness comparison plots (primary outcomes only)
+for (s in shocks) {
+  for (o in primary_outcomes) {
+    lp_comp <- coefs_all %>%
+      filter(shock == s, outcome == o, approach %in% c("LP", "LP_ShockHistory"),
+             weighting == "Unweighted")
+    if (nrow(lp_comp) == 0) next
+    p <- ggplot(lp_comp, aes(x = horizon, y = estimate, color = approach)) +
+      geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
+      geom_vline(xintercept = -0.5, linetype = "dotted", color = "gray70") +
+      geom_pointrange(aes(ymin = ci_low, ymax = ci_high),
+                      position = position_dodge(width = 0.3), size = 0.5) +
+      scale_x_continuous(breaks = h_min:h_max) +
+      scale_color_manual(values = c("LP" = "#2166AC", "LP_ShockHistory" = "#B2182B"),
+                         labels = c("LP" = "LP (no history)", "LP_ShockHistory" = "LP (with shock lags)")) +
+      labs(title = paste("Shock-History Robustness:", s, "->", o),
+           x = "Horizon (years)", y = "Estimate", color = "Specification") +
+      theme_minimal(base_size = 12) +
+      theme(plot.background = element_rect(fill = "white", color = NA),
+            panel.background = element_rect(fill = "white", color = NA))
+    ggsave(file.path(plot_dir, paste0("lp_history_robustness_", s, "_", o, ".png")),
+           p, width = 8, height = 5, dpi = 150, bg = "white")
+  }
 }
 
 # 9. Summary Diagnostics --------------------------------------------------
@@ -472,4 +565,21 @@ if (nrow(coefs_all) > 0) {
   print(as.data.frame(diag))
 }
 
-cat("\n=== Event Study Script Complete ===\n")
+# Compound shock support diagnostics (E6)
+cat("\n=== Compound Shock Support ===\n")
+cat("NOTE: Compound results (Shock_Count >= 2) have thin support (~2.2% of obs).\n")
+cat("Interpret compound coefficients as exploratory; CIs will be wide.\n\n")
+compound_support <- coefs_all %>%
+  filter(shock %in% c("Compound_Shock", "Shock_Count"),
+         approach %in% c("LP_Compound_Additive", "LP_Dose_Response"),
+         weighting == "Unweighted") %>%
+  group_by(shock, outcome, approach) %>%
+  summarize(
+    horizons = n(),
+    mean_N = round(mean(N)),
+    mean_CI_width = round(mean(ci_high - ci_low, na.rm = TRUE), 4),
+    .groups = "drop"
+  )
+if (nrow(compound_support) > 0) print(as.data.frame(compound_support))
+
+cat("\n=== Dynamic Panel Impulse-Response Script Complete ===\n")

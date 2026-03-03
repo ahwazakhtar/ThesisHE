@@ -129,19 +129,21 @@ test_that("Dynamic DL formula omits Lead1 (reference period)", {
   controls <- c("Household_Income_2023", "Uninsured_Rate")
 
   # Build RHS terms as the script should
+  # Uses _Lag1_es/_Lag2_es suffix to avoid collision with master's existing _Lag1/_Lag2
   rhs_terms <- c(
     paste0(shock, "_Lead2"),
     # Lead1 omitted (reference)
-    shock,                      # h=0
-    paste0(shock, "_Lag1"),     # h=+1
-    paste0(shock, "_Lag2"),     # h=+2
-    paste0(shock, "_Lag3"),     # h=+3
+    shock,                         # h=0
+    paste0(shock, "_Lag1_es"),     # h=+1
+    paste0(shock, "_Lag2_es"),     # h=+2
+    paste0(shock, "_Lag3"),        # h=+3
     controls
   )
 
   expect_false(paste0(shock, "_Lead1") %in% rhs_terms)
   expect_true(paste0(shock, "_Lead2") %in% rhs_terms)
   expect_true(shock %in% rhs_terms)
+  expect_true(paste0(shock, "_Lag1_es") %in% rhs_terms)
   expect_true(paste0(shock, "_Lag3") %in% rhs_terms)
   expect_length(rhs_terms, 7)  # 5 shock terms + 2 controls
 })
