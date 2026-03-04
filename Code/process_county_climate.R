@@ -114,6 +114,16 @@ process_noaa_data <- function(file_list, output_path) {
       .groups = "drop"
     )
 
+  # Compute national CDD/HDD 80th-percentile cutoffs from 1990-2000 county-year obs.
+  # Using a fixed national threshold (rather than within-county quintiles) ensures
+  # High_CDD/High_HDD capture objectively extreme years, not merely above-average
+  # years for a county that is already hot/cold. Anchored to the same pre-study
+  # reference period as the Z-score baseline for consistency.
+  baseline_cdd_hdd <- full_climate %>% filter(Year >= 1990, Year <= 2000)
+  cdd_p80 <- quantile(baseline_cdd_hdd$cdd_val, 0.80, na.rm = TRUE)
+  hdd_p80 <- quantile(baseline_cdd_hdd$hdd_val, 0.80, na.rm = TRUE)
+  cat(sprintf("  CDD national p80 (1990-2000): %.1f | HDD national p80: %.1f\n", cdd_p80, hdd_p80))
+
   full_climate_feat <- full_climate %>%
     left_join(baseline_stats, by = "fips_code") %>%
     group_by(fips_code) %>%
@@ -123,9 +133,11 @@ process_noaa_data <- function(file_list, output_path) {
       Z_Temp   = (temp_val   - temp_base_mean)   / temp_base_sd,
       Z_Precip = (precip_val - precip_base_mean) / precip_base_sd,
 
-      # CDD/HDD Quintiles
-      High_CDD = ifelse(ntile(cdd_val, 5) == 5, 1, 0),
-      High_HDD = ifelse(ntile(hdd_val, 5) == 5, 1, 0),
+      # CDD/HDD shock indicators: national 80th-percentile cutoff from 1990-2000.
+      # A county-year is "High" only if it exceeds the national reference threshold,
+      # not merely if it ranks high within its own county-specific history.
+      High_CDD = as.integer(!is.na(cdd_val) & cdd_val >= cdd_p80),
+      High_HDD = as.integer(!is.na(hdd_val) & hdd_val >= hdd_p80),
 
       # Distributed Lags (0-2)
       Z_Temp_Lag1 = lag(Z_Temp, 1), Z_Temp_Lag2 = lag(Z_Temp, 2),

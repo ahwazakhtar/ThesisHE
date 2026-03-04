@@ -9,7 +9,8 @@ library(tidyr)
 library(ggplot2)
 
 coefs <- read.csv("Analysis/event_study_coefs.csv", stringsAsFactors = FALSE)
-plot_dir <- "Analysis/plots"
+plot_dir <- "Analysis/plots/synthesis"
+dir.create(plot_dir, showWarnings = FALSE, recursive = TRUE)
 
 cat("Loaded", nrow(coefs), "coefficient rows\n")
 cat("Approaches:", paste(sort(unique(coefs$approach)), collapse = ", "), "\n")
@@ -244,18 +245,26 @@ cat("Saved: synthesis_dynamic_profiles.png\n")
 robust_data <- coefs %>%
   filter(approach %in% c("DL", "LP", "LP_ShockHistory"), weighting == "Unweighted",
          outcome %in% c("Medical_Debt_Share", "Benchmark_Silver_Real"),
-         shock %in% c("Is_Extreme_Drought", "High_CDD", "High_HDD"))
+         shock %in% c("Is_Extreme_Drought", "High_CDD", "High_HDD", "High_AQI_Max"))
+
+robust_shock_labeller <- c(
+  "Is_Extreme_Drought" = "Extreme Drought",
+  "High_CDD"           = "High CDD",
+  "High_HDD"           = "High HDD",
+  "High_AQI_Max"       = "High AQI"
+)
 
 p_robust <- ggplot(robust_data, aes(x = horizon, y = estimate, color = approach)) +
   geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
   geom_pointrange(aes(ymin = ci_low, ymax = ci_high),
                   position = position_dodge(width = 0.35), size = 0.35) +
-  facet_grid(outcome ~ shock, scales = "free_y") +
+  facet_grid(outcome ~ shock, scales = "free_y",
+             labeller = labeller(shock = robust_shock_labeller)) +
   scale_x_continuous(breaks = -2:3) +
   scale_color_manual(values = c("DL" = "#2166AC", "LP" = "#B2182B", "LP_ShockHistory" = "#4DAF4A"),
                      labels = c("DL" = "Distributed Lag", "LP" = "Local Projection",
                                 "LP_ShockHistory" = "LP + Shock History")) +
-  labs(title = "Cross-Method Robustness (Unweighted, State-Clustered)",
+  labs(title = "Cross-Method Robustness (Unweighted)",
        x = "Horizon (years)", y = "Estimate", color = "Method") +
   theme_minimal(base_size = 10) +
   theme(strip.text = element_text(size = 8),
@@ -265,6 +274,54 @@ p_robust <- ggplot(robust_data, aes(x = horizon, y = estimate, color = approach)
 ggsave(file.path(plot_dir, "synthesis_robustness_panel.png"),
        p_robust, width = 14, height = 7, dpi = 150, bg = "white")
 cat("Saved: synthesis_robustness_panel.png\n")
+
+# ============================================================================
+# 11b. VISUALIZATION: Supplemental robustness panel — secondary outcomes
+#      (Medical_Debt_Median_2023 and Hosp_BadDebt_PerCapita)
+# ============================================================================
+
+outcome_labels_extra <- c(
+  "Medical_Debt_Median_2023" = "Median Medical Debt ($2023)",
+  "Hosp_BadDebt_PerCapita"   = "Hosp. Bad Debt per Capita ($)"
+)
+
+robust_data_extra <- coefs %>%
+  filter(approach %in% c("DL", "LP", "LP_ShockHistory"), weighting == "Unweighted",
+         outcome %in% c("Medical_Debt_Median_2023", "Hosp_BadDebt_PerCapita"),
+         shock %in% c("Is_Extreme_Drought", "High_CDD", "High_HDD", "High_AQI_Max")) %>%
+  mutate(
+    outcome_label = outcome_labels_extra[outcome],
+    outcome_label = factor(outcome_label, levels = outcome_labels_extra)
+  )
+
+shock_labeller <- c(
+  "Is_Extreme_Drought" = "Extreme Drought",
+  "High_CDD"           = "High CDD",
+  "High_HDD"           = "High HDD",
+  "High_AQI_Max"       = "High AQI"
+)
+
+p_robust_extra <- ggplot(robust_data_extra, aes(x = horizon, y = estimate, color = approach)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
+  geom_pointrange(aes(ymin = ci_low, ymax = ci_high),
+                  position = position_dodge(width = 0.35), size = 0.35) +
+  facet_grid(outcome_label ~ shock, scales = "free_y",
+             labeller = labeller(shock = shock_labeller)) +
+  scale_x_continuous(breaks = -2:3) +
+  scale_color_manual(values = c("DL" = "#2166AC", "LP" = "#B2182B", "LP_ShockHistory" = "#4DAF4A"),
+                     labels = c("DL" = "Distributed Lag", "LP" = "Local Projection",
+                                "LP_ShockHistory" = "LP + Shock History")) +
+  labs(title = "Cross-Method Robustness — Secondary Outcomes (Unweighted)",
+       x = "Horizon (years)", y = "Estimate", color = "Method") +
+  theme_minimal(base_size = 10) +
+  theme(strip.text.x = element_text(size = 9, face = "bold"),
+        strip.text.y = element_text(size = 8),
+        plot.background = element_rect(fill = "white", color = NA),
+        panel.background = element_rect(fill = "white", color = NA),
+        legend.position = "bottom")
+ggsave(file.path(plot_dir, "synthesis_robustness_panel_extra.png"),
+       p_robust_extra, width = 14, height = 7, dpi = 150, bg = "white")
+cat("Saved: synthesis_robustness_panel_extra.png\n")
 
 # ============================================================================
 # 12. EXPORT STRUCTURED TABLE
@@ -421,7 +478,8 @@ cat("| `Analysis/event_study_full_results.csv` | All horizons, primary specs |\n
 cat("| `Analysis/event_study_results.txt` | DL model summaries (text) |\n")
 cat("| `Analysis/plots/synthesis_significance_heatmap.png` | h=0 significance heatmap |\n")
 cat("| `Analysis/plots/synthesis_dynamic_profiles.png` | LP impulse-response panel |\n")
-cat("| `Analysis/plots/synthesis_robustness_panel.png` | DL vs LP vs LP+History |\n")
+cat("| `Analysis/plots/synthesis_robustness_panel.png` | DL vs LP vs LP+History (Medical Debt Share, Silver Premium) |\n")
+cat("| `Analysis/plots/synthesis_robustness_panel_extra.png` | DL vs LP vs LP+History (Median Debt, Hosp Bad Debt) |\n")
 cat("| `Analysis/plots/lp_Shock_Count_*.png` | Dose-response multi-dose plots |\n")
 
 sink()

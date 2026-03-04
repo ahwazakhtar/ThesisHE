@@ -1,6 +1,6 @@
 # Descriptive Statistics Report: County-Level Panel
 
-**Generated:** 2026-03-03
+**Generated:** 2026-03-04
 **Panel:** 3,225 U.S. counties, 2011-2023 (42,360 county-year observations)
 **Script:** `Code/run_descriptive_stats.R`
 **Input data:** `Data/county_level_master.csv`
@@ -29,9 +29,9 @@ Main output tables:
 ## 2. Climate Shock Prevalence
 
 Average prevalence over 2011-2023:
-- Extreme Cold (High HDD): county-share average 16.4%, population-weighted average 12.8%.
+- Extreme Cold (High HDD): county-share average 17.3%, population-weighted average 6.5%.
 - Extreme Drought (PDSI <= -4): county-share average 2.3%, population-weighted average 5.4%.
-- Extreme Heat (High CDD): county-share average 29.7%, population-weighted average 34.1%.
+- Extreme Heat (High CDD): county-share average 24.0%, population-weighted average 26.2%.
 
 Interpretation:
 - Extreme heat is materially more common than extreme drought at the county-year level.
@@ -55,11 +55,11 @@ Interpretation:
 ## 4. Missing-Data Diagnostics
 
 Highest-missing variables in the study sample:
-- AQI Shock (z-score based): 68.0%
 - Median Medical Debt (2023 USD): 36.7%
 - Benchmark Silver Premium (2023 USD): 26.4%
 - Lowest Bronze Premium (2023 USD): 26.4%
 - Hospital Bad Debt (2023 USD): 24.8%
+- Hospital Charity Care (2023 USD): 24.8%
 
 Implications for econometric work:
 - AQI, premium, and hospital variables require unbalanced-panel inference and sensitivity checks.

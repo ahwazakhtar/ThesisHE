@@ -107,6 +107,48 @@ test_that("Baseline Z-scores differ from full-sample Z-scores when post-baseline
   expect_false(isTRUE(all.equal(z_baseline, z_fullsamp)))
 })
 
+# ---------------------------------------------------------------------------
+# Tests for national p80 CDD/HDD threshold logic
+# ---------------------------------------------------------------------------
+
+test_that("High_CDD uses national 80th-percentile cutoff from 1990-2000, not within-county quintile", {
+  # Two counties: county A is always hot (CDD 800-1000), county B is always cool (CDD 50-200).
+  # Under the old within-county ntile logic, both counties would have ~20% High_CDD years.
+  # Under the new national p80 logic, county B should have 0 High_CDD years.
+  baseline_df <- data.frame(
+    fips_code = c(rep("01001", 11), rep("01003", 11)),
+    Year      = rep(1990:2000, 2),
+    cdd_val   = c(seq(800, 1000, length.out = 11),   # hot county
+                  seq(50,  200,  length.out = 11))    # cool county
+  )
+  cdd_p80 <- quantile(baseline_df$cdd_val, 0.80, na.rm = TRUE)
+
+  result <- baseline_df %>%
+    mutate(High_CDD = as.integer(!is.na(cdd_val) & cdd_val >= cdd_p80))
+
+  # Cool county (01003) max CDD = 200, which is below the national p80 (~880);
+  # all of its observations should be 0.
+  expect_true(all(result$High_CDD[result$fips_code == "01003"] == 0))
+
+  # Hot county (01001) top values should exceed the threshold.
+  expect_true(any(result$High_CDD[result$fips_code == "01001"] == 1))
+})
+
+test_that("High_CDD national p80 threshold flags approximately 20% of baseline obs", {
+  set.seed(42)
+  n <- 500
+  df <- data.frame(
+    fips_code = rep(paste0("0100", 1:50), each = 10),
+    Year      = rep(1990:1999, 50),
+    cdd_val   = runif(n, 0, 2000)
+  )
+  cdd_p80 <- quantile(df$cdd_val, 0.80, na.rm = TRUE)
+  df$High_CDD <- as.integer(!is.na(df$cdd_val) & df$cdd_val >= cdd_p80)
+  pct_high <- mean(df$High_CDD)
+  # Should be close to 20% (within ±3 pp for n=500)
+  expect_true(abs(pct_high - 0.20) < 0.03)
+})
+
 test_that("Baseline Z-scores are computed independently per county", {
   test_df <- data.frame(
     fips_code = c(rep("01001", 11), rep("01003", 11)),

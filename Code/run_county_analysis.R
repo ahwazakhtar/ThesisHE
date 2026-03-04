@@ -276,7 +276,8 @@ run_models <- function(outcome_var, weight_var = NULL) {
 }
 
 # 6. Execution Loop -------------------------------------------------------
-outcomes <- c("Medical_Debt_Share", "Medical_Debt_Median_2023", "Benchmark_Silver_Real", "Hosp_BadDebt_PerCapita")
+outcomes <- c("Medical_Debt_Share", "Medical_Debt_Median_2023", "Benchmark_Silver_Real", "Hosp_BadDebt_PerCapita",
+              "PCPI_Real", "Med_HH_Income_Real", "Civilian_Employed")
 results_list <- list()
 sample_diag_list <- list()
 

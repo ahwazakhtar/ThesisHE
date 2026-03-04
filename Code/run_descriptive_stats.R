@@ -236,7 +236,7 @@ journal_theme <- function(base_size = 11) {
 run_descriptive_stats <- function(
   input_path = "Data/county_level_master.csv",
   output_dir = "Analysis",
-  plot_dir = "Analysis/plots",
+  plot_dir = "Analysis/plots/descriptive",
   debt_reporting_policy = data.frame(
     State = "CO",
     Start_Year = 2023L,

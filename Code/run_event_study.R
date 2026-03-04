@@ -16,10 +16,12 @@ library(ggplot2)
 input_path      <- "Data/county_level_master.csv"
 output_coefs    <- "Analysis/event_study_coefs.csv"
 output_results  <- "Analysis/event_study_results.txt"
-plot_dir        <- "Analysis/plots"
+plot_dir_es     <- "Analysis/plots/event_study"
+plot_dir_rob    <- "Analysis/plots/robustness"
 
 dir.create("Analysis", showWarnings = FALSE)
-dir.create(plot_dir, showWarnings = FALSE)
+dir.create(plot_dir_es,  showWarnings = FALSE, recursive = TRUE)
+dir.create(plot_dir_rob, showWarnings = FALSE, recursive = TRUE)
 
 cat("Loading Data...\n")
 df <- read.csv(input_path, stringsAsFactors = FALSE)
@@ -55,7 +57,8 @@ df$State <- as.factor(df$State)
 # Config
 shocks   <- c("Is_Extreme_Drought", "High_CDD", "High_HDD")
 outcomes <- c("Medical_Debt_Share", "Benchmark_Silver_Real",
-              "Medical_Debt_Median_2023", "Hosp_BadDebt_PerCapita")
+              "Medical_Debt_Median_2023", "Hosp_BadDebt_PerCapita",
+              "PCPI_Real", "Med_HH_Income_Real", "Civilian_Employed")
 primary_outcomes <- c("Medical_Debt_Share", "Benchmark_Silver_Real")
 controls <- intersect(c("Household_Income_2023", "Uninsured_Rate"), names(df))
 h_min <- -2L
@@ -465,7 +468,7 @@ make_es_plot <- function(data, title, filename) {
     theme_minimal(base_size = 12) +
     theme(plot.background = element_rect(fill = "white", color = NA),
           panel.background = element_rect(fill = "white", color = NA))
-  ggsave(file.path(plot_dir, filename), p, width = 7, height = 5, dpi = 150, bg = "white")
+  ggsave(file.path(plot_dir_es, filename), p, width = 7, height = 5, dpi = 150, bg = "white")
   invisible(p)
 }
 
@@ -506,7 +509,7 @@ for (s in shocks) {
       theme_minimal(base_size = 12) +
       theme(plot.background = element_rect(fill = "white", color = NA),
             panel.background = element_rect(fill = "white", color = NA))
-    ggsave(file.path(plot_dir, paste0("es_comparison_", s, "_", o, ".png")),
+    ggsave(file.path(plot_dir_rob, paste0("es_comparison_", s, "_", o, ".png")),
            p, width = 8, height = 5, dpi = 150, bg = "white")
   }
 }
@@ -522,7 +525,7 @@ for (o in outcomes) {
     filter(shock == "Compound_Shock", outcome == o, approach == "LP_Compound_Additive")
   make_es_plot(cs_sub,
                paste("Compound Shock (additive increment) ->", o),
-               paste0("lp_Compound_Shock_", o, ".png"))
+               paste0("lp_Compound_Shock_", o, ".png"))  # saved to plot_dir_es via make_es_plot
 
   # Dose-response: show predicted effect at Shock_Count = 1, 2, 3
   sc_sub <- compound_plot_data %>%
@@ -552,7 +555,7 @@ for (o in outcomes) {
       theme_minimal(base_size = 12) +
       theme(plot.background = element_rect(fill = "white", color = NA),
             panel.background = element_rect(fill = "white", color = NA))
-    ggsave(file.path(plot_dir, paste0("lp_Shock_Count_", o, ".png")),
+    ggsave(file.path(plot_dir_rob, paste0("lp_Shock_Count_", o, ".png")),
            p, width = 8, height = 5, dpi = 150, bg = "white")
   }
 }
@@ -577,7 +580,7 @@ for (s in shocks) {
       theme_minimal(base_size = 12) +
       theme(plot.background = element_rect(fill = "white", color = NA),
             panel.background = element_rect(fill = "white", color = NA))
-    ggsave(file.path(plot_dir, paste0("lp_history_robustness_", s, "_", o, ".png")),
+    ggsave(file.path(plot_dir_rob, paste0("lp_history_robustness_", s, "_", o, ".png")),
            p, width = 8, height = 5, dpi = 150, bg = "white")
   }
 }
