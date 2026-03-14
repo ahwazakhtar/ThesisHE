@@ -474,6 +474,111 @@ if (length(vif_log_lines) > 4) {
   cat(paste0("VIF diagnostics saved to: ", vif_output_path, "\n"))
 }
 
+# -------------------------------------------------------------------------
+# 9. Markdown Report — All Specs
+# -------------------------------------------------------------------------
+md_county_path <- "Analysis/county_regression_results.md"
+
+model_to_md_block <- function(model, spec_label, outcome, cluster_level, weighted_label) {
+  if (is.null(model)) return(paste0("**", spec_label, ":** *Not estimated.*\n\n"))
+
+  ct <- tryCatch(as.data.frame(coeftable(model)), error = function(e) NULL)
+  if (is.null(ct)) return(paste0("**", spec_label, ":** *coeftable failed.*\n\n"))
+  ct$Term <- rownames(ct)
+
+  n_obs <- tryCatch(nobs(model),       error = function(e) NA)
+  r2_w  <- tryCatch(round(r2(model, "wr2"), 4), error = function(e) NA)
+
+  hdr <- c(
+    paste0("#### ", spec_label),
+    paste0("**N =** ", format(n_obs, big.mark = ","),
+           " | **Within-R² =** ", r2_w,
+           " | **Cluster =** ", cluster_level,
+           " | **Weighting =** ", weighted_label),
+    "",
+    "| Term | Estimate | Std. Error | t value | p value |",
+    "|------|----------|------------|---------|---------|"
+  )
+
+  rows <- vapply(seq_len(nrow(ct)), function(i) {
+    p <- ct[i, "Pr(>|t|)"]
+    sig <- if (!is.na(p) && p < 0.01) "***" else if (!is.na(p) && p < 0.05) "**" else if (!is.na(p) && p < 0.10) "*" else ""
+    sprintf("| %s | %.4f%s | %.4f | %.3f | %.4f |",
+            ct[i, "Term"],
+            ct[i, "Estimate"], sig,
+            ct[i, "Std. Error"],
+            ct[i, "t value"],
+            ct[i, "Pr(>|t|)"])
+  }, character(1))
+
+  c(hdr, rows, "")
+}
+
+md_lines_county <- c(
+  "# County-Level Regression Results",
+  paste0("**Generated:** ", Sys.time()),
+  paste0("**Input:** ", input_path),
+  "**Model:** Two-way FE (fips_code + Year), cluster = State (primary), `fixest::feols`",
+  "**Specs:** Spec1 = Z-Temp/Z-Precip (relative shocks); Spec2 = High CDD/HDD (absolute burden); _AQI = +AQI_Shock; _RA_Cluster = Rating-Area clustered SEs",
+  "",
+  "Significance: \\*p<0.10, \\*\\*p<0.05, \\*\\*\\*p<0.01",
+  ""
+)
+
+spec_meta <- list(
+  Spec1_Base          = list(label = "Spec 1: Z-Temp/Z-Precip (Climate only)",             cluster = "State",           note = "Base"),
+  Spec1_AQI           = list(label = "Spec 1b: Z-Temp/Z-Precip + AQI",                     cluster = "State",           note = "AQI"),
+  Spec2_Base          = list(label = "Spec 2: High CDD/HDD (Absolute Burden)",              cluster = "State",           note = "Base"),
+  Spec2_AQI           = list(label = "Spec 2b: High CDD/HDD + AQI",                        cluster = "State",           note = "AQI"),
+  Spec1_Base_RA_Cluster = list(label = "Spec 1 (Rating-Area Clustered SEs)",                cluster = "rating_area_id",  note = "RA Cluster"),
+  Spec1_AQI_RA_Cluster  = list(label = "Spec 1b + AQI (Rating-Area Clustered SEs)",        cluster = "rating_area_id",  note = "RA Cluster"),
+  Spec2_Base_RA_Cluster = list(label = "Spec 2 (Rating-Area Clustered SEs)",                cluster = "rating_area_id",  note = "RA Cluster"),
+  Spec2_AQI_RA_Cluster  = list(label = "Spec 2b + AQI (Rating-Area Clustered SEs)",        cluster = "rating_area_id",  note = "RA Cluster")
+)
+
+for (y in outcomes) {
+  key_uw <- paste0(y, "_Unweighted")
+  key_w  <- paste0(y, "_Weighted")
+  has_uw <- key_uw %in% names(results_list)
+  has_w  <- key_w  %in% names(results_list)
+  if (!has_uw && !has_w) next
+
+  md_lines_county <- c(md_lines_county, paste0("---\n\n## Outcome: `", y, "`\n"))
+
+  for (wt_key in c(key_uw, key_w)) {
+    if (!wt_key %in% names(results_list)) next
+    wt_label <- if (grepl("_Weighted$", wt_key)) "Population-weighted" else "Unweighted"
+    res <- results_list[[wt_key]]
+
+    md_lines_county <- c(md_lines_county, paste0("### ", wt_label, "\n"))
+
+    for (sn in names(spec_meta)) {
+      m <- res[[sn]]
+      if (!is.null(m)) {
+        md_lines_county <- c(md_lines_county,
+          model_to_md_block(m, spec_meta[[sn]]$label, y, spec_meta[[sn]]$cluster, wt_label))
+      }
+    }
+  }
+
+  # RA-level robustness
+  key_ra <- paste0(y, "_RA_Robustness")
+  if (key_ra %in% names(results_list)) {
+    md_lines_county <- c(md_lines_county, "### Rating-Area Level Robustness (Pop-Weighted)\n")
+    res_ra <- results_list[[key_ra]]
+    for (sn in c("Spec1_Base", "Spec1_AQI", "Spec2_Base", "Spec2_AQI")) {
+      m <- res_ra[[sn]]
+      if (!is.null(m)) {
+        md_lines_county <- c(md_lines_county,
+          model_to_md_block(m, paste0("RA Robustness — ", spec_meta[[sn]]$label), y, "State", "Pop-Weighted"))
+      }
+    }
+  }
+}
+
+writeLines(md_lines_county, md_county_path)
+cat(paste0("Markdown report saved to: ", md_county_path, "\n"))
+
 # Export sample diagnostics
 if (length(sample_diag_list) > 0) {
   sample_diag_df <- dplyr::bind_rows(sample_diag_list)

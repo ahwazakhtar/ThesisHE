@@ -72,15 +72,23 @@ df <- df %>%
   ) %>%
   ungroup()
 
-# C. Energy Demand Shocks (CDD Top Quintile)
-# We determine the 80th percentile of CDD *within* each state
+# C. Energy Demand Shocks (CDD/HDD National 80th-Percentile Threshold)
+# Thresholds are computed from the 1990-2000 baseline period across all states,
+# matching the county-level pipeline design. Using a fixed national threshold
+# (rather than within-state quintiles) ensures High_CDD/High_HDD capture
+# objectively extreme years, not merely above-average years for a state that
+# is already hot/cold. Anchoring to 1990-2000 prevents look-ahead bias.
+baseline_cdd_hdd <- df %>% filter(Year >= 1990 & Year <= 2000)
+cdd_p80_national <- quantile(baseline_cdd_hdd$cdd_sum, 0.80, na.rm = TRUE)
+hdd_p80_national <- quantile(baseline_cdd_hdd$hdd_sum, 0.80, na.rm = TRUE)
+cat(sprintf("  CDD national p80 (1990-2000): %.1f | HDD national p80: %.1f\n",
+            cdd_p80_national, hdd_p80_national))
+
 df <- df %>%
-  group_by(State) %>%
   mutate(
-    cdd_80th = quantile(cdd_sum, probs = 0.80, na.rm = TRUE),
-    is_high_cdd = ifelse(!is.na(cdd_sum) & cdd_sum >= cdd_80th, 1, 0)
-  ) %>%
-  ungroup()
+    is_high_cdd = ifelse(!is.na(cdd_sum) & cdd_sum >= cdd_p80_national, 1, 0),
+    is_high_hdd = ifelse(!is.na(hdd_sum) & hdd_sum >= hdd_p80_national, 1, 0)
+  )
 
 # D. Air Quality — AQI variables from process_aqi_data.R enter regressions
 # directly as continuous measures (population-weighted median, max, pollutant
@@ -91,7 +99,7 @@ cat("Generating Distributed Lags (0, 1, 2 years)...\n")
 
 vars_to_lag <- c("is_extreme_drought", "is_severe_drought",
                  "is_heat_shock", "is_cold_shock",
-                 "is_high_cdd", "pdsi_level", "temp_z",
+                 "is_high_cdd", "is_high_hdd", "pdsi_level", "temp_z",
                  "pdsi_min_level", "is_extreme_drought_peak")
 
 # Add state AQI variables if present (produced by process_aqi_data.R)

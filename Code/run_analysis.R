@@ -26,7 +26,8 @@ climate_vars <- c(
   "is_extreme_drought_peak", "is_extreme_drought_peak_lag1", "is_extreme_drought_peak_lag2",
   "is_heat_shock", "is_heat_shock_lag1", "is_heat_shock_lag2",
   "is_cold_shock", "is_cold_shock_lag1", "is_cold_shock_lag2",
-  "is_high_cdd", "is_high_cdd_lag1", "is_high_cdd_lag2"
+  "is_high_cdd", "is_high_cdd_lag1", "is_high_cdd_lag2",
+  "is_high_hdd", "is_high_hdd_lag1", "is_high_hdd_lag2"
 )
 
 # Add state AQI variables if present (continuous measures from process_aqi_data.R)
@@ -115,14 +116,14 @@ for (dep in deps) {
 
   res_mat <- res_mat[, c("Dependent_Variable", "Term", "Estimate", "Std. Error", "t value", "Pr(>|t|)", "Observations", "R2_Within")]
   
-  results_list[[dep]] <- res_mat
+  results_list[[dep]] <- list(coef_df = res_mat, model = fem)
 }
 
 sink() # Close VIF log
 
 # 5. Export Results -------------------------------------------------------
 if (length(results_list) > 0) {
-  final_results <- do.call(rbind, results_list)
+  final_results <- do.call(rbind, lapply(results_list, function(x) x$coef_df))
   rownames(final_results) <- NULL
   
   # Clean column names
@@ -134,3 +135,60 @@ if (length(results_list) > 0) {
 } else {
   cat("\nWarning: No models ran successfully.\n")
 }
+
+# 6. Markdown Report -------------------------------------------------------
+md_output_path <- "Analysis/state_regression_results.md"
+
+model_to_md <- function(model, spec_name, outcome, cluster = "State", note = "") {
+  if (is.null(model)) return(paste0("*Model not estimated.*\n\n"))
+  ct <- as.data.frame(coeftable(model))
+  ct$Term <- rownames(ct)
+  n_obs   <- tryCatch(nobs(model), error = function(e) NA)
+  r2_w    <- tryCatch(round(r2(model, "wr2"), 4), error = function(e) NA)
+
+  lines <- c(
+    paste0("#### ", spec_name),
+    if (nzchar(note)) paste0("*", note, "*") else NULL,
+    paste0("**N =** ", format(n_obs, big.mark = ","),
+           " | **Within-R² =** ", r2_w,
+           " | **Cluster =** ", cluster),
+    "",
+    "| Term | Estimate | Std. Error | t value | p value |",
+    "|------|----------|------------|---------|---------|"
+  )
+
+  for (i in seq_len(nrow(ct))) {
+    sig <- dplyr::case_when(
+      ct[i, "Pr(>|t|)"] < 0.01  ~ "***",
+      ct[i, "Pr(>|t|)"] < 0.05  ~ "**",
+      ct[i, "Pr(>|t|)"] < 0.10  ~ "*",
+      TRUE                        ~ ""
+    )
+    lines <- c(lines, sprintf("| %s | %.4f%s | %.4f | %.3f | %.4f |",
+      ct[i, "Term"],
+      ct[i, "Estimate"], sig,
+      ct[i, "Std. Error"],
+      ct[i, "t value"],
+      ct[i, "Pr(>|t|)"]))
+  }
+  c(lines, "")
+}
+
+md_lines <- c(
+  "# State-Level Regression Results",
+  paste0("**Generated:** ", Sys.time()),
+  paste0("**Input:** ", input_path),
+  "**Model:** Two-way FE (State + Year), cluster = State, `fixest::feols`",
+  "",
+  "Significance: \\*p<0.10, \\*\\*p<0.05, \\*\\*\\*p<0.01",
+  ""
+)
+
+for (dep in deps) {
+  if (!dep %in% names(results_list)) next
+  md_lines <- c(md_lines, paste0("---\n\n## Outcome: `", dep, "`\n"))
+  md_lines <- c(md_lines, model_to_md(results_list[[dep]]$model, "Primary FE (State + Year)", dep))
+}
+
+writeLines(md_lines, md_output_path)
+cat(paste0("\nMarkdown report saved to: ", md_output_path, "\n"))
