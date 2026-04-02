@@ -77,7 +77,10 @@ master <- master_keys %>%
 # Join using fips_code and Year
 master <- master %>%
   left_join(df_aqi %>% select(fips_code, Year, Median_AQI, Max_AQI,
-                              any_of(c("AQI_Shock", "AQI_Shock_Lag1", "AQI_Shock_Lag2"))),
+                              any_of(c("AQI_Shock", "AQI_Shock_Lag1", "AQI_Shock_Lag2",
+                                       "Delta_Median_AQI", "Delta_Max_AQI",
+                                       "Delta_Median_AQI_Pos", "Delta_Median_AQI_Neg",
+                                       "Delta_Max_AQI_Pos", "Delta_Max_AQI_Neg"))),
             by = c("fips_code", "Year"))
 
 # 4b. Socioeconomic Outcomes Join -----------------------------------------

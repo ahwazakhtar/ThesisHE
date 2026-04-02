@@ -70,6 +70,29 @@
     - [x] Coefficient synthesis: contemporaneous effects, dynamic profiles, pre-trend checks, DL/LP consistency, shock-history robustness, compound decomposition, population weighting sensitivity.
 - [ ] **Task: Conductor - User Manual Verification 'Event Study & Econometric Modeling' (Protocol in workflow.md)**
 
+## Phase 3: Year-over-Year Weather Swing Analysis
+
+Motivation: explore a new source of variation — the *change* in climate exposure from one year to the next. The estimand is the health/economic cost of weather volatility, distinct from the level effects estimated in Phase 2.
+
+- [x] **Task: Construct delta exposure variables**
+    - [x] In `process_county_climate.R`, compute first differences for continuous climate variables: `Delta_Z_Temp`, `Delta_Z_Precip`, `Delta_CDD`, `Delta_HDD`, `Delta_PDSI`; asymmetric splits (`_Pos`/`_Neg`); binary onset/exit/persist for `Is_Extreme_Drought`, `High_CDD`, `High_HDD`.
+    - [x] In `process_county_aqi.R`, compute `Delta_Median_AQI`, `Delta_Max_AQI` and asymmetric splits.
+    - [x] 6 passing tests in `Code/tests/test_delta_variables.R` (NA boundary, arithmetic correctness, no cross-county bleed, Pos+Neg=symmetric, sign constraints, onset/exit/persist mutual exclusivity).
+
+- [x] **Task: Implement delta FE regression models**
+    - [x] `Code/run_delta_analysis.R`: primary spec `Outcome ~ Delta_X + Lagged_Level_X + controls | fips_code + Year`; LP distributed lags h=0..3; asymmetric specs; binary onset/exit; VIF diagnostics; plots. 896 coefficient rows in `Analysis/delta_coefs.csv`.
+    - [x] Also fixed `create_county_master.R` AQI join to include AQI delta columns.
+
+- [x] **Task: Asymmetric and robustness specs**
+    - [x] Implemented in `run_delta_analysis.R`: `Delta_Pos`/`Delta_Neg` asymmetric specs (196 rows), binary `Onset`/`Exit`/`Persist` specs (126 rows), VIF diagnostics in `Analysis/delta_vif_diagnostics.txt`.
+
+- [x] **Task: Synthesize and visualize delta results**
+    - [x] LP dynamic profile plots, contemporaneous FE plots in `Analysis/plots/delta/`.
+    - [x] Asymmetry plots (Pos vs Neg) and onset/exit plots in `Analysis/plots/delta_robustness/`.
+    - [x] Narrative synthesis with 6 key findings in `Analysis/delta_analysis_synthesis.md`.
+
+- [ ] **Task: Conductor - User Manual Verification 'Weather Swing Analysis' (Protocol in workflow.md)**
+
 ## Optional End-Step Robustness (Defer Until Final Pass)
 
 - [ ] Optional: simplify distributed lag blocks (e.g., cumulative lag sums or reduced lag sets) and report sensitivity versus the current unrestricted lag-by-lag primary specs.

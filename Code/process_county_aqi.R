@@ -93,7 +93,15 @@ df_feat <- df_all %>%
     Pct_Ozone_Lag1     = lag(Pct_Ozone, 1),      Pct_Ozone_Lag2     = lag(Pct_Ozone, 2),
     Pct_CO_Lag1        = lag(Pct_CO, 1),         Pct_CO_Lag2        = lag(Pct_CO, 2),
     Pct_NO2_Lag1       = lag(Pct_NO2, 1),        Pct_NO2_Lag2       = lag(Pct_NO2, 2),
-    Pct_Unhealthy_Lag1 = lag(Pct_Unhealthy, 1),  Pct_Unhealthy_Lag2 = lag(Pct_Unhealthy, 2)
+    Pct_Unhealthy_Lag1 = lag(Pct_Unhealthy, 1),  Pct_Unhealthy_Lag2 = lag(Pct_Unhealthy, 2),
+
+    # Year-over-Year Deltas (Phase 3: Weather Swing Analysis)
+    Delta_Median_AQI = Median_AQI - lag(Median_AQI, 1),
+    Delta_Max_AQI    = Max_AQI    - lag(Max_AQI,    1),
+
+    # Asymmetric decomposition
+    Delta_Median_AQI_Pos = pmax(Delta_Median_AQI, 0), Delta_Median_AQI_Neg = pmin(Delta_Median_AQI, 0),
+    Delta_Max_AQI_Pos    = pmax(Delta_Max_AQI,    0), Delta_Max_AQI_Neg    = pmin(Delta_Max_AQI,    0)
   ) %>%
   ungroup()
 

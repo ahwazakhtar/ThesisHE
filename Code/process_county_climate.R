@@ -151,7 +151,35 @@ process_noaa_data <- function(file_list, output_path) {
       # Extreme drought indicator: PDSI <= -4 (NOAA/Palmer threshold for extreme drought)
       Is_Extreme_Drought      = as.integer(!is.na(pdsi_val) & pdsi_val <= -4),
       Is_Extreme_Drought_Lag1 = lag(Is_Extreme_Drought, 1),
-      Is_Extreme_Drought_Lag2 = lag(Is_Extreme_Drought, 2)
+      Is_Extreme_Drought_Lag2 = lag(Is_Extreme_Drought, 2),
+
+      # Year-over-Year Deltas (Phase 3: Weather Swing Analysis)
+      # Delta = current - prior year. NA at first obs of each county (panel boundary).
+      # Symmetric: positive = worsening heat/drought; negative = relief.
+      Delta_Z_Temp   = Z_Temp   - lag(Z_Temp,   1),
+      Delta_Z_Precip = Z_Precip - lag(Z_Precip, 1),
+      Delta_CDD      = cdd_val  - lag(cdd_val,  1),
+      Delta_HDD      = hdd_val  - lag(hdd_val,  1),
+      Delta_PDSI     = pdsi_val - lag(pdsi_val, 1),
+
+      # Asymmetric decomposition: positive swing (escalation) vs. negative swing (relief)
+      Delta_Z_Temp_Pos   = pmax(Delta_Z_Temp,   0), Delta_Z_Temp_Neg   = pmin(Delta_Z_Temp,   0),
+      Delta_Z_Precip_Pos = pmax(Delta_Z_Precip, 0), Delta_Z_Precip_Neg = pmin(Delta_Z_Precip, 0),
+      Delta_CDD_Pos      = pmax(Delta_CDD,      0), Delta_CDD_Neg      = pmin(Delta_CDD,      0),
+      Delta_HDD_Pos      = pmax(Delta_HDD,      0), Delta_HDD_Neg      = pmin(Delta_HDD,      0),
+      Delta_PDSI_Pos     = pmax(Delta_PDSI,     0), Delta_PDSI_Neg     = pmin(Delta_PDSI,     0),
+
+      # Binary onset/exit (robustness): shock entry (0->1), exit (1->0), persist (1->1)
+      # Coded as separate binary flags for Is_Extreme_Drought; High_CDD/High_HDD analogous
+      Drought_Onset   = as.integer(Is_Extreme_Drought == 1 & lag(Is_Extreme_Drought, 1) == 0),
+      Drought_Exit    = as.integer(Is_Extreme_Drought == 0 & lag(Is_Extreme_Drought, 1) == 1),
+      Drought_Persist = as.integer(Is_Extreme_Drought == 1 & lag(Is_Extreme_Drought, 1) == 1),
+      CDD_Onset   = as.integer(High_CDD == 1 & lag(High_CDD, 1) == 0),
+      CDD_Exit    = as.integer(High_CDD == 0 & lag(High_CDD, 1) == 1),
+      CDD_Persist = as.integer(High_CDD == 1 & lag(High_CDD, 1) == 1),
+      HDD_Onset   = as.integer(High_HDD == 1 & lag(High_HDD, 1) == 0),
+      HDD_Exit    = as.integer(High_HDD == 0 & lag(High_HDD, 1) == 1),
+      HDD_Persist = as.integer(High_HDD == 1 & lag(High_HDD, 1) == 1)
     ) %>%
     select(-temp_base_mean, -temp_base_sd, -precip_base_mean, -precip_base_sd) %>%
     ungroup()
