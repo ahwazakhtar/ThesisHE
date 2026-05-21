@@ -25,13 +25,12 @@ Sequencing: Phase 0 is the gate. Phases 1 and 4 can run in parallel with Phase 2
 
 ## Phase 2: Post-exit dynamics (Econometric #2)
 
-- [ ] **Task: Extend Exit indicators with LP dynamic horizons**
-    - [ ] Extend `Code/run_delta_analysis.R` so that `*_Exit` (Drought, CDD, HDD) are estimated with LP horizons h=0..3 (currently only h=0).
-    - [ ] Add a complementary "exit-after-shock" spec: `Y_{i,t+h} ~ Shock_{i,t-1} * NoShock_{i,t}` (interaction isolates counties that were shocked at t-1 and recovered at t).
-    - [ ] Export coefficients to `Analysis/delta_coefs.csv` (extend existing file with horizon != 0 rows for Exit).
-    - [ ] Add tests in `Code/tests/test_delta_variables.R` for the new exit LP horizons (boundary cases, sign).
-    - [ ] Plots in `Analysis/plots/delta_exit_dynamics/` (per shock x outcome).
-    - [ ] Update `Analysis/delta_analysis_synthesis.md` with a new section on post-exit dynamics.
+- [x] **Task: Extend Exit indicators with LP dynamic horizons** [b241f83]
+    - [x] Extended `Code/run_delta_analysis.R` Section 9 with Block A (Exit_LP h=0..3) and Block B (Exit_Interaction: `Shock_{t-1} * NoShock_t`).
+    - [x] `Analysis/delta_coefs.csv`: 896 -> 1664 rows (+768 across primary + RA-cluster variants).
+    - [x] 3 new testthat blocks in `Code/tests/test_delta_variables.R` (LP-at-h=0 equivalence, lead() boundary safety, interaction identity). 9/9 pass.
+    - [x] 42 new plots in `Analysis/plots/delta_exit_dynamics/`.
+    - [x] `Analysis/delta_analysis_synthesis.md` extended with "Post-Exit Dynamics" section. Headline: Drought_Exit -> PCPI_Real peaks at h=2 (+$1044 pc, p=0.0002, partial scarring); HDD_Exit -> Hosp_BadDebt_PerCapita immediate relief (no cold-shock scarring); CDD-exit shows persistent employment benefits.
 
 ## Phase 3: Diff-in-Diff with never-exposed controls (Econometric #3)
 
