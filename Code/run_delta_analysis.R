@@ -29,10 +29,12 @@ output_coefs   <- "Analysis/delta_coefs.csv"
 output_results <- "Analysis/delta_results.txt"
 plot_dir       <- "Analysis/plots/delta"
 plot_dir_rob   <- "Analysis/plots/delta_robustness"
+plot_dir_exit  <- "Analysis/plots/delta_exit_dynamics"
 
 dir.create("Analysis",    showWarnings = FALSE)
 dir.create(plot_dir,      showWarnings = FALSE, recursive = TRUE)
 dir.create(plot_dir_rob,  showWarnings = FALSE, recursive = TRUE)
+dir.create(plot_dir_exit, showWarnings = FALSE, recursive = TRUE)
 
 cat("Loading data...\n")
 df <- read.csv(input_path, stringsAsFactors = FALSE)
@@ -322,6 +324,125 @@ for (spec in onset_exit_specs) {
 sink()
 cat("Model summaries saved to:", output_results, "\n")
 
+# 9b. Exit LP horizons (Committee Feedback Phase 2) ------------------------
+# Block A: lead(Y, h) ~ Exit_{i,t} + controls | fips_code + Year for h=0..3.
+# Direct dynamic response to leaving shock status; complements section 9's h=0 onset/exit table.
+# Block B: lead(Y, h) ~ Shock_{i,t-1} * NoShock_{i,t} | fips_code + Year.
+# The interaction term isolates counties that were shocked at t-1 AND recovered at t —
+# i.e. the scarring/relief population — separately from never-shocked and persistently-shocked.
+
+cat("\n=== Exit LP Horizons (Phase 2) ===\n")
+
+exit_lp_specs <- list(
+  list(exit = "Drought_Exit", shock = "Is_Extreme_Drought", label = "Drought"),
+  list(exit = "CDD_Exit",     shock = "High_CDD",           label = "CDD"),
+  list(exit = "HDD_Exit",     shock = "High_HDD",           label = "HDD")
+)
+exit_lp_specs <- Filter(function(s) s$exit %in% names(df) && s$shock %in% names(df),
+                        exit_lp_specs)
+
+# Lagged-shock and NoShock columns for Block B interaction term
+for (spec in exit_lp_specs) {
+  lag_col   <- paste0(spec$shock, "_LagShock")
+  no_col    <- paste0(spec$shock, "_NoShock")
+  df <- df %>%
+    group_by(fips_code) %>%
+    arrange(Year) %>%
+    mutate(
+      !!lag_col := dplyr::lag(.data[[spec$shock]], 1),
+      !!no_col  := 1L - .data[[spec$shock]]
+    ) %>%
+    ungroup()
+}
+
+coefs_exit_lp     <- list()
+coefs_exit_interact <- list()
+
+sink(output_results, append = TRUE)
+cat("\n\n=== Exit LP Horizons (Phase 2) ===\n\n")
+
+for (spec in exit_lp_specs) {
+  lag_col <- paste0(spec$shock, "_LagShock")
+  no_col  <- paste0(spec$shock, "_NoShock")
+
+  for (o in outcomes) {
+    for (h in 0L:h_max) {
+      dep_col <- paste0(o, "_fwd", h)
+      if (!dep_col %in% names(df)) next
+
+      # ---- Block A: Exit LP ----
+      rhs_A <- c(spec$exit, controls)
+      rhs_A <- rhs_A[rhs_A %in% names(df)]
+      f_A <- as.formula(paste(dep_col, "~", paste(rhs_A, collapse = " + "),
+                              "| fips_code + Year"))
+
+      # ---- Block B: Exit-after-shock interaction ----
+      rhs_B <- c(paste0(lag_col, " * ", no_col), controls)
+      rhs_B <- c(rhs_B[1], rhs_B[-1][rhs_B[-1] %in% names(df)])
+      f_B <- as.formula(paste(dep_col, "~", paste(rhs_B, collapse = " + "),
+                              "| fips_code + Year"))
+
+      for (wt in c("Unweighted", "Population")) {
+        wt_arg <- if (wt == "Population" && "Population" %in% names(df)) "Population" else NULL
+        if (wt == "Population" && is.null(wt_arg)) next
+
+        # Block A
+        m_A <- safe_feols(f_A, df, "State", wt_arg)
+        if (!is.null(m_A)) {
+          label <- paste("Exit_LP", spec$label, o, paste0("h=", h), wt, sep = " | ")
+          cat(paste0("\n--- ", label, " ---\n"))
+          print(summary(m_A))
+          N_A <- nobs(m_A)
+          coefs_exit_lp[[length(coefs_exit_lp) + 1]] <- extract_coef(
+            m_A, spec$exit, paste0(spec$label, "_Exit"), o, h, "Delta_Exit_LP", wt, N_A)
+
+          # RA cluster for premium outcomes
+          if (o == "Benchmark_Silver_Real" && "rating_area_id" %in% names(df)) {
+            m_A_ra <- safe_feols(f_A, df, "rating_area_id", wt_arg)
+            if (!is.null(m_A_ra)) {
+              coefs_exit_lp[[length(coefs_exit_lp) + 1]] <- extract_coef(
+                m_A_ra, spec$exit, paste0(spec$label, "_Exit"), o, h,
+                "Delta_Exit_LP_RA_Cluster", wt, nobs(m_A_ra))
+            }
+          }
+        }
+
+        # Block B
+        m_B <- safe_feols(f_B, df, "State", wt_arg)
+        if (!is.null(m_B)) {
+          label <- paste("Exit_Interaction", spec$label, o, paste0("h=", h), wt, sep = " | ")
+          cat(paste0("\n--- ", label, " ---\n"))
+          print(summary(m_B))
+          N_B <- nobs(m_B)
+          # Capture all three terms: LagShock main, NoShock main, interaction
+          interaction_term <- paste0(lag_col, ":", no_col)
+          for (trm in c(lag_col, no_col, interaction_term)) {
+            coefs_exit_interact[[length(coefs_exit_interact) + 1]] <- extract_coef(
+              m_B, trm, paste0(spec$label, "_", trm), o, h,
+              "Delta_Exit_Interaction", wt, N_B)
+          }
+
+          # RA cluster for premium outcomes
+          if (o == "Benchmark_Silver_Real" && "rating_area_id" %in% names(df)) {
+            m_B_ra <- safe_feols(f_B, df, "rating_area_id", wt_arg)
+            if (!is.null(m_B_ra)) {
+              N_B_ra <- nobs(m_B_ra)
+              for (trm in c(lag_col, no_col, interaction_term)) {
+                coefs_exit_interact[[length(coefs_exit_interact) + 1]] <- extract_coef(
+                  m_B_ra, trm, paste0(spec$label, "_", trm), o, h,
+                  "Delta_Exit_Interaction_RA_Cluster", wt, N_B_ra)
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+sink()
+cat("Exit LP / Interaction summaries appended to:", output_results, "\n")
+
 # 10. VIF Diagnostics ------------------------------------------------------
 
 cat("\n=== VIF Diagnostics (Delta + Lagged Level Block) ===\n")
@@ -366,7 +487,8 @@ cat("VIF diagnostics saved to Analysis/delta_vif_diagnostics.txt\n")
 
 # 11. Combine & Export Coefficients ----------------------------------------
 
-all_coef_lists <- c(coefs_primary, coefs_lp, coefs_asym, coefs_onset)
+all_coef_lists <- c(coefs_primary, coefs_lp, coefs_asym, coefs_onset,
+                    coefs_exit_lp, coefs_exit_interact)
 all_coef_lists <- Filter(Negate(is.null), all_coef_lists)
 coefs_all <- if (length(all_coef_lists) > 0) bind_rows(all_coef_lists) else data.frame()
 if (nrow(coefs_all) > 0) {
@@ -491,6 +613,67 @@ for (o in outcomes) {
           panel.background = element_rect(fill = "white", color = NA))
   ggsave(file.path(plot_dir_rob, paste0("onset_exit_", o, ".png")),
          p, width = 8, height = 5, dpi = 150, bg = "white")
+}
+
+# 12e. Exit LP dynamic profiles (Block A: Phase 2) -------------------------
+
+exit_lp_plot <- coefs_all %>%
+  filter(approach == "Delta_Exit_LP", weighting == "Unweighted")
+
+for (exp_label in unique(exit_lp_plot$exposure)) {
+  for (o in outcomes) {
+    sub <- exit_lp_plot %>% filter(exposure == exp_label, outcome == o)
+    if (nrow(sub) == 0) next
+    make_coef_plot(sub,
+                   paste("Post-Exit LP:", exp_label, "->", o),
+                   paste0("exit_lp_", exp_label, "_", o, ".png"),
+                   dir = plot_dir_exit)
+  }
+}
+
+# 12f. Exit interaction dynamic profiles (Block B: Phase 2) ----------------
+# Show the interaction term (Shock_{t-1} * NoShock_{t}) in its own panel,
+# with the two main effects (LagShock, NoShock) in a separate panel.
+
+exit_interact_plot <- coefs_all %>%
+  filter(approach == "Delta_Exit_Interaction", weighting == "Unweighted")
+
+for (shock_label in c("Drought", "CDD", "HDD")) {
+  for (o in outcomes) {
+    sub <- exit_interact_plot %>%
+      filter(grepl(paste0("^", shock_label, "_"), exposure), outcome == o)
+    if (nrow(sub) == 0) next
+
+    sub <- sub %>%
+      mutate(
+        component = case_when(
+          grepl(":", term) ~ "Interaction (Shock_{t-1} x NoShock_{t})",
+          grepl("_NoShock$", term) ~ "NoShock_{t} (main)",
+          grepl("_LagShock$", term) ~ "Shock_{t-1} (main)",
+          TRUE ~ term
+        ),
+        panel = ifelse(grepl("Interaction", component),
+                       "Interaction (scarring/relief)",
+                       "Main effects")
+      )
+
+    p <- ggplot(sub, aes(x = horizon, y = estimate, color = component)) +
+      geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
+      geom_pointrange(aes(ymin = ci_low, ymax = ci_high),
+                      position = position_dodge(width = 0.3), size = 0.5) +
+      facet_wrap(~ panel, scales = "free_y", ncol = 2) +
+      scale_x_continuous(breaks = unique(sub$horizon)) +
+      labs(title = paste("Exit Interaction:", shock_label, "->", o),
+           subtitle = "Shock_{t-1} * NoShock_{t} isolates the recovery cohort",
+           x = "Horizon h (years)", y = "Estimate", color = NULL) +
+      theme_minimal(base_size = 11) +
+      theme(legend.position = "bottom",
+            plot.background  = element_rect(fill = "white", color = NA),
+            panel.background = element_rect(fill = "white", color = NA))
+    ggsave(file.path(plot_dir_exit,
+                     paste0("exit_interact_", shock_label, "_", o, ".png")),
+           p, width = 10, height = 5, dpi = 150, bg = "white")
+  }
 }
 
 # 13. Summary Diagnostics --------------------------------------------------

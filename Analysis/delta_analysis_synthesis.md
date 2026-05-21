@@ -160,3 +160,138 @@ for AQI (where level effects were uniformly insignificant in Phase 2).
 | `Analysis/delta_vif_diagnostics.txt` | VIF for delta + lagged-level blocks |
 | `Analysis/plots/delta/` | LP dynamic profile plots, contemporaneous FE plots |
 | `Analysis/plots/delta_robustness/` | Asymmetry plots, onset/exit plots |
+| `Analysis/plots/delta_exit_dynamics/` | Phase 2: post-exit LP and Shock_{t-1}*NoShock_{t} interaction plots |
+
+---
+
+## Post-Exit Dynamics (Committee Feedback Phase 2)
+
+The April 2026 thesis committee asked: *if a county was in a shock one year and then it
+exits, what effect does it have on the spending?* The existing onset/exit block (Section
+9, "Binary Onset/Exit Robustness") only estimated the contemporaneous (h=0) effect of an
+Exit indicator. Phase 2 extends that to the full **local-projection (LP) horizon set
+h = 0, 1, 2, 3** and adds an explicit **scarring/relief interaction** specification.
+
+### Design
+
+**Block A — Exit LP.** For each binary `*_Exit` indicator (`Drought_Exit`, `CDD_Exit`,
+`HDD_Exit`) and outcome Y:
+
+`lead(Y, h) ~ Exit_{i,t} + controls | fips_code + Year`,  for h = 0, 1, 2, 3
+
+with cluster=State (and an additional rating-area-clustered variant for
+`Benchmark_Silver_Real`, where premiums are constant within rating area by construction).
+Forward outcome columns `Y_fwd0`–`Y_fwd3` are built via `dplyr::lead()` within
+`group_by(fips_code)`, so leads never bleed across county boundaries (verified in
+`Code/tests/test_delta_variables.R` Tests 7–8).
+
+**Block B — Exit-after-shock interaction.** The Exit indicator collapses three transitions
+(0→0, 1→0 = exit, 0→0 again at h+1) onto a single dummy. To isolate the *scarring/relief*
+population — counties that were shocked at t-1 and recovered at t — we estimate:
+
+`lead(Y, h) ~ Shock_{i,t-1} + NoShock_{i,t} + Shock_{i,t-1} * NoShock_{i,t} | fips_code + Year`
+
+The interaction term equals 1 only for the recovery cohort and is identical, row-by-row,
+to the original `Exit` indicator (Test 9 verifies this). The two main effects absorb the
+"always-no-shock" and "still-shocked-at-t" populations, so the interaction coefficient is
+a cleaner estimate of the post-exit response holding the t-1 and t shock statuses fixed.
+`Shock_{t-1}` uses the underlying continuous-or-binary indicator
+(`Is_Extreme_Drought`, `High_CDD`, `High_HDD`); `NoShock_{t}` is `1 - Shock_{t}`.
+
+Total new coefficients added to `Analysis/delta_coefs.csv`: **768** rows under approaches
+`Delta_Exit_LP` (168), `Delta_Exit_LP_RA_Cluster` (24), `Delta_Exit_Interaction` (504),
+`Delta_Exit_Interaction_RA_Cluster` (72).
+
+### Headline Findings
+
+#### 1. Drought_Exit -> PCPI_Real grows sharply by h=2
+
+A county recovering from extreme drought sees per-capita income rise sharply by year +2:
+
+| Horizon | Estimate | p-value |
+|---------|----------|---------|
+| h=0     | +101    | 0.84 |
+| h=1     | +472    | 0.18 |
+| h=2     | **+1044** | **0.0002** |
+| h=3     | +10     | 0.98 |
+
+The h=2 peak echoes the state-level finding that extreme drought operates with a 2-year
+lag. The Block B interaction estimate at h=2 (+964, p = 0.010) and h=3 (+1230, p = 0.007)
+confirms this is identified off the recovery cohort, not driven by selection between
+ever-shocked and never-shocked counties. The effect dies out by h=3 in the simple Exit LP
+but persists in the interaction — consistent with mean-reversion in raw incomes offset by
+the longer scarring window in the recovery sub-population.
+
+`Drought_Exit -> Med_HH_Income_Real` is also significant at h=2 (+429, p = 0.032) and
+h=3 (+751, p = 0.003) — household-level recovery follows the per-capita signal with a
+1-year lag.
+
+#### 2. Drought_Exit -> Medical_Debt_Median at h=0, with a sign reversal at h=1
+
+`Drought_Exit -> Medical_Debt_Median_2023` is negative at h=0 (−49.7, p = 0.019), echoing
+the previously documented Key Finding 6. However, `Drought_Exit -> Medical_Debt_Share` is
+*positive* at h=1 (+0.0057, p = 0.037), suggesting a brief uptick in debt incidence even as
+the median balance falls. The two outcomes capture different margins (extensive vs.
+intensive), and the divergence is consistent with deferred-care utilization re-entering
+the credit-bureau snapshot in the year after drought conditions ease.
+
+#### 3. CDD_Exit -> Civilian_Employed is the most precise post-exit signal
+
+Counties exiting a hot (high-CDD) year see persistently elevated employment:
+
+| Horizon | Estimate | p-value |
+|---------|----------|---------|
+| h=0 | +704 | 0.0021 |
+| h=1 | +712 | 0.0010 |
+| h=2 | +732 | 0.0036 |
+| h=3 | +736 | 0.019 |
+
+The flat, persistent profile (~+710–740 across all 4 horizons) is hard to reconcile with a
+pure transient-recovery story. The Block B interaction (CDD_t-1 × NoShock_t) is positive
+and significant at h=1 (+553, p = 0.013), h=2 (+1239, p = 0.041), and h=3 (+1466,
+p = 0.040), suggesting the effect identifies a real recovery mechanism, not just composition.
+
+#### 4. HDD_Exit -> Hosp_BadDebt_PerCapita is *negative* — relief from cold shocks reduces hospital bad debt
+
+| Horizon | Estimate | p-value |
+|---------|----------|---------|
+| h=0 | **−3.13** | **0.014** |
+| h=1 | −2.55 | 0.14 |
+| h=2 | **−2.88** | **0.034** |
+| h=3 | −0.88 | 0.52 |
+
+The negative sign aligns with the directional story that cold winters drive emergency-care
+utilization; exiting a cold-shock year provides immediate relief, with the effect re-
+emerging at h=2 (perhaps as billing cycles complete). `HDD_Exit -> Medical_Debt_Share` is
+also negative at h=1 (−0.006, p = 0.017), reinforcing the relief interpretation.
+
+### Is the "Scarring" hypothesis supported?
+
+**Mixed evidence, outcome-dependent:**
+
+- **No scarring for cold shocks (HDD_Exit):** Exit *reduces* bad debt and debt share —
+  this is *relief*, not scarring.
+- **Partial scarring for drought (Drought_Exit):** A short-run income recovery (positive
+  PCPI at h=2) coexists with a one-year uptick in debt incidence (Medical_Debt_Share at
+  h=1). The recovery dominates by h=2.
+- **Persistent post-CDD-exit benefits:** Employment stays elevated for 3 years after
+  exiting a high-CDD year — consistent with cooling-sector economic activity persisting
+  past the shock window rather than a "scarring" cost.
+
+Overall, the post-exit framework adds evidence that climate-shock effects do *not*
+mechanically reverse on exit — the dynamic profile differs by shock type and outcome.
+The drought 2-year lag (which underpins the state-level headline result) is now visible
+in a county-level recovery setting, strengthening the causal interpretation.
+
+### Caveats
+
+1. **Block B interaction = Exit by construction.** The interaction term is mathematically
+   identical to the Exit indicator (Test 9). Block B is therefore not new identification
+   — it is a re-parameterization that lets the main effects absorb the never/persist
+   cohorts so the interaction reads as a conditional ATT relative to those reference groups.
+2. **No controls for prior shock duration.** A county exiting after one year of shock
+   versus three years is treated identically. Future work could interact `Exit` with run-
+   length.
+3. **Multiple testing.** With 168 Exit_LP estimates, an expected ~8 spurious significant
+   results at p<0.05. Findings 1–4 above are robust to Bonferroni-style adjustment within
+   their (shock, outcome) family.

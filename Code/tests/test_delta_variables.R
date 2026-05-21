@@ -161,4 +161,109 @@ test_that("Onset + Exit + Persist + (never-shocked) partitions post-first-obs ro
               "Persist must be 0 when current Is_Extreme_Drought == 0")
 })
 
+# ===========================================================================
+# Exit LP horizons (Phase 2)
+# ===========================================================================
+# These tests cover the local-projection extension to the Exit indicators.
+# Block A: lead(Y, h) ~ Exit + ... | fips + Year, for h = 0..3
+# Block B: lead(Y, h) ~ Shock_{t-1} * NoShock_{t} | fips + Year (interaction
+# isolates scarring/relief population separately from never/persist cohorts).
+#
+# Tests intentionally use a small synthetic panel — they verify the LP
+# construction primitives (lead alignment, h=0 equivalence, no cross-county
+# bleed). Empirical findings on the real panel are validated separately.
+
+library(fixest)
+
+make_lp_panel <- function() {
+  set.seed(123)
+  d <- expand.grid(
+    fips_code = c("01001", "01002", "01003", "01004", "01005"),
+    Year = 2010:2020, stringsAsFactors = FALSE
+  ) %>%
+    arrange(fips_code, Year) %>%
+    group_by(fips_code) %>%
+    mutate(
+      Is_Extreme_Drought = as.integer(Year %in% sample(2011:2019, 3)),
+      Y                  = rnorm(n(), mean = 100, sd = 10) +
+                           5 * Is_Extreme_Drought
+    ) %>%
+    mutate(
+      Drought_Exit = as.integer(Is_Extreme_Drought == 0 &
+                                  lag(Is_Extreme_Drought, 1) == 1),
+      Y_fwd0 = Y,
+      Y_fwd1 = dplyr::lead(Y, 1),
+      Y_fwd2 = dplyr::lead(Y, 2),
+      Y_fwd3 = dplyr::lead(Y, 3),
+      LagShock = dplyr::lag(Is_Extreme_Drought, 1),
+      NoShock  = 1L - Is_Extreme_Drought
+    ) %>%
+    ungroup()
+  d
+}
+
+# ===========================================================================
+# Test 7: Exit LP at h=0 reproduces contemporaneous Exit coefficient
+# ===========================================================================
+# Y_fwd0 == Y by construction, so feols on Y_fwd0 with the Exit indicator
+# must yield the same point estimate as feols on Y. This guards against
+# misalignment in the lead() construction.
+test_that("LP at h=0 matches contemporaneous Exit coefficient", {
+  d <- make_lp_panel() %>% filter(!is.na(Drought_Exit))
+
+  m_base <- feols(Y      ~ Drought_Exit | fips_code + Year, data = d)
+  m_lp0  <- feols(Y_fwd0 ~ Drought_Exit | fips_code + Year, data = d)
+
+  expect_equal(coef(m_base)[["Drought_Exit"]],
+               coef(m_lp0)[["Drought_Exit"]],
+               tolerance = 1e-10,
+               label = "h=0 LP must equal contemporaneous regression")
+})
+
+# ===========================================================================
+# Test 8: lead() does not bleed across county boundaries
+# ===========================================================================
+# The last h observations of each county must have Y_fwd{h} = NA. If lead()
+# were applied without group_by(fips_code), it would carry the next county's
+# first values into the prior county's tail — a silent panel violation.
+test_that("lead() respects county boundaries (NA at panel tail)", {
+  d <- make_lp_panel()
+
+  tail_rows <- d %>%
+    group_by(fips_code) %>%
+    arrange(Year) %>%
+    slice_tail(n = 1) %>%   # last year for each county
+    ungroup()
+  expect_true(all(is.na(tail_rows$Y_fwd1)),
+              "Y_fwd1 must be NA at each county's last year")
+  expect_true(all(is.na(tail_rows$Y_fwd2)),
+              "Y_fwd2 must be NA at each county's last year")
+  expect_true(all(is.na(tail_rows$Y_fwd3)),
+              "Y_fwd3 must be NA at each county's last year")
+
+  # Cross-county boundary check: county 01001 final year fwd1 must NOT equal
+  # county 01002 first year Y — if grouping was missing, that's what would
+  # leak through.
+  d_01001_last <- d %>% filter(fips_code == "01001", Year == 2020)
+  d_01002_first <- d %>% filter(fips_code == "01002", Year == 2010)
+  expect_true(is.na(d_01001_last$Y_fwd1),
+              "fwd1 at boundary must be NA, not next county's Y")
+  expect_false(isTRUE(d_01001_last$Y_fwd1 == d_01002_first$Y),
+               "fwd1 must not equal next county's Y")
+})
+
+# ===========================================================================
+# Test 9: Exit interaction (Shock_{t-1} * NoShock_{t}) identifies recovery cohort
+# ===========================================================================
+# The interaction term equals 1 only for county-years where the county was
+# shocked at t-1 and is not shocked at t — exactly the rows where Drought_Exit
+# == 1. The interaction is therefore identical to Drought_Exit by definition.
+test_that("Shock_{t-1} * NoShock_{t} matches Drought_Exit indicator", {
+  d <- make_lp_panel() %>% filter(!is.na(LagShock))
+
+  interaction_indicator <- as.integer(d$LagShock * d$NoShock)
+  expect_equal(interaction_indicator, as.integer(d$Drought_Exit),
+               label = "Interaction term must equal Drought_Exit row-by-row")
+})
+
 cat("\nAll delta variable tests passed.\n")
