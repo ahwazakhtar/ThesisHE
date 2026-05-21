@@ -16,12 +16,12 @@ Sequencing: Phase 0 is the gate. Phases 1 and 4 can run in parallel with Phase 2
 
 ## Phase 1: Random-effects robustness (Econometric #1)
 
-- [ ] **Task: Random-effects counterparts for primary specs**
-    - [ ] Identify the primary FE specs in `run_analysis.R` (state) and `run_county_analysis.R` (county). Limit RE scope to these primary specs only.
-    - [ ] Estimate RE counterparts using `plm::plm(..., model = "random")` (or equivalent in `fixest` if available without losing the RE structure).
-    - [ ] Hausman test per matched pair; export coefficients/SEs/p-values to `Analysis/random_effects_results.csv`.
-    - [ ] Write `Analysis/random_effects_robustness.md` with FE vs. RE side-by-side coefficient table, Hausman test results, and a short interpretation.
-    - [ ] Add tests in `Code/tests/test_re_robustness.R` for at least one model (verify RE estimate reproduces from raw inputs).
+- [x] **Task: Random-effects counterparts for primary specs** [4c57c86]
+    - [x] Identified primary FE specs in `run_analysis.R` (State+Year, cluster=State, 6 outcomes) and `run_county_analysis.R` (fips_code+Year, cluster=State, 7 outcomes / Spec1_Base).
+    - [x] Implemented in new `Code/run_re_robustness.R` using `plm::plm(model = "within" | "random", effect = "twoways")` with `phtest`. Scoped exception to the fixest-only rule documented in the script header.
+    - [x] Hausman test per matched pair exported to `Analysis/random_effects_hausman.csv`; full coefficient comparison in `Analysis/random_effects_results.csv`.
+    - [x] Memo at `Analysis/random_effects_robustness.md` reports FE vs RE side-by-side. **RE rejected for all 11 estimable outcomes at p < 1e-9** (2 state outcomes failed to fit RE due to thin panels; FE remains authoritative there). Headline state findings (Extreme Drought 2-yr lag, Cold Shock 1-yr lag) survive — RE estimates same sign; rejection driven by precision/efficiency, not coefficient reversals.
+    - [x] Tests in `Code/tests/test_re_robustness.R` (5 tests, all pass): plm-fixest FE equality; Hausman stat/p-value sanity; correlated DGP rejects RE; uncorrelated DGP yields close FE/RE; output schema check.
 
 ## Phase 2: Post-exit dynamics (Econometric #2)
 
