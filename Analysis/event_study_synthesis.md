@@ -279,3 +279,57 @@ From the dose-response spec: `Shock_Count` = marginal effect per additional shoc
 | `Analysis/plots/synthesis_robustness_panel.png` | DL vs LP vs LP+History (Medical Debt Share, Silver Premium) |
 | `Analysis/plots/synthesis_robustness_panel_extra.png` | DL vs LP vs LP+History (Median Debt, Hosp Bad Debt) |
 | `Analysis/plots/lp_Shock_Count_*.png` | Dose-response multi-dose plots |
+
+---
+
+## Key Finding 7: Post-Exit Dynamics (Committee Feedback Phase 2)
+
+Added 2026-05-21. Track: `committee_feedback_april_2026`. The April 2026 committee asked: "if a county was in a shock one year and then it exits, what effect does it have on the spending?" This question is answered by the post-exit LP extension built into `Code/run_delta_analysis.R` (Block A: `Drought_Exit`/`CDD_Exit`/`HDD_Exit` LP h=0..3; Block B: `Shock_{t-1} × NoShock_t` interaction). Full results in `Analysis/delta_coefs.csv` (`approach = "Delta_Exit_LP"` and `"Delta_Exit_Interaction"`); synthesis in `Analysis/delta_analysis_synthesis.md`.
+
+Headline within-county recovery dynamics:
+- **Drought_Exit → PCPI_Real partial scarring.** Peak at h=2 (+$1,044 per capita, p=0.0002); the recovery rebounds but does not fully restore the pre-shock level over the horizon window.
+- **HDD_Exit → immediate hospital-cost relief, not scarring.** `Hosp_BadDebt_PerCapita` declines at h=0 (−3.13, p=0.014) and h=2 (−2.88, p=0.034). The cold-shock cost is in the *exposure*, not in lasting damage after recovery.
+- **CDD_Exit → persistent employment benefits.** Sustained labor-market gains after counties exit hot-shock state. Some of this likely reflects regional secular trends; caveated in the delta synthesis.
+
+## Key Finding 8: DiD with Never-Exposed Controls (Committee Feedback Phase 3)
+
+Added 2026-05-21. Source: `Code/run_did_analysis.R`. Memo: `Analysis/did/did_results.md`. Pre-feasibility: `Analysis/did_feasibility_memo.md`.
+
+The Phase 3 DiD layer complements the LP/event-study framework above by anchoring identification in *never-exposed* controls (counties with zero events 2011–2023 per Phase 0 inventory). Two designs:
+
+- **2x2 DiD on the 2012 Midwest drought** (139 treated, 2,534 never-exposed):
+    - **PCPI_Real ATT = −$1,311 (p=0.027)**
+    - **Civilian_Employed ATT = −2,053 (p=0.0001)**
+- **Callaway-Sant'Anna ATT(g,t) with never-treated controls** for Drought / HDD / CDD (manual implementation in `fixest` — `did` package unavailable in local R toolchain): 427 ATT(g,t) cells aggregated to event-time profiles in `Analysis/did/did_cs_event_time.csv`. Headline aggregated effects:
+    - Drought e=0: PCPI = −$1,050 (p=0.002), Civilian_Employed = −142 (p=0.002)
+    - HDD long-run: Civilian_Employed = −4,982 at e=10 (p=0.003); Medical_Debt_Share = +0.049 at e=10 (p=0.0002)
+- **AQI dropped from DiD** because only 3.1% of counties are never-exposed; the existing LP/event-study coverage (Key Findings 1–6 above) remains the sole identification channel for AQI.
+
+### Reconciling LP/event-study and DiD findings
+
+LP and DiD answer different questions and the answers are *complementary*, not contradictory:
+
+| Question | LP / Event-Study | DiD vs Never-Exposed |
+|----------|------------------|----------------------|
+| "What happens within a county when its shock state changes year-over-year?" | Identified by `Delta_*` / `*_Exit` / DL / LP | (not the design question) |
+| "What is the persistent gap between counties ever-exposed to shock and counties never-exposed?" | (not the design question) | Identified by 2x2 / CS-DiD |
+
+The most consequential reconciliation is for cold shocks:
+- LP/Exit results say cold-shock counties experience immediate cost relief on *exit*. There is no within-county scarring.
+- CS-DiD says cold-shock counties end up worse off than never-exposed counties at event-time 10 (compound employment loss, rising debt share).
+
+Both are correct. Cold-state counties recover when shocks end (LP/Exit), but they spend more years in shock state than never-exposed counties do, so the population gap accumulates (CS-DiD). The thesis can frame this as: cold shocks impose recurring within-year costs without leaving permanent damage in any given year, but treated populations accumulate net cost over a decade because exposure is recurrent.
+
+### Pre-trends note
+
+Pre-trend failures already flagged in Key Finding 3 (above) for the LP framework (Is_Extreme_Drought / High_HDD / High_AQI_Max on Benchmark_Silver_Real, etc.) carry over to the DiD designs: ACA-era premium data availability begins in 2014, so a 2012-event drought cohort has no pre-period for premiums and the outcome drops from the 2x2 via collinearity. CS-DiD picks it up for later cohorts. Premiums should be discussed using both the LP/DL pre-trend caveat *and* the DiD data-availability constraint in the thesis text.
+
+## Cross-Reference Index (Committee Feedback April 2026)
+
+| Concern | Primary artifact | Cross-reference |
+|---------|------------------|-----------------|
+| Random effects (Phase 1) | `Analysis/random_effects_robustness.md` | State-level only; county-level Hausman not run |
+| Post-exit dynamics (Phase 2) | `Analysis/delta_analysis_synthesis.md` | Key Finding 7 above |
+| DiD with never-exposed (Phase 3) | `Analysis/did/did_results.md` | Key Finding 8 above |
+| Humidity / PRISM tdmean (Phase 4) | **Parked** — `memory/project_humidity_phase4.md` | Caveat in state summary §6.4 |
+| Propagation pathways (Phase 5) | `Text/propagation_pathways.md`, `Analysis/pathway_descriptives_summary.md` | Pathway-to-empirics mapping |
