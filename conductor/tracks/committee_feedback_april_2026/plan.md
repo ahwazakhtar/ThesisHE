@@ -34,21 +34,21 @@ Sequencing: Phase 0 is the gate. Phases 1 and 4 can run in parallel with Phase 2
 
 ## Phase 3: Diff-in-Diff with never-exposed controls (Econometric #3)
 
-- [ ] **Task: 3a. Natural-experiment 2x2 DiD**
-    - [ ] Based on Phase 0 memo, select 1-2 events (likely 2012 Midwest drought; possibly 2014 polar vortex for HDD).
-    - [ ] Construct treated cohort (counties exposed in event year) and control cohort (never-exposed counties) per Phase 0 inventory.
-    - [ ] Estimate canonical 2x2 DiD in new `Code/run_did_analysis.R` for headline outcomes (Medical_Debt, Benchmark_Silver_Real, hospital cost metrics).
-    - [ ] Pre-trends diagnostic: event-study with leads/lags around event year, restricted to treated + never-exposed.
-    - [ ] Export results to `Analysis/did/2x2/` and tabulate in `Analysis/did/did_results.md`.
+- [x] **Task: 3a. Natural-experiment 2x2 DiD** [0e297b1]
+    - [x] Selected events from Phase 0 memo: 2012 Midwest drought (139 treated, 2,534 controls); 2013 HDD onset (171 treated, 2,303 controls — first-event semantics rather than new-onset).
+    - [x] Built treated/never-exposed cohorts and 2x2 DiD in `Code/run_did_analysis.R` for 7 outcomes (Medical_Debt, premiums, hospital, income, employment).
+    - [x] Pre-trends event-study (k=-2..+3) for both events in `Analysis/did/did_pretrends_event_study.csv`.
+    - [x] Headline: Drought 2012 treated counties have PCPI ATT=-$1,311 (p=0.027) and Civilian_Employed ATT=-2,053 (p=0.0001). HDD 2013 has Civilian_Employed ATT=-2,720 (p=0.011). Premium outcome drops via ACA-era collinearity (handled in CS-DiD).
+    - [x] Synthesis in `Analysis/did/did_results.md`.
 
-- [ ] **Task: 3b. Stacked / Callaway-Sant'Anna DiD**
-    - [ ] In `Code/run_did_analysis.R`, use `did::att_gt` with `control_group = "nevertreated"` for each shock type that has sufficient never-exposed counties.
-    - [ ] Aggregate cohort-level ATTs to event-time response curves; report group-time ATTs and dynamic effects.
-    - [ ] Export to `Analysis/did/cs/` with plots in `Analysis/plots/did/`.
-    - [ ] Compare CS-DiD dynamic profile against existing LP profile and note any divergence in `Analysis/did/did_results.md`.
+- [x] **Task: 3b. Stacked / Callaway-Sant'Anna DiD** [0e297b1]
+    - [x] Manual CS implementation in `Code/run_did_analysis.R` via fixest (the `did` R package failed to install on the local Windows R 4.2.2 toolchain because dep `recipes` failed to build). 427 ATT(g,t) estimates across Drought/HDD/CDD.
+    - [x] Cohort-size-weighted event-time aggregation in `Analysis/did/did_cs_event_time.csv`; 28 plots in `Analysis/plots/did/`.
+    - [x] Headline CS findings: Drought e=0 PCPI=-$1,050 (p=0.002); HDD long-run Civilian_Employed loss compounds to -4,982 at e=10 (p=0.003); HDD Medical_Debt_Share rises +4.9pp at e=10 (p=0.0002) — long-run cold-state scarring identified.
+    - [x] LP vs DiD comparison in `Analysis/did/did_results.md`: complementary designs (LP=within-county dynamics; DiD=persistent treated-vs-never-exposed gap).
 
-- [ ] **Task: 3c. Tests for DiD construction**
-    - [ ] `Code/tests/test_did_analysis.R`: never-treated identification matches Phase 0 inventory; treated/control cohort sizes correct; group-time ATT signs reasonable on a synthetic test fixture.
+- [x] **Task: 3c. Tests for DiD construction** [0e297b1]
+    - [x] `Code/tests/test_did_analysis.R`: 5 testthat tests covering 2x2 tau recovery on synthetic data, partition cleanliness, cohort first-event construction, CS-DiD vs canonical 2x2 equivalence, and output schema. 5/5 pass.
 
 ## Phase 4: Humidity integration (Environmental #1)
 
@@ -69,13 +69,13 @@ Sequencing: Phase 0 is the gate. Phases 1 and 4 can run in parallel with Phase 2
 
 ## Phase 5: Propagation-pathway evidence (General #1)
 
-- [ ] **Task: Literature review of mechanisms**
-    - [ ] New `Text/propagation_pathways.md`: cited literature on (a) heat -> delayed care, (b) cold -> shifted/increased care utilization, (c) drought -> chronic health and income effects, (d) AQI -> respiratory and cardiac utilization.
-    - [ ] Aim: 2-4 cited references per pathway; include effect direction and time-scale claims.
+- [x] **Task: Literature review of mechanisms** [0e297b1]
+    - [x] `Text/propagation_pathways.md` covers heat -> delayed care, cold -> shifted utilization, drought -> income -> debt, AQI -> respiratory/cardiac. 18 references total (2-4 per pathway). Pathway-to-empirics mapping table links each pathway to the specific identification channel(s) in our work.
 
-- [ ] **Task: Descriptive evidence from existing data**
-    - [ ] New `Code/run_pathway_descriptives.R`: produce seasonal patterns in MEPS/hospital data, correlation of shock indicators with care-adjacent variables already in the panel, climate-region splits.
-    - [ ] Figures in `Analysis/plots/pathways/`; reference them inline in `Text/propagation_pathways.md`.
+- [x] **Task: Descriptive evidence from existing data** [0e297b1]
+    - [x] `Code/run_pathway_descriptives.R` produces 4 figures in `Analysis/plots/pathways/`: (1) shock prevalence by Census region, (2) pooled correlation matrix, (3) delta onset/exit mean comparison, (4) Medical_Debt_Share by income quartile x shock status.
+    - [x] Summary doc `Analysis/pathway_descriptives_summary.md` references figures by pathway.
+    - [x] Annual panel limits us to cross-county and year-over-year evidence (no within-year seasonal patterns possible).
 
 ## Phase 6: Conductor verification & write-up
 
