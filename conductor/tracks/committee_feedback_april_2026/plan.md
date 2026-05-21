@@ -8,11 +8,11 @@ Sequencing: Phase 0 is the gate. Phases 1 and 4 can run in parallel with Phase 2
 
 ## Phase 0: Scoping & exposure inventory
 
-- [~] **Task: Inventory never-exposed counties and identify DiD candidates**
-    - [ ] For each shock indicator (`Is_Extreme_Drought`, `High_CDD`, `High_HDD`, `High_AQI_Max`), compute per-county event counts across 2011-2023.
-    - [ ] Export `Analysis/never_exposed_inventory.csv` (county, shock, n_events, ever_exposed flag, never_exposed flag).
-    - [ ] Identify candidate sharp events for natural-experiment DiD (e.g., 2012 Midwest drought, 2014 polar vortex). Document in `Analysis/did_feasibility_memo.md`.
-    - [ ] Memo determines which shock(s) advance to Phase 3a.
+- [x] **Task: Inventory never-exposed counties and identify DiD candidates** [bc165f1]
+    - [x] For each shock indicator (`Is_Extreme_Drought`, `High_CDD`, `High_HDD`, `High_AQI_Max`), compute per-county event counts across 2011-2023. (`Code/run_never_exposed_inventory.R`)
+    - [x] Export `Analysis/never_exposed_inventory.csv` (county, shock, n_events, ever_exposed flag, never_exposed flag) plus per-shock summary, by-state, and event-year onset tables. (CSVs gitignored.)
+    - [x] Identify candidate sharp events for natural-experiment DiD. Primary: **2012 Midwest drought** (139 onset counties, 2,534 never-exposed). Secondary: **2013 HDD** (407 onset, 2,303 never-exposed). Documented in `Analysis/did_feasibility_memo.md`.
+    - [x] Memo determines which shock(s) advance to Phase 3a. **Drought + HDD advance to 3a; Drought + HDD + CDD advance to 3b; AQI dropped from DiD scope (3.1% never-exposed too thin).**
 
 ## Phase 1: Random-effects robustness (Econometric #1)
 
