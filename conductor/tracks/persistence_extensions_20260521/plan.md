@@ -30,20 +30,15 @@ Sequencing: Phase 0 is the framing gate. Phase 1 builds on the existing Exit-LP 
 
 ## Phase 2: Continuously-exposed sub-population analysis
 
-- [ ] **Task: Define and characterize the always-exposed cohort**
-    - [ ] New `Code/run_persistent_exposure.R`. For each shock indicator, define:
-        - `Always_Exposed`: counties with shock in \(\geq 10/13\) panel years
-        - `Frequently_Exposed`: 5--9/13 years
-        - `Rarely_Exposed`: 1--4/13 years
-        - `Never_Exposed`: 0/13 years (matches Phase 0 inventory from prior track)
-    - [ ] Descriptive table: cohort size, geographic concentration, headline outcome means.
-    - [ ] Export `Analysis/persistent_exposure_inventory.csv`.
+- [x] **Task: Define and characterize the always-exposed cohort** [443e895]
+    - [x] New `Code/run_persistent_exposure.R` + `Code/exposure_cohorts.R` define Always (≥10/13), Frequently (5–9), Rarely (1–4), Never (0) per shock. 6 tests in `Code/tests/test_persistent_exposure.R` (band boundaries, partition, custom cuts, inventory schema). 6/6 pass.
+    - [x] Descriptive table `Analysis/persistent_exposure_cohort_summary.csv`: cohort size, n_states, top-3 states, headline outcome means. Always cohorts: CDD 661 (TX/GA/MS), HDD 432 (MN/MT/ND), AQI 353 (CA/OH/PA), Drought **1** (chronic extreme drought ≈ nonexistent → onset-DiD remains the drought design).
+    - [x] Exported `Analysis/persistent_exposure_inventory.csv` (county × shock + cohort).
 
-- [ ] **Task: Always-vs-Never DiD-style contrast**
-    - [ ] For each headline outcome, estimate the persistent treated-vs-never gap using two-way FE with `Always_Exposed` as treatment indicator interacted with year FE.
-    - [ ] Compare against the onset-cohort CS-DiD results from the prior track. Hypothesis: continuously-exposed counties should show the largest persistent gap.
-    - [ ] Output to `Analysis/persistent_exposure_contrast.csv`.
-    - [ ] Plots in `Analysis/plots/persistent_exposure/`.
+- [x] **Task: Always-vs-Never DiD-style contrast** [443e895]
+    - [x] Static dose-response (`Outcome ~ cohort | Year`) and dynamic two-way FE trajectory (`i(Year, Always_Exposed, ref) | fips_code + Year`) on Always ∪ Never. Outputs `Analysis/persistent_exposure_contrast.csv` (72 rows) + `…_dynamic.csv` (275 rows).
+    - [x] Hypothesis confirmed for heat: **CDD Always shows the largest, monotone persistent debt gap** (+9.9 pp, p<0.0001; Never 0.156→Always 0.255). But within-design the gap is a stable level, not widening — contrasted against the onset CS-DiD (which compounds) in `Analysis/persistent_exposure_synthesis.md`.
+    - [x] 48 plots in `Analysis/plots/persistent_exposure/` (dynamic trajectories + dose-response).
 
 ## Phase 3: Cumulative-dose analysis
 
