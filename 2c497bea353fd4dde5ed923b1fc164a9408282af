@@ -1,0 +1,47 @@
+Task: Symmetric Onset-LP / Persist-LP + three-way comparison + symmetry test
+(Persistence Extensions — Phase 1, all three plan tasks)
+
+WHY: Phase 2 estimated Exit alone. The committee's symmetry question — does the
+cost of entering a shock get undone on leaving? — needs Onset, Persist and Exit
+on a common footing plus a formal test. This is the core "persistence vs.
+reversibility" evidence of the track.
+
+WHAT CHANGED:
+- New Code/transition_symmetry.R: transition_symmetry_test(model, onset, exit)
+  computes the Wald test H0: beta_Onset + beta_Exit = 0 from the joint clustered
+  vcov of one regression (no stacking/bootstrap needed). Returns beta_onset,
+  beta_exit, asymmetry (sum), se, z, p, reject_symmetry. Positive sum = scarring;
+  negative = over-relief; both relative to the never-transitioned (0->0) ref.
+- Code/run_delta_analysis.R section 9c: joint LP
+    lead(Y,h) ~ Onset + Persist + Exit + controls | fips_code + Year, h=0..3
+  for Drought/CDD/HDD x 7 outcomes x 2 weightings, + RA-cluster for premiums.
+  Tags: Delta_Onset_LP, Delta_Persist_LP, Delta_Exit_LP_Joint (+_RA_Cluster).
+  delta_coefs.csv 1664 -> 2240 rows (+576).
+  Writes Analysis/delta_transition_summary.csv (252 long-format rows) and
+  Analysis/delta_symmetry_test.csv (168 tests; 28 reject at p<0.05 = 16.7%).
+  21 three-way comparison plots in Analysis/plots/delta_transition_compare/.
+- Analysis/delta_analysis_synthesis.md: new "Three-Way Transition Decomposition"
+  section.
+- Code/tests/test_delta_variables.R: 4 new tests (Tests 10-13) — joint LP h=0
+  equivalence; symmetry rejects under asymmetric known-truth DGP; does not reject
+  under symmetric DGP; NULL guard on missing terms. 13/13 pass.
+
+DESIGN DECISION: estimate the trio JOINTLY (not three separate regressions) so
+the symmetry test reads off the model's own covariance. All coefficients are vs
+the 0->0 reference, making Onset/Persist/Exit directly comparable in the plots.
+
+KEY RESULTS:
+- Drought -> Medical_Debt_Share, h=2: asymmetry +0.0182 (p=0.0015) -> drought
+  debt is SCARRING, not reversed on exit. Backs the state is_extreme_drought_lag2
+  headline at county level. Still present at h=3 (+0.0144, p=0.043).
+- Income (PCPI_Real) h=1-2: symmetric UPWARD overshoot for CDD/Drought/HDD
+  (both onset and exit positive) -> recovery/mean-reversion, not a level shift.
+- HDD -> Hosp_BadDebt_PerCapita h=3: negative sum (-6.49, p=0.024) = over-relief.
+- 83% of tests do not reject; rejections cluster on the theorized channels
+  (drought->debt scarring; income overshoot), arguing against a pure
+  multiple-testing artifact.
+
+FILES: Code/transition_symmetry.R, Code/run_delta_analysis.R,
+Code/tests/test_delta_variables.R, Analysis/delta_analysis_synthesis.md.
+Data outputs (delta_coefs.csv, delta_transition_summary.csv,
+delta_symmetry_test.csv, plots) are gitignored per project convention.
