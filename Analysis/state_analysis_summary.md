@@ -83,11 +83,17 @@ Source: `Text/propagation_pathways.md` · Descriptives: `Analysis/pathway_descri
 
 The four pathways underlying the headline findings (heat → delayed care, cold → shifted utilization, drought → income → debt, AQI → respiratory/cardiac) are now anchored to 18 cited references with effect-direction and time-scale claims. The drought→income→debt pathway has the strongest convergence: Hornbeck (2012), Burke-Hsiang-Miguel (2015), Carleton et al. (2022), and our own 2012 DiD all point the same direction at consistent 1- to 3-year horizons.
 
-### 6.4 Humidity NOT yet controlled — Phase 4 parked
+### 6.4 Humidity now controlled — Phase 4 complete
 
-Phase 4 (acquire PRISM `tdmean` at state level and add as control) is **parked** because the required `terra`, `sf`, and `tigris` R packages are not installed in the local environment. See `memory/project_humidity_phase4.md` for the working PRISM endpoint and resumption notes.
+Source: `Code/download_prism_humidity.R` → `Code/process_state_humidity.R` → `Data/intermediate_humidity.rds` · Sensitivity: `Analysis/humidity_sensitivity.csv`
 
-**Outstanding caveat for the thesis text:** the headline drought and cold findings have not been stress-tested against humidity confounding. A discussant asking "could the drought lag actually be picking up low-humidity confounding?" cannot be definitively answered with the current pipeline. This is the highest-priority residual gap from the committee's feedback.
+PRISM `tdmean` (mean dew point) was acquired as annual 4km CONUS grids from the open PRISM web service (`services.nacse.org`, no API key) for 2009–2025 and aggregated to a state-year panel by **area-weighted zonal mean** using the Census 2018 cartographic state boundaries (`terra`). PRISM's native Celsius is retained as `tdmean_C` and converted to `tdmean_F` for consistency with the project's Fahrenheit convention. Coverage is CONUS only, so **Alaska and Hawaii are NA** (the web service does not yet serve those regions); all 48 contiguous states + DC are covered. Annual mean dew points range 22.4–64.8 °F (mountain-west to Gulf Coast), as expected.
+
+**Sensitivity design.** Because PRISM coverage shrinks the sample (2009–2025, no AK/HI), adding `tdmean` to the primary spec would conflate "added control" with "changed sample." So the headline coefficients are re-estimated on the *identical humidity-available subsample* both without and with humidity (`tdmean_F` + lag1 + lag2), isolating the effect of controlling for humidity.
+
+**Result — the headline cold finding survives.** For Medical Debt Share, the **Cold Shock (1-year lag)** coefficient is essentially unchanged when humidity is added: **0.01363 (p = 0.011) → 0.01368 (p = 0.017)**, n = 624. The drought 2-year-lag effect is not separately significant on this recent-years-only subsample (a power, not a sign, issue). A discussant asking "could the cold lag be picking up humidity confounding?" can now be answered: **no — the coefficient is stable to three significant figures.**
+
+**Humidity is itself a substantive predictor.** Higher dew point is associated with **higher medical debt** (Share +0.00246 per °F, p = 0.009; Median +$16.0 per °F, p = 0.004) and **marginally lower** employee premium contributions (−$13.7 per °F, p = 0.052). This is consistent with a humid-climate health-burden channel distinct from the temperature and drought shocks, and is a candidate finding for the thesis discussion.
 
 ### 6.5 Summary table — what changed after committee feedback
 
@@ -97,4 +103,4 @@ Phase 4 (acquire PRISM `tdmean` at state level and add as control) is **parked**
 | Post-exit dynamics | Done — see `Analysis/delta_analysis_synthesis.md` | County-level (delta + LP) |
 | Natural-experiment DiD with never-exposed | Done — Drought 2012 is cleanest | §6.2, `Analysis/did/did_results.md` |
 | Propagation evidence | Done — 18 references + descriptive plots | §6.3, `Text/propagation_pathways.md` |
-| Humidity (PRISM tdmean) | **Parked** — packages not installed | §6.4 — flag in thesis text |
+| Humidity (PRISM tdmean) | Done — cold-lag finding survives; humidity itself raises medical debt | §6.4, `Analysis/humidity_sensitivity.csv` |

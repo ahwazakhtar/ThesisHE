@@ -11,6 +11,7 @@ path_meps    <- "Data/MEPS_Data_IC/meps_ic_state_consolidated.csv"
 path_cms     <- "Data/State Residence health expenditures/cms_nhe_state_consolidated.csv"
 path_macro   <- "Data/State_Policy_Data/state_macroeconomics.csv"
 path_meddebt <- "Data/MedicalDebt/medical_debt_state_consolidated.csv"
+path_humidity <- "Data/intermediate_humidity.rds"   # PRISM tdmean (state-year)
 output_path  <- "Data/state_level_analysis_master.csv"
 
 # State Code Mapping for Macro data (AL -> Alabama)
@@ -47,6 +48,13 @@ df_cms <- read.csv(path_cms, stringsAsFactors = FALSE)
 # Medical Debt
 df_meddebt <- read.csv(path_meddebt, stringsAsFactors = FALSE)
 
+# Humidity (PRISM tdmean, state-year). CONUS-only, so Alaska/Hawaii are NA.
+df_humidity <- if (file.exists(path_humidity)) readRDS(path_humidity) else NULL
+if (is.null(df_humidity)) {
+  warning("Humidity intermediate not found at ", path_humidity,
+          "; run download_prism_humidity.R + process_state_humidity.R. tdmean omitted.")
+}
+
 # Macroeconomics (requires more cleaning)
 df_macro_raw <- read.csv(path_macro, stringsAsFactors = FALSE)
 
@@ -75,6 +83,10 @@ master <- df_climate %>%
 
 if (!is.null(df_aqi)) {
   master <- master %>% left_join(df_aqi, by = c("State", "Year"))
+}
+
+if (!is.null(df_humidity)) {
+  master <- master %>% left_join(df_humidity, by = c("State", "Year"))
 }
 
 # 4. Inflation Adjustment -------------------------------------------------

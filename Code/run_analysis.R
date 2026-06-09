@@ -192,3 +192,65 @@ for (dep in deps) {
 
 writeLines(md_lines, md_output_path)
 cat(paste0("\nMarkdown report saved to: ", md_output_path, "\n"))
+
+# 7. Humidity Sensitivity (Committee Feedback April 2026, Environmental #1) -
+# PRISM `tdmean` (mean dew point, deg F) covers 2009-2025 and CONUS only (no
+# AK/HI), so adding it to the PRIMARY spec would change the estimation sample.
+# To isolate the effect of CONTROLLING for humidity (as opposed to changing the
+# sample), we re-fit on the IDENTICAL humidity-available subsample:
+#   (a) a baseline with NO humidity, and
+#   (b) a humidity-augmented spec adding tdmean_F + lag1 + lag2.
+# We then compare the two headline coefficients the committee cares about:
+#   Extreme Drought, 2-year lag  (is_extreme_drought_lag2)
+#   Cold Shock, 1-year lag       (is_cold_shock_lag1)
+# The full-sample primary models above remain authoritative; this block is the
+# robustness check, written to Analysis/humidity_sensitivity.csv.
+hum_terms      <- c("tdmean_F", "tdmean_F_lag1", "tdmean_F_lag2")
+headline_terms <- c("is_extreme_drought_lag2", "is_cold_shock_lag1")
+
+humidity_rows <- list()
+if (all(hum_terms %in% names(df))) {
+  rhs_hum <- paste(c(climate_vars, controls, hum_terms), collapse = " + ")
+  get_cell <- function(ct, term, col) {
+    v <- ct[ct$Term == term, col]
+    if (length(v) == 0) NA_real_ else as.numeric(v)
+  }
+  for (dep in deps) {
+    md <- df[!is.na(df[[dep]]) & stats::complete.cases(df[, hum_terms]), ]
+    if (nrow(md) < 50) {
+      cat(paste0("  Humidity block: skipping ", dep, " (n=", nrow(md), ")\n"))
+      next
+    }
+    f_base <- as.formula(paste(dep, "~", rhs_formula, "| State + Year"))
+    f_hum  <- as.formula(paste(dep, "~", rhs_hum,     "| State + Year"))
+    m_base <- tryCatch(feols(f_base, data = md, cluster = ~State), error = function(e) NULL)
+    m_hum  <- tryCatch(feols(f_hum,  data = md, cluster = ~State), error = function(e) NULL)
+    if (is.null(m_base) || is.null(m_hum)) next
+
+    ct_b <- as.data.frame(coeftable(m_base)); ct_b$Term <- rownames(ct_b)
+    ct_h <- as.data.frame(coeftable(m_hum));  ct_h$Term <- rownames(ct_h)
+
+    for (term in c(headline_terms, hum_terms)) {
+      humidity_rows[[paste(dep, term)]] <- data.frame(
+        Outcome          = dep,
+        Term             = term,
+        N                = nobs(m_hum),
+        Est_NoHumidity   = get_cell(ct_b, term, "Estimate"),
+        SE_NoHumidity    = get_cell(ct_b, term, "Std. Error"),
+        p_NoHumidity     = get_cell(ct_b, term, "Pr(>|t|)"),
+        Est_WithHumidity = get_cell(ct_h, term, "Estimate"),
+        SE_WithHumidity  = get_cell(ct_h, term, "Std. Error"),
+        p_WithHumidity   = get_cell(ct_h, term, "Pr(>|t|)"),
+        stringsAsFactors = FALSE
+      )
+    }
+  }
+}
+
+if (length(humidity_rows) > 0) {
+  hum_df <- do.call(rbind, humidity_rows); rownames(hum_df) <- NULL
+  write.csv(hum_df, "Analysis/humidity_sensitivity.csv", row.names = FALSE)
+  cat("Humidity sensitivity saved to: Analysis/humidity_sensitivity.csv\n")
+} else {
+  cat("Humidity sensitivity skipped (tdmean_F lags unavailable).\n")
+}

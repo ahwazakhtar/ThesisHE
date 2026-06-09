@@ -1,5 +1,5 @@
 # State-Level Regression Results
-**Generated:** 2026-03-09 12:24:03
+**Generated:** 2026-06-09 14:51:34
 **Input:** Data/analysis_ready_dataset.csv
 **Model:** Two-way FE (State + Year), cluster = State, `fixest::feols`
 

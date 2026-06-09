@@ -108,6 +108,10 @@ aqi_state_vars <- c("AQI_Median_Wtd", "AQI_Median_EW", "AQI_Max_State",
                     "Pct_CO_State", "Pct_NO2_State", "Pct_Unhealthy_State")
 vars_to_lag <- c(vars_to_lag, intersect(aqi_state_vars, names(df)))
 
+# Add PRISM humidity (mean dew point, deg F) if present, so the humidity
+# sensitivity block in run_analysis.R can use contemporaneous + lagged tdmean.
+vars_to_lag <- c(vars_to_lag, intersect("tdmean_F", names(df)))
+
 # We must group by State to ensure lags don't bleed across states
 df_lags <- df %>%
   arrange(State, Year) %>%
