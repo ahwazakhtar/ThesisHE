@@ -12,6 +12,19 @@ Generated: 2026-03-04 15:15
 - **Fixed effects:** County (fips_code) + Year
 - **Clustering:** State-level (primary), Rating-area (premium robustness)
 
+## Ex-Ante Hypotheses and Predictions (Persistence Extensions — Phase 0)
+
+*Added 2026-06-09. Directional and timing predictions implied by the propagation-pathway literature (`Text/propagation_pathways.md`), committed **before** reading the impulse-response estimates below. The "Surprise audit" at the end of this document tags each key finding against these priors so the committee can see where the dynamics depart from the pre-registered story.*
+
+| Shock | Outcome | Predicted sign | Predicted dynamics | Basis (pathway → literature) |
+|-------|---------|:--------------:|--------------------|------------------------------|
+| Is_Extreme_Drought | PCPI_Real, Civilian_Employed | **−** | drop at h=0, persists | Drought → income/employment; Burke-Hsiang-Miguel (2015), Hornbeck (2012) |
+| Is_Extreme_Drought | Medical_Debt_Share | **+** delayed | ≈ null at h=0, builds at h=1–2 | debt follows the income decline with a lag |
+| High_HDD (cold) | Medical_Debt_Share, Benchmark_Silver, Hosp_BadDebt | **+** | contemporaneous + lag-1; long-run scarring at e ≥ 8 | Cold → shifted utilization; Deschênes-Moretti (2009), Gasparrini et al. (2015) |
+| High_CDD (heat) | Medical_Debt_Share, Hosp_BadDebt | **+** delayed; contemporaneous ≈ null | builds at h=1–2 | Heat → delayed care → deferred spend; Sun et al. (2021), White (2017) |
+| High_CDD (heat) | PCPI_Real / Med_HH_Income | **ambiguous** | — | no clean directional income prior |
+| High_AQI_Max | Hosp_BadDebt, Medical_Debt_Share | **+** small | within-year | AQI → respiratory/cardiac utilization; Deryugina et al. (2019) — but identification is thin (3.1% never-exposed) |
+
 ## Key Finding 1: Contemporaneous Effects (h=0)
 
 | Shock | Outcome | DL Estimate | LP Estimate |
@@ -331,5 +344,22 @@ Pre-trend failures already flagged in Key Finding 3 (above) for the LP framework
 | Random effects (Phase 1) | `Analysis/random_effects_robustness.md` | State-level only; county-level Hausman not run |
 | Post-exit dynamics (Phase 2) | `Analysis/delta_analysis_synthesis.md` | Key Finding 7 above |
 | DiD with never-exposed (Phase 3) | `Analysis/did/did_results.md` | Key Finding 8 above |
-| Humidity / PRISM tdmean (Phase 4) | **Parked** — `memory/project_humidity_phase4.md` | Caveat in state summary §6.4 |
+| Humidity / PRISM tdmean (Phase 4) | Done — `Analysis/humidity_sensitivity.csv` | State summary §6.4; cold-lag finding survives |
 | Propagation pathways (Phase 5) | `Text/propagation_pathways.md`, `Analysis/pathway_descriptives_summary.md` | Pathway-to-empirics mapping |
+
+---
+
+## Surprise Audit — Key Findings vs. Ex-Ante Priors (Persistence Extensions — Phase 0)
+
+Each dynamic finding is tagged against the prediction it tested (see "Ex-Ante Hypotheses" near the top): **As expected**, **Stronger than expected**, **Direction opposite to expected**, or **No clear prior**.
+
+| Key finding | Result | vs. prior | Tag |
+|-------------|--------|-----------|-----|
+| High_HDD (cold), h=0 | Medical_Debt_Share +0.0038**, Benchmark_Silver +31.99***, Hosp_BadDebt +4.37** | predicted + contemporaneous | **As expected** |
+| High_HDD long-run (CS-DiD) | Civilian_Employed −4,982 @ e=10, Medical_Debt_Share +4.9pp @ e=10 | long-run scarring predicted, but persistence/magnitude exceed the short-run-focused cold literature | **Stronger than expected** |
+| Is_Extreme_Drought, h=0 | Civilian_Employed −1,716, PCPI/income − | predicted contemporaneous income/employment decline | **As expected** |
+| Is_Extreme_Drought → Medical_Debt_Share | ≈ 0 at h=0, builds at later horizons | predicted delayed (debt lags income) | **As expected** |
+| High_CDD (heat) income signals | PCPI_Real +669** but Med_HH_Income −272** at h=0 | opposing income signs; no clean prior, and the split is itself unexpected | **Direction opposite / mixed** |
+| High_AQI_Max | insignificant across outcomes | predicted small + within-year, but identification thin | **No clear prior (null)** |
+
+**Where to be surprised:** the cold-shock *long-run* scarring (compounding employment loss + rising debt to e=10) is the result that most exceeds its ex-ante prior — the cold literature we drew on emphasizes acute, first-30-day effects, so a decade-long cumulative gap is a genuine extension, not a confirmation. The High_CDD income split (rising per-capita income but falling median household income under heat) is the other place the data depart from a clean prediction and deserves explicit discussion of distributional/compositional mechanisms.

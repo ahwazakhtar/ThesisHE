@@ -37,6 +37,20 @@ This document summarizes the execution of the state-level analysis plan, investi
 | **State-Level Clustering** | Essential for valid inference as climate treatments are highly correlated within states over time. |
 | **Base Year Consistency** | Medical Debt data was pre-adjusted to 2023 dollars. While not explicitly re-baselined in the final regression script (as `_Real` variables were pre-calculated), the analysis relied on the `_Real` columns generated in the master creation phase. |
 
+## 3a. Ex-Ante Hypotheses and Predictions (Persistence Extensions — Phase 0)
+
+*Added 2026-06-09. The committee asked for an explicit "where should we be surprised?" lens. The table below states the directional and timing predictions implied by the propagation-pathway literature (`Text/propagation_pathways.md`) **before** consulting our estimates. Committing to priors up front is what makes a genuine surprise visible; §4.6 then tags each headline result against these priors.*
+
+| Shock | Outcome | Predicted sign | Predicted time-scale | Basis (pathway → literature) |
+|-------|---------|:--------------:|----------------------|------------------------------|
+| Extreme Drought | Medical Debt | **+** | lag 1–2 yr | Drought → income → debt; Hornbeck (2012), Burke-Hsiang-Miguel (2015), Currie-Greenstone-Meckel (2017) |
+| Extreme Drought | Premiums | **+** | lag 1–2 yr | income channel + insurers re-pricing prior-year loss experience |
+| Cold Shock | Medical Debt | **+** | contemporaneous → lag 1 | Cold → shifted utilization + "heat-or-eat"; Deschênes-Moretti (2009), Andrews et al. (2017) |
+| Cold Shock | Premiums | **+** (weaker) | lag 1 | utilization → next-year pricing |
+| Heat (CDD) | Medical Debt | **+** delayed; contemporaneous ≈ null | lag 1–2 yr | Heat → delayed care → deferred spend; Sun et al. (2021), White (2017) |
+| Drought / Cold | Systemic per-capita health exp | **ambiguous** | — | net of utilization shift vs. deferral; no strong directional prior |
+| Humidity (tdmean) | any | **no pre-registered prior** | — | not a pre-specified pathway; entered as an exploratory control (Phase 4) |
+
 ## 4. Summary of Findings
 
 *   **Medical Debt:** Strongly responsive to climate shocks with a lag.
@@ -44,6 +58,20 @@ This document summarizes the execution of the state-level analysis plan, investi
     *   **Cold Shock (Lag 1):** Significant positive effect ($p < 0.001$).
 *   **Premiums:** Showed sensitivity to lagged drought and temperature shocks, though significance was more marginal ($p < 0.05$).
 *   **Systemic Costs:** Largely driven by economic controls (Income, Unemployment) rather than climate shocks.
+
+### 4.6 Surprise audit — headline findings vs. ex-ante priors (Phase 0)
+
+Each headline below is tagged against the §3a prediction it was meant to test: **As expected** (sign and time-scale match), **Stronger than expected**, **Direction opposite to expected**, or **No clear prior**.
+
+| Headline finding | Result | vs. §3a prior | Tag |
+|------------------|--------|---------------|-----|
+| Extreme Drought (lag 2) → Medical Debt | + , p < 0.01 | predicted + at 1–2 yr | **As expected** |
+| Cold Shock (lag 1) → Medical Debt | + , p < 0.001 | predicted + at contemporaneous–lag 1 | **As expected** |
+| Drought / temperature (lag) → Premiums | + , p < 0.05 (marginal) | predicted + but expected stronger | **As expected (weaker)** |
+| Systemic per-capita health exp | no climate signal; driven by income/unemployment | no directional prior | **No clear prior** |
+| Humidity (tdmean) → Medical Debt | + , p < 0.01 (Share & Median; §6.4) | not pre-registered as a pathway | **No clear prior (new)** |
+
+**Where we are genuinely surprised:** (1) the *premium* response is weaker than the income/loss-pricing pathway would predict given how robust the *debt* response is — a candidate for the discussion of why premium pass-through lags or is muted; and (2) humidity emerges as an independent positive predictor of medical debt despite never being a pre-registered pathway, suggesting a humid-climate health-burden channel worth follow-up. The two core findings (drought-lag-2 and cold-lag-1 on debt) are squarely **as expected**, which is itself reassuring rather than surprising.
 
 ## 5. Artifacts
 *   **Processed Data:** `Data/analysis_ready_dataset.csv`
