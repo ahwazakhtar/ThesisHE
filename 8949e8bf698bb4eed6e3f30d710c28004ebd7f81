@@ -1,0 +1,33 @@
+Task: Make hypotheses explicit in synthesis docs (Persistence Extensions — Phase 0, the framing gate)
+
+WHY: The committee asked for a "where should we be surprised?" lens. Stating
+directional + time-scale predictions BEFORE consulting results is what makes a
+genuine surprise distinguishable from a confirmation. This is the gate the rest
+of the Persistence track builds on.
+
+WHAT CHANGED:
+- Analysis/state_analysis_summary.md:
+  * New section 3a "Ex-Ante Hypotheses and Predictions" — a table of predicted
+    sign + time-scale per shock x outcome, each sourced from a named pathway and
+    citation in Text/propagation_pathways.md.
+  * New section 4.6 "Surprise audit" — tags each headline (drought-lag-2 debt,
+    cold-lag-1 debt, premiums, systemic cost, humidity) As expected / weaker /
+    No clear prior, with an explicit "where we are genuinely surprised" note.
+- Analysis/event_study_synthesis.md:
+  * New "Ex-Ante Hypotheses and Predictions" block after the Overview.
+  * New "Surprise Audit" section tagging the dynamic findings; cold-shock
+    long-run CS-DiD scarring tagged Stronger than expected, High_CDD income split
+    tagged Direction opposite/mixed.
+  * Updated the stale "Parked" humidity row in the cross-reference index to Done.
+
+TAGGING SUMMARY:
+- As expected: drought-lag-2 -> debt; cold-lag-1 -> debt; drought h=0 ->
+  employment/income decline; drought -> debt builds with delay; HDD h=0 cost rise.
+- Stronger than expected: HDD long-run employment scarring + debt rise to e=10.
+- Direction opposite / mixed: High_CDD PCPI up but median HH income down.
+- No clear prior: systemic per-capita cost (no climate signal); humidity -> debt
+  (positive, not pre-registered); AQI nulls.
+
+Docs-only task; no code/tests. Next: Phase 1 (Onset-LP / Persist-LP + symmetry test).
+
+FILES: Analysis/state_analysis_summary.md, Analysis/event_study_synthesis.md.
