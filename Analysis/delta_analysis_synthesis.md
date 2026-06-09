@@ -295,3 +295,53 @@ in a county-level recovery setting, strengthening the causal interpretation.
 3. **Multiple testing.** With 168 Exit_LP estimates, an expected ~8 spurious significant
    results at p<0.05. Findings 1–4 above are robust to Bonferroni-style adjustment within
    their (shock, outcome) family.
+
+---
+
+## Three-Way Transition Decomposition (Persistence Extensions — Phase 1)
+
+Phase 2 estimated the Exit indicator in isolation. Phase 1 closes the symmetry question the committee implied — *if entering a shock raises costs, does leaving it lower them by the same amount?* — by estimating **Onset, Persist, and Exit jointly** in one local projection per horizon:
+
+```
+lead(Y, h) ~ Onset + Persist + Exit + controls | fips_code + Year,   h = 0..3
+```
+
+All three transitions are measured against the **never-transitioned (0→0) reference**, so their coefficients are directly comparable (plotted in `Analysis/plots/delta_transition_compare/`, tabulated in `Analysis/delta_transition_summary.csv`, 252 rows). The formal symmetry test **H₀: β_Onset + β_Exit = 0** is computed from the joint clustered covariance (`Code/transition_symmetry.R`) and exported to `Analysis/delta_symmetry_test.csv` (168 tests; **28, or 16.7%, reject symmetry at p<0.05**).
+
+### Design
+
+- **Onset (0→1):** the year a county enters shock — the cost of *arriving*.
+- **Exit (1→0):** the year it leaves — the *relief* on departure.
+- **Persist (1→1):** staying in shock — the *standing* cost of chronic exposure.
+- A rejection of β_Onset + β_Exit = 0 means the onset effect is **not** mirrored by the exit effect. A positive sum is **hysteresis / scarring** (arriving costs more than leaving relieves); a negative sum is **over-relief**.
+
+### Headline finding: drought debt is scarring, not reversible
+
+**Drought → Medical_Debt_Share at h=2** is the cleanest asymmetry: β_Onset = +0.0133 and β_Exit = +0.0049, so the sum **+0.0182 is significantly positive (p = 0.0015)**. Both entering *and* leaving drought leave a county with higher debt two years later than a never-transitioned county — the debt accrued during drought does **not** unwind when the drought ends. This is direct county-level evidence of **scarring** behind the state headline (`is_extreme_drought_lag2` → Medical Debt), and it is the persistence story the committee asked us to interrogate. The effect is still present, weaker, at h=3 (+0.0144, p = 0.043).
+
+### Income transitions overshoot symmetrically upward
+
+The largest cluster of rejections is on **per-capita income (PCPI_Real) at h=1–2**, where Onset and Exit *both* carry positive coefficients:
+
+| Shock | Outcome | h | β_Onset | β_Exit | Asymmetry (sum) | p |
+|-------|---------|---|---------|--------|-----------------|---|
+| CDD | PCPI_Real | 1 | 949 | 911 | **+1,860** | 0.0007 |
+| Drought | PCPI_Real | 2 | 464 | 1,127 | **+1,591** | 0.0021 |
+| Drought | PCPI_Real | 1 | 950 | 599 | **+1,550** | 0.0063 |
+| HDD | PCPI_Real | 2 | 678 | 554 | **+1,232** | 0.0033 |
+
+The shared sign suggests a **recovery-overshoot / mean-reversion** pattern: both the year of entry and the year of exit are followed, 1–2 years later, by income running above the no-transition baseline. This is consistent with transitory shocks triggering compensating activity (relief transfers, rebuilding, re-employment) rather than a permanent income-path shift, and it is the same recovery dynamic the Phase 2 Exit_LP flagged for PCPI — now shown to be a property of *both* transition edges, not just exit.
+
+### One cold over-relief signal
+
+**HDD → Hosp_BadDebt_PerCapita at h=3** rejects with a *negative* sum (−6.49, p = 0.024): cold onset and exit both reduce hospital bad debt three years out — over-relief rather than scarring, consistent with the Phase 2 finding that cold-shock exit brings immediate hospital-cost relief.
+
+### Where symmetry holds
+
+For **83% of the 168 tests symmetry is not rejected** — for most shock × outcome × horizon cells, onset and exit are statistical mirror images and the shock effect is reversible. The asymmetries are not scattered noise: they concentrate on (i) drought → debt at h=2 (scarring) and (ii) income at h=1–2 (overshoot), exactly the channels where a persistence mechanism is theorized. A pipeline producing 16.7% rejections clustered on the predicted channels, rather than ~5% scattered at random, is evidence of signal rather than a multiple-testing artifact.
+
+### Caveats
+
+1. **Drought_Persist is thin** (301 county-years), so the Persist coefficient for drought is the least precise of the trio; the Onset/Exit contrast that drives the symmetry test is unaffected.
+2. **Symmetry is tested per horizon**, not jointly across horizons; a joint test would have more power but the per-horizon view is what the three-way plots show.
+3. **Reference group.** All effects are relative to never-transitioned (0→0) counties; the test asks whether onset and exit are mirror images of each other, not whether either equals zero.

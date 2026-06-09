@@ -24,17 +24,21 @@ library(tidyr)
 library(fixest)
 library(ggplot2)
 
+source("Code/transition_symmetry.R")  # Phase 1: beta_Onset + beta_Exit = 0 Wald test
+
 input_path     <- "Data/county_level_master.csv"
 output_coefs   <- "Analysis/delta_coefs.csv"
 output_results <- "Analysis/delta_results.txt"
 plot_dir       <- "Analysis/plots/delta"
 plot_dir_rob   <- "Analysis/plots/delta_robustness"
 plot_dir_exit  <- "Analysis/plots/delta_exit_dynamics"
+plot_dir_trans <- "Analysis/plots/delta_transition_compare"  # Phase 1 three-way
 
 dir.create("Analysis",    showWarnings = FALSE)
 dir.create(plot_dir,      showWarnings = FALSE, recursive = TRUE)
 dir.create(plot_dir_rob,  showWarnings = FALSE, recursive = TRUE)
 dir.create(plot_dir_exit, showWarnings = FALSE, recursive = TRUE)
+dir.create(plot_dir_trans, showWarnings = FALSE, recursive = TRUE)
 
 cat("Loading data...\n")
 df <- read.csv(input_path, stringsAsFactors = FALSE)
@@ -443,6 +447,103 @@ for (spec in exit_lp_specs) {
 sink()
 cat("Exit LP / Interaction summaries appended to:", output_results, "\n")
 
+# 9c. Transition LP: Onset / Persist / Exit jointly + symmetry test (Phase 1) --
+# Persistence Extensions Phase 1. Estimates the full transition trio JOINTLY:
+#   lead(Y, h) ~ Onset + Persist + Exit + controls | fips_code + Year   (h=0..3)
+# All three are measured against the never-transitioned (0 -> 0) reference, so the
+# Onset/Persist/Exit coefficients are directly comparable (three-way comparison)
+# and the symmetry test beta_Onset + beta_Exit = 0 reads off the joint clustered
+# vcov (see Code/transition_symmetry.R). This complements the separate Exit-LP
+# block (9b) retained from Phase 2.
+
+cat("\n=== Transition LP (Onset/Persist/Exit) + Symmetry (Phase 1) ===\n")
+
+# approach tag per transition suffix
+approach_for <- c(Onset = "Delta_Onset_LP", Persist = "Delta_Persist_LP",
+                  Exit = "Delta_Exit_LP_Joint")
+
+coefs_trans_lp <- list()
+symmetry_rows  <- list()
+
+sink(output_results, append = TRUE)
+cat("\n\n=== Transition LP (Phase 1) ===\n\n")
+
+for (spec in onset_exit_specs) {
+  terms_three <- c(spec$onset, spec$persist, spec$exit)
+  terms_three <- terms_three[terms_three %in% names(df)]
+  # Need at least onset + exit present for the joint spec and symmetry test.
+  if (!all(c(spec$onset, spec$exit) %in% terms_three)) next
+
+  for (o in outcomes) {
+    for (h in 0L:h_max) {
+      dep_col <- paste0(o, "_fwd", h)
+      if (!dep_col %in% names(df)) next
+
+      rhs <- c(terms_three, controls)
+      rhs <- rhs[rhs %in% names(df)]
+      f <- as.formula(paste(dep_col, "~", paste(rhs, collapse = " + "),
+                            "| fips_code + Year"))
+
+      for (wt in c("Unweighted", "Population")) {
+        wt_arg <- if (wt == "Population" && "Population" %in% names(df)) "Population" else NULL
+        if (wt == "Population" && is.null(wt_arg)) next
+
+        m <- safe_feols(f, df, "State", wt_arg)
+        if (is.null(m)) next
+        N <- nobs(m)
+
+        if (h == 0L && wt == "Unweighted") {
+          cat(paste0("\n--- Transition LP | ", spec$label, " | ", o, " | h=0 ---\n"))
+          print(summary(m))
+        }
+
+        # Per-transition coefficient rows
+        for (trm in terms_three) {
+          suffix <- sub(".*_", "", trm)   # Onset / Persist / Exit
+          coefs_trans_lp[[length(coefs_trans_lp) + 1]] <- extract_coef(
+            m, trm, paste0(spec$label, "_", suffix), o, h,
+            approach_for[[suffix]], wt, N)
+        }
+
+        # Symmetry test on the joint (state-clustered) fit
+        st <- transition_symmetry_test(m, spec$onset, spec$exit)
+        if (!is.null(st)) {
+          st$shock <- spec$label; st$outcome <- o; st$horizon <- h
+          st$weighting <- wt; st$N <- N
+          symmetry_rows[[length(symmetry_rows) + 1]] <- st
+        }
+
+        # RA-cluster variant for the premium outcome (consistency with 9b)
+        if (o == "Benchmark_Silver_Real" && "rating_area_id" %in% names(df)) {
+          m_ra <- safe_feols(f, df, "rating_area_id", wt_arg)
+          if (!is.null(m_ra)) {
+            for (trm in terms_three) {
+              suffix <- sub(".*_", "", trm)
+              coefs_trans_lp[[length(coefs_trans_lp) + 1]] <- extract_coef(
+                m_ra, trm, paste0(spec$label, "_", suffix), o, h,
+                paste0(approach_for[[suffix]], "_RA_Cluster"), wt, nobs(m_ra))
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
+sink()
+cat("Transition LP summaries appended to:", output_results, "\n")
+
+# Export symmetry test (Phase 1, task 3)
+if (length(symmetry_rows) > 0) {
+  symmetry_df <- bind_rows(symmetry_rows)
+  symmetry_df <- symmetry_df[, c("shock", "outcome", "horizon", "weighting", "N",
+                                 "beta_onset", "beta_exit", "asymmetry",
+                                 "std.error", "z.value", "p.value", "reject_symmetry")]
+  write.csv(symmetry_df, "Analysis/delta_symmetry_test.csv", row.names = FALSE)
+  cat("Symmetry test results saved to: Analysis/delta_symmetry_test.csv (",
+      nrow(symmetry_df), " rows)\n", sep = "")
+}
+
 # 10. VIF Diagnostics ------------------------------------------------------
 
 cat("\n=== VIF Diagnostics (Delta + Lagged Level Block) ===\n")
@@ -488,7 +589,7 @@ cat("VIF diagnostics saved to Analysis/delta_vif_diagnostics.txt\n")
 # 11. Combine & Export Coefficients ----------------------------------------
 
 all_coef_lists <- c(coefs_primary, coefs_lp, coefs_asym, coefs_onset,
-                    coefs_exit_lp, coefs_exit_interact)
+                    coefs_exit_lp, coefs_exit_interact, coefs_trans_lp)
 all_coef_lists <- Filter(Negate(is.null), all_coef_lists)
 coefs_all <- if (length(all_coef_lists) > 0) bind_rows(all_coef_lists) else data.frame()
 if (nrow(coefs_all) > 0) {
@@ -673,6 +774,50 @@ for (shock_label in c("Drought", "CDD", "HDD")) {
     ggsave(file.path(plot_dir_exit,
                      paste0("exit_interact_", shock_label, "_", o, ".png")),
            p, width = 10, height = 5, dpi = 150, bg = "white")
+  }
+}
+
+# 12g. Three-way transition comparison (Onset/Persist/Exit) — Phase 1 --------
+# One PNG per (shock x outcome): Onset, Persist, Exit on the same axis across
+# horizons h=0..3, from the joint transition LP. Also writes the long-format
+# comparison table delta_transition_summary.csv (Phase 1, task 2).
+
+trans_long <- coefs_all %>%
+  filter(approach %in% c("Delta_Onset_LP", "Delta_Persist_LP", "Delta_Exit_LP_Joint"),
+         weighting == "Unweighted") %>%
+  mutate(
+    transition = sub(".*_", "", exposure),                  # Onset/Persist/Exit
+    shock      = sub("_(Onset|Persist|Exit)$", "", exposure)
+  ) %>%
+  arrange(shock, outcome, transition, horizon)
+
+if (nrow(trans_long) > 0) {
+  write.csv(
+    trans_long %>% select(shock, outcome, horizon, transition,
+                          estimate, std.error, p.value, N),
+    "Analysis/delta_transition_summary.csv", row.names = FALSE)
+  cat("Three-way transition summary saved to: Analysis/delta_transition_summary.csv\n")
+
+  trans_colors <- c("Onset" = "#B2182B", "Persist" = "#4DAF4A", "Exit" = "#2166AC")
+  for (sh in unique(trans_long$shock)) {
+    for (o in outcomes) {
+      sub <- trans_long %>% filter(shock == sh, outcome == o)
+      if (nrow(sub) == 0) next
+      p <- ggplot(sub, aes(x = horizon, y = estimate, color = transition)) +
+        geom_hline(yintercept = 0, linetype = "dashed", color = "gray50") +
+        geom_pointrange(aes(ymin = ci_low, ymax = ci_high),
+                        position = position_dodge(width = 0.3), size = 0.5) +
+        scale_x_continuous(breaks = unique(sub$horizon)) +
+        scale_color_manual(values = trans_colors) +
+        labs(title = paste("Onset / Persist / Exit:", sh, "->", o),
+             subtitle = "Joint LP; effect vs never-transitioned (0->0) reference",
+             x = "Horizon h (years)", y = "Estimate", color = "Transition") +
+        theme_minimal(base_size = 11) +
+        theme(plot.background  = element_rect(fill = "white", color = NA),
+              panel.background = element_rect(fill = "white", color = NA))
+      ggsave(file.path(plot_dir_trans, paste0("transition_", sh, "_", o, ".png")),
+             p, width = 7, height = 5, dpi = 150, bg = "white")
+    }
   }
 }
 

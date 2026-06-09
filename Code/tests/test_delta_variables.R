@@ -266,4 +266,83 @@ test_that("Shock_{t-1} * NoShock_{t} matches Drought_Exit indicator", {
                label = "Interaction term must equal Drought_Exit row-by-row")
 })
 
+# ===========================================================================
+# Joint Transition LP + Symmetry test (Persistence Extensions — Phase 1)
+# ===========================================================================
+# The Phase 1 block estimates Onset/Persist/Exit JOINTLY:
+#   lead(Y, h) ~ Onset + Persist + Exit + controls | fips_code + Year
+# so all three transitions are measured against the same 0->0 reference and the
+# symmetry test (beta_Onset + beta_Exit = 0) can be read off the joint vcov.
+
+source("Code/transition_symmetry.R")
+
+# Synthetic panel with KNOWN transition effects, so the recovered coefficients
+# and the symmetry verdict have a ground truth to check against.
+make_transition_panel <- function(beta_onset, beta_exit, beta_persist = 2,
+                                   n_units = 80, n_years = 16, sd = 1, seed = 7) {
+  set.seed(seed)
+  units <- sprintf("%05d", seq_len(n_units))
+  d <- expand.grid(fips_code = units, Year = seq_len(n_years),
+                   stringsAsFactors = FALSE)
+  d <- d[order(d$fips_code, d$Year), ]
+  d$shock <- rbinom(nrow(d), 1, 0.4)          # random spells -> all transitions occur
+  d <- d %>%
+    group_by(fips_code) %>% arrange(Year) %>%
+    mutate(
+      lag_shock = lag(shock, 1),
+      Onset   = as.integer(shock == 1 & lag_shock == 0),
+      Exit    = as.integer(shock == 0 & lag_shock == 1),
+      Persist = as.integer(shock == 1 & lag_shock == 1)
+    ) %>% ungroup()
+  unit_fe <- setNames(rnorm(n_units, 0, 2), units)
+  year_fe <- setNames(rnorm(n_years, 0, 1), as.character(seq_len(n_years)))
+  z <- function(x) ifelse(is.na(x), 0L, x)
+  d$Y <- unit_fe[d$fips_code] + year_fe[as.character(d$Year)] +
+         beta_onset * z(d$Onset) + beta_exit * z(d$Exit) +
+         beta_persist * z(d$Persist) + rnorm(nrow(d), 0, sd)
+  d$Y_fwd0 <- d$Y
+  d %>% filter(!is.na(Onset))                  # drop each county's first obs
+}
+
+# ---------------------------------------------------------------------------
+# Test 10: joint LP at h=0 reproduces the contemporaneous joint coefficients
+test_that("joint transition LP at h=0 matches contemporaneous joint regression", {
+  d <- make_transition_panel(beta_onset = 3, beta_exit = -2, seed = 5)
+  m_base <- feols(Y      ~ Onset + Persist + Exit | fips_code + Year, data = d)
+  m_lp0  <- feols(Y_fwd0 ~ Onset + Persist + Exit | fips_code + Year, data = d)
+  for (trm in c("Onset", "Persist", "Exit")) {
+    expect_equal(coef(m_base)[[trm]], coef(m_lp0)[[trm]], tolerance = 1e-10,
+                 label = paste("h=0 LP must equal contemporaneous for", trm))
+  }
+})
+
+# ---------------------------------------------------------------------------
+# Test 11: symmetry machinery REJECTS under a known-asymmetric DGP
+test_that("symmetry test rejects when onset and exit do not offset (truth = asymmetric)", {
+  d <- make_transition_panel(beta_onset = 4, beta_exit = 4, seed = 1)  # sum = 8
+  m <- feols(Y ~ Onset + Persist + Exit | fips_code + Year, data = d)
+  r <- transition_symmetry_test(m, "Onset", "Exit")
+  expect_equal(r$asymmetry, 8, tolerance = 1.0)
+  expect_true(r$reject_symmetry)
+})
+
+# ---------------------------------------------------------------------------
+# Test 12: symmetry machinery does NOT reject under a symmetric DGP
+test_that("symmetry test does not reject when onset and exit offset (truth = symmetric)", {
+  d <- make_transition_panel(beta_onset = 4, beta_exit = -4, seed = 2)  # sum = 0
+  m <- feols(Y ~ Onset + Persist + Exit | fips_code + Year, data = d)
+  r <- transition_symmetry_test(m, "Onset", "Exit")
+  expect_lt(abs(r$asymmetry), 1.5)
+  expect_false(r$reject_symmetry)
+})
+
+# ---------------------------------------------------------------------------
+# Test 13: helper returns NULL when the requested terms are absent
+test_that("transition_symmetry_test returns NULL on missing terms / NULL model", {
+  d <- make_transition_panel(beta_onset = 1, beta_exit = 1, seed = 3)
+  m <- feols(Y ~ Onset | fips_code + Year, data = d)        # no Exit term
+  expect_null(transition_symmetry_test(m, "Onset", "Exit"))
+  expect_null(transition_symmetry_test(NULL, "Onset", "Exit"))
+})
+
 cat("\nAll delta variable tests passed.\n")
