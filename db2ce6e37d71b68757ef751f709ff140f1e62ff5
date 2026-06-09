@@ -1,0 +1,42 @@
+Task: Humidity integration (Committee Feedback April 2026, Phase 4 — Environmental #1)
+
+WHY: The thesis committee asked that humidity be taken into account, pointing to
+PRISM tdmean at the state level. Phase 4 had been parked on the belief that
+sf/tigris were required and uninstalled. This closes the gap.
+
+WHAT CHANGED:
+- New Code/download_prism_humidity.R — acquires annual 4km CONUS tdmean BIL grids
+  from the open PRISM web service (services.nacse.org, no API key) for 2009-2025.
+  Idempotent: skips already-unzipped years (PRISM blocks a file re-downloaded
+  within 24h). Header documents access pattern, limits, manual fallback.
+- New Code/process_state_humidity.R — aggregates each grid to a state-year panel
+  by area-weighted zonal mean (terra::extract weights=TRUE) over Census 2018
+  cartographic state boundaries (auto-downloaded). Output Data/intermediate_
+  humidity.rds (State, Year, tdmean_C, tdmean_F). Only terra required.
+- create_state_master.R — left-joins intermediate_humidity.rds.
+- analysis_pre_processing.R — adds tdmean_F to the lag set (tdmean_F_lag1/lag2).
+- run_analysis.R — humidity-sensitivity block re-fits headline coefficients on
+  the identical humidity-available subsample with vs without tdmean_F + lags,
+  writing Analysis/humidity_sensitivity.csv. Full-sample primary spec unchanged.
+- Analysis/state_analysis_summary.md §6.4 rewritten from "parked" to results.
+- memory/project_humidity_phase4.md updated to completed.
+- Tests: Code/tests/test_humidity_download.R (3/3), test_state_humidity.R (4/4).
+
+KEY DECISIONS:
+- Area-weighted (not population-weighted) aggregation: standard for a continuous
+  climate field; population-weighting reserved for exposure variables like AQI.
+- Humidity kept OUT of the full-sample primary spec because PRISM coverage
+  (2009-2025, CONUS-only) shrinks the sample; the sensitivity block isolates the
+  control effect on a constant sample instead.
+- Units converted C->F (tdmean_F) for project consistency; native tdmean_C kept.
+
+RESULT: Cold Shock (1-yr lag) -> Medical Debt Share survives humidity adjustment
+(0.01363 p=0.011 -> 0.01368 p=0.017, n=624). Humidity itself raises medical debt
+(Share +0.0025/F p=0.009; Median +$16.0/F p=0.004) and marginally lowers premiums
+(-$13.7/F p=0.052). AK/HI are NA (PRISM us = CONUS only).
+
+FILES: Code/download_prism_humidity.R, Code/process_state_humidity.R,
+Code/tests/test_humidity_download.R, Code/tests/test_state_humidity.R,
+Code/create_state_master.R, Code/analysis_pre_processing.R, Code/run_analysis.R,
+Analysis/state_analysis_summary.md, Analysis/state_regression_results.md,
+memory/project_humidity_phase4.md.
