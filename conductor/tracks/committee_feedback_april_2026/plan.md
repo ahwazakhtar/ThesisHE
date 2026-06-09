@@ -52,20 +52,20 @@ Sequencing: Phase 0 is the gate. Phases 1 and 4 can run in parallel with Phase 2
 
 ## Phase 4: Humidity integration (Environmental #1)
 
-- [ ] **Task: Acquire PRISM humidity (tdmean) at state level**
-    - [ ] New `Code/download_prism_humidity.R`: pull `tdmean` from PRISM web service (https://prism.oregonstate.edu/documents/PRISM_downloads_web_service.pdf). Store raw outputs in `Data/Climate_Data/State level/PRISM_tdmean/`.
-    - [ ] Document API key / access pattern in script header. If no API key, document the manual download fallback.
-    - [ ] Tests in `Code/tests/test_humidity_download.R` (file shape, column names, year coverage).
+- [x] **Task: Acquire PRISM humidity (tdmean) at state level**
+    - [x] New `Code/download_prism_humidity.R`: pulls annual 4km CONUS `tdmean` grids (BIL) from `services.nacse.org` (no API key) for 2009–2025; skips already-unzipped years (PRISM 24h re-download block). Raw outputs in `Data/Climate_Data/State level/PRISM_tdmean/`.
+    - [x] Script header documents the open (keyless) access pattern, download limits, and a manual-download fallback.
+    - [x] Tests in `Code/tests/test_humidity_download.R` (skip-existing logic offline; file shape + year coverage integration). 3/3 pass.
 
-- [ ] **Task: Process humidity to state-year panel**
-    - [ ] New `Code/process_state_humidity.R`: aggregate raw PRISM `tdmean` to state-year. Output `Data/intermediate_humidity.rds`.
-    - [ ] Tests: missingness summary, sensible value range for dew point (deg F), no duplicate state-year rows.
+- [x] **Task: Process humidity to state-year panel**
+    - [x] New `Code/process_state_humidity.R`: area-weighted zonal mean of each grid over Census 2018 state polygons via `terra` (only `terra` needed — bundles GDAL/GEOS/PROJ; `sf`/`tigris` NOT required). Output `Data/intermediate_humidity.rds` (State, Year, tdmean_C, tdmean_F). CONUS-only → AK/HI NA.
+    - [x] Tests in `Code/tests/test_state_humidity.R` (synthetic area-weighted extraction, C→F conversion, no-duplicate state-year, deg-F range, AK/HI missingness). 4/4 pass.
 
-- [ ] **Task: Integrate humidity into state pipeline and re-run primary state regressions**
-    - [ ] Join `intermediate_humidity.rds` in `Code/create_state_master.R`.
-    - [ ] Add `tdmean` (and a lagged variant if motivated) to controls in `Code/analysis_pre_processing.R` and `Code/run_analysis.R`.
-    - [ ] Re-run `run_analysis.R`; update `Analysis/regression_results_summary.csv` and `Analysis/state_analysis_summary.md`.
-    - [ ] Add a humidity-sensitivity sub-section: do the headline Extreme Drought (2-yr lag) and Cold Shock (1-yr lag) results survive?
+- [x] **Task: Integrate humidity into state pipeline and re-run primary state regressions**
+    - [x] Joined `intermediate_humidity.rds` in `Code/create_state_master.R`; `tdmean_F` lagged in `Code/analysis_pre_processing.R`.
+    - [x] Humidity-sensitivity block in `Code/run_analysis.R` compares headline coefficients on the *identical humidity-available subsample* with vs. without `tdmean_F` + lags (avoids conflating added control with changed sample). Output `Analysis/humidity_sensitivity.csv`.
+    - [x] Re-ran state pipeline; full-sample primary `regression_results_summary.csv` unchanged (humidity kept out of it by design); `Analysis/state_analysis_summary.md` §6.4 rewritten with results.
+    - [x] Headline **Cold Shock (1-yr lag) → Medical Debt Share survives** (0.01363, p=0.011 → 0.01368, p=0.017). Humidity itself raises medical debt (Share +0.0025/°F p=0.009; Median +$16.0/°F p=0.004) and marginally lowers premiums (−$13.7/°F p=0.052).
 
 ## Phase 5: Propagation-pathway evidence (General #1)
 
