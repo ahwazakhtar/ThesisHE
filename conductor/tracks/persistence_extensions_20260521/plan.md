@@ -1,0 +1,94 @@
+# Implementation Plan: Persistence Extensions
+
+Source notes: `Text/persistence.txt`. Track spec: `./spec.md`.
+
+Sequencing: Phase 0 is the framing gate. Phase 1 builds on the existing Exit-LP work in `Code/run_delta_analysis.R` and unlocks Phases 2 and 3. Phase 4 (demographics) has an independent data-acquisition step. Phase 5 is a standalone robustness sweep.
+
+---
+
+## Phase 0: Ex-ante hypothesis framing
+
+- [x] **Task: Make hypotheses explicit in synthesis docs** [8949e8b]
+    - [x] Drafted "Ex-Ante Hypotheses and Predictions" subsection (§3a) in `Analysis/state_analysis_summary.md` — predicted direction + time-scale per shock × outcome, each sourced to a named pathway/citation in `Text/propagation_pathways.md`.
+    - [x] Same block added near the top of `Analysis/event_study_synthesis.md`.
+    - [x] Tagged each headline (state §4.6 surprise audit; event-study Surprise Audit section): drought-lag-2 & cold-lag-1 debt = **As expected**; HDD long-run scarring = **Stronger than expected**; High_CDD income split = **Direction opposite/mixed**; humidity→debt, systemic cost, AQI = **No clear prior**.
+
+## Phase 1: Symmetric Onset-LP and Persist-LP
+
+- [ ] **Task: Extend Onset and Persist indicators with LP horizons**
+    - [ ] Extend `Code/run_delta_analysis.R` to estimate `*_Onset` (Drought_Onset, CDD_Onset, HDD_Onset) at \(h=0..3\), mirroring the existing Exit-LP block.
+    - [ ] Same extension for `*_Persist` (Drought_Persist, CDD_Persist, HDD_Persist) at \(h=0..3\).
+    - [ ] Append coefficient rows to `Analysis/delta_coefs.csv` with `approach = "Delta_Onset_LP"` and `"Delta_Persist_LP"`.
+    - [ ] Plots: one PNG per (shock × outcome) showing Onset, Persist, Exit on the same axis across \(h=0..3\) in `Analysis/plots/delta_transition_compare/`.
+
+- [ ] **Task: Three-way comparison synthesis**
+    - [ ] Build a long-format table indexed by (shock, outcome, horizon, transition ∈ {Onset, Persist, Exit}) with coefficient, SE, p-value. Export to `Analysis/delta_transition_summary.csv`.
+    - [ ] Narrative addition to `Analysis/delta_analysis_synthesis.md`: a "Three-way decomposition" section that reads each headline transition as a comparison across the three indicators.
+
+- [ ] **Task: Formal symmetry test**
+    - [ ] For each (shock, outcome, horizon) pair, test \(H_0: \beta_\text{Onset} + \beta_\text{Exit} = 0\) using a Wald test on the joint fit. If onset and exit are estimated in separate regressions, use a stacked spec or block-bootstrap to recover the joint covariance.
+    - [ ] Export to `Analysis/delta_symmetry_test.csv`: reject/no-reject + the implied asymmetry magnitude.
+    - [ ] Tests in `Code/tests/test_delta_variables.R`: at least one new `test_that` block verifying that the symmetry-test machinery returns sensible results on a synthetic panel where the truth is known.
+
+## Phase 2: Continuously-exposed sub-population analysis
+
+- [ ] **Task: Define and characterize the always-exposed cohort**
+    - [ ] New `Code/run_persistent_exposure.R`. For each shock indicator, define:
+        - `Always_Exposed`: counties with shock in \(\geq 10/13\) panel years
+        - `Frequently_Exposed`: 5--9/13 years
+        - `Rarely_Exposed`: 1--4/13 years
+        - `Never_Exposed`: 0/13 years (matches Phase 0 inventory from prior track)
+    - [ ] Descriptive table: cohort size, geographic concentration, headline outcome means.
+    - [ ] Export `Analysis/persistent_exposure_inventory.csv`.
+
+- [ ] **Task: Always-vs-Never DiD-style contrast**
+    - [ ] For each headline outcome, estimate the persistent treated-vs-never gap using two-way FE with `Always_Exposed` as treatment indicator interacted with year FE.
+    - [ ] Compare against the onset-cohort CS-DiD results from the prior track. Hypothesis: continuously-exposed counties should show the largest persistent gap.
+    - [ ] Output to `Analysis/persistent_exposure_contrast.csv`.
+    - [ ] Plots in `Analysis/plots/persistent_exposure/`.
+
+## Phase 3: Cumulative-dose analysis
+
+- [ ] **Task: Construct cumulative-shock-years variable**
+    - [ ] In `Code/process_county_climate.R` (or a successor script that joins into the master), compute `Cum_Drought_Years`, `Cum_HDD_Years`, `Cum_CDD_Years` = running count of shock-positive years for each county up to \(t\).
+    - [ ] Tests for boundary cases (resets if shock exits and re-enters? — choose monotonic non-decreasing for the primary spec; document).
+
+- [ ] **Task: Dose-response regressions**
+    - [ ] New `Code/run_cumulative_dose.R`. Estimate \(Y_{it} = \alpha_i + \gamma_t + f(\text{CumYears}_{it}) + \mathbf{X}_{it}'\delta + \varepsilon_{it}\) for each headline outcome.
+    - [ ] Use linear, quadratic, and binned (1--3, 4--6, 7--9, 10+ years) functional forms.
+    - [ ] Question to answer: is the marginal effect of year 10 of HDD different from year 1? If yes by how much?
+    - [ ] Export `Analysis/cumulative_dose_coefs.csv`; plots in `Analysis/plots/cumulative_dose/`.
+    - [ ] Narrative section in `Analysis/delta_analysis_synthesis.md`.
+
+## Phase 4: Demographic-change mediators
+
+- [ ] **Task: Acquire ACS migration and age-distribution variables**
+    - [ ] Extend `Code/download_county_socioeconomic.R` to pull ACS B07001 (geographic mobility), B07401 (in-migration by origin), B01001 (age distribution), and B25003 (housing tenure).
+    - [ ] Extend `Code/process_county_socioeconomic.R` to derive county-year `Net_Migration_Rate`, `Pct_Age_65plus`, `Pct_Owner_Occupied`.
+    - [ ] Tests: variable ranges, year coverage (ACS 5-year so latest = 2023; document the moving-average smoothing).
+
+- [ ] **Task: Population-change responses to shocks**
+    - [ ] New `Code/run_demographic_mediators.R`. First-stage: does shock exposure predict subsequent in/out-migration or age-composition change?
+    - [ ] Treat the demographic variables as *outcomes* in their own FE specs (do shocks cause population shifts?).
+    - [ ] Export `Analysis/demographic_response_coefs.csv`.
+
+- [ ] **Task: Mediator decomposition**
+    - [ ] Re-run the headline outcome regressions (Medical_Debt_Share, PCPI_Real, Hosp_BadDebt_PerCapita) with and without the demographic controls.
+    - [ ] Report the fraction of the shock effect that survives demographic adjustment.
+    - [ ] Output to `Analysis/demographic_mediator_decomposition.csv` and a brief narrative section in `Analysis/state_analysis_summary.md`.
+
+## Phase 5: HDD/CDD threshold sensitivity
+
+- [ ] **Task: Sensitivity sweep for top-quintile cutoffs**
+    - [ ] New `Code/run_threshold_sensitivity.R`. Recompute `High_CDD` and `High_HDD` at the p70, p80 (existing primary), and p90 national 1990--2000 baselines.
+    - [ ] Re-estimate the primary state spec and primary county Spec 2 for each cutoff.
+    - [ ] Export the side-by-side coefficient table: `Analysis/threshold_sensitivity_coefs.csv`.
+    - [ ] Brief narrative in `Analysis/state_analysis_summary.md`: does the headline cold-lag-1 effect survive a stricter cutoff (p90)? If yes, robustness is supported.
+
+## Phase 6: Conductor verification & write-up
+
+- [ ] **Task: Conductor --- User Manual Verification 'Persistence Extensions' (Protocol in workflow.md)**
+- [ ] **Task: Propagate findings into upstream synthesis**
+    - [ ] `Analysis/state_analysis_summary.md`: humidity caveat untouched; add threshold-sensitivity verdict; add demographic-mediator decomposition; reference Onset/Persist/Exit symmetry results.
+    - [ ] `Analysis/event_study_synthesis.md`: add the three-way transition decomposition and cumulative-dose results.
+    - [ ] `Analysis/delta_analysis_synthesis.md`: already extended in Phases 1 and 3; final pass for cross-references.
