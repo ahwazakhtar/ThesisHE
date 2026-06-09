@@ -1,0 +1,45 @@
+Task: Continuously-exposed sub-population analysis (Persistence Extensions —
+Phase 2, both plan tasks)
+
+WHY: The prior track's DiD used the ONSET cohort. The committee/persistence track
+asks about CHRONICALLY exposed counties — do counties that spend most of the
+panel in shock show the largest persistent gap vs never-exposed?
+
+WHAT CHANGED:
+- New Code/exposure_cohorts.R: assign_exposure_cohort() bins a county by its
+  shock-year count over 2011-2023 into Always (>=10/13), Frequently (5-9),
+  Rarely (1-4), Never (0). Sourceable for testing.
+- New Code/run_persistent_exposure.R:
+  * Inventory (county x shock + cohort) -> persistent_exposure_inventory.csv.
+  * Cohort descriptives (size, n_states, top-3 states, outcome means) ->
+    persistent_exposure_cohort_summary.csv.
+  * Static dose-response Outcome ~ cohort | Year (cluster State) ->
+    persistent_exposure_contrast.csv (72 rows).
+  * Dynamic two-way FE Always-vs-Never trajectory
+    Outcome ~ i(Year, Always_Exposed, ref) | fips_code + Year ->
+    persistent_exposure_dynamic.csv (275 rows).
+  * 48 plots in Analysis/plots/persistent_exposure/.
+- New Analysis/persistent_exposure_synthesis.md with the onset-CS-DiD comparison.
+- New Code/tests/test_persistent_exposure.R (6 tests, all pass).
+
+KEY RESULTS:
+- Cohort sizes (Always): CDD 661 (TX/GA/MS), HDD 432 (MN/MT/ND), AQI 353
+  (CA/OH/PA), Is_Extreme_Drought 1 (CA). Chronic extreme drought ~ nonexistent
+  => onset-DiD remains the correct drought design; chronic-exposure lens applies
+  to heat/cold/AQI.
+- Heat (CDD) -> Medical_Debt_Share is the clean win: monotone cohort means
+  Never 0.156 -> Rarely 0.230 -> Frequently 0.248 -> Always 0.255; Always-Never
+  gap +0.099 (p<0.0001) = largest persistent gap (hypothesis confirmed).
+- CAVEAT: static gap is geographically confounded (heat=poor South, cold=rich
+  North, AQI=rich urban). The dynamic two-way FE shows the heat-debt gap is a
+  STABLE LEVEL, not widening (drifts negative, sig by 2022-23) — contrasts with
+  the onset CS-DiD where cold debt/employment gaps COMPOUND. The two designs are
+  complementary (onset = transient-shock causal; chronic = standing population).
+
+DECISIONS: static spec intentionally has no county FE (treatment is
+time-invariant) -> descriptive cross-sectional gap; dynamic spec is the within
+counterpart. Unweighted primary.
+
+FILES: Code/exposure_cohorts.R, Code/run_persistent_exposure.R,
+Code/tests/test_persistent_exposure.R, Analysis/persistent_exposure_synthesis.md.
+CSV/plot outputs gitignored per project convention.
