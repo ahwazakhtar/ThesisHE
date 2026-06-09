@@ -15,20 +15,18 @@ Sequencing: Phase 0 is the framing gate. Phase 1 builds on the existing Exit-LP 
 
 ## Phase 1: Symmetric Onset-LP and Persist-LP
 
-- [ ] **Task: Extend Onset and Persist indicators with LP horizons**
-    - [ ] Extend `Code/run_delta_analysis.R` to estimate `*_Onset` (Drought_Onset, CDD_Onset, HDD_Onset) at \(h=0..3\), mirroring the existing Exit-LP block.
-    - [ ] Same extension for `*_Persist` (Drought_Persist, CDD_Persist, HDD_Persist) at \(h=0..3\).
-    - [ ] Append coefficient rows to `Analysis/delta_coefs.csv` with `approach = "Delta_Onset_LP"` and `"Delta_Persist_LP"`.
-    - [ ] Plots: one PNG per (shock × outcome) showing Onset, Persist, Exit on the same axis across \(h=0..3\) in `Analysis/plots/delta_transition_compare/`.
+- [x] **Task: Extend Onset and Persist indicators with LP horizons** [2c497be]
+    - [x] `run_delta_analysis.R` §9c estimates `*_Onset`/`*_Persist`/`*_Exit` JOINTLY at h=0..3 (one LP per shock×outcome×horizon×weighting), against the never-transitioned (0→0) reference. Approaches `Delta_Onset_LP`, `Delta_Persist_LP`, `Delta_Exit_LP_Joint` (+`_RA_Cluster` for premiums).
+    - [x] Joint estimation chosen so the symmetry test reads off the model's own covariance; `delta_coefs.csv` 1664→2240 rows.
+    - [x] 21 PNGs (3 shocks × 7 outcomes) in `Analysis/plots/delta_transition_compare/` showing Onset/Persist/Exit on one axis across h=0..3.
 
-- [ ] **Task: Three-way comparison synthesis**
-    - [ ] Build a long-format table indexed by (shock, outcome, horizon, transition ∈ {Onset, Persist, Exit}) with coefficient, SE, p-value. Export to `Analysis/delta_transition_summary.csv`.
-    - [ ] Narrative addition to `Analysis/delta_analysis_synthesis.md`: a "Three-way decomposition" section that reads each headline transition as a comparison across the three indicators.
+- [x] **Task: Three-way comparison synthesis** [2c497be]
+    - [x] Long-format `Analysis/delta_transition_summary.csv` (252 rows) indexed by (shock, outcome, horizon, transition) with estimate, SE, p, N.
+    - [x] "Three-Way Transition Decomposition" section added to `Analysis/delta_analysis_synthesis.md`. Headline: Drought→Medical_Debt_Share h=2 is scarring (asymmetry +0.0182, p=0.0015); income shows symmetric overshoot; HDD→Hosp_BadDebt h=3 over-relief.
 
-- [ ] **Task: Formal symmetry test**
-    - [ ] For each (shock, outcome, horizon) pair, test \(H_0: \beta_\text{Onset} + \beta_\text{Exit} = 0\) using a Wald test on the joint fit. If onset and exit are estimated in separate regressions, use a stacked spec or block-bootstrap to recover the joint covariance.
-    - [ ] Export to `Analysis/delta_symmetry_test.csv`: reject/no-reject + the implied asymmetry magnitude.
-    - [ ] Tests in `Code/tests/test_delta_variables.R`: at least one new `test_that` block verifying that the symmetry-test machinery returns sensible results on a synthetic panel where the truth is known.
+- [x] **Task: Formal symmetry test** [2c497be]
+    - [x] `Code/transition_symmetry.R`: Wald test H0: β_Onset + β_Exit = 0 from the joint clustered vcov. Exported to `Analysis/delta_symmetry_test.csv` (168 tests; 28 reject at p<0.05, with beta_onset/beta_exit/asymmetry/p/reject_symmetry).
+    - [x] 4 new `test_that` blocks in `Code/tests/test_delta_variables.R` (Tests 10–13): joint LP h=0 equivalence; symmetry rejects under known asymmetric DGP; does not reject under symmetric DGP; NULL guard. 13/13 pass.
 
 ## Phase 2: Continuously-exposed sub-population analysis
 
