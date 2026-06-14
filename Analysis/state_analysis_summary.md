@@ -146,3 +146,15 @@ Track: [`persistence_extensions_20260521`](../conductor/tracks/persistence_exten
 - *Decomposition:* the shock coefficients on Medical_Debt_Share, Hosp_BadDebt, and PCPI are essentially unchanged when the three demographic controls are added — fraction of the effect surviving is **0.94–1.04** for the debt and hospital outcomes (`Analysis/demographic_mediator_decomposition.csv`). The only material attenuation is on the (already small/insignificant) PCPI cold effect (0.58).
 
 **Implication.** The headline mechanisms (drought→income→debt; cold→utilization) are **not artifacts of population turnover, aging, or tenure shifts** — they survive demographic adjustment intact. This closes a confounding channel a discussant might raise, with the caveat that ACS smoothing limits detection of fast demographic responses.
+
+---
+
+## 8. Persistence Extensions — HDD/CDD Threshold Sensitivity (Phase 5)
+
+Source: `Code/run_threshold_sensitivity.R` · `Analysis/threshold_sensitivity_coefs.csv` · plots in `Analysis/plots/threshold_sensitivity/`.
+
+`High_CDD`/`High_HDD` flag a year above the national **p80** of the 1990–2000 baseline. We re-derived the flags at **p70, p80, p90** and re-estimated the primary state spec and county Spec 2, extracting the CDD/HDD coefficients at each cut-point (252 rows).
+
+**The headline cold finding survives a stricter cutoff.** The genuine state cold headline, `is_cold_shock_lag1 → Medical_Debt_Share` (z-temperature based, not a degree-day cut), is stable and significant across all three cut-points: **0.0129 (p=0.007, p70) / 0.0117 (p=0.012, p80) / 0.0138 (p=0.003, p90)**. Re-defining the energy-demand flags does not disturb it. Answering the committee's question directly: **yes, the headline cold-lag-1 effect on medical debt survives the stricter p90 definition** — robustness supported.
+
+**But the `High_CDD`/`High_HDD` degree-day coefficients are themselves cutoff-fragile.** Only **25 of 234 (10.7%)** CDD/HDD coefficients are significant at p<0.05, and — critically — **none are significant at all three cut-points**: every significant degree-day term appears at only one or two cut-points and flips to non-significant at another. The energy-demand-burden findings should therefore be reported with an explicit caveat: their significance depends on where the top-quintile line is drawn, unlike the temperature-z cold shock and the PDSI drought results, which are threshold-free by construction. This is a reason to lead the cold story with `is_cold_shock` (robust) rather than `High_HDD` (fragile).
