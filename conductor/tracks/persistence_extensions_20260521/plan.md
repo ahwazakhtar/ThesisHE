@@ -42,16 +42,15 @@ Sequencing: Phase 0 is the framing gate. Phase 1 builds on the existing Exit-LP 
 
 ## Phase 3: Cumulative-dose analysis
 
-- [ ] **Task: Construct cumulative-shock-years variable**
-    - [ ] In `Code/process_county_climate.R` (or a successor script that joins into the master), compute `Cum_Drought_Years`, `Cum_HDD_Years`, `Cum_CDD_Years` = running count of shock-positive years for each county up to \(t\).
-    - [ ] Tests for boundary cases (resets if shock exits and re-enters? — choose monotonic non-decreasing for the primary spec; document).
+- [x] **Task: Construct cumulative-shock-years variable** [8e573cc]
+    - [x] Successor-script approach (avoids full county-pipeline rebuild): `Code/cumulative_dose.R::add_cumulative_shock_years()` derives `Cum_Drought_Years`, `Cum_CDD_Years`, `Cum_HDD_Years` from the master's shock indicators — running per-county count, **monotonic non-decreasing** (no reset on exit/re-entry), NA→0 carry-forward. Documented in the helper header.
+    - [x] 7 tests in `Code/tests/test_cumulative_dose.R` (running-sum correctness, monotonicity, no cross-county bleed/reset, NA handling, order-invariance, plus `lincom` recovery). 7/7 pass.
 
-- [ ] **Task: Dose-response regressions**
-    - [ ] New `Code/run_cumulative_dose.R`. Estimate \(Y_{it} = \alpha_i + \gamma_t + f(\text{CumYears}_{it}) + \mathbf{X}_{it}'\delta + \varepsilon_{it}\) for each headline outcome.
-    - [ ] Use linear, quadratic, and binned (1--3, 4--6, 7--9, 10+ years) functional forms.
-    - [ ] Question to answer: is the marginal effect of year 10 of HDD different from year 1? If yes by how much?
-    - [ ] Export `Analysis/cumulative_dose_coefs.csv`; plots in `Analysis/plots/cumulative_dose/`.
-    - [ ] Narrative section in `Analysis/delta_analysis_synthesis.md`.
+- [x] **Task: Dose-response regressions** [8e573cc]
+    - [x] New `Code/run_cumulative_dose.R`: `Y ~ f(CumYears) + controls | fips_code + Year` for 3 shocks × 6 outcomes × 2 weightings, with **linear / quadratic / binned (1–3,4–6,7–9,10+ vs 0)** forms.
+    - [x] Year-10-vs-year-1 answered via quadratic ME(10)−ME(1) and binned 10+−1–3 (`lincom` Wald). **HDD employment compounds**: monotone −1,269/−3,267/−5,353/−6,936; 10+ vs 1–3 = −5,668 (p<0.0001), converging with CS-DiD. **Heat does NOT compound** (CDD debt ME negative by year 10). **Drought 10+ = 1 county**, flagged not interpretable.
+    - [x] Exported `Analysis/cumulative_dose_coefs.csv` (252) + `…_marginal.csv` (180); plots in `Analysis/plots/cumulative_dose/`.
+    - [x] "Cumulative-Dose Response" narrative section added to `Analysis/delta_analysis_synthesis.md`.
 
 ## Phase 4: Demographic-change mediators
 
