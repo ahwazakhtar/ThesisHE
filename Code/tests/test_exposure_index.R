@@ -68,4 +68,55 @@ test_that("intermediate_svi.rds is well-formed", {
   expect_true(all(spread$u == 1))
 })
 
-cat("\nAll exposure index (Phase 1) tests completed.\n")
+# ===========================================================================
+# Phase 2: exposure components
+# ===========================================================================
+source("Code/exposure_index.R")
+
+# ---------------------------------------------------------------------------
+test_that("person_years_exposure = population x hazard indicator", {
+  expect_equal(person_years_exposure(c(1000, 2000, 500), c(1, 0, 1)), c(1000, 0, 500))
+  # continuous intensity
+  expect_equal(person_years_exposure(c(100, 200), c(0.5, 2)), c(50, 400))
+})
+
+test_that("person_years_exposure handles NA per the flag", {
+  expect_true(is.na(person_years_exposure(1000, NA)))
+  expect_equal(person_years_exposure(1000, NA, na_indicator_zero = TRUE), 0)
+})
+
+test_that("person_years_exposure is non-negative for valid inputs", {
+  py <- person_years_exposure(c(0, 100, 5000), c(1, 1, 0))
+  expect_true(all(py >= 0))
+})
+
+# ---------------------------------------------------------------------------
+test_that("build_chei rises with both hazard and vulnerability", {
+  # increasing in hazard at fixed positive vulnerability
+  h <- c(0, 1, 2, 3)
+  idx_h <- build_chei(h, svi = rep(0.5, 4))
+  expect_true(all(diff(idx_h) > 0))
+  # increasing in vulnerability at fixed positive hazard
+  v <- c(0, 0.25, 0.5, 1)
+  idx_v <- build_chei(hazard_z = rep(2, 4), svi = v)
+  expect_true(all(diff(idx_v) > 0))
+})
+
+test_that("zero vulnerability gives a zero index", {
+  expect_equal(build_chei(c(-2, 0, 3), svi = c(0, 0, 0)), c(0, 0, 0))
+})
+
+test_that("build_chei absolute variant scales by population", {
+  rel <- build_chei(2, svi = 0.5)
+  abs <- build_chei(2, svi = 0.5, pop = 1000)
+  expect_equal(abs, rel * 1000)
+})
+
+test_that("build_chei standardisation yields mean 0 / sd 1", {
+  set.seed(1)
+  idx <- build_chei(rnorm(500, 1, 1), svi = runif(500), standardize = TRUE)
+  expect_equal(mean(idx), 0, tolerance = 1e-9)
+  expect_equal(stats::sd(idx), 1, tolerance = 1e-9)
+})
+
+cat("\nAll exposure index (Phase 1+2) tests completed.\n")
