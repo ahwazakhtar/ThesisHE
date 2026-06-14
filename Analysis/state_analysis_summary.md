@@ -173,3 +173,13 @@ The county-level transition analysis (full detail in `Analysis/delta_analysis_sy
 | 3 Cumulative dose | cold compounds, heat saturates, drought episodic | `delta_analysis_synthesis.md`; `cumulative_dose_*.csv` |
 | 4 Demographic mediators | no mediation (effects survive) | §7 above; `demographic_mediator_decomposition.csv` |
 | 5 Threshold sensitivity | cold headline survives p90; degree-day flags fragile | §8 above; `threshold_sensitivity_coefs.csv` |
+
+---
+
+## 9. Climate–Health Exposure Index — EJ Amplification (track `climate_health_exposure_index`)
+
+Source: `Code/run_exposure_index.R` + `Code/run_exposure_secondary.R` · Detail: `Analysis/exposure_index_synthesis.md`. Adds a *hazard × exposure × vulnerability* layer (CDC SVI) and tests whether climate→health-cost effects are amplified in structurally vulnerable counties via `Y ~ Shock + Shock × SVI | fips + Year`.
+
+**Verdict — vulnerability amplifies harm for the real-economy outcomes.** In high-SVI counties, **heat costs jobs** (Civilian_Employed +878 at low SVI → −184 at high, p=0.001), **cold's income hit is ~8× larger** (PCPI −$56 → −$472, p=0.056), and **drought raises ACA premiums** (benchmark −$54 → +$16, p=0.001). The composite `CHEI_heat → Med_HH_Income` is −$435/SD (p=0.0002). 
+
+**Caveat.** The *credit-bureau medical-debt* response runs the other way — concentrated in *less*-vulnerable counties — a measurement artifact (poorer/uninsured counties accrue less *measured* debt), not evidence against EJ harm. Lancet-style person-years of extreme-temperature exposure (~70–105M/yr heat, 3–5× cold) are reported in `Analysis/exposure_personyears_trend.csv`.
