@@ -69,11 +69,11 @@ Sequencing: Phase 0 is the framing gate. Phase 1 builds on the existing Exit-LP 
 
 ## Phase 5: HDD/CDD threshold sensitivity
 
-- [ ] **Task: Sensitivity sweep for top-quintile cutoffs**
-    - [ ] New `Code/run_threshold_sensitivity.R`. Recompute `High_CDD` and `High_HDD` at the p70, p80 (existing primary), and p90 national 1990--2000 baselines.
-    - [ ] Re-estimate the primary state spec and primary county Spec 2 for each cutoff.
-    - [ ] Export the side-by-side coefficient table: `Analysis/threshold_sensitivity_coefs.csv`.
-    - [ ] Brief narrative in `Analysis/state_analysis_summary.md`: does the headline cold-lag-1 effect survive a stricter cutoff (p90)? If yes, robustness is supported.
+- [x] **Task: Sensitivity sweep for top-quintile cutoffs** [b893c06]
+    - [x] New `Code/run_threshold_sensitivity.R` recomputes `High_CDD`/`High_HDD` at p70/p80/p90 of the national 1990–2000 baseline (state baseline from `analysis_ready_dataset.csv`; county baseline from `Data/intermediate_climate.rds`).
+    - [x] Re-estimated the primary state spec and county Spec 2 at each cutoff; 252 coefficient rows + faceted plots.
+    - [x] Exported `Analysis/threshold_sensitivity_coefs.csv`.
+    - [x] Narrative §8 in `Analysis/state_analysis_summary.md`. **Headline cold finding survives p90**: `is_cold_shock_lag1 → Medical_Debt_Share` stable at 0.0129/0.0117/0.0138 (p=0.007/0.012/0.003 across p70/p80/p90). **Caveat surfaced:** the `High_CDD`/`High_HDD` degree-day coefficients are cutoff-fragile (only 10.7% significant; none stable across all three cutoffs) — lead the cold story with `is_cold_shock`, not `High_HDD`. (No unit tests: pure re-estimation sweep; p80 recomputation reproduces existing flags as the implicit check.)
 
 ## Phase 6: Conductor verification & write-up
 
