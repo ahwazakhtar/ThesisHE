@@ -19,13 +19,13 @@ Sequencing: Phase 1 (SVI acquisition) is the data gate. Phase 2 builds the expos
 
 ## Phase 2: Construct exposure components
 
-- [ ] **Task: Lancet-style person-years exposure**
-    - [ ] In `Code/exposure_index.R` (sourceable): `person_years_exposure(pop, hazard_indicator)` = Population × extreme-temperature indicator (High_CDD / High_HDD). County-year series + state/national aggregates for a Lancet-style trend.
-    - [ ] Tests: arithmetic correctness, NA handling, non-negativity.
+- [x] **Task: Lancet-style person-years exposure** [8b5b79d]
+    - [x] `Code/exposure_index.R::person_years_exposure(pop, hazard_indicator, na_indicator_zero)` = Population × extreme-temperature indicator. (County-year series + state/national Lancet trend are materialized in Phase 4's descriptive script where the master join lives — avoids a redundant intermediate.)
+    - [x] Tests: arithmetic (binary + continuous), NA handling per flag, non-negativity.
 
-- [ ] **Task: Composite CHEI scalar**
-    - [ ] In `Code/exposure_index.R`: `build_chei(hazard_z, svi, pop=NULL)` = z(Hazard) × SVI (relative risk) and a population-scaled absolute-burden variant; standardized output. Hazard input parameterized (continuous CDD/HDD z, PDSI severity, or shock-count).
-    - [ ] Tests: monotonic increasing in both hazard and vulnerability; zero-vulnerability ⇒ zero index; standardization sanity.
+- [x] **Task: Composite CHEI scalar** [8b5b79d]
+    - [x] `Code/exposure_index.R::build_chei(hazard_z, svi, pop=NULL, standardize=)` = hazard_z × SVI (relative) and × Population (absolute); optional z-standardisation. Hazard input parameterized.
+    - [x] Tests: monotonic increasing in both hazard and vulnerability; zero-vulnerability ⇒ zero index; population scaling; standardisation mean 0 / sd 1. 12/12 exposure tests pass.
 
 ## Phase 3: EJ amplification — Shock × vulnerability interactions (PRIMARY)
 
