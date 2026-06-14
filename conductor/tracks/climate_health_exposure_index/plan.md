@@ -29,10 +29,11 @@ Sequencing: Phase 1 (SVI acquisition) is the data gate. Phase 2 builds the expos
 
 ## Phase 3: EJ amplification — Shock × vulnerability interactions (PRIMARY)
 
-- [ ] **Task: Interaction regressions**
-    - [ ] New `Code/run_exposure_index.R`. For each headline shock (Is_Extreme_Drought incl. lag2, High_CDD, High_HDD incl. lags, cumulative-dose) × headline outcome (Medical_Debt_Share, PCPI_Real, Hosp_BadDebt_PerCapita, premiums, employment): estimate `Y ~ Shock + Shock:SVI_2018 + controls | fips_code + Year`, cluster State (+ RA-cluster for premiums).
-    - [ ] Export `Analysis/exposure_interaction_coefs.csv` with the `Shock` and `Shock × SVI` terms; a verdict column on whether vulnerability amplifies (sign & significance of the interaction).
-    - [ ] Plots: interaction marginal effects (effect of shock at low vs high SVI) per (shock × outcome) in `Analysis/plots/exposure_index/`.
+- [x] **Task: Interaction regressions** [ceb8531]
+    - [x] New `Code/run_exposure_index.R`: `Y ~ Shock + Shock:SVI_static + controls | fips_code + Year`, cluster State, for shocks {Drought, Drought_Lag2, Heat_CDD, Cold_HDD, Cold_CumYears} × 6 headline outcomes (30 models). Marginal shock effects at low (p25) and high (p75) SVI via `lincom`.
+    - [x] Export `Analysis/exposure_interaction_coefs.csv` with `beta_shock`, `beta_interaction`, marginal effects, and an **outcome-aware `ej_verdict`** (adverse direction differs by outcome: debt/premiums up = harm, income/employment down = harm).
+    - [x] 6 marginal-effect plots (shock effect at low vs high SVI) in `Analysis/plots/exposure_index/`.
+    - [x] **Result:** 4 interactions show **EJ amplification** (climate harm worse in vulnerable counties): Heat→Employment (+878→−184), Cold→PCPI (−$56→−$472, ~8×), Drought(+lag2)→premiums. 3 are reversed — the *credit-bureau medical-debt* response concentrates in *less*-vulnerable counties (measurement artifact: poorer/uninsured counties accrue less measured debt). Honest caveat documented.
 
 ## Phase 4: Composite index & robustness (SECONDARY)
 
