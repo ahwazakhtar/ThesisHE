@@ -1,0 +1,13 @@
+Task: Acquire & process CDC SVI county panel (CHEI Phase 1, both tasks).
+
+WHY: SVI is the structural-vulnerability layer V for the exposure index and the Shock x vulnerability (EJ amplification) interactions.
+
+WHAT: download_svi.R (keyless ATSDR pull, 5 vintages, candidate filename casings, skip-if-exists) -> Data/SVI_Data/. process_svi.R -> Data/intermediate_svi.rds (fips_code, Year, SVI_yr + 4 theme percentiles time-varying, SVI_static time-invariant 2018-with-mean-fallback). nearest_svi_vintage() = largest vintage <= year floored at 2014; documented. 41,015 rows, 3,155 counties, 2011-2023.
+
+BUG FIXED: sprintf('%05s') space-pads -> dropped 4-digit-integer FIPS (CA=06, AL=01, etc.), yielding 2,827 counties; switched to formatC(width=5, flag='0') -> 3,155 (matches master). Same latent pattern exists in older socioeconomic scripts but their FIPS arrive pre-padded.
+
+DESIGN: SVI_static (time-invariant) is primary so the Shock x V interaction is identified under county FE and V cannot respond to shocks; SVI_yr is the time-varying robustness variant.
+
+TESTS: test_exposure_index.R 5/5 (URL pattern, vintage mapping, FIPS validation, raw-column presence, processed-panel schema/ranges/time-invariance).
+
+FILES: Code/download_svi.R, Code/process_svi.R, Code/tests/test_exposure_index.R. SVI CSVs + intermediate_svi.rds gitignored.
