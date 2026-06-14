@@ -8,13 +8,14 @@ Sequencing: Phase 1 (SVI acquisition) is the data gate. Phase 2 builds the expos
 
 ## Phase 1: Acquire & process CDC SVI
 
-- [ ] **Task: Download SVI county data**
-    - [ ] New `Code/download_svi.R`: pull `SVI_<YYYY>_US_county.csv` for 2014, 2016, 2018, 2020, 2022 from `svi.cdc.gov` (keyless). Store raw CSVs in `Data/SVI_Data/`. Skip-if-exists; document the URL pattern and `-999` missing code in the header.
-    - [ ] Tests in `Code/tests/test_exposure_index.R` (file present, expected key columns: `FIPS`, `RPL_THEMES`, `RPL_THEME1–4`).
+- [x] **Task: Download SVI county data** [9f68392]
+    - [x] New `Code/download_svi.R`: keyless pull of `SVI_<YYYY>_US_county.csv` for 2014/2016/2018/2020/2022 from `svi.cdc.gov`, trying candidate filename casings (ATSDR varies them), skip-if-exists, `-999` documented. All 5 vintages fetched. Raw in `Data/SVI_Data/`.
+    - [x] Tests in `Code/tests/test_exposure_index.R` (URL-candidate pattern; raw vintages have FIPS/RPL_THEMES/RPL_THEME1–4).
 
-- [ ] **Task: Process SVI to a county panel**
-    - [ ] New `Code/process_svi.R`: keep `FIPS`, overall `RPL_THEMES`, and the four theme percentiles; recode `-999`→NA; validate 5-digit county FIPS. Build a vintage→year mapping covering 2011–2023 (nearest available vintage; document) → `Data/intermediate_svi.rds` with both a **time-invariant** `SVI_2018` (primary) and a **time-varying** `SVI_yr` (robustness) column.
-    - [ ] Tests: percentiles in [0,1], no duplicate (fips, Year), AK/HI/territory coverage noted, vintage-mapping correctness.
+- [x] **Task: Process SVI to a county panel** [9f68392]
+    - [x] New `Code/process_svi.R`: keeps overall `RPL_THEMES` + 4 theme percentiles; `-999`→NA; validated 5-digit FIPS. Documented `nearest_svi_vintage()` map (largest vintage ≤ year, floored at 2014). Output `Data/intermediate_svi.rds`: **time-invariant `SVI_static`** (2018 vintage, cross-vintage-mean fallback) for the primary interaction + **time-varying `SVI_yr`** (+ themes) for robustness. 41,015 rows, 3,155 counties, 2011–2023, ~0% NA.
+    - [x] **Bug fixed:** `sprintf("%05s")` pads with spaces (dropped CA/AL/etc. 4-digit-int FIPS → 2,827 counties); switched to `formatC(width=5, flag="0")` → 3,155 counties (matches master).
+    - [x] Tests: nearest-vintage mapping, FIPS validation, percentiles in [0,1], no duplicate (fips, Year), time-invariance of `SVI_static`, year coverage. 5/5 pass.
 
 ## Phase 2: Construct exposure components
 
