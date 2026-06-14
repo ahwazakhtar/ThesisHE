@@ -1,0 +1,35 @@
+Task: HDD/CDD threshold sensitivity sweep (Persistence Extensions — Phase 5)
+
+WHY: High_CDD/High_HDD use an arbitrary p80 top-quintile cut on the 1990-2000
+baseline. Does the headline cold finding survive a stricter cut, and are the
+degree-day burden coefficients robust to the threshold choice?
+
+WHAT CHANGED:
+- New Code/run_threshold_sensitivity.R: re-derives High_CDD/High_HDD at p70, p80
+  (primary), p90 of the national 1990-2000 baseline and re-estimates:
+    * the primary STATE spec (full climate block, swapping CDD/HDD cut), and
+    * the primary county SPEC 2 (PDSI + High_CDD/HDD),
+  extracting CDD/HDD coefficients (+ state is_cold_shock_lag1) at each cut.
+  Self-contained baselines: STATE from analysis_ready_dataset.csv (1990-2025),
+  COUNTY from Data/intermediate_climate.rds (1990-2000). 252 coef rows ->
+  Analysis/threshold_sensitivity_coefs.csv + faceted plots.
+- Analysis/state_analysis_summary.md: new section 8.
+
+KEY RESULTS:
+- HEADLINE COLD SURVIVES p90: is_cold_shock_lag1 -> Medical_Debt_Share is stable
+  and significant at all three cuts (0.0129 p=0.007 / 0.0117 p=0.012 / 0.0138
+  p=0.003). It is z-temperature based, so threshold-free by construction;
+  re-defining the degree-day flags does not disturb it.
+- DEGREE-DAY COEFS ARE CUTOFF-FRAGILE: only 25/234 (10.7%) High_CDD/High_HDD
+  coefficients significant, and NONE significant at all three cuts -- every
+  significant degree-day term flips at some cutoff. Recommendation: lead the cold
+  story with is_cold_shock (robust) and PDSI drought (threshold-free), and report
+  High_CDD/High_HDD with an explicit threshold-sensitivity caveat.
+
+DECISIONS: no unit tests -- Phase 5 is a pure re-estimation sweep with no new
+reusable algorithm (the plan lists no test bullet); the p80 recomputation
+reproducing the existing flags is the implicit validation. Debt reporting
+exclusion (CO 2023) applied to debt outcomes to match run_county_analysis.R.
+
+FILES: Code/run_threshold_sensitivity.R, Analysis/state_analysis_summary.md.
+CSV/plot outputs gitignored per project convention.
