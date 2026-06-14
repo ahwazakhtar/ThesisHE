@@ -78,7 +78,7 @@ Sequencing: Phase 0 is the framing gate. Phase 1 builds on the existing Exit-LP 
 ## Phase 6: Conductor verification & write-up
 
 - [ ] **Task: Conductor --- User Manual Verification 'Persistence Extensions' (Protocol in workflow.md)**
-- [ ] **Task: Propagate findings into upstream synthesis**
-    - [ ] `Analysis/state_analysis_summary.md`: humidity caveat untouched; add threshold-sensitivity verdict; add demographic-mediator decomposition; reference Onset/Persist/Exit symmetry results.
-    - [ ] `Analysis/event_study_synthesis.md`: add the three-way transition decomposition and cumulative-dose results.
-    - [ ] `Analysis/delta_analysis_synthesis.md`: already extended in Phases 1 and 3; final pass for cross-references.
+- [x] **Task: Propagate findings into upstream synthesis** [3200136]
+    - [x] `Analysis/state_analysis_summary.md`: humidity caveat untouched; §8 threshold-sensitivity verdict; §7 demographic-mediator decomposition; §8.1 references Onset/Persist/Exit symmetry; §8.2 Persistence artifact index.
+    - [x] `Analysis/event_study_synthesis.md`: added "Persistence Extensions" section summarizing the three-way transition decomposition, cumulative-dose, and continuously-exposed cohorts (with pointers to detail docs).
+    - [x] `Analysis/delta_analysis_synthesis.md`: extended in Phases 1 & 3; added a final "Persistence Extensions — cross-references" pass linking Phases 2/4/5 and the symmetry machinery.
