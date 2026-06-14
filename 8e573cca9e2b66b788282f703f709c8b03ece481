@@ -1,0 +1,44 @@
+Task: Cumulative-dose analysis (Persistence Extensions — Phase 3, both plan tasks)
+
+WHY: Phases 1-2 treated shock years as discrete events / cohort membership.
+Phase 3 asks the stock question the committee posed: does the marginal cost of
+the Nth cumulative shock-year differ from the 1st?
+
+WHAT CHANGED:
+- New Code/cumulative_dose.R:
+  * add_cumulative_shock_years(): per-county running count of shock-positive
+    years, MONOTONIC non-decreasing (no reset on exit/re-entry), NA -> 0 with
+    carry-forward. Derived from the master (successor-script approach) so no full
+    county-pipeline rebuild is needed.
+  * lincom(): estimate/SE/p for an arbitrary linear combination of model coefs
+    from the clustered vcov.
+- New Code/run_cumulative_dose.R: builds Cum_{Drought,CDD,HDD}_Years + quadratic
+  + bin dummies; fits Linear/Quadratic/Binned (1-3/4-6/7-9/10+ vs 0) with
+  fips+Year FE, state-clustered, x6 outcomes x2 weightings. Writes
+  cumulative_dose_coefs.csv (252) and cumulative_dose_marginal.csv (180:
+  quadratic ME at x=1/5/10, ME(10)-ME(1), binned 10+ vs 1-3). Dose plots.
+- Analysis/delta_analysis_synthesis.md: new "Cumulative-Dose Response" section.
+- New Code/tests/test_cumulative_dose.R (7 tests, all pass).
+
+KEY RESULTS:
+- COLD COMPOUNDS: HDD -> Civilian_Employed monotone staircase
+  -1,269 / -3,267 / -5,353 / -6,936 across 1-3/4-6/7-9/10+; 10+ vs 1-3 = -5,668
+  (p<1e-4). Converges with the prior CS-DiD long-run cold employment scarring
+  (-4,982 at e=10). Two independent designs agree.
+- HEAT SATURATES: CDD -> Medical_Debt_Share marginal effect ~0 at year 1, turns
+  significantly negative by year 10 (-0.0039, p=0.026); 10+ vs 1-3 = -0.0212
+  (p=0.041). Cumulative heat does not keep adding debt (consistent with Phase 2:
+  the hot-county debt gap is a standing level, not widening).
+- DROUGHT EPISODIC: only 1 county reaches 10+ cumulative drought-years, so the
+  high-dose drought bins are a single-county artifact and are excluded from
+  interpretation. Drought cost is onset/lag (Phase 1), not stock.
+- Takeaway: persistence is shock-specific (cold accumulates, heat saturates,
+  drought is episodic) -- a flat "more exposure = worse" story would be wrong.
+
+DECISIONS: cumulative variable built in a successor helper (not
+process_county_climate.R) to avoid rebuilding the county master; documented.
+Monotonic non-decreasing chosen as the primary (wear-and-tear) spec.
+
+FILES: Code/cumulative_dose.R, Code/run_cumulative_dose.R,
+Code/tests/test_cumulative_dose.R, Analysis/delta_analysis_synthesis.md.
+CSV/plot outputs gitignored per project convention.
