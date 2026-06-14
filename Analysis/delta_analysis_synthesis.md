@@ -345,3 +345,41 @@ For **83% of the 168 tests symmetry is not rejected** — for most shock × outc
 1. **Drought_Persist is thin** (301 county-years), so the Persist coefficient for drought is the least precise of the trio; the Onset/Exit contrast that drives the symmetry test is unaffected.
 2. **Symmetry is tested per horizon**, not jointly across horizons; a joint test would have more power but the per-horizon view is what the three-way plots show.
 3. **Reference group.** All effects are relative to never-transitioned (0→0) counties; the test asks whether onset and exit are mirror images of each other, not whether either equals zero.
+
+---
+
+## Cumulative-Dose Response (Persistence Extensions — Phase 3)
+
+The transition decomposition above treats each shock year as a discrete event. Phase 3 asks a *stock* question: does the **10th** cumulative year of a shock cost more than the **1st**? We count, per county-year, the running number of shock-positive years to date (`Cum_*_Years`, monotonic non-decreasing — exposure accumulates and never resets; `Code/cumulative_dose.R`) and fit linear, quadratic, and binned (1–3 / 4–6 / 7–9 / 10+ vs 0) forms with county + year FE (`Code/run_cumulative_dose.R`). Coefficients in `Analysis/cumulative_dose_coefs.csv` (252 rows); marginal effects and the 10+-vs-1–3 contrast in `Analysis/cumulative_dose_marginal.csv` (180 rows); plots in `Analysis/plots/cumulative_dose/`.
+
+Support varies sharply by shock: counties reaching 10+ cumulative years number **661 for CDD, 432 for HDD, but only 1 for extreme drought** — so the high-dose drought estimates are driven by a single county and are not interpretable (reported for completeness, flagged below).
+
+### Headline: cumulative *cold* compounds into employment loss
+
+**HDD → Civilian_Employed** is a textbook monotone dose-response — each additional band of accumulated cold-years deepens the employment deficit relative to never-cold counties:
+
+| Cumulative HDD-years | Effect on Civilian_Employed | p |
+|---|---:|---:|
+| 1–3 | −1,269 | 0.22 |
+| 4–6 | −3,267 | 0.02 |
+| 7–9 | −5,353 | <0.01 |
+| **10+** | **−6,936** | <0.01 |
+
+The 10+-vs-1–3 contrast is **−5,668 (p < 0.0001)**: the tenth year of cold is far more costly than the first. This is the cumulative-stock analogue of the prior CS-DiD long-run cold scarring (employment compounding to −4,982 at event-time 10) — two independent designs converging on the same compounding cold-employment damage. HDD → Medical_Debt_Share also escalates with dose, though only marginally (10+ vs 1–3 = +0.0147, p = 0.062).
+
+### Heat does *not* compound
+
+**CDD** shows the opposite pattern. Its marginal effect on Medical_Debt_Share *attenuates* with accumulated exposure — the quadratic marginal effect is ≈ 0 at year 1 (−0.0003, p = 0.93) and turns significantly negative by year 10 (−0.0039, p = 0.026), and the binned 10+-vs-1–3 contrast is −0.0212 (p = 0.041). Cumulative heat tracks Sun-Belt employment *growth* (CDD 10+ → Civilian_Employed +8,235, p = 0.003) rather than damage. This reconciles with Phase 2: the chronically-hot debt gap is a standing *level* difference, not a dynamically compounding one — so accumulating more heat-years does not keep adding debt.
+
+### Drought dose not assessable at the top
+
+Extreme drought is transient: only one county reaches 10+ cumulative drought-years, so the drought 10+ coefficients (e.g., the implausibly large Civilian_Employed and PCPI values) are a single-county artifact and are excluded from interpretation. Drought's cost is captured by its *onset/lag* dynamics (Phase 1 scarring; state lag-2 headline), not by chronic accumulation.
+
+### Takeaway
+
+The persistence mechanism is **shock-specific**: cold damage *accumulates* (each additional cold-year compounds employment loss), heat damage *saturates* (a level gap that stops growing), and drought damage is *episodic* (onset-and-lag, not stock). A one-size "more exposure = monotonically worse" story would be wrong — Phase 3 shows which shocks actually compound.
+
+### Caveats
+1. **Cumulative years correlate with calendar time**; year FE absorb the common trend, so identification is the *cross-county* difference in accumulation rate. Counties that accumulate faster than the year average drive the estimates.
+2. **Income controls** (`Household_Income_2023`) are held in all specs for consistency with the delta pipeline; for the income outcomes themselves this absorbs much variation, so the employment and debt results are the cleaner reads.
+3. **Drought high-dose bins are single-county** — do not interpret.
