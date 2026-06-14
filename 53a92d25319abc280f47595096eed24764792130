@@ -1,0 +1,48 @@
+Task: Demographic-change mediators (Persistence Extensions — Phase 4, all 3 tasks)
+
+WHY: Could the climate-shock -> health-cost links be an artifact of population
+change — chronically shocked counties losing young residents / aging / shifting
+tenure, with cost effects merely reflecting who remains? Phase 4 tests this.
+
+WHAT CHANGED:
+- download_county_socioeconomic.R: added an ACS demographics pull (B25003 tenure,
+  B01001 age, B07001 geographic mobility) for 2011-2023 ->
+  Data/County_Socioeconomic/acs_demographics_raw.csv.
+- New process_county_demographics.R: compute_demographic_features() derives
+  In_Migration_Rate, Pct_Age_65plus, Pct_Owner_Occupied ->
+  Data/intermediate_demographics.rds (41,869 rows, 3,234 counties, 2011-2023;
+  NA rates In_Migration 2.4%, age/owner 0%).
+- New run_demographic_mediators.R: (1) first stage shocks->demographics; (2)
+  mediator decomposition of the headline outcomes base vs +demographics on the
+  identical sample. Writes demographic_response_coefs.csv (27) and
+  demographic_mediator_decomposition.csv (9) + a fraction-surviving plot.
+- state_analysis_summary.md: new section 7.
+- New test_demographic_mediators.R (5 tests, all pass).
+
+KEY DECISIONS / DEVIATIONS:
+- Named the migration variable In_Migration_Rate, NOT the plan's
+  Net_Migration_Rate: ACS geographic-mobility tables observe only in-migrants
+  (out-migration is not in the table), so a true net rate is not recoverable.
+  Documented in the script header.
+- B07401 (in-migration by income) was not needed; B07001 supplies the in-mover
+  cells (diff-county-same-state + diff-state + abroad).
+- Demographics joined at analysis time (run_demographic_mediators.R) rather than
+  baked into create_county_master.R, to avoid a full county-pipeline rebuild.
+- ACS 5-year estimates are moving averages -> slow-moving compositional controls;
+  the weak first-stage is partly a power statement.
+
+KEY RESULTS (a clean, useful null):
+- First stage: only 2 of 27 shock->demographic coefficients significant, both
+  tiny (High_CDD lag2 -> Pct_Age_65plus +0.0017 p=0.004; High_CDD ->
+  Pct_Owner_Occupied -0.0020 p=0.044). Shocks barely move demographics.
+- Decomposition: shock coefficients on Medical_Debt_Share, Hosp_BadDebt_PerCapita
+  and PCPI survive demographic adjustment essentially intact -- fraction
+  surviving 0.94-1.04 for debt/hospital. The only material attenuation is the
+  already-insignificant PCPI cold effect (0.58).
+- Implication: the headline mechanisms (drought->income->debt; cold->utilization)
+  are NOT artifacts of population turnover, aging, or tenure. Closes a
+  confounding channel (with the ACS-smoothing power caveat).
+
+FILES: Code/download_county_socioeconomic.R, Code/process_county_demographics.R,
+Code/run_demographic_mediators.R, Code/tests/test_demographic_mediators.R,
+Analysis/state_analysis_summary.md. Data/CSV/plot outputs gitignored.
