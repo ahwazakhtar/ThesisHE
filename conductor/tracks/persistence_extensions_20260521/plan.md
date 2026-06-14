@@ -54,20 +54,18 @@ Sequencing: Phase 0 is the framing gate. Phase 1 builds on the existing Exit-LP 
 
 ## Phase 4: Demographic-change mediators
 
-- [ ] **Task: Acquire ACS migration and age-distribution variables**
-    - [ ] Extend `Code/download_county_socioeconomic.R` to pull ACS B07001 (geographic mobility), B07401 (in-migration by origin), B01001 (age distribution), and B25003 (housing tenure).
-    - [ ] Extend `Code/process_county_socioeconomic.R` to derive county-year `Net_Migration_Rate`, `Pct_Age_65plus`, `Pct_Owner_Occupied`.
-    - [ ] Tests: variable ranges, year coverage (ACS 5-year so latest = 2023; document the moving-average smoothing).
+- [x] **Task: Acquire ACS migration and age-distribution variables** [53a92d2]
+    - [x] Extended `Code/download_county_socioeconomic.R` to pull ACS B25003 (tenure), B01001 (age 65+ cells), B07001 (geographic mobility) for 2011–2023. (B07401 not needed — B07001 supplies the in-migration cells.)
+    - [x] New `Code/process_county_demographics.R` derives `In_Migration_Rate`, `Pct_Age_65plus`, `Pct_Owner_Occupied` → `Data/intermediate_demographics.rds` (41,869 rows, 3,234 counties). **DEVIATION:** named `In_Migration_Rate` not `Net_Migration_Rate` — ACS mobility tables observe in-migration only (out-migration unobserved), so a true net rate is not recoverable; documented in script header. Joined at analysis time (no county-master rebuild).
+    - [x] Tests `Code/tests/test_demographic_mediators.R` (feature arithmetic, all 12 age cells, NA-denominator guards, [0,1] ranges, intermediate schema). 5/5 pass. ACS 5-year smoothing documented.
 
-- [ ] **Task: Population-change responses to shocks**
-    - [ ] New `Code/run_demographic_mediators.R`. First-stage: does shock exposure predict subsequent in/out-migration or age-composition change?
-    - [ ] Treat the demographic variables as *outcomes* in their own FE specs (do shocks cause population shifts?).
-    - [ ] Export `Analysis/demographic_response_coefs.csv`.
+- [x] **Task: Population-change responses to shocks** [53a92d2]
+    - [x] `Code/run_demographic_mediators.R` first stage: each demographic ~ contemporaneous + lag1 + lag2 shocks | fips + Year. Export `Analysis/demographic_response_coefs.csv` (27 rows).
+    - [x] **Result: shocks barely move demographics** — only 2/27 links significant, both tiny (High_CDD lag-2 → Pct_Age_65plus +0.0017; High_CDD → Pct_Owner_Occupied −0.0020). ACS smoothing limits annual response (power caveat).
 
-- [ ] **Task: Mediator decomposition**
-    - [ ] Re-run the headline outcome regressions (Medical_Debt_Share, PCPI_Real, Hosp_BadDebt_PerCapita) with and without the demographic controls.
-    - [ ] Report the fraction of the shock effect that survives demographic adjustment.
-    - [ ] Output to `Analysis/demographic_mediator_decomposition.csv` and a brief narrative section in `Analysis/state_analysis_summary.md`.
+- [x] **Task: Mediator decomposition** [53a92d2]
+    - [x] Re-ran Medical_Debt_Share / PCPI_Real / Hosp_BadDebt_PerCapita on shocks with vs. without demographic controls on the identical sample. Output `Analysis/demographic_mediator_decomposition.csv` + plot.
+    - [x] **Clean null: demographics do NOT mediate** — fraction of shock effect surviving 0.94–1.04 for debt/hospital outcomes. Headline mechanisms are not population-turnover/aging artifacts. Narrative §7 added to `Analysis/state_analysis_summary.md`.
 
 ## Phase 5: HDD/CDD threshold sensitivity
 
