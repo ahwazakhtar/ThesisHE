@@ -105,4 +105,46 @@ df_acs <- bind_rows(Filter(Negate(is.null), acs_list)) %>%
 write.csv(df_acs, "Data/County_Socioeconomic/acs_socioeconomic_raw.csv", row.names = FALSE)
 cat("  Saved: acs_socioeconomic_raw.csv (", nrow(df_acs), "rows)\n")
 
+# ---------------------------------------------------------------------------
+# 3. Census ACS 5-year -- Demographic mediators (Persistence Phase 4)
+#
+#   Tenure  B25003: _001 total occupied, _002 owner-occupied
+#   Age     B01001: _001 total; 65+ = male _020-_025 + female _044-_049
+#   Mobility B07001: _001 total 1yr+; in-movers _049 (diff county same state),
+#            _065 (diff state), _081 (from abroad)
+# These feed Code/process_county_demographics.R -> intermediate_demographics.rds.
+# ---------------------------------------------------------------------------
+demo_vars <- c(
+  "B25003_001E", "B25003_002E",
+  paste0("B01001_0", 20:25, "E"), paste0("B01001_0", 44:49, "E"), "B01001_001E",
+  "B07001_001E", "B07001_049E", "B07001_065E", "B07001_081E"
+)
+demo_years <- 2011:2023
+
+fetch_acs_demographics <- function(year, api_key) {
+  url <- paste0(
+    "https://api.census.gov/data/", year, "/acs/acs5",
+    "?get=NAME,", paste(demo_vars, collapse = ","),
+    "&for=county:*&in=state:*", "&key=", api_key
+  )
+  resp <- GET(url)
+  if (http_error(resp)) {
+    warning("ACS demographics request failed for year ", year, ": HTTP ", status_code(resp))
+    return(NULL)
+  }
+  raw <- fromJSON(content(resp, as = "text", encoding = "UTF-8"), simplifyDataFrame = TRUE)
+  df  <- as.data.frame(raw[-1, , drop = FALSE], stringsAsFactors = FALSE)
+  names(df) <- raw[1, ]
+  df$Year <- year
+  df
+}
+
+cat("\nFetching ACS 5-year demographic mediators (tenure / age / mobility) 2011-2023...\n")
+demo_list <- lapply(demo_years, function(yr) { cat("  Year:", yr, "\n"); fetch_acs_demographics(yr, census_key) })
+df_demo <- bind_rows(Filter(Negate(is.null), demo_list)) %>%
+  mutate(fips_code = paste0(state, county))
+
+write.csv(df_demo, "Data/County_Socioeconomic/acs_demographics_raw.csv", row.names = FALSE)
+cat("  Saved: acs_demographics_raw.csv (", nrow(df_demo), "rows)\n")
+
 cat("\nDone. Raw socioeconomic data in Data/County_Socioeconomic/\n")

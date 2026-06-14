@@ -132,3 +132,17 @@ PRISM `tdmean` (mean dew point) was acquired as annual 4km CONUS grids from the 
 | Natural-experiment DiD with never-exposed | Done — Drought 2012 is cleanest | §6.2, `Analysis/did/did_results.md` |
 | Propagation evidence | Done — 18 references + descriptive plots | §6.3, `Text/propagation_pathways.md` |
 | Humidity (PRISM tdmean) | Done — cold-lag finding survives; humidity itself raises medical debt | §6.4, `Analysis/humidity_sensitivity.csv` |
+
+---
+
+## 7. Persistence Extensions — Demographic-Change Mediators (Phase 4)
+
+Track: [`persistence_extensions_20260521`](../conductor/tracks/persistence_extensions_20260521/). Source: `Code/run_demographic_mediators.R` · Data: ACS B25003/B01001/B07001 → `Data/intermediate_demographics.rds` (`Code/download_county_socioeconomic.R` + `Code/process_county_demographics.R`).
+
+**Question.** Could the climate-shock → health-cost links run *through* population change — chronically shocked counties losing young residents, aging, or shifting tenure, with the cost effects merely reflecting who remains? We pulled three ACS county-year mediators — `In_Migration_Rate` (ACS observes in-migration only; out-migration is not in the mobility tables, so this is an honest rename of the plan's "Net_Migration_Rate"), `Pct_Age_65plus`, `Pct_Owner_Occupied` — and ran (1) a first stage (shocks → demographics) and (2) a mediator decomposition (headline outcomes with vs. without the demographic controls on the identical sample).
+
+**Finding — demographics do *not* mediate the shock effects (a clean null).**
+- *First stage:* shocks barely move demographics — only 2 of 27 shock→demographic coefficients are significant, both tiny (High_CDD lag-2 → Pct_Age_65plus +0.0017, p=0.004; High_CDD → Pct_Owner_Occupied −0.0020, p=0.044). ACS 5-year estimates are moving averages, so annual demographic response is heavily smoothed — this is partly a power statement.
+- *Decomposition:* the shock coefficients on Medical_Debt_Share, Hosp_BadDebt, and PCPI are essentially unchanged when the three demographic controls are added — fraction of the effect surviving is **0.94–1.04** for the debt and hospital outcomes (`Analysis/demographic_mediator_decomposition.csv`). The only material attenuation is on the (already small/insignificant) PCPI cold effect (0.58).
+
+**Implication.** The headline mechanisms (drought→income→debt; cold→utilization) are **not artifacts of population turnover, aging, or tenure shifts** — they survive demographic adjustment intact. This closes a confounding channel a discussant might raise, with the caveat that ACS smoothing limits detection of fast demographic responses.
