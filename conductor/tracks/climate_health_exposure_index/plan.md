@@ -37,15 +37,15 @@ Sequencing: Phase 1 (SVI acquisition) is the data gate. Phase 2 builds the expos
 
 ## Phase 4: Composite index & robustness (SECONDARY)
 
-- [ ] **Task: Composite-index regressions**
-    - [ ] `Y ~ CHEI + controls | fips_code + Year` for the headline outcomes; export `Analysis/exposure_chei_coefs.csv`.
-- [ ] **Task: Vulnerability-stratified + time-varying-SVI robustness**
-    - [ ] Re-estimate the headline shock models on high- vs low-SVI subsamples (median split) and compare; re-run the primary interactions with time-varying `SVI_yr`. Export `Analysis/exposure_robustness.csv`.
-- [ ] **Task: Lancet-style descriptive exposure**
-    - [ ] National/state person-years-of-extreme-temperature-exposure trend (2011–2023) + plot; brief narrative.
+- [x] **Task: Composite-index regressions** [d842fbc]
+    - [x] `Code/run_exposure_secondary.R` §4a: `Y ~ CHEI_heat / CHEI_cold + controls | fips + Year` for the 6 outcomes → `Analysis/exposure_chei_coefs.csv`. Headline: `CHEI_heat → Med_HH_Income` −$435/SD (p=0.0002).
+- [x] **Task: Vulnerability-stratified + time-varying-SVI robustness** [d842fbc]
+    - [x] §4b: median-SVI-split headline shock models (high/low) + time-varying-`SVI_yr` interactions → `Analysis/exposure_robustness.csv` (54 rows). Stratified corroborates the interaction direction (High_HDD→PCPI −$317 high-SVI vs −$85 low-SVI); time-varying-SVI leaves conclusions unchanged.
+- [x] **Task: Lancet-style descriptive exposure** [d842fbc]
+    - [x] §4c: person-years of extreme-temperature exposure (Population × High_CDD/HDD) → `Analysis/exposure_personyears_trend.csv` + `personyears_trend.png`. U.S. heat ~70–105M person-years/yr, 3–5× cold.
 
 ## Phase 5: Synthesis & conductor verification
 
-- [ ] **Task: Synthesis write-up**
-    - [ ] New `Analysis/exposure_index_synthesis.md`: EJ-amplification verdict, composite-index result, stratified robustness, Lancet trend; cross-reference into `Analysis/state_analysis_summary.md`.
+- [x] **Task: Synthesis write-up** [d842fbc]
+    - [x] New `Analysis/exposure_index_synthesis.md` (EJ-amplification verdict + medical-debt caveat, composite CHEI, robustness, Lancet trend); cross-referenced as §9 in `Analysis/state_analysis_summary.md`.
 - [ ] **Task: Conductor — User Manual Verification 'Climate–Health Exposure Index' (Protocol in workflow.md)**
