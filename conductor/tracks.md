@@ -10,5 +10,7 @@ This file tracks all major tracks for the project. Each track has its own detail
   *Link: [./tracks/committee_feedback_april_2026/](./tracks/committee_feedback_april_2026/)*
 - [~] **Track: Persistence Extensions**
   *Link: [./tracks/persistence_extensions_20260521/](./tracks/persistence_extensions_20260521/)*
-- [ ] **Track: Climate–Health Exposure Index**
+- [~] **Track: Climate–Health Exposure Index**
   *Link: [./tracks/climate_health_exposure_index/](./tracks/climate_health_exposure_index/)*
+- [~] **Track: Cross-Level Symmetry**
+  *Link: [./tracks/cross_level_symmetry/](./tracks/cross_level_symmetry/)*
