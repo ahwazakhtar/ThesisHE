@@ -363,3 +363,15 @@ Each dynamic finding is tagged against the prediction it tested (see "Ex-Ante Hy
 | High_AQI_Max | insignificant across outcomes | predicted small + within-year, but identification thin | **No clear prior (null)** |
 
 **Where to be surprised:** the cold-shock *long-run* scarring (compounding employment loss + rising debt to e=10) is the result that most exceeds its ex-ante prior — the cold literature we drew on emphasizes acute, first-30-day effects, so a decade-long cumulative gap is a genuine extension, not a confirmation. The High_CDD income split (rising per-capita income but falling median household income under heat) is the other place the data depart from a clean prediction and deserves explicit discussion of distributional/compositional mechanisms.
+
+---
+
+## Persistence Extensions (track `persistence_extensions_20260521`)
+
+Three follow-on analyses extend the dynamics above; full detail in `Analysis/delta_analysis_synthesis.md` and `Analysis/persistent_exposure_synthesis.md`.
+
+**Three-way transition decomposition (Phase 1).** Onset, Persist, and Exit estimated jointly per horizon (vs. the never-transitioned 0→0 reference) with a formal symmetry test β_Onset + β_Exit = 0 (`Code/transition_symmetry.R`, `Analysis/delta_symmetry_test.csv`, 168 tests / 28 reject). Headline: **Drought → Medical_Debt_Share at h=2 is asymmetric (+0.0182, p=0.0015)** — drought debt scars rather than reversing on exit; income (PCPI) shows a *symmetric* h=1–2 overshoot; HDD → hospital bad debt at h=3 is over-relief. 83% of tests do not reject, with asymmetries concentrated on the theorized channels.
+
+**Cumulative-dose response (Phase 3).** Counting running shock-years per county (`Analysis/cumulative_dose_coefs.csv`) shows persistence is **shock-specific**: cold *compounds* (HDD → Civilian_Employed monotone −1,269/−3,267/−5,353/−6,936 across 1–3/4–6/7–9/10+; year-10-vs-1 = −5,668, p<0.0001, converging with the CS-DiD long-run cold scarring above), heat *saturates* (CDD debt marginal effect turns negative by year 10), and drought is *episodic* (only 1 county reaches 10+ cumulative drought-years).
+
+**Continuously-exposed cohorts (Phase 2).** Always-exposed (≥10/13 yr) vs never-exposed counties: the largest persistent debt gap is for chronic heat (CDD Always +9.9 pp), but it is a standing *level* difference, not a widening trajectory — complementary to the onset CS-DiD. See `Analysis/persistent_exposure_synthesis.md`.

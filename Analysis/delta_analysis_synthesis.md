@@ -383,3 +383,13 @@ The persistence mechanism is **shock-specific**: cold damage *accumulates* (each
 1. **Cumulative years correlate with calendar time**; year FE absorb the common trend, so identification is the *cross-county* difference in accumulation rate. Counties that accumulate faster than the year average drive the estimates.
 2. **Income controls** (`Household_Income_2023`) are held in all specs for consistency with the delta pipeline; for the income outcomes themselves this absorbs much variation, so the employment and debt results are the cleaner reads.
 3. **Drought high-dose bins are single-county** — do not interpret.
+
+---
+
+## Persistence Extensions — cross-references
+
+The Phase 1 transition decomposition and Phase 3 cumulative-dose sections above are part of the `persistence_extensions_20260521` track. Companion analyses:
+- **Continuously-exposed cohorts (Phase 2):** `Analysis/persistent_exposure_synthesis.md` — Always-vs-Never gaps; chronic-heat debt gap is the largest but a standing *level*, not a widening trajectory (complements the cumulative-dose finding that heat saturates).
+- **Demographic mediators (Phase 4):** `Analysis/state_analysis_summary.md` §7 — the shock effects survive demographic adjustment (no population-turnover confound).
+- **Threshold sensitivity (Phase 5):** `Analysis/state_analysis_summary.md` §8 — the `is_cold_shock` headline survives p90; `High_CDD`/`High_HDD` degree-day flags are cutoff-fragile.
+- **Symmetry test machinery:** `Code/transition_symmetry.R`; results in `Analysis/delta_symmetry_test.csv`.

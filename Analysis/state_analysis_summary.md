@@ -158,3 +158,18 @@ Source: `Code/run_threshold_sensitivity.R` · `Analysis/threshold_sensitivity_co
 **The headline cold finding survives a stricter cutoff.** The genuine state cold headline, `is_cold_shock_lag1 → Medical_Debt_Share` (z-temperature based, not a degree-day cut), is stable and significant across all three cut-points: **0.0129 (p=0.007, p70) / 0.0117 (p=0.012, p80) / 0.0138 (p=0.003, p90)**. Re-defining the energy-demand flags does not disturb it. Answering the committee's question directly: **yes, the headline cold-lag-1 effect on medical debt survives the stricter p90 definition** — robustness supported.
 
 **But the `High_CDD`/`High_HDD` degree-day coefficients are themselves cutoff-fragile.** Only **25 of 234 (10.7%)** CDD/HDD coefficients are significant at p<0.05, and — critically — **none are significant at all three cut-points**: every significant degree-day term appears at only one or two cut-points and flips to non-significant at another. The energy-demand-burden findings should therefore be reported with an explicit caveat: their significance depends on where the top-quintile line is drawn, unlike the temperature-z cold shock and the PDSI drought results, which are threshold-free by construction. This is a reason to lead the cold story with `is_cold_shock` (robust) rather than `High_HDD` (fragile).
+
+### 8.1 Onset / Persist / Exit symmetry (Phase 1) — cross-reference
+
+The county-level transition analysis (full detail in `Analysis/delta_analysis_synthesis.md`, "Three-Way Transition Decomposition") tests whether the cost of entering a shock is undone on leaving it (β_Onset + β_Exit = 0; `Code/transition_symmetry.R`, `Analysis/delta_symmetry_test.csv`). The result reinforces the state drought headline: **Drought → Medical Debt is asymmetric at h=2 (+0.0182, p=0.0015) — it scars rather than reversing on exit**, the county-level mechanism behind the state `is_extreme_drought_lag2` finding. Cumulative-dose analysis (Phase 3) further shows cold employment damage *compounds* with accumulated exposure while heat debt *saturates*.
+
+### 8.2 Persistence Extensions — artifact index
+
+| Phase | Finding | Artifact |
+|-------|---------|----------|
+| 0 Hypothesis framing | ex-ante predictions + surprise audit | §3a, §4.6 above; `event_study_synthesis.md` |
+| 1 Onset/Persist/Exit LP + symmetry | drought debt scars (h=2 asymmetry) | `delta_analysis_synthesis.md`; `delta_symmetry_test.csv` |
+| 2 Continuously-exposed cohorts | chronic-heat debt gap largest (level, not widening) | `persistent_exposure_synthesis.md` |
+| 3 Cumulative dose | cold compounds, heat saturates, drought episodic | `delta_analysis_synthesis.md`; `cumulative_dose_*.csv` |
+| 4 Demographic mediators | no mediation (effects survive) | §7 above; `demographic_mediator_decomposition.csv` |
+| 5 Threshold sensitivity | cold headline survives p90; degree-day flags fragile | §8 above; `threshold_sensitivity_coefs.csv` |
