@@ -1,0 +1,8 @@
+Task: Propagate findings into upstream synthesis (Persistence Phase 6, write-up task).
+
+Wove the Phase 1-5 Persistence Extensions results into the synthesis docs:
+- state_analysis_summary.md sections 8.1 (symmetry cross-ref) + 8.2 (artifact index).
+- event_study_synthesis.md new Persistence Extensions section (three-way + cumulative-dose + cohorts).
+- delta_analysis_synthesis.md final cross-reference pass.
+
+The remaining Phase 6 task (Conductor User Manual Verification) is a user-driven gate per workflow.md and is left open. Docs-only commit.
