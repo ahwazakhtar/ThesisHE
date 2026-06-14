@@ -1,0 +1,1 @@
+Task: exposure-component helpers (CHEI Phase 2, both tasks). Sourceable primitives person_years_exposure() and build_chei() with 7 tests. Series/trend materialized downstream in Phase 3/4 run scripts. Files: Code/exposure_index.R, Code/tests/test_exposure_index.R.
