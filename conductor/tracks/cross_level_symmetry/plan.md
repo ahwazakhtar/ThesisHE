@@ -6,23 +6,22 @@ Track spec: `./spec.md`. Mirrors three single-level analyses to the other level 
 
 ## Phase 1: Humidity at county level
 
-- [ ] **Task: Build county tdmean panel**
-    - [ ] New `Code/process_county_humidity.R`: area-weighted zonal mean of the PRISM tdmean grids over Census 2018 county boundaries → `Data/intermediate_humidity_county.rds` (fips_code, Year, tdmean_C, tdmean_F). 2009–2023.
-    - [ ] Tests: schema, deg-F range, no duplicate (fips, Year), AK/HI NA.
-- [ ] **Task: County humidity sensitivity**
-    - [ ] New `Code/run_county_humidity_sensitivity.R`: join county tdmean; for the headline county outcomes, fit base vs +`tdmean_F` (+lags) on the identical humidity-available sample (mirror of the state humidity block). Export `Analysis/county_humidity_sensitivity.csv`; note whether county findings survive.
+- [x] **Task: Build county tdmean panel** [93e9c2e]
+    - [x] New `Code/process_county_humidity.R`: area-weighted zonal mean of the PRISM tdmean grids over Census 2018 county boundaries → `Data/intermediate_humidity_county.rds` (fips_code, Year, tdmean_C, tdmean_F). 48,300 rows, 3,220 counties, 2009–2023, °F range 13.7–70.8; AK/HI/PR NA.
+    - [x] Integration test added to `Code/tests/test_state_humidity.R` (schema, deg-F range, no duplicate (fips, Year), AK/HI NA). 5/5 pass.
+- [x] **Task: County humidity sensitivity** [93e9c2e]
+    - [x] New `Code/run_county_humidity_sensitivity.R`: county Spec-2 climate coefficients base vs +`tdmean_F`(+lags) on the identical humidity-available sample → `Analysis/county_humidity_sensitivity.csv`. **County cold findings survive humidity** (High_HDD→Hosp_BadDebt 4.93→4.71 p=0.04; →premium 28.1→23.2 p=0.01; High_CDD→Med_HH_Income −297→−295 p=0.007) — mirrors the state result.
 
 ## Phase 2: Exposure Index (SVI) at state level
 
-- [ ] **Task: State SVI + EJ interactions**
-    - [ ] New `Code/run_exposure_index_state.R`: population-weight county `SVI_static` → state vulnerability; estimate `Y ~ Shock + Shock×SVI_state + controls | State + Year` for the state headline shocks (is_extreme_drought incl. lag2, is_cold_shock, is_high_cdd/hdd) × state outcomes. Export `Analysis/exposure_interaction_state_coefs.csv` with the outcome-aware EJ verdict.
-    - [ ] Compare to the county EJ result; brief note in `Analysis/exposure_index_synthesis.md`.
+- [x] **Task: State SVI + EJ interactions** [93e9c2e]
+    - [x] New `Code/run_exposure_index_state.R`: population-weighted state SVI; `Y ~ Shock + Shock×SVI_state + controls | State + Year` for state shocks × outcomes → `Analysis/exposure_interaction_state_coefs.csv` (25 rows, outcome-aware EJ verdict).
+    - [x] EJ signal persists (cold→Total_Per_Capita_Health_Exp +$1,720 p=0.0002 amplifies). **State↔county divergence on medical debt** (state: amplifies in vulnerable; county: concentrated in less-vulnerable credit-bureau artifact) noted in `Analysis/exposure_index_synthesis.md`.
 
 ## Phase 3: Demographic mediators at state level
 
-- [ ] **Task: State demographic mediators**
-    - [ ] New `Code/run_demographic_mediators_state.R`: population-weight ACS county demographics → state; first stage (state shocks → demographics) + mediator decomposition (state headline outcomes base vs +demographics, constant sample). Export `Analysis/demographic_response_state_coefs.csv` and `Analysis/demographic_mediator_state_decomposition.csv`.
-    - [ ] Brief state↔county comparison note in `Analysis/state_analysis_summary.md` §7.
+- [x] **Task: State demographic mediators** [93e9c2e]
+    - [x] New `Code/run_demographic_mediators_state.R`: population-weighted state demographics; first stage (2/12 shock→demographic links significant) + decomposition → `Analysis/demographic_response_state_coefs.csv`, `Analysis/demographic_mediator_state_decomposition.csv`. **No mediation** (fraction surviving ≈ 0.92–1.04 for debt/health-spending) — mirrors county. Noted in `Analysis/state_analysis_summary.md` §10.
 
 ## Phase 4: Conductor verification
 
