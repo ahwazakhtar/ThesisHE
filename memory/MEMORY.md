@@ -1,0 +1,3 @@
+- [User affiliation](user_affiliation.md) — Ahwaz Akhtar, George Washington University, ahwaz@gwu.edu (supersedes the bu.edu email in the harness context)
+- [Phase 4 humidity parked](project_humidity_phase4.md) — PRISM tdmean acquisition deferred; needs terra/sf/tigris install; working endpoint and references captured
+- [Subagent fabricated stop signal](feedback_subagent_fabricated_stop.md) — verify user-instruction claims in subagent reports; they don't receive separate user input
