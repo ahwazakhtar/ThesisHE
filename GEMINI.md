@@ -2,9 +2,13 @@
 
 This is a research project (likely a thesis) focused on the aggregation and analysis of United States health, climate, and economic data. The project relies on R for data acquisition and subsequent analysis. The primary goal is constructing a multi-dimensional dataset spanning several years (mostly ~2011-2026) to investigate relationships between environmental factors (Climate, AQI), health costs (HIX premiums, Hospital costs, Medical debt), and policy.
 
-**Status Update (Mar 2026):**
-*   **State-Level Analysis:** Completed. Found significant evidence that **Extreme Drought (2-year lag)** and **Cold Shocks (1-year lag)** increase Medical Debt and Insurance Premiums.
-*   **County-Level Analysis:** **Phase 2 in progress.** Individual and combined shock impulse-response models complete (DL + LP + robustness). 5 shocks (Drought, CDD, HDD, AQI Max, Any_Shock) × 4 outcomes × 6 horizons. Econometric remediation (E1–E8) resolved. Synthesis produced. Next: Phase 2 verification checkpoint.
+**Status Update (Jun 2026):**
+*   **State-Level Analysis:** Completed. Found significant evidence that **Extreme Drought (2-year lag)** and **Cold Shocks (1-year lag)** increase Medical Debt and Insurance Premiums. Robustness layers added: random effects (rejected), humidity (findings survive), demographic mediators (no mediation), HDD/CDD threshold sensitivity (cold headline survives p90).
+*   **County-Level Analysis:** Impulse-response (DL+LP), delta/transition, and never-exposed DiD complete.
+*   **Persistence Extensions:** **Completed (Phases 0–6).** Onset/Persist/Exit symmetry (drought debt scars at h=2), continuously-exposed cohorts, cumulative-dose (cold compounds / heat saturates / drought episodic), demographic mediators, threshold sensitivity.
+*   **Climate–Health Exposure Index:** **Completed (Phases 1–5).** CDC SVI vulnerability × climate hazard. EJ amplification (heat→employment, cold→income, drought→premiums worse in vulnerable counties); medical-debt response is a credit-bureau measurement artifact. Lancet-style person-years exposure.
+*   **Cross-Level Symmetry:** **Completed (Phases 1–3).** Mirrored humidity→county, SVI→state, demographics→state. Robustness nulls and income/health-spending EJ replicate across levels; medical-debt direction is aggregation-sensitive.
+*   **Open:** user-driven Conductor verification gates for the Committee Feedback, Persistence Extensions, Climate–Health Exposure Index, and Cross-Level Symmetry tracks.
 
 # Directory Structure
 
@@ -20,6 +24,13 @@ Contains R scripts used to automate the downloading and processing of raw data.
 - `run_county_analysis.R`: **New.** Executes county-level FE models with state-level clustering, including unweighted and population-weighted specifications. For premium outcomes, also produces rating-area-clustered SE variants (`*_RA_Cluster`) to account for within-rating-area residual correlation.
 - `run_event_study.R`: **New.** Dynamic panel impulse-response models for county-level climate/AQI shocks. DL + LP + shock-history robustness + compound shock decomposition.
 - `synthesize_event_study.R`: **New.** Reads event study coefficients and produces synthesis narrative, formatted tables, and summary plots.
+- `download_prism_humidity.R` / `process_state_humidity.R` / `process_county_humidity.R`: **New (Jun 2026).** PRISM `tdmean` (mean dew point) acquisition + area-weighted zonal aggregation to state and county via `terra`. Output `intermediate_humidity{,_county}.rds`.
+- `run_delta_analysis.R`: Year-over-year delta + transition (Onset/Persist/Exit) local projections; §9c adds the joint transition LP + symmetry test (`transition_symmetry.R`).
+- `run_persistent_exposure.R` (+ `exposure_cohorts.R`): **New.** Chronic-exposure cohorts (Always/Frequently/Rarely/Never) and Always-vs-Never contrasts.
+- `run_cumulative_dose.R` (+ `cumulative_dose.R`): **New.** Cumulative-shock-years dose-response (linear/quadratic/binned).
+- `process_county_demographics.R` / `run_demographic_mediators.R` (+ `_state.R`): **New.** ACS migration/age/tenure mediators; first stage + decomposition at county and state.
+- `run_threshold_sensitivity.R`: **New.** Re-derives High_CDD/HDD at p70/p80/p90 and re-estimates state + county Spec 2.
+- `download_svi.R` / `process_svi.R` / `exposure_index.R` / `run_exposure_index.R` (+ `_state.R`) / `run_exposure_secondary.R`: **New.** CDC SVI vulnerability layer + Climate–Health Exposure Index (Shock × SVI EJ interactions, composite CHEI, Lancet person-years).
 
 ## `Data/`
 The core storage for raw and processed datasets.
@@ -69,6 +80,9 @@ Based on `Data/data sources.txt` and script inspection:
 | **Hospital Costs** | NASHP | Hospital Cost Tool data. |
 | **Medical Debt** | Urban Institute | Medical debt over time. |
 | **Macro Policy** | FRED / BEA | State Unemployment and Personal Income. |
+| **Humidity** | PRISM (Oregon State / NACSE) | Annual 4km CONUS `tdmean` (mean dew point); keyless web service. Aggregated to state/county. |
+| **Social Vulnerability** | CDC / ATSDR (SVI) | County overall + 4-theme vulnerability percentiles (2014–2022); keyless. |
+| **Demographics** | Census ACS 5-yr | Geographic mobility (B07001), age (B01001), tenure (B25003) → migration/age-65+/owner-occupied. |
 
 # Development & Usage
 

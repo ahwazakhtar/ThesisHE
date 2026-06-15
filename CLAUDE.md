@@ -15,9 +15,11 @@ At the start of every conversation, before doing anything else:
 
 This is an academic econometrics thesis investigating relationships between environmental factors (climate shocks, AQI), health costs (HIX premiums, hospital costs, medical debt), and macroeconomic policy across the United States (~2011–2026). The project is entirely R-based.
 
-**Current status (Feb 2026):**
-- **State-level analysis:** Complete. Key finding: Extreme Drought (2-year lag) and Cold Shocks (1-year lag) increase Medical Debt and Insurance Premiums.
-- **County-level analysis:** In progress — active track `county_analysis_refinement_20260216`.
+**Current status (Jun 2026):**
+- **State + county analysis:** Complete, with a deep robustness layer.
+- **Completed tracks (analytical phases):** `committee_feedback_april_2026` (Phase 4 humidity now done), `persistence_extensions_20260521` (Phases 0–6), `climate_health_exposure_index` (Phases 1–5), `cross_level_symmetry` (Phases 1–3).
+- **Open across all tracks:** only the user-driven Conductor *User Manual Verification* gates.
+- Key findings: drought debt **scars** (h=2) and **cold employment compounds** with cumulative exposure; climate harm is **amplified in high-SVI counties** for income/employment/premiums (medical debt is a credit-bureau measurement-fragile outcome); humidity and demographics do **not** confound/mediate the headline findings.
 
 ---
 
@@ -87,9 +89,7 @@ This is an academic econometrics thesis investigating relationships between envi
 
 All work is governed by the conductor workflow. Follow `conductor/workflow.md` strictly for task lifecycle (status markers, commits, git notes, phase checkpoints).
 
-- **Active track:** `conductor/tracks/county_analysis_refinement_20260216/`
-  - Spec: `conductor/tracks/county_analysis_refinement_20260216/spec.md`
-  - Plan: `conductor/tracks/county_analysis_refinement_20260216/plan.md`
+- **Tracks (all analytical phases complete; Conductor verification gates open):** `committee_feedback_april_2026`, `persistence_extensions_20260521`, `climate_health_exposure_index`, `cross_level_symmetry`. See `conductor/tracks.md` for the registry and each track's `spec.md`/`plan.md`. The earlier `county_analysis_refinement_20260216` track remains in progress for its own optional/verification items.
 - **Track registry:** `conductor/tracks.md`
 
 ### Task Status Conventions
@@ -177,3 +177,12 @@ rm -f .claude/session_edits.log
 - County drought block multicollinearity: `run_county_analysis.R` primary specs use PDSI only (`drought_vars_primary`: pdsi_val + Lag1/Lag2) to avoid VIF inflation from near-collinear PDSI/PHDI/PMDI. Full 9-variable block retained as `drought_vars_robust_full` for optional robustness specs. VIF computed via auxiliary OLS on within-transformed predictor matrix; logged to `Analysis/county_vif_diagnostics.txt`. Post-pruning VIFs confirmed acceptable (max ~5.33).
 - State AQI aggregation: `process_aqi_data.R` uses strict population weights — counties with missing population are dropped from `AQI_Median_Wtd` (no `Pop_Wt=1` fallback). Equal-weight robustness series `AQI_Median_EW` computed alongside. Diagnostics written to `Analysis/state_aqi_weight_diagnostics.csv`.
 - Rating area structure in premium models: counties sharing a rating area have identical premiums by construction. Primary models cluster at state level (which nests rating areas). For premium outcomes (`Benchmark_Silver_Real`, `Lowest_Bronze_Real`), `run_county_analysis.R` also produces rating-area-clustered SE variants (`*_RA_Cluster`). The existing rating-area aggregation robustness block (lines 153–243) remains as a separate robustness check. Median rating area has 4 counties; 33.5% are 1-to-1.
+
+### Lessons learned (Session 5, Jun 2026)
+- **FIPS zero-padding trap:** `sprintf("%05s", fips)` pads with **spaces**, so 4-digit integer FIPS (single-digit state codes — CA=06, AL=01, …) become `" 1001"` and fail `^[0-9]{5}$` validation, silently dropping ~316 counties. Always use `formatC(as.integer(fips), width = 5, flag = "0")`. The same latent pattern exists in older socioeconomic scripts (their FIPS happen to arrive pre-padded).
+- **County master `State` is a 2-letter abbreviation**, NOT a full name — any join to the state pipeline (which uses full names like "Alabama") needs an abbreviation→name map or it zero-matches silently. (`run_exposure_index_state.R` / `run_demographic_mediators_state.R` carry the map.)
+- **Spatial work needs only `terra`** (it bundles GDAL/GEOS/PROJ and reads both rasters and vector boundaries) — `sf`/`tigris` are NOT required. Census cartographic boundaries (`Data/Geo/cb_2018_us_{state,county}_20m`) are auto-downloaded. County zonal extraction ≈ 90s/year.
+- **PRISM `tdmean` is in °C** (convert ×9/5+32 → °F for project consistency). PRISM serves gridded CONUS data only (no AK/HI, no state/county endpoint) → aggregate locally.
+- **Medical debt is the measurement-fragile outcome.** Credit-bureau medical debt requires insurance + billed encounters + a credit file, so poorer/uninsured (high-SVI) areas accrue less *measured* debt. The EJ direction on medical debt is **aggregation-sensitive** (amplifies at state level, reverses at county level), unlike income/employment/premium outcomes which are consistent. Lead EJ claims with the real-economy outcomes.
+- **`Code/transition_symmetry.R::lincom()` and `Code/cumulative_dose.R`** are reusable helpers (linear-combination Wald tests, cumulative shock-years) used across the delta, dose, and exposure scripts.
+- **New keyless data sources added:** PRISM (`services.nacse.org`), CDC/ATSDR SVI (`svi.cdc.gov`, filename casing varies by vintage — try candidates). New intermediates: `intermediate_humidity{,_county}.rds`, `intermediate_svi.rds`, `intermediate_demographics.rds`.

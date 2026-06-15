@@ -2,7 +2,43 @@
 
 ---
 
-## 2026-03-03 (Session 4)
+## 2026-06-14 (Session 5)
+
+Four tracks advanced: closed Committee Feedback **Phase 4 (humidity)**; completed the **Persistence Extensions** track (Phases 0–6); built the new **Climate–Health Exposure Index** track (Phases 1–5); built the new **Cross-Level Symmetry** track (Phases 1–3). 62 tests pass across the new code. Only user-driven Conductor verification gates remain open.
+
+### Committee Feedback — Phase 4: Humidity (PRISM tdmean)
+
+- **New `Code/download_prism_humidity.R`** — keyless pull of annual 4km CONUS `tdmean` grids (BIL) from `services.nacse.org` for 2009–2025; skips already-unzipped years. Confirmed PRISM serves gridded data only (no state endpoint) and is in **°C**.
+- **New `Code/process_state_humidity.R`** — area-weighted zonal mean over Census 2018 state polygons via `terra` (only `terra` needed; the old "needs sf/tigris" blocker was wrong). Output `Data/intermediate_humidity.rds` (State, Year, tdmean_C, tdmean_F). CONUS-only → AK/HI NA.
+- **`Code/create_state_master.R`** — joins `intermediate_humidity.rds`. **`Code/analysis_pre_processing.R`** — adds `tdmean_F` to the lag set. **`Code/run_analysis.R`** — new humidity-sensitivity block comparing headline coefficients on the identical humidity-available subsample with vs. without humidity → `Analysis/humidity_sensitivity.csv`. Full-sample primary spec deliberately unchanged.
+- **Finding:** Cold-Shock (1-yr lag) → Medical Debt **survives** humidity; humidity itself raises medical debt. `state_analysis_summary.md` §6.4 rewritten from "parked" to results.
+- Tests: `test_humidity_download.R` (3), `test_state_humidity.R` (4→5). `memory/project_humidity_phase4.md` updated to complete.
+
+### Persistence Extensions (Phases 0–6, new track completed)
+
+- **Phase 0 (framing):** `state_analysis_summary.md` §3a (ex-ante predictions) + §4.6 (surprise audit); `event_study_synthesis.md` ex-ante + Surprise Audit. Sourced from `Text/propagation_pathways.md`.
+- **Phase 1 (symmetry):** new `Code/transition_symmetry.R` (Wald test β_Onset + β_Exit = 0); `Code/run_delta_analysis.R` §9c joint Onset/Persist/Exit LP → `delta_coefs.csv` 1664→2240 rows, `delta_transition_summary.csv`, `delta_symmetry_test.csv`. Tests 10–13 in `test_delta_variables.R`. **Drought→Medical_Debt h=2 scars (+0.0182, p=0.0015).**
+- **Phase 2 (cohorts):** new `Code/exposure_cohorts.R` + `Code/run_persistent_exposure.R`; `Analysis/persistent_exposure_*.csv` + `persistent_exposure_synthesis.md`. Chronic extreme drought ≈ nonexistent (1 county); chronic-heat debt gap largest but a level, not widening. `test_persistent_exposure.R` (6).
+- **Phase 3 (cumulative dose):** new `Code/cumulative_dose.R` (`add_cumulative_shock_years`, `lincom`) + `Code/run_cumulative_dose.R`; `cumulative_dose_{coefs,marginal}.csv`. **Cold compounds** (HDD→employment −5,668 by yr 10), heat saturates, drought episodic. `test_cumulative_dose.R` (7).
+- **Phase 4 (demographic mediators):** `Code/download_county_socioeconomic.R` extended (ACS B25003/B01001/B07001); new `Code/process_county_demographics.R` → `Data/intermediate_demographics.rds` (In_Migration_Rate, Pct_Age_65plus, Pct_Owner_Occupied); new `Code/run_demographic_mediators.R`. **No mediation** (fraction surviving 0.94–1.04). `state_analysis_summary.md` §7. `test_demographic_mediators.R` (5). *Deviation:* named `In_Migration_Rate` (ACS observes in-migration only, not net).
+- **Phase 5 (threshold sensitivity):** new `Code/run_threshold_sensitivity.R` — recomputes High_CDD/HDD at p70/p80/p90 for **both** state and county Spec 2 → `threshold_sensitivity_coefs.csv`; `state_analysis_summary.md` §8. **Cold headline survives p90**; degree-day flags cutoff-fragile.
+- **Phase 6 (write-up):** propagated into `event_study_synthesis.md`, `delta_analysis_synthesis.md`, `state_analysis_summary.md` §8.1/§8.2.
+
+### Climate–Health Exposure Index (new track, Phases 1–5)
+
+- **Phase 1:** new `Code/download_svi.R` (keyless CDC/ATSDR SVI 2014–2022) + `Code/process_svi.R` → `Data/intermediate_svi.rds` (SVI_static time-invariant + SVI_yr). **Bug fixed:** `sprintf("%05s")` space-pads → dropped CA/AL-type 4-digit FIPS (2,827 vs 3,155 counties); switched to `formatC(flag="0")`.
+- **Phase 2:** new `Code/exposure_index.R` (`person_years_exposure`, `build_chei`).
+- **Phase 3 (primary):** new `Code/run_exposure_index.R` — `Y ~ Shock + Shock:SVI_static | fips+Year`. **EJ amplification** for real-economy outcomes (heat→employment, cold→income ~8×, drought→premiums); medical-debt response reverses (credit-bureau artifact). `exposure_interaction_coefs.csv`.
+- **Phase 4–5:** new `Code/run_exposure_secondary.R` (composite CHEI, robustness, Lancet person-years trend); new `Analysis/exposure_index_synthesis.md`; `state_analysis_summary.md` §9. `test_exposure_index.R` (12).
+
+### Cross-Level Symmetry (new track, Phases 1–3)
+
+- **Humidity → county:** new `Code/process_county_humidity.R` (terra zonal over county polygons → `intermediate_humidity_county.rds`, 48,300 rows) + `Code/run_county_humidity_sensitivity.R`. County cold findings survive humidity.
+- **SVI → state:** new `Code/run_exposure_index_state.R` (population-weighted state SVI interactions). EJ amplification on health spending persists; **medical-debt EJ direction is aggregation-sensitive** (state amplifies vs county artifact reversal).
+- **Demographics → state:** new `Code/run_demographic_mediators_state.R`. No mediation (mirrors county).
+- **Key gotcha:** the county master stores `State` as a **2-letter abbreviation**, which silently zero-matched state-name joins until an abbr→name map was added. County-humidity integration test added to `test_state_humidity.R`. `state_analysis_summary.md` §10; `exposure_index_synthesis.md` State-level mirror.
+
+---
 
 ### `Code/run_event_study.R`
 
