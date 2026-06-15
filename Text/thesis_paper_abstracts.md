@@ -1,0 +1,32 @@
+# Climate Shocks and the Financial Health of American Households
+### A Three-Essay Dissertation: Incidence, Persistence, and Inequality
+
+---
+
+## Dissertation Abstract (Umbrella)
+
+Climate shocks impose costs on households long after the weather normalizes, yet these costs are seldom measured financially, traced over time, or mapped onto those least able to absorb them. This dissertation develops the financial epidemiology of climate exposure in U.S. health markets through three linked essays, built on a harmonized state and county panel (≈1996–2025) that integrates NOAA climate data, PRISM humidity, EPA air quality, and CDC vulnerability indices with insurance premiums, medical debt, hospital bad debt, and local economic outcomes. Essay 1 establishes *incidence*: using distributed-lag fixed-effects models, a never-exposed-control difference-in-differences design, and local projections, it shows cold and drought raise medical debt and premiums at a one- to two-year lag, operating through a household income channel rather than systemic spending. Essay 2 turns to *persistence*, decomposing shocks into onset, persistence, and exit transitions and estimating cumulative-dose responses: drought debt scars, cold employment losses compound with repeated exposure, and heat saturates—so the policy-relevant horizon is hazard-specific. Essay 3 addresses *inequality*, constructing a hazard × exposure × vulnerability index that interacts shocks with the CDC Social Vulnerability Index; climate harm to income, employment, and premiums is amplified in structurally vulnerable communities, while credit-bureau medical debt is shown to be measurement-fragile. Together the essays argue that environmental risk assessment in health and insurance markets must price not only the lagged incidence of climate stress, but its persistence and its unequal distribution.
+
+---
+
+## Essay 1 — Deferred Costs: The Lagged Financial Burden of Climate Shocks in U.S. Health Markets
+
+Climate shocks strain household finances slowly, surfacing as medical debt and higher insurance premiums only after a delay as the actuarial cycle reprices coverage and stressed households exhaust their assets. Using a harmonized U.S. state and county panel from 1996 to 2025 that links NOAA climate and EPA air-quality data to insurance premiums, medical debt, and health spending, I estimate distributed-lag fixed-effects models and corroborate them with a difference-in-differences design that uses never-exposed counties as controls and with dynamic local projections. Cold shocks raise the share of residents carrying medical debt by about 1.1 percentage points one year later, and extreme drought raises it by roughly 0.7 points after two years, alongside an eighteen-dollar increase in real annual employee premiums. The 2012 Midwest drought, treated as a sharp natural experiment, lowered per-capita income by $1,311 and employment by about 2,000 jobs in exposed counties relative to never-exposed controls, tracing the income channel through which drought later surfaces as debt. Systemic per-capita health spending, by contrast, follows income and unemployment rather than the weather. These results locate the financial cost of climate stress in lagged household outcomes rather than contemporaneous system spending, and identify the environmental lag structure as a margin that insurers and policymakers currently leave unpriced.
+
+**JEL:** I13, I18, Q54, G51
+
+---
+
+## Essay 2 — Scarring and Compounding: The Persistence of Climate-Driven Health Costs
+
+Whether a changing climate raises health costs over the long run depends on what happens once a shock ends—whether the damage reverses, leaves a scar, or compounds as shocks recur. Using a U.S. county panel from 2011 to 2023, I decompose each climate shock into its onset, its persistence, and its exit, test whether entering a shock and leaving it offset one another, and estimate how outcomes respond to the cumulative number of shock-years a county has accumulated. The dynamics are shock-specific. Drought debt scars: the debt accrued during a drought does not unwind once the drought ends. Cold damage compounds: the tenth cumulative cold-year reduces county employment by about 5,700 more than the first, a pattern a staggered difference-in-differences confirms as an employment and medical-debt gap that keeps widening a decade after onset. Heat damage instead saturates into a fixed level difference rather than growing, and chronic extreme drought is so rare that drought is best understood as episodic. The findings survive adjustment for humidity, are not explained by migration or population ageing, and hold under a stricter definition of extreme temperature. These results show that the horizon over which climate raises health costs is itself hazard-specific, so contemporaneous exposure measures understate the burden of recurring cold.
+
+**JEL:** I13, Q54, J21, G51
+
+---
+
+## Essay 3 — Unequal Weather: Social Vulnerability and the Distribution of Climate Health Costs
+
+The same climate shock need not impose the same cost everywhere; where households are already economically and socially fragile, a shock can tip them from coping to crisis. Building a hazard × exposure × vulnerability index for a U.S. county panel from 2011 to 2023, I interact climate shocks with the CDC Social Vulnerability Index, compare the marginal effect of a shock in the least and most vulnerable counties, and mirror every estimate at the state level. Structural vulnerability amplifies the real-economy harm of climate. In the most vulnerable counties extreme heat costs jobs, turning a small employment gain into a loss; cold's hit to per-capita income is roughly eight times larger than in the least vulnerable counties; and drought, at a two-year lag, pushes benchmark insurance premiums up in vulnerable counties rather than down. A composite heat-vulnerability index lowers median household income by $435 per standard deviation, and the country absorbs between seventy and one hundred and five million person-years of heat exposure each year, several times the cold burden. Credit-bureau medical debt is the exception, concentrating in less-vulnerable areas and flipping sign across geographic scales—a measurement artifact of how debt is recorded rather than evidence against unequal harm. These results identify social vulnerability as a first-order margin in the health cost of climate, and caution that debt-based welfare metrics understate harm precisely where it is greatest.
+
+**JEL:** I14, Q56, Q54, I18
