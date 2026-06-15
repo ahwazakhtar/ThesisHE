@@ -1,0 +1,10 @@
+Task: Cross-Level Symmetry mirrors (Phases 1-3). Mirrored humidity->county, SVI exposure->state, demographic mediators->state.
+
+KEY FIX: county master stores State as 2-letter abbreviation (not full name) -> the state-aggregation joins (SVI, demographics) initially produced 0 rows; added an abbr->full-name map.
+
+RESULTS:
+- Humidity->county: county cold findings survive humidity adjustment (High_HDD->Hosp_BadDebt 4.93->4.71 p=0.04; ->benchmark premium 28.1->23.2 p=0.01; High_CDD->Med_HH_Income -297->-295 p=0.007). Mirrors state.
+- SVI->state: 25 interactions, 6 significant; cold->Total_Per_Capita_Health_Exp amplifies in vulnerable states (+1720 p=0.0002). State<->county DIVERGE on medical debt (state amplifies vs county less-vulnerable credit-bureau artifact) -- debt is the aggregation-fragile outcome.
+- Demographics->state: 2/12 first-stage links significant; decomposition fraction surviving ~0.92-1.04 for debt/health-spending -> no mediation, mirrors county.
+
+FILES: process_county_humidity.R, run_county_humidity_sensitivity.R, run_exposure_index_state.R, run_demographic_mediators_state.R, test_state_humidity.R, exposure_index_synthesis.md, state_analysis_summary.md. Conductor verification gate (Phase 4) left open.
