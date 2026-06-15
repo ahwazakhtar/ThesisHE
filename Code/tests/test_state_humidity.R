@@ -71,4 +71,18 @@ test_that("intermediate_humidity.rds is well-formed", {
   expect_true(all(!is.na(h$tdmean_C[h$State == "Texas"])))
 })
 
-cat("All state humidity processing tests completed.\n")
+# ---------------------------------------------------------------------------
+# Integration: county humidity mirror (Cross-Level Symmetry).
+test_that("intermediate_humidity_county.rds is well-formed", {
+  path <- "Data/intermediate_humidity_county.rds"
+  skip_if_not(file.exists(path),
+              "county humidity missing; run process_county_humidity.R first")
+  h <- readRDS(path)
+  expect_true(all(c("fips_code", "Year", "tdmean_C", "tdmean_F") %in% names(h)))
+  expect_equal(anyDuplicated(h[, c("fips_code", "Year")]), 0L)
+  f <- h$tdmean_F[!is.na(h$tdmean_F)]
+  expect_true(length(f) > 0 && all(f > -20 & f < 90))
+  expect_true(any(is.na(h$tdmean_C)))   # CONUS-only: AK/HI/PR counties NA
+})
+
+cat("All state + county humidity processing tests completed.\n")

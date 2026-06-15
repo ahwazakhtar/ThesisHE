@@ -29,5 +29,11 @@ Three significant interactions go the *other* way: the credit-bureau **medical-d
 
 **Lancet-style exposure** (`Analysis/exposure_personyears_trend.csv`). Person-years of extreme-temperature exposure (population × High_CDD / High_HDD): U.S. heat exposure runs ~70–105 million person-years/year — 3–5× cold exposure — the population-weighted hazard metric the Lancet Countdown reports.
 
+## State-level mirror (Cross-Level Symmetry track)
+
+`Code/run_exposure_index_state.R` population-weights county SVI to a state vulnerability index and re-runs the interactions in the state pipeline (`Analysis/exposure_interaction_state_coefs.csv`). With only 51 states the interaction is coarse, but the EJ signal persists: **cold (is_high_hdd) → Total_Per_Capita_Health_Exp amplifies in vulnerable states** (+$1,720, p=0.0002) and cold → medical debt amplifies (+0.067, p=0.03). 
+
+**Notable state↔county divergence on medical debt:** at the *county* level the debt response concentrates in *less*-vulnerable counties (credit-bureau artifact), but at the *state* level cold → medical debt *amplifies* in vulnerable states. State aggregation smooths the county credit-reporting heterogeneity, so the debt-EJ direction is aggregation-sensitive — reinforcing that the debt outcome is the measurement-fragile one, while the income/health-spending amplification is consistent across levels.
+
 ## Bottom line for the thesis
 Adding a vulnerability layer **sharpens** the headline findings into an EJ statement: climate shocks impose larger *income, employment, and premium* costs on structurally vulnerable counties. The lone exception — credit-bureau medical debt concentrating in *less*-vulnerable counties — is a known data-measurement artifact and is flagged as such. Cross-referenced in `Analysis/state_analysis_summary.md` §9.

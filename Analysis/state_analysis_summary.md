@@ -183,3 +183,15 @@ Source: `Code/run_exposure_index.R` + `Code/run_exposure_secondary.R` · Detail:
 **Verdict — vulnerability amplifies harm for the real-economy outcomes.** In high-SVI counties, **heat costs jobs** (Civilian_Employed +878 at low SVI → −184 at high, p=0.001), **cold's income hit is ~8× larger** (PCPI −$56 → −$472, p=0.056), and **drought raises ACA premiums** (benchmark −$54 → +$16, p=0.001). The composite `CHEI_heat → Med_HH_Income` is −$435/SD (p=0.0002). 
 
 **Caveat.** The *credit-bureau medical-debt* response runs the other way — concentrated in *less*-vulnerable counties — a measurement artifact (poorer/uninsured counties accrue less *measured* debt), not evidence against EJ harm. Lancet-style person-years of extreme-temperature exposure (~70–105M/yr heat, 3–5× cold) are reported in `Analysis/exposure_personyears_trend.csv`.
+
+---
+
+## 10. Cross-Level Symmetry (track `cross_level_symmetry`)
+
+Three single-level analyses were mirrored to the other level to check state↔county consistency.
+
+- **Humidity → county** (`Code/process_county_humidity.R`, `Code/run_county_humidity_sensitivity.R`; `Analysis/county_humidity_sensitivity.csv`). PRISM tdmean aggregated to counties; the headline **county cold findings survive humidity adjustment** (High_HDD → Hosp_BadDebt 4.93→4.71, p=0.04; → benchmark premium 28.1→23.2, p=0.01; High_CDD → Med_HH_Income −297→−295, p=0.007). Mirrors the state result (§6.4): the cold/drought findings are not humidity confounding at either level.
+- **Demographic mediators → state** (`Code/run_demographic_mediators_state.R`; `Analysis/demographic_mediator_state_decomposition.csv`). Population-weighted state demographics; the shock effects on debt and health spending **survive demographic adjustment** (fraction surviving ≈ 0.92–1.04), the same clean null as the county analysis (§7).
+- **Exposure Index (SVI) → state** — see `Analysis/exposure_index_synthesis.md` ("State-level mirror"): EJ amplification on health spending persists at the state level; the medical-debt EJ *direction* is aggregation-sensitive (a debt-measurement caveat).
+
+**Takeaway:** the two robustness nulls (humidity, demographics) and the income/health-spending EJ amplification replicate across state and county; only the credit-bureau **medical-debt** outcome behaves differently across levels, consistent with it being the measurement-fragile outcome throughout the thesis.
