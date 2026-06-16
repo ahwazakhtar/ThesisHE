@@ -1,0 +1,14 @@
+Task: Hospital incidence regressions — Phase 2.
+
+Summary: run_hospital_incidence.R + fit_incidence_dl() fit hospital-FE + year-FE
+distributed-lag IRFs (Shock + Lag1 + Lag2 | CCN + Year, cluster State) for
+{UncompCare_PctNPR, OperatingMargin, UncompCare_Real, NetMargin} x
+{Is_Extreme_Drought, High_CDD, High_HDD, High_AQI_Max}; cumulative effect via
+lincom(). Exports hospital_incidence_coefs.csv + IRF plots.
+
+Findings: extreme drought lowers measured uncompensated care (%NPR and $);
+High_HDD raises uncompensated $ (p=0.02); pooled margin effects insignificant
+(heterogeneity is the Phase-4 story).
+
+Files: Code/run_hospital_incidence.R, Code/tests/test_hospital_incidence.R.
+Tests recover a known 2/1 DGP + cumulative=sum identity; all pass.
