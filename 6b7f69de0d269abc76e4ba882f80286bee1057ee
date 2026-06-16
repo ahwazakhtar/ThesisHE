@@ -1,0 +1,12 @@
+Task: Market-concentration measure + Heterogeneity interactions — Phase 4 (PRIMARY).
+
+run_hospital_heterogeneity.R: compute_hhi() county-year Herfindahl from NPR shares
+by Health System (standalone hospital = own firm); HighConcentration = HHI>=0.25.
+Y ~ Shock * M | CCN + Year for M in {SafetyNet, Ownership, MedicaidExpansion,
+HighConcentration}, outcomes {UncompCare_PctNPR, OperatingMargin}. marginal_binary()
++ lincom() give per-level marginal shock effects; strain_verdict() is outcome-aware.
+
+Findings: High_CDD uncompensated-care strain concentrates in safety-net hospitals
+(interaction p=0.02); High_HDD & drought uncompensated-care responses differ by
+Medicaid-expansion status (p<0.001). Exports hospital_heterogeneity_coefs.csv + plots.
+Tests (HHI cases, marginal recovery, verdict logic, artifact) all pass.
