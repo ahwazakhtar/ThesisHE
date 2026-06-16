@@ -39,8 +39,8 @@ Sequencing: Phase 1 (panel) is the data gate. Phases 2–4 (the three lenses) bu
 
 ## Phase 5: Synthesis, integration, verification
 
-- [ ] **Task: Synthesis + integrate into the three papers**
-    - [ ] New `Analysis/hospital_supply_side_synthesis.md`.
-    - [ ] Add a supply-side subsection to each: `state_analysis_summary.md` / `event_study_synthesis.md` / `delta_analysis_synthesis.md` as appropriate; note the demand↔supply pairing per paper.
-    - [ ] Make a copy of `Text/committee_presentation_20260615.tex` and add hospital slides to the copy (incidence, persistence, provider heterogeneity).
+- [x] **Task: Synthesis + integrate into the three papers** 214b5b7
+    - [x] New `Analysis/hospital_supply_side_synthesis.md`. 214b5b7
+    - [x] Add a supply-side subsection to each: `state_analysis_summary.md` / `event_study_synthesis.md` / `delta_analysis_synthesis.md` as appropriate; note the demand↔supply pairing per paper. 214b5b7
+    - [x] Make a copy of `Text/committee_presentation_20260615.tex` and add hospital slides to the copy (incidence, persistence, provider heterogeneity). 214b5b7
 - [ ] **Task: Conductor — User Manual Verification 'Hospital Supply-Side Integration' (Protocol in workflow.md)**
