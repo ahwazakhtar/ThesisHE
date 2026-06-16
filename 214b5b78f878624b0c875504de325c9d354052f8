@@ -1,0 +1,11 @@
+Task: Synthesis + integrate into the three papers — Phase 5.
+
+New Analysis/hospital_supply_side_synthesis.md: full hospital-year write-up across
+Incidence/Persistence/Inequality + demand<->supply pairing table + caveats.
+Supply-side subsections appended to event_study_synthesis.md (Finding 9),
+delta_analysis_synthesis.md (supply-side persistence), state_analysis_summary.md
+(section 6.6). Three hospital slides added to a COPY of the committee deck
+(Text/committee_presentation_20260615_hospital.tex, gitignored; 27 pages, builds).
+
+Headlines integrated: temperature -> hospital uncompensated care; drought scars
+margins; High_CDD x SafetyNet strain concentration (p=0.021).
