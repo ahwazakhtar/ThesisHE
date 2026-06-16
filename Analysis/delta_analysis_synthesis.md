@@ -280,6 +280,32 @@ also negative at h=1 (−0.006, p = 0.017), reinforcing the relief interpretatio
 
 Overall, the post-exit framework adds evidence that climate-shock effects do *not*
 mechanically reverse on exit — the dynamic profile differs by shock type and outcome.
+
+---
+
+## Supply-Side Persistence — hospital finances scar under drought
+
+Added 2026-06-16. Track: `hospital_supply_side_20260615`. Full write-up:
+`Analysis/hospital_supply_side_synthesis.md`. Source:
+`Code/run_hospital_persistence.R` (`Analysis/hospital_persistence_coefs.csv`),
+hospital (CCN) × year panel, hospital + year FE, state-clustered. Reuses the same
+onset/exit symmetry test (`transition_symmetry.R`) and cumulative-dose machinery
+(`cumulative_dose.R`) used here on the county side.
+
+The county-level "drought scars / cold relieves" pattern **reappears on hospital
+balance sheets**:
+
+- **Drought is asymmetric (scarring)** for both hospital outcomes: onset+exit
+  asymmetry on uncompensated care %NPR = −0.013 (p=0.012) and on operating margin
+  = +0.027 (p=0.006). Entering and leaving a drought state do not cleanly cancel.
+- **Temperature shocks are symmetric (reversible)** for hospitals (CDD/HDD
+  asymmetry p > 0.14) — the same "cost is in the exposure, not lasting damage"
+  reading as the county-level cold-exit *relief*.
+- **Cumulative exposure does not compound into margin collapse.** The
+  cumulative-shock-years dose-response on operating margin is mildly *positive*
+  (+0.018 for 10+ vs 1-3 years, p=0.033), read as survivorship/adaptation in the
+  unbalanced hospital panel — not erosion. The persistence story on the supply
+  side is **drought hysteresis**, not dose-driven decline.
 The drought 2-year lag (which underpins the state-level headline result) is now visible
 in a county-level recovery setting, strengthening the causal interpretation.
 

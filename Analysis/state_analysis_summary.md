@@ -133,6 +133,32 @@ PRISM `tdmean` (mean dew point) was acquired as annual 4km CONUS grids from the 
 | Propagation evidence | Done — 18 references + descriptive plots | §6.3, `Text/propagation_pathways.md` |
 | Humidity (PRISM tdmean) | Done — cold-lag finding survives; humidity itself raises medical debt | §6.4, `Analysis/humidity_sensitivity.csv` |
 
+### 6.6 Supply side restored — hospital-finance analysis (Chapter 2)
+
+Added 2026-06-16. Track: `hospital_supply_side_20260615`. Full write-up:
+`Analysis/hospital_supply_side_synthesis.md`.
+
+The proposal's **Chapter 2 (supply side)** is now built out. A hospital (CCN) ×
+year panel (`Data/intermediate_hospital_panel.rds`, NASHP HCT — 59,896
+hospital-years, 5,119 hospitals, 2011–2023) carries hospital finances through the
+same three-paper lens, with provider heterogeneity preserved (which county
+aggregation destroyed). Each hospital inherits its **location county's** climate
+shocks (98.4% zip→county match). Hospital + year FE, state-clustered throughout.
+
+- **Incidence:** temperature shocks raise hospital **uncompensated care**
+  (cold +$1.55M/hospital cumulative, p=0.022); average margins absorbed.
+- **Persistence:** **drought scars** hospital uncompensated care and operating
+  margin (onset/exit asymmetry p=0.012 / 0.006); temperature reversible.
+- **Inequality (primary):** heat-driven uncompensated care **concentrates in
+  safety-net hospitals** (High_CDD × SafetyNet interaction p=0.021) — the
+  supply-side analogue of the demand-side high-SVI amplification; Medicaid-
+  expansion interactions are strong but point (surprisingly) to expansion states.
+
+This pairs the consumer ledger (premiums + medical debt) with the provider ledger
+(margins + uncompensated care): the same drought hysteresis and the same
+"vulnerability amplifies, measurement-fragile outcomes misbehave" caveats hold on
+both sides.
+
 ---
 
 ## 7. Persistence Extensions — Demographic-Change Mediators (Phase 4)

@@ -316,6 +316,30 @@ The Phase 3 DiD layer complements the LP/event-study framework above by anchorin
 - **Callaway-Sant'Anna ATT(g,t) with never-treated controls** for Drought / HDD / CDD (manual implementation in `fixest` — `did` package unavailable in local R toolchain): 427 ATT(g,t) cells aggregated to event-time profiles in `Analysis/did/did_cs_event_time.csv`. Headline aggregated effects:
     - Drought e=0: PCPI = −$1,050 (p=0.002), Civilian_Employed = −142 (p=0.002)
     - HDD long-run: Civilian_Employed = −4,982 at e=10 (p=0.003); Medical_Debt_Share = +0.049 at e=10 (p=0.0002)
+
+## Key Finding 9: Supply-Side Incidence — climate shocks → hospital uncompensated care
+
+Added 2026-06-16. Track: `hospital_supply_side_20260615`. Full write-up:
+`Analysis/hospital_supply_side_synthesis.md`. Source: `Code/run_hospital_incidence.R`
+(`Analysis/hospital_incidence_coefs.csv`), on the hospital (CCN) × year panel
+`Data/intermediate_hospital_panel.rds` (NASHP HCT; 59,896 hospital-years,
+5,119 hospitals, 2011–2023; hospital + year FE, state-clustered).
+
+The Incidence event study has a **supply-side companion**: where the demand side
+shows shocks raising medical-debt share and premiums, the supply side shows the
+unpaid bills landing on hospital balance sheets.
+
+- **Temperature shocks raise uncompensated care.** Cumulative (h=0..2) effect:
+  cold (High_HDD) **+$1.55M** per hospital (p=0.022) and +0.53 pp of NPR
+  (p=0.097); heat (High_CDD) **+1.22 pp** of NPR (p=0.063). This is the provider
+  mirror of the consumer-side cold→utilization→debt channel.
+- **Average operating/net margins are not significantly moved** — hospitals
+  absorb the shock through the uncompensated-care line, with the *distribution*
+  of that absorption taken up in the provider-heterogeneity analysis (Paper 3).
+- **Drought lowers *measured* uncompensated care** (−1.68 pp, −$6.2M cumulative);
+  treated as measurement-fragile (patient-mix/volume/revenue composition), the
+  supply-side analogue of the medical-debt measurement caveat — lead with the
+  temperature channel.
 - **AQI dropped from DiD** because only 3.1% of counties are never-exposed; the existing LP/event-study coverage (Key Findings 1–6 above) remains the sole identification channel for AQI.
 
 ### Reconciling LP/event-study and DiD findings
