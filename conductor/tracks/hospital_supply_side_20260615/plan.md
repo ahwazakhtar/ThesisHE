@@ -30,12 +30,12 @@ Sequencing: Phase 1 (panel) is the data gate. Phases 2–4 (the three lenses) bu
 
 ## Phase 4: Provider heterogeneity (Paper 3, supply side) — PRIMARY for this track
 
-- [ ] **Task: Construct market-concentration measure**
-    - [ ] County-year hospital HHI from `Net Patient Revenue` shares by Health System within county; add `MarketConcentration`.
-- [ ] **Task: Heterogeneity interactions**
-    - [ ] New `Code/run_hospital_heterogeneity.R`: `Y ~ Shock + Shock × M + controls | CCN + Year` for M ∈ {`SafetyNet`, `Ownership`, `MedicaidExpansion`, `MarketConcentration`}, outcomes {uncompensated care %, operating margin}.
-    - [ ] Marginal shock effect by moderator level; outcome-aware verdict (does strain concentrate in safety-net / high-Medicaid / non-expansion / concentrated-market hospitals?). Export `Analysis/hospital_heterogeneity_coefs.csv` + plots.
-    - [ ] Tests for the interaction/heterogeneity machinery on a synthetic panel.
+- [x] **Task: Construct market-concentration measure** 6b7f69d
+    - [x] County-year hospital HHI from `Net Patient Revenue` shares by Health System within county; add `MarketConcentration` (+ `HighConcentration` ≥0.25 flag). 6b7f69d
+- [x] **Task: Heterogeneity interactions** 6b7f69d
+    - [x] New `Code/run_hospital_heterogeneity.R`: `Y ~ Shock + Shock × M + controls | CCN + Year` for M ∈ {`SafetyNet`, `Ownership`, `MedicaidExpansion`, `MarketConcentration`}, outcomes {uncompensated care %, operating margin}. 6b7f69d
+    - [x] Marginal shock effect by moderator level; outcome-aware verdict (does strain concentrate in safety-net / high-Medicaid / non-expansion / concentrated-market hospitals?). Export `Analysis/hospital_heterogeneity_coefs.csv` + plots. 6b7f69d
+    - [x] Tests for the interaction/heterogeneity machinery on a synthetic panel. 6b7f69d
 
 ## Phase 5: Synthesis, integration, verification
 
