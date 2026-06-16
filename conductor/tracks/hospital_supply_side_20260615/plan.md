@@ -24,9 +24,9 @@ Sequencing: Phase 1 (panel) is the data gate. Phases 2–4 (the three lenses) bu
 
 ## Phase 3: Persistence — hospital-finance dynamics (Paper 2, supply side)
 
-- [ ] **Task: Hospital persistence**
-    - [ ] New `Code/run_hospital_persistence.R`: onset/persist/exit symmetry (reuse `transition_symmetry.R`) and cumulative-dose (reuse `cumulative_dose.R`) on `Hosp_UncompCare_PctNPR` and `Hosp_OperatingMargin`. Hospital + year FE.
-    - [ ] Export `Analysis/hospital_persistence_coefs.csv`; note whether margin compression scars/compounds.
+- [x] **Task: Hospital persistence** 736e4c7
+    - [x] New `Code/run_hospital_persistence.R`: onset/persist/exit symmetry (reuse `transition_symmetry.R`) and cumulative-dose (reuse `cumulative_dose.R`) on `Hosp_UncompCare_PctNPR` and `Hosp_OperatingMargin`. Hospital + year FE. 736e4c7
+    - [x] Export `Analysis/hospital_persistence_coefs.csv`; note whether margin compression scars/compounds (drought scars both outcomes; CDD/HDD symmetric). 736e4c7
 
 ## Phase 4: Provider heterogeneity (Paper 3, supply side) — PRIMARY for this track
 
