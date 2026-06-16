@@ -8,13 +8,13 @@ Sequencing: Phase 1 (panel) is the data gate. Phases 2–4 (the three lenses) bu
 
 ## Phase 1: Hospital-year panel
 
-- [ ] **Task: Build the hospital-year financial panel**
-    - [ ] New `Code/process_hospital_panel.R`: read NASHP HCT (`readxl`); keep `CCN#`, Year, Zip Code, State + the scoped financials and attributes (spec §Variable scope). Derive `Hosp_UncompCare` (= Uninsured/Bad Debt + Net Charity), `Hosp_UncompCare_PctNPR`, inflation-adjust dollar fields to \$2023.
-    - [ ] Map hospital Zip Code → `fips_code` via `Data/Zip County Crosswalk/` (hospital location, not residential allocation). Report county-match rate.
-    - [ ] Derive moderators: `SafetyNet` (top-quartile Medicaid + uncompensated payer mix), `Ownership`, `SystemAffiliated`, `BedSize`; placeholder for `MarketConcentration` (Phase 4). Output `Data/intermediate_hospital_panel.rds`.
-    - [ ] Tests `Code/tests/test_hospital_panel.R`: schema, no duplicate (CCN, Year), margin/ratio plausible ranges, uncompensated-care = baddebt+charity identity, county-match coverage.
-- [ ] **Task: Medicaid expansion table**
-    - [ ] Small hardcoded state-year `MedicaidExpansion` indicator (KFF adoption dates); join to the panel. Document source in header.
+- [x] **Task: Build the hospital-year financial panel** 51d0ce3
+    - [x] New `Code/process_hospital_panel.R`: read NASHP HCT (`readxl`); keep `CCN#`, Year, Zip Code, State + the scoped financials and attributes (spec §Variable scope). Derive `Hosp_UncompCare` (= Uninsured/Bad Debt + Net Charity), `Hosp_UncompCare_PctNPR`, inflation-adjust dollar fields to \$2023. 51d0ce3
+    - [x] Map hospital Zip Code → `fips_code` via `Data/Zip County Crosswalk/` (hospital location, not residential allocation). Report county-match rate (98.4%). 51d0ce3
+    - [x] Derive moderators: `SafetyNet` (top-quartile Medicaid + uncompensated payer mix), `Ownership`, `SystemAffiliated`, `BedSize`; placeholder for `MarketConcentration` (Phase 4). Output `Data/intermediate_hospital_panel.rds`. 51d0ce3
+    - [x] Tests `Code/tests/test_hospital_panel.R`: schema, no duplicate (CCN, Year), margin/ratio plausible ranges, uncompensated-care = baddebt+charity identity, county-match coverage. 51d0ce3
+- [x] **Task: Medicaid expansion table** 51d0ce3
+    - [x] Small hardcoded state-year `MedicaidExpansion` indicator (KFF adoption dates); join to the panel. Document source in header (`Code/medicaid_expansion.R`). 51d0ce3
 
 ## Phase 2: Incidence — climate → hospital finances (Paper 1, supply side)
 
