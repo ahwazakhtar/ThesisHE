@@ -1,0 +1,46 @@
+# Implementation Plan: Hospital Supply-Side Integration
+
+Track spec: `./spec.md`. Weaves hospital finances (NASHP HCT) through the Incidence / Persistence / Inequality papers at the **hospital-year** level, preserving provider heterogeneity. Reuses `Code/transition_symmetry.R`, `Code/cumulative_dose.R`, and the zip-county crosswalk.
+
+Sequencing: Phase 1 (panel) is the data gate. Phases 2–4 (the three lenses) build on it and are independent of each other. Phase 5 integrates and verifies.
+
+---
+
+## Phase 1: Hospital-year panel
+
+- [ ] **Task: Build the hospital-year financial panel**
+    - [ ] New `Code/process_hospital_panel.R`: read NASHP HCT (`readxl`); keep `CCN#`, Year, Zip Code, State + the scoped financials and attributes (spec §Variable scope). Derive `Hosp_UncompCare` (= Uninsured/Bad Debt + Net Charity), `Hosp_UncompCare_PctNPR`, inflation-adjust dollar fields to \$2023.
+    - [ ] Map hospital Zip Code → `fips_code` via `Data/Zip County Crosswalk/` (hospital location, not residential allocation). Report county-match rate.
+    - [ ] Derive moderators: `SafetyNet` (top-quartile Medicaid + uncompensated payer mix), `Ownership`, `SystemAffiliated`, `BedSize`; placeholder for `MarketConcentration` (Phase 4). Output `Data/intermediate_hospital_panel.rds`.
+    - [ ] Tests `Code/tests/test_hospital_panel.R`: schema, no duplicate (CCN, Year), margin/ratio plausible ranges, uncompensated-care = baddebt+charity identity, county-match coverage.
+- [ ] **Task: Medicaid expansion table**
+    - [ ] Small hardcoded state-year `MedicaidExpansion` indicator (KFF adoption dates); join to the panel. Document source in header.
+
+## Phase 2: Incidence — climate → hospital finances (Paper 1, supply side)
+
+- [ ] **Task: Hospital incidence regressions**
+    - [ ] New `Code/run_hospital_incidence.R`: `Y ~ Shock(+lags) + controls | CCN + Year`, cluster State, for outcomes {`Hosp_UncompCare_PctNPR`, `Hosp_OperatingMargin`, `Hosp_UncompCare`, `Hosp_NetMargin`}; shocks = Is_Extreme_Drought, High_CDD, High_HDD (county shocks attached by hospital county), High_AQI_Max.
+    - [ ] Export `Analysis/hospital_incidence_coefs.csv`; plots in `Analysis/plots/hospital/`. Headline: do climate shocks raise uncompensated care / compress operating margins?
+
+## Phase 3: Persistence — hospital-finance dynamics (Paper 2, supply side)
+
+- [ ] **Task: Hospital persistence**
+    - [ ] New `Code/run_hospital_persistence.R`: onset/persist/exit symmetry (reuse `transition_symmetry.R`) and cumulative-dose (reuse `cumulative_dose.R`) on `Hosp_UncompCare_PctNPR` and `Hosp_OperatingMargin`. Hospital + year FE.
+    - [ ] Export `Analysis/hospital_persistence_coefs.csv`; note whether margin compression scars/compounds.
+
+## Phase 4: Provider heterogeneity (Paper 3, supply side) — PRIMARY for this track
+
+- [ ] **Task: Construct market-concentration measure**
+    - [ ] County-year hospital HHI from `Net Patient Revenue` shares by Health System within county; add `MarketConcentration`.
+- [ ] **Task: Heterogeneity interactions**
+    - [ ] New `Code/run_hospital_heterogeneity.R`: `Y ~ Shock + Shock × M + controls | CCN + Year` for M ∈ {`SafetyNet`, `Ownership`, `MedicaidExpansion`, `MarketConcentration`}, outcomes {uncompensated care %, operating margin}.
+    - [ ] Marginal shock effect by moderator level; outcome-aware verdict (does strain concentrate in safety-net / high-Medicaid / non-expansion / concentrated-market hospitals?). Export `Analysis/hospital_heterogeneity_coefs.csv` + plots.
+    - [ ] Tests for the interaction/heterogeneity machinery on a synthetic panel.
+
+## Phase 5: Synthesis, integration, verification
+
+- [ ] **Task: Synthesis + integrate into the three papers**
+    - [ ] New `Analysis/hospital_supply_side_synthesis.md`.
+    - [ ] Add a supply-side subsection to each: `state_analysis_summary.md` / `event_study_synthesis.md` / `delta_analysis_synthesis.md` as appropriate; note the demand↔supply pairing per paper.
+    - [ ] Add hospital slides to `Text/committee_presentation_20260615.tex` (incidence, persistence, provider heterogeneity).
+- [ ] **Task: Conductor — User Manual Verification 'Hospital Supply-Side Integration' (Protocol in workflow.md)**
