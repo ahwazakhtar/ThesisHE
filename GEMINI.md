@@ -9,6 +9,8 @@ This is a research project (likely a thesis) focused on the aggregation and anal
 *   **Climate–Health Exposure Index:** **Completed (Phases 1–5).** CDC SVI vulnerability × climate hazard. EJ amplification (heat→employment, cold→income, drought→premiums worse in vulnerable counties); medical-debt response is a credit-bureau measurement artifact. Lancet-style person-years exposure.
 *   **Cross-Level Symmetry:** **Completed (Phases 1–3).** Mirrored humidity→county, SVI→state, demographics→state. Robustness nulls and income/health-spending EJ replicate across levels; medical-debt direction is aggregation-sensitive.
 *   **Open:** user-driven Conductor verification gates for the Committee Feedback, Persistence Extensions, Climate–Health Exposure Index, and Cross-Level Symmetry tracks.
+*   **Writing/dissemination (Jun 2026):** three-essay thesis abstracts + umbrella (`Text/thesis_paper_abstracts.md`), a conference abstract (`Text/conference_abstract.*`), and a committee update deck (`Text/committee_presentation_20260615.tex`, + a hyperlinked-appendix detailed variant).
+*   **Hospital Supply-Side Integration:** **registered, not yet implemented.** A demand/supply review (vs. the original proposal) found the hospital side under-built; track `hospital_supply_side_20260615` will weave hospital finances (NASHP HCT, hospital-year) through the three papers with provider heterogeneity. Next: Phase 1 panel build.
 
 # Directory Structure
 

@@ -2,7 +2,34 @@
 
 ---
 
-## 2026-06-14 (Session 5)
+## 2026-06-15 (Session 6)
+
+Writing, dissemination, and a structural-scope correction. Produced the three-essay thesis abstracts, a conference abstract, and a committee update deck; then a demand/supply review found the hospital side under-accounted and a new track was scoped to fix it. (Presentation `.tex`/`.pdf` are gitignored per repo convention — only `.md` deliverables and conductor files are tracked.)
+
+### Writing deliverables (`Text/`)
+
+- **`thesis_paper_abstracts.md`** — three standalone essay abstracts (Incidence / Persistence / Inequality) + an umbrella dissertation abstract; each ≤250 words, NBER-style flowing tone (mechanism-first, plain magnitudes, JEL codes). Essay 3 drought claim specified to the 2-year lag per `exposure_interaction_coefs.csv`.
+- **`thesis_paper_abstracts_structured.md`** — the alternative structured-label variant (Objective/Data/Results/Conclusion/Keywords), renamed from an editor `... copy.md`.
+- **`conference_abstract.md` / `.tex` / `.pdf`** — single 351-word conference abstract for the integrated project + a ~140-word short version; compiled to a one-page PDF.
+
+### Committee presentation (`Text/committee_presentation_20260615.tex`, gitignored)
+
+- New 24-slide update deck in the house style of `committee_presentation_20260521b.tex`: three-paper reorganization, April-feedback recap (reframed as robustness), **conceptual model**, **mechanism-pathways** (literature) and **hypotheses** slides, then Paper 1/2/3 each as a three-act arc (prior → method/context → synthesis), humidity, summary.
+- Conference tone pass (declarative finding titles; removed update/committee framing; e.g. "Credit-Bureau Medical Debt: Measurement Issues").
+- Paper 1 expanded to 3 slides incl. the 2012-drought natural-experiment context + event-study figure. Paper 2 results = a three-panel "drought scars / cold compounds / heat saturates" figure, unified on Medical Debt Share.
+- **`committee_presentation_20260615_detailed.tex`** — variant adding a hyperlinked appendix (full state/county coefficients, symmetry test, cumulative dose, EJ interactions) with `\beamergotobutton`/`\beamerreturnbutton` navigation (needs two `pdflatex` passes; 31 pp).
+
+### Demand/supply scope correction → new track
+
+- Reviewed `Text/v2_Akhtar_Proposal.pdf`: the original proposal is two-sided (Ch.1 demand/consumers; Ch.2 supply/hospitals; Ch.3 structural). The current three-paper work is demand-heavy — hospitals survive only as `Hosp_BadDebt_PerCapita`; `Hosp_Charity_Total` and `Hosp_Revenue_Total` sit unused; margins/expenses never extracted.
+- Inspected `Data/Hosp_Data/NASHP 2011-2023 HCT Data 2025 Feb.xlsx` (sheet `Downloadable`, **114 cols**): operating/net margins, uncompensated care, net patient revenue, expenses, payer mix, ownership, system affiliation, bed size — full supply-side richness.
+- **Registered track `hospital_supply_side_20260615`** (Option 2: weave hospitals through the three papers at the **hospital-year** level to preserve provider heterogeneity — safety-net, ownership, Medicaid expansion, market concentration). Scoped variables documented in the track spec. Not yet implemented (Phase 1 = panel build is next).
+
+### Misc (committed earlier this session)
+
+- `conductor/tracks/persistence_extensions_20260521/spec.md` (was untracked), `memory/` notes, and `Poster/generate_poster_plots.R` added to git.
+
+---
 
 Four tracks advanced: closed Committee Feedback **Phase 4 (humidity)**; completed the **Persistence Extensions** track (Phases 0–6); built the new **Climate–Health Exposure Index** track (Phases 1–5); built the new **Cross-Level Symmetry** track (Phases 1–3). 62 tests pass across the new code. Only user-driven Conductor verification gates remain open.
 
