@@ -1,0 +1,23 @@
+Task: Build the hospital-year financial panel (+ Medicaid expansion table) — Phase 1.
+
+Summary: New hospital (CCN) x year panel from NASHP HCT replaces the demand-side
+county-summed Hosp_BadDebt_PerCapita for the supply-side analysis. Preserves
+provider heterogeneity that county aggregation destroys.
+
+Created:
+ - Code/process_hospital_panel.R: build_hospital_panel() + pure helpers
+   (pad_fips, classify_ownership, derive_uncomp, derive_safetynet). Reads the
+   Downloadable sheet, derives outcomes/moderators, CPI-deflates to $2023, maps
+   Zip->county (one-to-one crosswalk; modal county; 98.4% match), attaches county
+   shocks+lags from county_level_master.csv (97.7%). Heavy build guarded by
+   sys.nframe()==0 so tests can source helpers without rebuilding.
+ - Code/medicaid_expansion.R: KFF ACA-expansion adoption years -> medicaid_expanded().
+ - Code/tests/test_hospital_panel.R: 6 unit + 9 integration tests, all pass.
+
+Output (gitignored): Data/intermediate_hospital_panel.rds — 59,896 hospital-years,
+5,119 hospitals, 2011-2023.
+
+Why: provider heterogeneity (ownership/safety-net/system/payer mix) is a hospital
+attribute; the supply-side (proposal Ch.2) analysis must run at hospital-year.
+
+Units verified: margins/payer-mix/%NPR are proportions; dollars raw -> $2023.
