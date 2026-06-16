@@ -1,0 +1,13 @@
+Task: Hospital persistence — Phase 3.
+
+run_hospital_persistence.R: (A) Onset/Persist/Exit symmetry via make_transitions
++ transition_symmetry_test (reused); (B) cumulative climate-shock-years dose via
+add_cumulative_shock_years + lincom (reused). Outcomes UncompCare_PctNPR &
+OperatingMargin; hospital + year FE, state cluster.
+
+Finding: extreme drought ASYMMETRIC (scar) on both outcomes (p=0.012 / 0.006);
+CDD/HDD symmetric. Dose-response + 10+ vs 1-3 contrast tabulated.
+
+Files: Code/run_hospital_persistence.R, Code/tests/test_hospital_persistence.R.
+make_transitions sets transition state NA when the 1-yr lag is unknown. Tests pass.
+Output: Analysis/hospital_persistence_coefs.csv.
