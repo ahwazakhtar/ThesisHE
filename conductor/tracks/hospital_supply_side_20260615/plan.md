@@ -18,9 +18,9 @@ Sequencing: Phase 1 (panel) is the data gate. Phases 2–4 (the three lenses) bu
 
 ## Phase 2: Incidence — climate → hospital finances (Paper 1, supply side)
 
-- [ ] **Task: Hospital incidence regressions**
-    - [ ] New `Code/run_hospital_incidence.R`: `Y ~ Shock(+lags) + controls | CCN + Year`, cluster State, for outcomes {`Hosp_UncompCare_PctNPR`, `Hosp_OperatingMargin`, `Hosp_UncompCare`, `Hosp_NetMargin`}; shocks = Is_Extreme_Drought, High_CDD, High_HDD (county shocks attached by hospital county), High_AQI_Max.
-    - [ ] Export `Analysis/hospital_incidence_coefs.csv`; plots in `Analysis/plots/hospital/`. Headline: do climate shocks raise uncompensated care / compress operating margins?
+- [x] **Task: Hospital incidence regressions** 9aaf454
+    - [x] New `Code/run_hospital_incidence.R`: `Y ~ Shock(+lags) + controls | CCN + Year`, cluster State, for outcomes {`Hosp_UncompCare_PctNPR`, `Hosp_OperatingMargin`, `Hosp_UncompCare`, `Hosp_NetMargin`}; shocks = Is_Extreme_Drought, High_CDD, High_HDD (county shocks attached by hospital county), High_AQI_Max. 9aaf454
+    - [x] Export `Analysis/hospital_incidence_coefs.csv`; plots in `Analysis/plots/hospital/`. Headline: do climate shocks raise uncompensated care / compress operating margins? 9aaf454
 
 ## Phase 3: Persistence — hospital-finance dynamics (Paper 2, supply side)
 
@@ -42,5 +42,5 @@ Sequencing: Phase 1 (panel) is the data gate. Phases 2–4 (the three lenses) bu
 - [ ] **Task: Synthesis + integrate into the three papers**
     - [ ] New `Analysis/hospital_supply_side_synthesis.md`.
     - [ ] Add a supply-side subsection to each: `state_analysis_summary.md` / `event_study_synthesis.md` / `delta_analysis_synthesis.md` as appropriate; note the demand↔supply pairing per paper.
-    - [ ] Add hospital slides to `Text/committee_presentation_20260615.tex` (incidence, persistence, provider heterogeneity).
+    - [ ] Make a copy of `Text/committee_presentation_20260615.tex` and add hospital slides to the copy (incidence, persistence, provider heterogeneity).
 - [ ] **Task: Conductor — User Manual Verification 'Hospital Supply-Side Integration' (Protocol in workflow.md)**
