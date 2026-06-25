@@ -2,6 +2,75 @@
 
 ---
 
+## 2026-06-25 (Session 7)
+
+DiD frontier-methods robustness for the 2012-drought natural experiment, plus the
+empirical-framework technical note's DiD sections. Central result: the **income** effect of
+drought is robust to modern DiD scrutiny; the **employment** effect is fragile; the 2012
+result does not generalize to the average drought cohort. A separate external-reader track
+on mechanisms was also registered.
+
+### Technical note (`Text/technical_note_empirical_framework.html`)
+
+- Added the **difference-in-differences sections** the note previously lacked:
+  - **§2.5** sharp 2×2 natural-experiment DiD (2012 drought, 139 first-onset treated vs.
+    2,534 never-exposed), **§2.5.1** the clean-control comparison, **§2.5.2** a worked
+    numerical example using the **actual** sample means (PCPI: treated +$2,946 vs. control
+    +$4,257 → DiD −$1,311; with a single pre-period the FE estimate equals the 2×2 exactly).
+  - **§2.6** Callaway–Sant'Anna event-time extension (cohort-weighted profiles, recurring-
+    treatment reconciliation, parallel-trends + CDD region-confounding caveats).
+  - **§2.5.3 (new this step)** doubly-robust check: eq. (D2) Sant'Anna–Zhao estimator,
+    unconditional-vs-DR results table, the pooled-CS "does it generalize?" null note, and the
+    ITT-estimand + "Midwest"-misnomer caveats.
+- Appendix quick-reference row for the DiD design; footer cites `run_did_analysis.R`.
+
+### New track `conductor/tracks/did_frontier_robustness_20260625/`
+
+- `spec.md` + `plan.md` documenting the three frontier gaps (few treated clusters, recurring/
+  non-absorbing treatment → ITT estimand, single-pre-period 2012 cohort) and a 5-phase plan.
+  Phases 0, 2, 3 complete; Phase 1 (wild bootstrap) and Phase 4 (full write-up) pending.
+
+### New `Code/did_robustness/` (runs on R 4.5.3, not the main 4.2.2)
+
+- `00_did_robustness_common.R` — shared panel/cohort/baseline-covariate/division helpers
+  (mirrors `run_did_analysis.R` cohort logic; CO-2023 debt exclusion preserved).
+- `01_wild_cluster_bootstrap.R` — WCB (Webb, FWL-residualized for speed) + randomization
+  inference. **Written, not yet run** (deferred).
+- `02_doubly_robust_did.R` — **run.** DRDID improved-DR 2×2 + `did::att_gt` covariate-
+  conditional CS. Outputs `dr_2x2_drought_2012.csv`, `dr_csdid_drought.csv`,
+  `dr_csdid_eventtime.csv`.
+- `03_honestdid_sensitivity.R` — **run.** HonestDiD relative-magnitudes on the pooled CS
+  event-study (e∈[−5,5]). Output `honestdid_sensitivity.csv`.
+- `04_synthesize_did_robustness.R` — collation stub (not yet run).
+
+### Results (Phase 2–3)
+
+- **DRDID 2×2 (covariate-conditional):** PCPI **−$1,451** [−2461,−441] (stronger than the
+  unconditional −$1,311); Civilian_Employed **−871** [−1719,−23] (**attenuated ~58%** from
+  −2,053); Med_HH_Income −$1,186; Medical_Debt_Share −0.011.
+- **Pooled CS-dr (all drought cohorts):** null — PCPI +$350, employment +2,609; employment
+  event-study shows positive pre-trends. ⇒ the 2012 effect is event-specific.
+- **HonestDiD:** robust CI includes 0 at every M-bar; **cannot test the 2012 cohort** (no
+  pre-period) — it only assesses the already-null pooled design. Headline credibility rests
+  on the DRDID 2×2 and (pending) cluster-robust inference, not HonestDiD.
+
+### Environment / methodological decisions
+
+- Stood up **R 4.5.3** with `DRDID`, `did`, `HonestDiD`, `fwildclusterboot` (the latter from
+  r-universe `s3alfisc`; archived on CRAN). Main pipeline untouched on R 4.2.2.
+- Bugs fixed: duplicate `Division` join collision; `DRDID` numeric-`idname` requirement;
+  HonestDiD influence-function vcov scaled by 1/n² (not 1/n).
+- Decision: filed as a **new track** (not a phase under `committee_feedback_april_2026`)
+  because it is self-contained and runs on a different R.
+
+### External-reader mechanisms track (registered)
+
+- `Text/external_reader_feedback.md` + `conductor/tracks/mechanism_channels_20260625/`
+  (spec + plan): reviewer asks how much of the climate→cost result is the **agricultural
+  income channel** and what other mechanisms operate. Registered, not yet implemented.
+
+---
+
 ## 2026-06-15 (Session 6)
 
 Writing, dissemination, and a structural-scope correction. Produced the three-essay thesis abstracts, a conference abstract, and a committee update deck; then a demand/supply review found the hospital side under-accounted and a new track was scoped to fix it. (Presentation `.tex`/`.pdf` are gitignored per repo convention — only `.md` deliverables and conductor files are tracked.)

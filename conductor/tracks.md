@@ -16,3 +16,7 @@ This file tracks all major tracks for the project. Each track has its own detail
   *Link: [./tracks/cross_level_symmetry/](./tracks/cross_level_symmetry/)*
 - [~] **Track: Hospital Supply-Side Integration**
   *Link: [./tracks/hospital_supply_side_20260615/](./tracks/hospital_supply_side_20260615/)*
+- [ ] **Track: DiD Frontier-Methods Robustness** (documented; execution deferred)
+  *Link: [./tracks/did_frontier_robustness_20260625/](./tracks/did_frontier_robustness_20260625/)*
+- [ ] **Track: Mechanisms — Agricultural Channel & Beyond** (external-reader feedback; registered, not yet implemented)
+  *Link: [./tracks/mechanism_channels_20260625/](./tracks/mechanism_channels_20260625/)*
