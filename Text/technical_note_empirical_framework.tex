@@ -1,0 +1,330 @@
+% Compile: pdflatex (two passes for cross-refs).  Engine: MiKTeX pdflatex.
+\documentclass[11pt]{article}
+
+\usepackage[letterpaper,margin=1in]{geometry}
+\usepackage{mathptmx}            % Times text + math (NBER house look), base-safe
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{graphicx}            % \resizebox for one wide display
+\usepackage{caption}
+\usepackage{microtype}
+\usepackage[hidelinks]{hyperref}
+
+\captionsetup{font=small,labelfont=bf,skip=4pt}
+\setlength{\parskip}{2pt}
+\setlength{\emergencystretch}{2em}
+\renewcommand{\arraystretch}{1.05}
+
+% compact section heading spacing
+\makeatletter
+\renewcommand\section{\@startsection{section}{1}{\z@}%
+  {-2.2ex \@plus -1ex \@minus -.2ex}{1.0ex \@plus .2ex}%
+  {\normalfont\large\bfseries}}
+\renewcommand\subsection{\@startsection{subsection}{2}{\z@}%
+  {-1.8ex \@plus -1ex \@minus -.2ex}{0.6ex \@plus .2ex}%
+  {\normalfont\normalsize\bfseries}}
+\makeatother
+
+\newcommand{\Sct}{S_{ct}}
+
+\title{\vspace{-1.2cm}\bfseries An Empirical Framework for the Health-Cost
+Incidence, Persistence, and Distributional Burden of Climate Shocks}
+\author{Ahwaz Akhtar\\[-2pt]\normalsize Boston University}
+\date{\normalsize June 2026}
+
+\begin{document}
+\maketitle
+\vspace{-0.7cm}
+
+%================================================================
+\section{Setting and identification}
+%================================================================
+The analysis uses two panels that share a common county-level climate-shock
+series but measure different outcome domains. \emph{Panel~A} is a
+county~$\times$~year panel (demand side): $\sim$41{,}400 county-years, 3{,}155
+counties, 2011--2023, with outcomes for individual-market benchmark premiums,
+medical-debt share, real personal income per capita, and civilian employment.
+\emph{Panel~B} is a hospital~$\times$~year panel (supply side): $\sim$59{,}900
+hospital-years, 5{,}119 hospitals (CMS Certification Numbers), with operating and
+net margins and uncompensated care. Each hospital is geo-coded to a single county
+(modal county per ZIP, facility location) and inherits that county's shocks, so
+$S_{it}\equiv S_{c(i),t}$. Both panels carry county (or hospital) and year fixed
+effects and cluster standard errors at the state level ($\sim$50 clusters).
+
+All papers use four binary shocks defined at the county-year level:
+$\textsf{Is\_Extreme\_Drought}$ (Palmer PDSI $\le-4$);
+$\textsf{High\_CDD}$ / $\textsf{High\_HDD}$ (cooling/heating degree-days in the top
+quartile of the county's own historical distribution); and
+$\textsf{High\_AQI\_Max}$ (annual maximum AQI $>100$). Generically
+$\Sct\in\{0,1\}$. These are \emph{recurring} shocks, not one-time absorbing
+treatments: a county may enter, leave, and re-enter drought. This rules out
+canonical staggered-adoption DiD as the \emph{primary} design and motivates the
+persistence estimators of Section~3; Section~2 adds a first-onset cohort DiD as a
+contamination-free cross-check. Defining shocks against each county's own
+1990--2000 baseline distribution makes ``shock'' an unusual draw relative to local
+historical norms rather than an absolute threshold.
+
+%================================================================
+\section{Paper 1 --- Incidence: do climate shocks raise health costs?}
+%================================================================
+\subsection{Distributed-lag two-way fixed effects}
+Paper~1 asks whether contemporaneous and lagged exposure shifts the \emph{level} of
+the outcome. For outcome $Y$ and shock $S$,
+\begin{equation}
+Y_{ct}=\alpha_c+\gamma_t+\sum_{k=0}^{2}\beta_k\,S_{c,t-k}
+        +\mathbf{X}_{ct}'\delta+\varepsilon_{ct},
+\label{eq:dl}
+\end{equation}
+with county FE $\alpha_c$, year FE $\gamma_t$, and time-varying controls
+$\mathbf{X}_{ct}$ (log real income per capita, unemployment, Medicaid-expansion
+status); the hospital version replaces $c$ with hospital $i$. Equation~\eqref{eq:dl}
+is estimated \emph{once per (outcome, shock) pair} on the full panel; the three lag
+terms enter the same regression. The subscripts run $t,t-1,t-2$ because a shock can
+only affect current and \emph{subsequent} outcomes: a single drought in year $t$
+appears as the $\beta_0$ regressor for the year-$t$ outcome, the $\beta_1$ regressor
+for the year-$(t{+}1)$ outcome, and the $\beta_2$ regressor for year $t{+}2$. The
+identifying variation is counties that \emph{switch} shock status; always- and
+never-shocked counties are absorbed by $\alpha_c$. The cumulative (impulse-response)
+effect of one shock-year traced across all three horizons is
+\begin{equation}
+\hat\beta_{\mathrm{cum}}=\hat\beta_0+\hat\beta_1+\hat\beta_2,
+\qquad
+\widehat{\operatorname{Var}}(\hat\beta_{\mathrm{cum}})
+   =\sum_{j=0}^{2}\sum_{k=0}^{2}\widehat{\operatorname{Cov}}(\hat\beta_j,\hat\beta_k),
+\label{eq:cum}
+\end{equation}
+the off-diagonal covariances taken from the state-clustered vcov via a Wald
+linear-combination test. On the hospital panel, heat raises uncompensated care
+($\textsf{High\_CDD}$: $+1.22$ pp of net patient revenue, $p=0.063$; cold:
+$+\$1.55$M per hospital, $p=0.022$). The negative drought coefficient on
+uncompensated care ($-1.68$ pp, $p=0.032$) is a measurement artifact---billing and
+credit-bureau measures undercount distress in drought-stricken, lower-utilization
+areas---and is flagged throughout rather than read causally.
+
+\subsection{A sharper control group: the 2012 drought natural experiment}
+Because the lag model's control group for any drought year silently includes
+counties droughted in \emph{other} years, we add a first-onset cohort DiD. Let
+$\text{Treated}_c=1$ if county $c$'s first-ever extreme-drought year in the panel is
+2012, and $\text{Post}_t=\mathbf 1[t\ge2012]$:
+\begin{equation}
+Y_{ct}=\alpha_c+\gamma_t+\tau\,(\text{Treated}_c\times\text{Post}_t)+\varepsilon_{ct}.
+\label{eq:did}
+\end{equation}
+The FEs absorb both main effects, so $\hat\tau$ is the ATT: 139 first-onset-2012
+counties against 2{,}534 \emph{never}-droughted controls (counties first droughted in
+other years are excluded, which is what cleans the control group). With a single
+pre-period (2011) the regression returns the $2\times2$ difference exactly.
+
+The sharp $2\times2$ assumes \emph{unconditional} parallel trends, which is strong
+here: treated counties skew rural-agricultural (Georgia, the Mountain West, the
+Plains) while controls skew urban and coastal. We therefore also report the
+Sant'Anna--Zhao (2020) doubly-robust ATT, consistent if \emph{either} the propensity
+or the outcome-regression model is correct, conditioning only on \emph{baseline}
+(2011) covariates---log population, baseline median household income, Census
+division---and deliberately not on contemporaneous income, employment, or premiums,
+which are post-treatment mediators (bad controls):
+\begin{equation}
+\resizebox{0.96\hsize}{!}{$\displaystyle
+\widehat\tau_{\mathrm{dr}}=\mathbb E\!\left[\left(\frac{D}{\mathbb E[D]}
+-\frac{\hat\pi(X)\,(1-D)/(1-\hat\pi(X))}
+       {\mathbb E\!\left[\hat\pi(X)(1-D)/(1-\hat\pi(X))\right]}\right)
+\bigl(\Delta Y-\widehat m_0(X)\bigr)\right]$}
+\label{eq:drdid}
+\end{equation}
+where $\Delta Y$ is the pre-to-post outcome change (post collapsed to the 2012--2023
+mean), $\hat\pi(X)$ the propensity score, and $\widehat m_0(X)$ the control
+outcome-change regression. Results are in Table~\ref{tab:incidence}.
+
+\begin{table}[h]
+\centering
+\caption{Incidence: 2012-drought natural experiment (county panel, \$2023)}
+\label{tab:incidence}
+\small
+\begin{tabular}{lrrc}
+\toprule
+Outcome & Uncond.\ $2\times2$ $\hat\tau$ & Doubly-robust $\hat\tau_{\mathrm{dr}}$ & DR 95\% CI \\
+\midrule
+Personal income per capita & $-1{,}311$ & $\mathbf{-1{,}451}$ & $[-2{,}461,\,-441]$ \\
+Civilian employed (persons) & $-2{,}053$ & $-871$ & $[-1{,}719,\,-23]$ \\
+Median household income & $-992$ & $-1{,}186$ & $[-2{,}140,\,-232]$ \\
+Medical-debt share & $-0.006$\,(n.s.) & $-0.011$ & $[-0.019,\,-0.002]$ \\
+\bottomrule
+\end{tabular}
+
+\vspace{2pt}
+\footnotesize\raggedright
+139 treated (first-onset 2012) vs.\ 2{,}534 never-exposed; state-clustered.
+$2\times2$: income $z=-2.28$ ($p=0.027$), employment $z=-4.29$ ($p=0.0001$).
+Income is robust to conditioning (if anything stronger); employment attenuates
+$\sim$58\% and is the composition-sensitive secondary finding. Medical debt is
+measurement-fragile. Re-estimated as a full Callaway--Sant'Anna model across
+\emph{all} drought cohorts the average is null (PCPI $+\$350$, s.e.\ 585), so the
+negative real-economy effect is specific to the large, clean 2012 event and is an
+intent-to-treat ``effect of first onset.''
+\end{table}
+
+%================================================================
+\section{Paper 2 --- Persistence: scarring, reversibility, dose}
+%================================================================
+\subsection{Onset/persist/exit local projections}
+Converting the binary series into a transition state from $(\Sct,S_{c,t-1})$ gives
+\emph{onset} $D^{on}\!=\!(1,0)$, \emph{persist} $D^{per}\!=\!(1,1)$, and \emph{exit}
+$D^{ex}\!=\!(0,1)$, with $(0,0)$ omitted as the reference. Following Jord\`a (2005),
+a separate regression is run per horizon $h$:
+\begin{equation}
+Y_{i,t+h}=\alpha_i+\gamma_t
+   +\beta^{on}_h D^{on}_{it}+\beta^{per}_h D^{per}_{it}+\beta^{ex}_h D^{ex}_{it}
+   +\varepsilon_{i,t+h},\qquad h=0,1,2,
+\label{eq:lp}
+\end{equation}
+where the LHS is the outcome $h$ years after the transition year $t$ and the dummies
+are always indexed by $t$. Each coefficient is measured against the never-shocked
+$(0,0)$ reference: $\beta^{on}_h$ is the entry effect, $\beta^{per}_h$ the interior
+of a sustained spell, and $\beta^{ex}_h$ the first post-shock year. If a shock were
+fully reversible the entry cost would be exactly undone on exit, so the null and the
+asymmetry statistic are
+\begin{equation}
+H_0:\ \beta^{on}_h+\beta^{ex}_h=0,
+\qquad
+\hat L_h=\hat\beta^{on}_h+\hat\beta^{ex}_h,
+\qquad
+z_h=\frac{\hat L_h}{\sqrt{V_{11}+V_{33}+2V_{13}}}\xrightarrow{d}\mathcal N(0,1),
+\label{eq:sym}
+\end{equation}
+the covariance $V_{13}$ taken directly from the single fitted model's vcov.
+A nonzero $\hat L_h$ means exit does not return the unit to its pre-shock
+trajectory---scarring.
+
+\subsection{Cumulative dose}
+A second lens asks whether the \emph{stock} of past exposure matters. Define a
+never-resetting counter $C_{it}=\sum_{s\le t}S_{is}$ and estimate
+\begin{equation}
+Y_{it}=\alpha_i+\gamma_t+\beta_1 C_{it}+\beta_2 C_{it}^2+\varepsilon_{it},
+\qquad
+\frac{\partial Y}{\partial C}\Big|_{C=x}=\beta_1+2\beta_2 x,
+\label{eq:dose}
+\end{equation}
+with a binned variant $\sum_b\delta_b\mathbf 1[C_{it}\in b]$ over
+$b\in\{1\text{--}3,4\text{--}6,7\text{--}9,10{+}\}$ (reference $C=0$) and a
+high-vs-low contrast $\hat\Delta=\hat\delta_{10+}-\hat\delta_{1\text{--}3}$.
+Table~\ref{tab:persist} reports drought $\to$ hospital operating margin.
+
+\begin{table}[h]
+\centering
+\caption{Persistence: extreme drought $\to$ hospital operating margin ($N=57{,}302$)}
+\label{tab:persist}
+\small
+\begin{tabular}{lrl}
+\toprule
+Quantity & Estimate & Test \\
+\midrule
+$\hat\beta^{on}_0$ (onset) & $+0.0159$ & margin $+1.59$ pp vs.\ $(0,0)$ \\
+$\hat\beta^{per}_0$ (persist) & $-0.0017$ & --- \\
+$\hat\beta^{ex}_0$ (exit) & $+0.0109$ & still $+1.09$ pp after clearing \\
+Asymmetry $\hat L_0=\hat\beta^{on}_0+\hat\beta^{ex}_0$ & $+0.0268$ & SE $0.0098$, $z=2.73$, $p=0.006$ \\
+Dose marginal at $x=5$ (Eq.\ \ref{eq:dose}) & $+0.0023$ & $p=0.010$ \\
+Dose marginal at $x=10$ & $+0.0018$ & $p=0.14$ \\
+Binned $\hat\Delta=\hat\delta_{10+}-\hat\delta_{1\text{--}3}$ & $+0.018$ & $p=0.033$ \\
+\bottomrule
+\end{tabular}
+
+\vspace{2pt}
+\footnotesize\raggedright
+Onset and exit are \emph{both} positive: the margin does not unwind on exit
+($H_0$ rejected at 1\%)---asymmetric persistence. The positive dose-response is read
+as survivorship/adaptation (financially weaker hospitals exit the unbalanced panel
+first), not as climate exposure improving finances; the persistence claim is
+anchored to the drought hysteresis result, which needs no long accumulation window.
+\end{table}
+
+%================================================================
+\section{Paper 3 --- Inequality and provider heterogeneity}
+%================================================================
+Paper~3 asks whether the effects of Papers~1--2 concentrate in already-disadvantaged
+groups. For a moderator $M_{it}$,
+\begin{equation}
+Y_{it}=\alpha_i+\gamma_t+\beta \Sct+\theta(\Sct\times M_{it})+\phi M_{it}
+        +\mathbf X_{it}'\delta+\varepsilon_{it},
+\label{eq:het}
+\end{equation}
+so $\beta$ is the shock effect at $M=0$, $\beta+\theta$ at $M=1$ (SE from
+$\sqrt{V_{\beta\beta}+V_{\theta\theta}+2V_{\beta\theta}}$), and $\theta$ the
+differential. The demand side uses county social vulnerability (CDC/ATSDR SVI,
+top-quartile dummy); the supply side uses hospital safety-net status, ownership,
+state Medicaid-expansion, and county hospital-market concentration (HHI). For
+strain-increasing outcomes (uncompensated-care \%) $\theta>0$ indicates concentration
+in high-$M$ units; for operating margin a negative $\theta$ does.
+Table~\ref{tab:het} gives selected interactions.
+
+\begin{table}[h]
+\centering
+\caption{Heterogeneity: selected shock $\times$ moderator interactions}
+\label{tab:het}
+\small
+\begin{tabular}{llll}
+\toprule
+Shock $\times$ moderator & Outcome & Direction of $\hat\theta$ & $p$ \\
+\midrule
+$\textsf{High\_CDD}\times$ SafetyNet & Uncomp.\ care \%NPR & higher for safety-net & $0.021$ \\
+Drought $\times$ SVI (county) & Income per capita & larger loss in high-SVI & $<0.05$ \\
+$\textsf{High\_HDD}\times$ SafetyNet & Uncomp.\ care \%NPR & higher for non-safety-net & $0.011$ \\
+Drought $\times$ Medicaid expansion & Uncomp.\ care \%NPR & higher in expansion states & $<0.001$ \\
+\bottomrule
+\end{tabular}
+
+\vspace{2pt}
+\footnotesize\raggedright
+Headline: heat-driven uncompensated care concentrates in safety-net hospitals---the
+supply-side analogue of high-SVI county amplification on the demand side. Interactions
+are shock- and outcome-specific and not all point the ``vulnerability amplifies'' way;
+all are reported transparently.
+\end{table}
+
+%================================================================
+\section{Inference}
+%================================================================
+All standard errors cluster at the state level throughout; for HIX-premium outcomes
+the county panel additionally reports rating-area--clustered SEs, since counties
+sharing a rating area have identical premiums by construction. Every post-estimation
+quantity---cumulative lag effects \eqref{eq:cum}, asymmetry statistics \eqref{eq:sym},
+dose-level marginal effects \eqref{eq:dose}, and moderator marginal effects
+\eqref{eq:het}---is a linear combination $\hat L=\mathbf w'\hat{\boldsymbol\beta}$ with
+$\widehat{\operatorname{Var}}(\hat L)=\mathbf w'\hat V\mathbf w$ evaluated on the
+state-clustered vcov $\hat V$; tests use the normal approximation and are two-tailed at
+$\alpha=0.05$. All models are estimated with \texttt{fixest::feols} (Bergé 2018), which
+performs the two-way within transform and exports the clustered vcov for the
+lincom steps.
+
+%================================================================
+\appendix
+\section*{Appendix: estimating-equation reference}
+\small
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Paper & Estimating equation & Key quantity \\
+\midrule
+1 Incidence & $Y_{it}=\alpha_i+\gamma_t+\sum_{k=0}^2\beta_k S_{i,t-k}+\varepsilon$
+  & $\hat\beta_{\mathrm{cum}}=\sum_k\hat\beta_k$ \\
+1 Incidence (DiD) & $Y_{ct}=\alpha_c+\gamma_t+\tau(\text{Tr}_c{\times}\text{Post}_t)+\varepsilon$
+  & ATT $\hat\tau=\Delta^T-\Delta^C$ \\
+2 Persistence (onset/exit) & $Y_{i,t+h}=\alpha_i+\gamma_t+\beta^{on}D^{on}+\beta^{per}D^{per}+\beta^{ex}D^{ex}+\varepsilon$
+  & $\hat L_h=\hat\beta^{on}_h+\hat\beta^{ex}_h$ \\
+2 Persistence (dose) & $Y_{it}=\alpha_i+\gamma_t+\beta_1 C_{it}+\beta_2 C_{it}^2+\varepsilon$
+  & $\hat\beta_1+2\hat\beta_2 x$ \\
+3 Heterogeneity & $Y_{it}=\alpha_i+\gamma_t+\beta S_{it}+\theta(S_{it}{\times}M_{it})+\phi M_{it}+\varepsilon$
+  & differential $\hat\theta$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\vspace{2pt}
+\footnotesize\noindent
+Estimation in R (\texttt{fixest}). Shock construction:
+\texttt{process\_county\_climate.R}, \texttt{process\_hospital\_panel.R}.
+Persistence helpers: \texttt{transition\_symmetry.R}, \texttt{cumulative\_dose.R}.
+Natural-experiment DiD: \texttt{run\_did\_analysis.R};
+doubly-robust check: \texttt{did\_robustness/02\_doubly\_robust\_did.R}.
+
+\end{document}

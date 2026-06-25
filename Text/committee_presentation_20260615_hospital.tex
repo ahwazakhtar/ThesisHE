@@ -1,0 +1,838 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+% ── Packages ──────────────────────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc, positioning}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{siunitx}
+\usepackage{colortbl}
+
+% ── Colour Palette ────────────────────────────────────────────────────────────
+\definecolor{DeepNavy}{HTML}{2E4057}
+\definecolor{Teal}{HTML}{048A81}
+\definecolor{WarmOrange}{HTML}{E85D04}
+\definecolor{SoftPurple}{HTML}{9D4EDD}
+\definecolor{WarmGray}{HTML}{8A8A8A}
+\definecolor{LightGray}{HTML}{F2F2F2}
+\definecolor{Cream}{HTML}{FFFDF7}
+\definecolor{DeepRed}{HTML}{C1121F}
+\definecolor{Gold}{HTML}{D4A017}
+
+% ── Theme Setup ───────────────────────────────────────────────────────────────
+\usetheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{headline}{}
+\setbeamercolor{background canvas}{bg=Cream}
+\setbeamercolor{frametitle}{fg=DeepNavy,bg=Cream}
+\setbeamerfont{frametitle}{series=\bfseries,size=\large}
+
+\setbeamertemplate{frametitle}{%
+  \vspace*{0.3em}%
+  \insertframetitle%
+  \ifx\insertframesubtitle\empty\else
+    \\[0.1em]{\footnotesize\color{WarmGray}\parbox{\textwidth}{\insertframesubtitle}}%
+  \fi
+  \par\vspace*{0.15em}%
+  \textcolor{Teal}{\rule{\textwidth}{0.5pt}}%
+}
+
+\setbeamertemplate{footline}{%
+  \hfill{\color{WarmGray}\tiny\insertframenumber\hspace{0.5em}}%
+  \vspace{0.3em}%
+}
+
+\setbeamercolor{itemize item}{fg=Teal}
+\setbeamercolor{itemize subitem}{fg=WarmOrange}
+\setbeamertemplate{itemize item}{\small\raisebox{0.15ex}{\textbullet}}
+\setbeamertemplate{itemize subitem}{\scriptsize\raisebox{0.15ex}{\textbullet}}
+
+% ── Custom Macros ─────────────────────────────────────────────────────────────
+\newcommand{\emphcolor}[1]{{\color{WarmOrange}\textbf{#1}}}
+\newcommand{\tealtext}[1]{{\color{Teal}#1}}
+\newcommand{\navytext}[1]{{\color{DeepNavy}#1}}
+\newcommand{\graytext}[1]{{\color{WarmGray}#1}}
+\newcommand{\purpletext}[1]{{\color{SoftPurple}#1}}
+
+\newcommand{\transitionslide}[2]{%
+  \begingroup
+  \setbeamercolor{background canvas}{bg=DeepNavy}
+  \setbeamertemplate{footline}{}
+  \begin{frame}[plain]
+    \begin{tikzpicture}[overlay]
+      \draw[Teal, opacity=0.3, line width=8pt]
+        (-1,-1) -- ++(20,0) -- ++(0,12) -- cycle;
+    \end{tikzpicture}
+    \vspace{1.8cm}
+    \hspace{0.8cm}%
+    {\color{white}\bfseries\LARGE\parbox{13cm}{#1}}\\[0.6em]
+    \hspace{0.8cm}%
+    {\color{Teal}\normalsize\parbox{13cm}{#2}}
+  \end{frame}%
+  \endgroup
+}
+
+% ── Document ──────────────────────────────────────────────────────────────────
+\begin{document}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% Slide 1 — Title
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\begingroup
+\setbeamercolor{background canvas}{bg=DeepNavy}
+\setbeamertemplate{footline}{}
+\begin{frame}[plain]
+  \begin{tikzpicture}[overlay]
+    \node[text=Teal, opacity=0.12, font=\fontsize{140}{140}\selectfont]
+      at (10, 2.5) {\(\sim\)};
+  \end{tikzpicture}
+  \vspace{0.65cm}
+  \hspace{0.6cm}%
+  {\color{white}\bfseries\fontsize{22}{28}\selectfont
+    \parbox{13cm}{Climate Shocks and the Financial\\Health of American Households and Hospitals}}
+  \par\vspace{0.45em}
+  \hspace{0.6cm}%
+  {\color{WarmOrange}\rule{12cm}{2pt}}
+  \par\vspace{0.45em}
+  \hspace{0.6cm}%
+  {\color{Teal}\normalsize Three Papers: Incidence, Persistence, and Inequality}
+  \par\vspace{0.35em}
+  \hspace{0.6cm}%
+  {\color{WarmGray}\small Ahwaz Akhtar \(\cdot\) George Washington University \(\cdot\) June 2026}
+\end{frame}
+\endgroup
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% Slide 2 — Roadmap
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\begin{frame}{Overview}
+  \framesubtitle{Three papers on the financial consequences of climate shocks across the health system --- households and the hospitals that serve them --- on one U.S. panel}
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \textbf{\tealtext{Three papers}}
+      \begin{itemize}\itemsep0.18em
+        \item \emphcolor{Incidence} --- do climate shocks raise the financial burden of health, for households and hospitals?
+        \item \emphcolor{Persistence} --- do the effects reverse, scar, or compound?
+        \item \emphcolor{Inequality} --- does structural vulnerability amplify them?
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \textbf{\tealtext{Empirical approach}}
+      \begin{itemize}\itemsep0.18em
+        \item Two-way fixed effects with distributed lags; local projections for dynamics
+        \item Natural-experiment and Callaway--Sant'Anna difference-in-differences against never-exposed counties
+        \item Onset/persist/exit symmetry; cumulative-dose; hazard \(\times\) exposure \(\times\) vulnerability index
+        \item Estimates mirrored at state and county level
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \vspace{0.2em}
+  \begin{center}
+    \graytext{\scriptsize U.S. panel, 2011--2023: $\sim$3{,}155 counties and 51 states $\times$ 13 years.}
+  \end{center}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% Slide 3 — The reorganization
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\begin{frame}{Three Papers: Incidence, Persistence, Inequality}
+  \framesubtitle{Incidence (how much) \(\to\) Persistence (how long) \(\to\) Inequality (who bears it)}
+  \footnotesize
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.10\linewidth}>{\raggedright\arraybackslash}p{0.24\linewidth}>{\raggedright\arraybackslash}p{0.27\linewidth}>{\raggedright\arraybackslash}p{0.31\linewidth}@{}}
+    \rowcolor{DeepNavy}
+    \textcolor{white}{\textbf{Paper}} &
+    \textcolor{white}{\textbf{Question}} &
+    \textcolor{white}{\textbf{Design}} &
+    \textcolor{white}{\textbf{Headline}} \\
+    \rowcolor{Teal!10}
+    \textbf{1. Deferred Costs} \graytext{(Incidence)}
+      & Do climate shocks raise the financial burden of health?
+      & Distributed-lag FE; never-exposed DiD; local projections
+      & Cold (lag 1) and drought (lag 2) raise medical debt and premiums via an income channel \\
+    \textbf{2. Scarring \& Compounding} \graytext{(Persistence)}
+      & Do the costs reverse, scar, or compound?
+      & Onset/persist/exit symmetry; cumulative-dose; Callaway--Sant'Anna
+      & Drought debt \emphcolor{scars}; cold employment \emphcolor{compounds}; heat \emphcolor{saturates} \\
+    \rowcolor{Teal!10}
+    \textbf{3. Unequal Weather} \graytext{(Inequality)}
+      & Who bears the cost?
+      & Hazard \(\times\) exposure \(\times\) vulnerability (CDC SVI); EJ interactions
+      & Harm to income, jobs, premiums is \emphcolor{amplified} where vulnerability is highest \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.3em}
+  \begin{center}
+    \graytext{\scriptsize Each paper is self-contained; all three share the same 2011--2023 panel and identification toolkit.}
+  \end{center}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% Slide 4 — Committee feedback closed
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\begin{frame}{Econometric Robustness and Methodological Additions}
+  \framesubtitle{Five analyses extend the core specification; each addresses a point raised in prior review}
+  \footnotesize
+  \renewcommand{\arraystretch}{1.25}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.50\linewidth}c@{}}
+    \rowcolor{DeepNavy}
+    \textcolor{white}{\textbf{Analysis}} &
+    \textcolor{white}{\textbf{Result}} &
+    \textcolor{white}{\textbf{Paper}} \\
+    \rowcolor{Teal!10}
+    Random effects (Hausman) & Rejected for all 11 outcomes (\(p<10^{-9}\)); fixed effects retained & 1 \\
+    Post-exit / transition dynamics & Onset/persist/exit local projections; drought income partially scars & 1, 2 \\
+    \rowcolor{Teal!10}
+    Natural-experiment DiD & 2012 drought 2$\times$2 and Callaway--Sant'Anna vs.\ never-exposed counties & 1, 2 \\
+    Propagation pathways & 18 references and descriptive figures, one set per channel & all \\
+    \rowcolor{Teal!10}
+    Humidity (PRISM \texttt{tdmean}) & Acquired and aggregated to state and county; headline findings stable & 2 \\
+    \bottomrule
+  \end{tabular}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% CONCEPTUAL MODEL & HYPOTHESES
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\transitionslide{Conceptual Model and Hypotheses}{What the propagation-pathway literature predicts ---\\stated \emph{ex ante}, before consulting our estimates}
+
+\begin{frame}{Conceptual Model: From Climate Shock to Health-Financial Outcome}
+  \framesubtitle{A lagged causal chain, moderated by vulnerability --- the three papers interrogate three parts of it}
+  \begin{columns}[T]
+    \begin{column}{0.63\textwidth}
+      \vspace{0.5em}
+      \resizebox{\textwidth}{!}{%
+      \begin{tikzpicture}[
+        box/.style={draw=DeepNavy, rounded corners=3pt, fill=LightGray,
+                    minimum width=3.1cm, minimum height=1.35cm, align=center, font=\scriptsize},
+        cause/.style={draw=DeepNavy, rounded corners=3pt, fill=Teal!25,
+                    minimum width=3.1cm, minimum height=1.35cm, align=center, font=\scriptsize\bfseries}]
+        \node[cause] (haz)  at (0,0)    {Climate shock\\[1pt]\scriptsize cold \(\cdot\) heat\\\scriptsize drought \(\cdot\) AQI};
+        \node[box]   (mech) at (4.3,0)  {Mechanism\\[1pt]\scriptsize income \(\downarrow\) \(\cdot\) care deferral\\\scriptsize utilization shift};
+        \node[box, fill=Gold!30] (out) at (8.6,0) {Financial outcome\\[1pt]\scriptsize debt \(\cdot\) premiums\\\scriptsize bad debt \(\cdot\) spending};
+        \node[box, fill=SoftPurple!25] (vul) at (4.3,-2.7) {Structural vulnerability\\\scriptsize (CDC SVI)};
+        \draw[->, WarmOrange, very thick] (haz) -- (mech);
+        \draw[->, WarmOrange, very thick] (mech) -- (out);
+        \draw[->, SoftPurple, thick, dashed] (vul) -- (mech.south);
+        \draw[->, SoftPurple, thick, dashed] (vul.east) to[bend right=20] (out.south);
+        \node[font=\scriptsize\itshape, text=WarmGray] at (6.45,0.78) {lag 1--2 yr};
+        \node[font=\scriptsize\itshape, text=SoftPurple] at (7.1,-2.15) {amplifies};
+        \node[font=\scriptsize\itshape, text=Teal, align=center] at (8.6,1.55) {over time:\\scar? compound?};
+      \end{tikzpicture}}
+    \end{column}
+    \begin{column}{0.34\textwidth}
+      \footnotesize
+      \textbf{\tealtext{Three questions, three papers}}
+      \begin{itemize}\itemsep0.30em
+        \item \textbf{Paper 1 --- the chain:} sign and lag of shock \(\to\) outcome \graytext{(orange arrows)}
+        \item \textbf{Paper 2 --- over time:} does the effect reverse, scar, or compound? \graytext{(teal)}
+        \item \textbf{Paper 3 --- moderation:} does \purpletext{vulnerability} amplify it? \graytext{(purple)}
+      \end{itemize}
+      \vspace{0.2em}
+      \graytext{\scriptsize One model; each paper isolates a different margin of the same chain.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Proposed Mechanism Pathways and Supporting Evidence}
+  \framesubtitle{Each headline channel is anchored to peer-reviewed evidence on its direction and time-scale}
+  \scriptsize
+  \renewcommand{\arraystretch}{1.3}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.19\linewidth}>{\raggedright\arraybackslash}p{0.46\linewidth}>{\raggedright\arraybackslash}p{0.29\linewidth}@{}}
+    \rowcolor{DeepNavy}
+    \textcolor{white}{\textbf{Channel}} &
+    \textcolor{white}{\textbf{Mechanism}} &
+    \textcolor{white}{\textbf{Key references}} \\
+    \rowcolor{Teal!10}
+    Heat \(\to\) delayed care
+      & Acute heat defers non-urgent ambulatory visits; substitution into later high-acuity ED/inpatient raises cost with a lag
+      & Sun et al.\ '21; White '17; Karlsson--Ziebarth '18 \\
+    Cold \(\to\) utilization shift
+      & Respiratory/cardiac demand rises on impact; heating costs crowd out health spending (``heat-or-eat''), raising missed payments
+      & Desch\^enes--Moretti '09; Gasparrini et al.\ '15; Andrews et al.\ '17 \\
+    \rowcolor{Teal!10}
+    Drought \(\to\) income \(\to\) debt
+      & Farm and adjacent income falls; local consumption and ability-to-pay erode over 1--3 years --- an income, not biological, channel
+      & Hornbeck '12; Burke--Hsiang--Miguel '15; Currie--Greenstone--Meckel '17 \\
+    AQI \(\to\) respiratory/cardiac
+      & PM\(_{2.5}\)/ozone raise acute respiratory and cardiovascular events, feeding ED/inpatient utilization and cost
+      & Deryugina et al.\ '19; Schlenker--Walker '16; Currie--Walker '11 \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.4em}
+  \begin{center}
+    \graytext{\scriptsize 18 references across the four channels; full set in the propagation-pathways review.}
+  \end{center}
+\end{frame}
+
+\begin{frame}{Hypotheses: What Existing Literature Predicts}
+  \framesubtitle{Direction and time-scale committed \emph{ex ante} from the propagation-pathway literature --- the ``where should we be surprised?'' lens}
+  \scriptsize
+  \renewcommand{\arraystretch}{1.15}
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.36\linewidth}>{\raggedright\arraybackslash}p{0.36\linewidth}>{\raggedright\arraybackslash}p{0.22\linewidth}@{}}
+    \rowcolor{DeepNavy}
+    \textcolor{white}{\textbf{Pathway}} &
+    \textcolor{white}{\textbf{Predicted effect}} &
+    \textcolor{white}{\textbf{Time-scale}} \\
+    \rowcolor{Teal!10}
+    Drought \(\to\) income \(\to\) debt & Debt \emphcolor{\(\uparrow\)} (via income \(\downarrow\)) & lag 1--2 yr \\
+    Cold \(\to\) utilization shift & Debt \& premiums \emphcolor{\(\uparrow\)} & contemp.--lag 1 \\
+    \rowcolor{Teal!10}
+    Heat \(\to\) delayed care & Spending \emphcolor{\(\uparrow\)} (deferred) & lag 1--2 yr \\
+    AQI \(\to\) respiratory/cardiac & Utilization \emphcolor{\(\uparrow\)} & within-year \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.45em}
+  \begin{columns}[T]
+    \begin{column}{0.60\textwidth}
+      \footnotesize \textbf{\tealtext{Structural hypotheses}}
+      \begin{itemize}\itemsep0.06em
+        \item[\textbf{H1}] \textbf{Incidence:} shocks raise the financial burden of health with a 1--2 yr lag (income + utilization channels)
+        \item[\textbf{H2}] \textbf{Persistence:} drought \emph{scars} (Hornbeck long-run); cold expected \emph{acute} (Desch\^enes-Moretti) --- test if cumulative exposure compounds
+        \item[\textbf{H3}] \textbf{Inequality:} structural vulnerability \emph{amplifies} harm (EJ / Lancet Countdown)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.38\textwidth}
+      \footnotesize \textbf{\tealtext{Ex-ante vs.\ realized}}
+      \begin{itemize}\itemsep0.06em
+        \item Drought lag-2, cold lag-1 \(\to\) debt: \tealtext{as predicted}
+        \item Long-run cold \emph{compounding}: \emphcolor{stronger than predicted}
+        \item Humidity \(\to\) debt: \graytext{no prior}
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% PAPER 1
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\transitionslide{Paper 1 --- Deferred Costs}{Incidence: climate shocks raise the financial burden of health --- on households and hospitals,\\with a one- to two-year lag}
+
+% ── Paper 1, slide 1: prior panel evidence
+\begin{frame}{Paper 1: Prior Evidence from the Panel}
+  \framesubtitle{Two-way fixed effects with distributed lags, state and county; selected significant coefficients}
+  \begin{columns}[T]
+    \begin{column}{0.55\textwidth}
+      \scriptsize
+      \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.63\linewidth}rr@{}}
+        \toprule
+        Coefficient & Estimate & \\
+        \midrule
+        \multicolumn{3}{l}{\textit{State}} \\
+        Employer premium: Severe Drought (lag 0/1) & $+\$86$ / $+\$65$ & \emphcolor{**} \\
+        Debt share: Cold Shock (lag 1)             & $+0.0135$ & \emphcolor{**} \\
+        Total PC health exp: Cold Shock ($h{=}0$)  & $+\$205$  & \emphcolor{**} \\
+        Medicaid PE: Severe Drought (lag 1)        & $-\$525$  & \emphcolor{***} \\
+        \midrule
+        \multicolumn{3}{l}{\textit{County}} \\
+        Benchmark Silver: High HDD ($h{=}0$)       & $+\$22$   & \emphcolor{***} \\
+        Debt median (PW): High HDD ($h{=}0$)       & $+\$31$   & \emphcolor{**}  \\
+        Hospital bad debt: High HDD ($h{=}0$)      & $+\$5.3$  & \emphcolor{***} \\
+        Med HH income: Z\_Temp ($h{=}0$, heat)     & $-\$88$   & \emphcolor{***} \\
+        PCPI: PDSI (lag 2)                         & $-\$113$  & \emphcolor{**}  \\
+        \bottomrule
+      \end{tabular}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \footnotesize
+      \textbf{\tealtext{What this establishes}}
+      \begin{itemize}\itemsep0.12em
+        \item Cold and drought raise medical debt and premiums with a \emphcolor{1--2 year lag}
+        \item Transmission runs through \emphcolor{household income}, not systemic spending
+        \item State and county estimates agree in direction
+      \end{itemize}
+      \vspace{0.3em}
+      \textbf{\tealtext{What it cannot settle}}
+      \begin{itemize}\itemsep0.12em
+        \item Within-unit FE identifies an \emph{association}
+        \item Recurring shocks confound a clean before/after comparison
+        \item Motivates a sharp natural experiment
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \vspace{0.1em}
+  \begin{center}\graytext{\scriptsize \emphcolor{**}\(p{<}0.05\), \emphcolor{***}\(p{<}0.01\); dollar outcomes in \$2023.}\end{center}
+\end{frame}
+
+% ── Paper 1, slide 2: 2012 context + design
+\begin{frame}{The 2012 Midwest Drought: Context for a Natural Experiment}
+  \framesubtitle{One of the most severe and extensive U.S. droughts in decades --- a sharp, plausibly exogenous shock}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \footnotesize
+      \textbf{\tealtext{The event}}
+      \begin{itemize}\itemsep0.14em
+        \item Severe drought across the Corn Belt and Great Plains; widespread crop losses and federal disaster declarations
+        \item \emphcolor{139 counties} record their \emph{first} extreme-drought event (PDSI \(\le -4\)) in 2012 --- a 4.4\% onset rate
+        \item A documented event with a defined geography and timing
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \footnotesize
+      \textbf{\tealtext{Difference-in-differences design}}\\[0.25em]
+      \(Y_{it} = \alpha_i + \gamma_t + \tau\,(\text{Treated}_i \times \text{Post}_t) + \varepsilon_{it}\)
+      \begin{itemize}\itemsep0.12em
+        \item \emphcolor{Treated:} first-ever extreme drought \(=\) 2012 (139 counties)
+        \item \emphcolor{Control:} \emphcolor{never-exposed} counties, 2011--2023 (2{,}534)
+        \item Cluster: state; event-study reference year \(t=-1\)
+      \end{itemize}
+      \vspace{0.25em}
+      \graytext{\scriptsize A sharp event against never-exposed controls closes the recurring-shock loophole that within-county lags cannot.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ── Paper 1, slide 3: results, prior + experiment
+\begin{frame}{Paper 1: What the Natural Experiment Adds}
+  \framesubtitle{Treated vs.\ never-exposed counties: income and employment fall, accumulating over the event window}
+  \begin{columns}[T]
+    \begin{column}{0.54\textwidth}
+      \begin{center}
+        \textbf{\tealtext{\small 2012 Drought \(\to\) Civilian Employed}}\\[0.1em]
+        \includegraphics[width=\textwidth, height=0.58\textheight, keepaspectratio]%
+          {../Analysis/plots/did/eventstudy_Drought_2012_Civilian_Employed.png}
+      \end{center}
+      \vspace{-0.3em}
+      \graytext{\scriptsize Near-zero pre-period; post-event loss accumulates ($\sim$-100 at $t{=}1$ to $\sim$-1{,}100 at $t{=}3$).}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \scriptsize
+      \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.52\linewidth}rr@{}}
+        \toprule
+        2$\times$2 ATT & Estimate & \(p\) \\
+        \midrule
+        \emphcolor{PCPI Real}         & \emphcolor{\(-\$1{,}311\)} & \emphcolor{0.027} \\
+        \emphcolor{Civilian Employed} & \emphcolor{\(-2{,}053\)}   & \emphcolor{0.0001} \\
+        Med HH Income Real            & \(-\$992\)  & 0.24 \\
+        Medical Debt Share            & \(-0.0062\) & 0.49 \\
+        \bottomrule
+      \end{tabular}
+      \vspace{0.3em}
+      \footnotesize
+      \textbf{\tealtext{Prior \(+\) experiment}}
+      \begin{itemize}\itemsep0.08em
+        \item Panel: drought/cold \(\to\) debt and premiums (lagged, income channel)
+        \item Experiment: \emphcolor{causal} income and employment loss vs.\ never-exposed
+        \item Debt is null in the 2$\times$2 (averages over post years; LP peaks at \(h{=}1\)--2)
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ── Paper 1, supply-side companion (Chapter 2): hospital incidence
+\begin{frame}{Paper 1, Supply Side: Climate Shocks Push Unpaid Bills Onto Hospitals}
+  \framesubtitle{The same shocks that raise household medical debt land on provider balance sheets --- hospital (CCN) \(\times\) year panel (NASHP HCT), 59{,}896 hospital-years, hospital + year FE}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \footnotesize
+      \textbf{\tealtext{Where the household side showed debt, the hospital side shows uncompensated care}}
+      \vspace{0.25em}
+      \scriptsize
+      \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.40\linewidth}rr@{}}
+        \toprule
+        Shock \(\to\) uncompensated care & Effect & \(p\) \\
+        \midrule
+        \rowcolor{Teal!10}
+        Cold (HDD) \(\to\) \$ uncomp.\ care & \emphcolor{\(+\$1.55\)M} & 0.022 \\
+        Cold (HDD) \(\to\) \% of NPR        & \(+0.53\) pp & 0.097 \\
+        \rowcolor{Teal!10}
+        Heat (CDD) \(\to\) \% of NPR        & \emphcolor{\(+1.22\) pp} & 0.063 \\
+        Drought \(\to\) \% of NPR (measured) & \(-1.68\) pp & 0.032 \\
+        \bottomrule
+      \end{tabular}
+      \vspace{0.35em}
+      \begin{itemize}\itemsep0.10em
+        \item Temperature shocks push \emph{unpaid bills} onto hospital ledgers --- the provider mirror of Paper 1's household debt channel
+        \item Average operating / net margins \emph{not} moved: the strain is absorbed through uncompensated care, not reported margin
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \begin{center}
+        \includegraphics[width=\textwidth, height=0.52\textheight, keepaspectratio]%
+          {../Analysis/plots/hospital/incidence_High_HDD_Hosp_UncompCare_Real.png}
+      \end{center}
+      \vspace{-0.3em}
+      \graytext{\scriptsize Cold-shock distributed-lag effect on uncompensated care (\$2023); drought's negative sign is a measurement caveat.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% PAPER 2
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\transitionslide{Paper 2 --- Scarring and Compounding}{Persistence: do the costs reverse, scar, or compound?\\Onset/persist/exit symmetry, cumulative-dose, chronic-exposure cohorts}
+
+% ── Paper 2, slide 1: from levels to dynamics
+\begin{frame}{Paper 2: From Levels to Dynamics}
+  \framesubtitle{Level effects show shocks raise costs; post-exit local projections motivate the persistence question}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \footnotesize
+      \textbf{\tealtext{What we knew}}
+      \begin{itemize}\itemsep0.14em
+        \item Cold and drought raise debt and premiums (Paper 1; levels and lags)
+        \item Post-exit LP: drought income \emph{partially scars} --- \emphcolor{$+\$1{,}044$} PCPI at $h{=}2$ ($p=0.0002$)
+        \item Post-exit LP: cold-shock exit brings \emph{immediate} hospital-cost relief ($-3.1$ at $h{=}0$) --- no within-county scarring
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \footnotesize
+      \textbf{\tealtext{Open questions}}
+      \begin{itemize}\itemsep0.14em
+        \item Is the cost of \emph{entering} a shock mirrored by the benefit of \emph{leaving} it? (symmetry)
+        \item Does \emph{cumulative} exposure compound, or does the effect saturate?
+        \item Does the answer differ by hazard?
+      \end{itemize}
+      \vspace{0.25em}
+      \graytext{\scriptsize The level/lag specification cannot separate a reversible shock from a scarring or compounding one.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ── Paper 2, slide 2: two designs for persistence
+\begin{frame}{Paper 2: Two Designs for Persistence}
+  \framesubtitle{Onset/persist/exit symmetry, and a cumulative-shock-years dose-response}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \footnotesize
+      \textbf{\tealtext{Transition symmetry}}
+      \begin{itemize}\itemsep0.14em
+        \item Decompose each shock into \emphcolor{onset} ($0{\to}1$), \emphcolor{persist} ($1{\to}1$), \emphcolor{exit} ($1{\to}0$) vs.\ never-transitioned
+        \item Estimate the three jointly by local projection, $h{=}0\ldots3$
+        \item Test \emphcolor{$\beta_\text{onset} + \beta_\text{exit} = 0$}: a nonzero sum is hysteresis (scarring or over-relief)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \footnotesize
+      \textbf{\tealtext{Cumulative-dose response}}
+      \begin{itemize}\itemsep0.14em
+        \item Count \emphcolor{cumulative shock-years} per county (monotone, non-resetting)
+        \item Regress outcomes on linear, quadratic, and binned dose ($1$--$3$/$4$--$6$/$7$--$9$/$10{+}$)
+        \item Compare the marginal effect of the \emphcolor{10th} shock-year to the \emphcolor{1st}
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \vspace{0.3em}
+  \begin{center}\graytext{\scriptsize Both estimated with county + year fixed effects, state-clustered; cross-validated against a Callaway--Sant'Anna design.}\end{center}
+\end{frame}
+
+% ── Paper 2, slide 3: results synthesis (three profiles)
+\begin{frame}{Paper 2: Three Hazards, Three Persistence Profiles}
+  \framesubtitle{Drought scars (onset/exit asymmetry); cold compounds and heat saturates (cumulative dose)}
+  \begin{columns}[T]
+    \begin{column}{0.33\textwidth}
+      \begin{center}
+        \textbf{\tealtext{\scriptsize Drought --- scars}}\\[0.15em]
+        \includegraphics[width=\textwidth, height=0.50\textheight, keepaspectratio]%
+          {../Analysis/plots/delta_transition_compare/transition_Drought_Medical_Debt_Share.png}
+      \end{center}
+      \graytext{\tiny Onset and exit both raise debt at $h{=}2$ --- not undone on exit.}
+    \end{column}
+    \begin{column}{0.33\textwidth}
+      \begin{center}
+        \textbf{\tealtext{\scriptsize Cold --- compounds}}\\[0.15em]
+        \includegraphics[width=\textwidth, height=0.50\textheight, keepaspectratio]%
+          {../Analysis/plots/cumulative_dose/dose_HDD_Medical_Debt_Share.png}
+      \end{center}
+      \graytext{\tiny Debt share rises with each cumulative cold-year.}
+    \end{column}
+    \begin{column}{0.33\textwidth}
+      \begin{center}
+        \textbf{\tealtext{\scriptsize Heat --- saturates}}\\[0.15em]
+        \includegraphics[width=\textwidth, height=0.50\textheight, keepaspectratio]%
+          {../Analysis/plots/cumulative_dose/dose_CDD_Medical_Debt_Share.png}
+      \end{center}
+      \graytext{\tiny Marginal debt effect flattens and reverses by year 10.}
+    \end{column}
+  \end{columns}
+  \vspace{0.15em}
+  \begin{center}
+    \footnotesize \tealtext{Headline:} persistence is shock-specific --- drought onset/exit asymmetry $+0.018$ ($p{=}0.0015$); cumulative cold raises debt to $+1.5$ pp at $10{+}$ years (and compounds employment loss, $-5{,}668$ jobs); heat reverses. Robust to humidity, demographics, p90.
+  \end{center}
+\end{frame}
+
+% ── Paper 2, supply-side companion (Chapter 2): hospital persistence
+\begin{frame}{Paper 2, Supply Side: Drought Scars Hospital Balance Sheets}
+  \framesubtitle{The county-level ``drought scars, temperature reverses'' dynamic reappears on hospital finances --- same onset/exit symmetry and cumulative-dose tools, hospital + year FE}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \footnotesize
+      \textbf{\tealtext{Onset \(+\) exit asymmetry (\(h=0\))}}
+      \vspace{0.2em}
+      \scriptsize
+      \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.46\linewidth}rr@{}}
+        \toprule
+        Drought \(\to\) outcome & Asymmetry & \(p\) \\
+        \midrule
+        \rowcolor{Teal!10}
+        Uncompensated care, \%NPR & \emphcolor{\(-0.013\)} & 0.012 \\
+        Operating margin          & \emphcolor{\(+0.027\)} & 0.006 \\
+        \bottomrule
+      \end{tabular}
+      \vspace{0.35em}
+      \begin{itemize}\itemsep0.12em
+        \item Drought onset and exit \emph{do not cancel} --- hysteresis on both hospital outcomes (\emphcolor{scarring}), echoing the county debt scar in Paper 2
+        \item Cold / heat shocks are \emph{symmetric} (reversible), as on the household side
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \footnotesize
+      \textbf{\tealtext{Cumulative exposure}}
+      \begin{itemize}\itemsep0.12em
+        \item Operating-margin dose-response is mildly \emph{positive} (10+ vs 1--3 yrs \(+0.018\), \(p=0.033\))
+        \item Read as \emphcolor{survivorship / adaptation} in an unbalanced panel --- \emph{not} margin erosion
+        \item The supply-side persistence story is drought \emph{hysteresis}, not dose-driven decline
+      \end{itemize}
+      \vspace{0.3em}
+      \graytext{\scriptsize Same ``drought scars, temperature reverses'' pattern the county delta analysis found in Paper 2, now on hospital balance sheets.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% PAPER 3
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\transitionslide{Paper 3 --- Unequal Weather}{Inequality: who bears the cost?\\A hazard \(\times\) exposure \(\times\) vulnerability index (CDC SVI)}
+
+% ── Paper 3, slide 1: from average effects to their distribution
+\begin{frame}{Paper 3: From Average Effects to Their Distribution}
+  \framesubtitle{Papers 1--2 estimate population averages; who bears the cost is a separate question}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \footnotesize
+      \textbf{\tealtext{What the averages miss}}
+      \begin{itemize}\itemsep0.14em
+        \item Papers 1--2 estimate \emph{population-average} effects of each shock
+        \item They do not identify \emphcolor{which communities} absorb the cost
+        \item A given shock may be far more costly where households are already fragile
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \footnotesize
+      \textbf{\tealtext{Hypothesis (environmental justice)}}
+      \begin{itemize}\itemsep0.14em
+        \item Structural vulnerability \emphcolor{amplifies} climate harm
+        \item Grounded in the environmental-justice and Lancet Countdown vulnerability-indicator literature
+        \item Prediction: the same shock costs more at higher vulnerability
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ── Paper 3, slide 2: the exposure index and interaction design
+\begin{frame}{Paper 3: A Hazard \(\times\) Exposure \(\times\) Vulnerability Index}
+  \framesubtitle{Climate hazard interacted with the CDC Social Vulnerability Index; estimates mirrored at state and county}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \footnotesize
+      \textbf{\tealtext{Construction}}
+      \begin{itemize}\itemsep0.14em
+        \item Combine \emphcolor{hazard} (shock) $\times$ \emphcolor{exposure} (population) $\times$ \emphcolor{vulnerability} (CDC SVI percentile)
+        \item Composite scalar index, standardized
+        \item Lancet-style \emphcolor{person-years} of extreme-temperature exposure
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \footnotesize
+      \textbf{\tealtext{Interaction design}}
+      \begin{itemize}\itemsep0.14em
+        \item Estimate \emphcolor{Shock $\times$ SVI} in the fixed-effects model
+        \item Recover the marginal shock effect at \emphcolor{low (p25)} vs.\ \emphcolor{high (p75)} vulnerability
+        \item Mirror every estimate at state and county level
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ── Paper 3, slide 3: results synthesis
+\begin{frame}{Paper 3: Structural Vulnerability Amplifies Climate Harm}
+  \framesubtitle{Shock \(\times\) CDC Social Vulnerability Index; marginal effect at low (p25) vs.\ high (p75) vulnerability}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \scriptsize
+      \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.34\linewidth}rrr@{}}
+        \toprule
+        Shock \(\to\) outcome & Low SVI & High SVI & \(p_{\text{int}}\) \\
+        \midrule
+        \rowcolor{Teal!10}
+        Heat \(\to\) employment   & \(+878\)  & \emphcolor{\(-184\)}   & 0.001 \\
+        Cold \(\to\) PCPI         & \(-\$56\) & \emphcolor{\(-\$472\)} & 0.056 \\
+        \rowcolor{Teal!10}
+        Drought (lag 2) \(\to\) premium & \(-\$54\) & \emphcolor{\(+\$16\)} & 0.001 \\
+        \bottomrule
+      \end{tabular}
+      \vspace{0.3em}
+
+      {\scriptsize\graytext{Separately, the \emph{Composite Heat Exposure Index} --- a single standardized index, with no SVI split --- lowers median income by \emphcolor{\(-\$435\)/SD} (\(p=0.0002\)): the index predicts harm on average.}}
+      \vspace{0.35em}
+      \begin{itemize}\itemsep0.10em
+        \item In vulnerable counties heat \emphcolor{costs} jobs; cold's income hit is \(\sim\)8\(\times\) larger; drought pushes premiums \emph{up}
+        \item Lancet-style exposure: \(\sim\)70--105M heat person-years/yr (3--5\(\times\) cold)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \begin{center}
+        \includegraphics[width=\textwidth, height=0.60\textheight, keepaspectratio]%
+          {../Analysis/plots/exposure_index/interaction_Civilian_Employed.png}
+      \end{center}
+      \vspace{-0.3em}
+      \graytext{\scriptsize Heat's employment effect at low vs.\ high vulnerability --- it flips from gain to loss.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ── Paper 3, supply-side companion (Chapter 2): provider heterogeneity
+\begin{frame}{Paper 3, Supply Side: Strain Concentrates in Safety-Net Hospitals}
+  \framesubtitle{The provider analogue of the SVI amplification: where high-SVI \emph{counties} bore more household harm, high-Medicaid \emph{safety-net hospitals} bear more heat-driven uncompensated care --- Shock \(\times\) moderator, hospital + year FE}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \scriptsize
+      \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.42\linewidth}rr@{}}
+        \toprule
+        Shock \(\times\) moderator \(\to\) uncomp.\ \%NPR & \(p_{\text{int}}\) & Concentrates? \\
+        \midrule
+        \rowcolor{Teal!10}
+        Heat (CDD) \(\times\) Safety-net & 0.021 & \emphcolor{Yes} \\
+        Cold (HDD) \(\times\) Safety-net & 0.011 & reversed \\
+        Cold (HDD) \(\times\) Medicaid exp. & \(<0.001\) & expansion \\
+        Drought \(\times\) Medicaid exp. & \(<0.001\) & expansion \\
+        \bottomrule
+      \end{tabular}
+      \vspace{0.35em}
+      \begin{itemize}\itemsep0.10em
+        \item \emphcolor{Heat-driven} uncompensated care concentrates in \emph{safety-net} hospitals --- those least able to absorb it
+        \item Amplification is shock- and outcome-specific (as on the household side), \emph{not} blanket
+        \item Medicaid-expansion interactions are strong but point (surprisingly) to \emph{expansion} states
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.44\textwidth}
+      \begin{center}
+        \includegraphics[width=\textwidth, height=0.60\textheight, keepaspectratio]%
+          {../Analysis/plots/hospital/heterogeneity_SafetyNet_Hosp_UncompCare_PctNPR.png}
+      \end{center}
+      \vspace{-0.3em}
+      \graytext{\scriptsize Marginal shock effect on uncompensated care at non-safety-net vs.\ safety-net hospitals.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Credit-Bureau Medical Debt: Measurement Issues}
+  \framesubtitle{Income, employment, and premium results are robust; the medical-debt outcome is sensitive to how debt is recorded}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \footnotesize
+      \textbf{\tealtext{Pattern}}
+      \begin{itemize}\itemsep0.12em
+        \item Debt response concentrates in \emph{less}-vulnerable counties
+        \item Sign \emphcolor{reverses} between county and state aggregation
+      \end{itemize}
+      \vspace{0.2em}
+      \textbf{\tealtext{Interpretation}}
+      \begin{itemize}\itemsep0.12em
+        \item Credit-bureau debt requires insurance, billed encounters, a credit file
+        \item Higher-uninsurance areas record less \emph{measured} debt
+        \item Consistent with a recording artifact, not absence of harm
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \textbf{\tealtext{Cross-level evidence}}\\[0.2em]
+      \footnotesize
+      \begin{itemize}\itemsep0.12em
+        \item Estimates mirrored: humidity \(\to\) county, SVI \(\to\) state, demographics \(\to\) state
+        \item Income, employment, and premium effects \emphcolor{replicate} across aggregation
+        \item Only medical debt is aggregation-sensitive
+      \end{itemize}
+      \vspace{0.3em}
+      \graytext{\scriptsize The real-economy outcomes carry the inequality result; the debt outcome is reported with the recording caveat.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% Humidity closed
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\begin{frame}{Humidity (PRISM \texttt{tdmean}) Does Not Overturn the Findings}
+  \framesubtitle{Mean dew point added as a control at state and county level; headline coefficients are stable}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \footnotesize
+      \textbf{\tealtext{Procedure}}
+      \begin{itemize}\itemsep0.12em
+        \item PRISM annual \texttt{tdmean} (mean dew point), 2009--2025
+        \item Area-weighted to \emphcolor{state and county} polygons
+        \item Added as a control; headlines compared with vs.\ without humidity on a constant sample
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \footnotesize
+      \textbf{\tealtext{Result}}
+      \begin{itemize}\itemsep0.12em
+        \item State: cold (lag 1) \(\to\) medical debt stable, \(0.0136 \to 0.0137\)
+        \item County: cold \(\to\) hospital bad debt and premiums essentially unchanged
+        \item Humidity itself predicts medical debt (positive)
+      \end{itemize}
+      \vspace{0.3em}
+      \graytext{\scriptsize The drought lag-2 and cold lag-1 results are not driven by humidity confounding.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% Where things stand / next
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\begin{frame}{Summary}
+  \framesubtitle{Findings across the three papers, and open issues}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \textbf{\tealtext{Findings}}
+      \begin{itemize}\itemsep0.16em
+        \item \emphcolor{Incidence:} cold (lag 1) and drought (lag 2) raise medical debt and premiums, via a household income channel
+        \item \emphcolor{Persistence:} drought debt scars; cold employment compounds with cumulative exposure; heat saturates
+        \item \emphcolor{Inequality:} income, employment, and premium harm is amplified where structural vulnerability is highest
+        \item \emphcolor{Supply side (Ch.\ 2):} each paper has a hospital companion --- temperature shocks raise uncompensated care, drought scars margins, and heat strain concentrates in safety-net hospitals
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \textbf{\tealtext{Open issues}}
+      \begin{itemize}\itemsep0.16em
+        \item Credit-bureau medical debt is measurement-sensitive
+        \item Cumulative-CDD difference-in-differences carries a north/south regional confound --- suggestive only
+        \item Multiple testing: headline cells survive Bonferroni correction within shock
+      \end{itemize}
+      \vspace{0.35em}
+      \graytext{\scriptsize Findings are consistent across state and county aggregation throughout.}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% Closing
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\begingroup
+\setbeamercolor{background canvas}{bg=DeepNavy}
+\setbeamertemplate{footline}{}
+\begin{frame}[plain]
+  \begin{tikzpicture}[overlay]
+    \node[text=Teal, opacity=0.12, font=\fontsize{140}{140}\selectfont]
+      at (10, 2.5) {?};
+  \end{tikzpicture}
+  \vspace{2.4cm}
+  \hspace{0.8cm}%
+  {\color{white}\bfseries\fontsize{32}{36}\selectfont
+    \parbox{13cm}{Thank you.}}
+  \par\vspace{0.6em}
+  \hspace{0.8cm}%
+  {\color{WarmOrange}\rule{12cm}{2pt}}
+  \par\vspace{0.6em}
+  \hspace{0.8cm}%
+  {\color{Teal}\Large Discussion and questions}
+\end{frame}
+\endgroup
+
+\end{document}

@@ -1,0 +1,298 @@
+% ======================================================================
+%  REACH Center Climate and Health Research Day
+%  Poster: Climate Swings, Sticky Costs
+%  Author: Ahwaz Akhtar (George Washington University, ahwaz@gwu.edu)
+%  Format: 48 in x 36 in (landscape), US academic standard
+%  Compile: pdflatex reach_poster.tex  (twice if labels are added later)
+% ======================================================================
+
+\documentclass[final,t]{beamer}
+
+% --- Poster size: 48 in = 121.92 cm, 36 in = 91.44 cm ---
+\usepackage[orientation=landscape,size=custom,width=121.92,height=91.44,scale=1.22]{beamerposter}
+
+% --- Fonts & typography ---
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{lmodern}
+\usepackage{helvet}
+\renewcommand{\familydefault}{\sfdefault}
+\usepackage{microtype}
+
+% --- Graphics & layout ---
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage{tabularx}
+\usepackage{xcolor}
+\usepackage{tcolorbox}
+\tcbuselibrary{skins,breakable}
+\usepackage{multicol}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{ragged2e}
+
+% ======================================================================
+%  COLOR PALETTE  (George Washington University)
+% ======================================================================
+\definecolor{gwblue}{HTML}{033C5A}   % GWU primary
+\definecolor{gwbuff}{HTML}{AC935E}   % GWU secondary
+\definecolor{accent}{HTML}{B91C1C}   % headline accent (red)
+\definecolor{softgray}{HTML}{EEEEEE}
+\definecolor{darkgray}{HTML}{444444}
+\definecolor{bodytext}{HTML}{222222}
+
+% ======================================================================
+%  BEAMER THEME OVERRIDES
+% ======================================================================
+\usetheme{default}
+\setbeamercolor{background canvas}{bg=white}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{itemize item}{\color{gwblue}\rule[0.25ex]{0.9ex}{0.9ex}}
+\setbeamertemplate{itemize subitem}{\color{gwbuff}\textendash}
+
+% ======================================================================
+%  POSTER BLOCK COMMAND  (tcolorbox)
+% ======================================================================
+% Title sits INSIDE the box (flush) so long titles can't clip past the column edge.
+\newtcolorbox{posterblock}[1]{
+  enhanced,
+  colback=white,
+  colframe=gwblue,
+  boxrule=0.8mm,
+  arc=2mm,
+  left=8mm,right=8mm,top=4mm,bottom=5mm,
+  title={\MakeUppercase{#1}},
+  fonttitle=\bfseries\large,
+  colbacktitle=gwblue,
+  coltitle=white,
+  sharp corners=northwest,sharp corners=northeast,
+  toptitle=3mm,bottomtitle=3mm,
+  before upper={\vspace{1mm}},
+  breakable
+}
+
+% ======================================================================
+%  CALLOUT BOX  (for key findings)
+% ======================================================================
+\newtcolorbox{callout}{
+  enhanced,
+  colback=gwbuff!15,
+  colframe=gwbuff,
+  boxrule=0.6mm,
+  arc=2mm,
+  left=6mm,right=6mm,top=4mm,bottom=4mm,
+}
+
+% ======================================================================
+%  DOCUMENT
+% ======================================================================
+\begin{document}
+\begin{frame}[t,fragile]
+
+% ----------------------------------------------------------------------
+%  HEADER BAND
+% ----------------------------------------------------------------------
+\begin{tcolorbox}[
+  enhanced,
+  colback=gwblue,
+  colframe=gwblue,
+  arc=0mm,
+  left=10mm,right=10mm,top=6mm,bottom=6mm,
+  boxrule=0pt
+]
+\begin{columns}[c]
+  \begin{column}{0.80\paperwidth}
+    \centering
+    \vspace{-2mm}
+    {\color{white}\fontsize{82pt}{92pt}\selectfont\bfseries Climate Swings, Sticky Costs\par}
+    \vspace{4mm}
+    {\color{gwbuff}\fontsize{38pt}{46pt}\selectfont
+    Year\mbox{-}over\mbox{-}Year Weather Volatility and the Financial Health of U.S.\ Counties, 2011--2023\par}
+    \vspace{8mm}
+    {\color{white}\fontsize{30pt}{36pt}\selectfont
+    \textbf{Ahwaz Akhtar} \enspace\textbar\enspace George Washington University
+    \enspace\textbar\enspace \texttt{ahwaz@gwu.edu}
+    \enspace\textbar\enspace \textit{REACH Center Climate and Health Research Day, April 2026}\par}
+    \vspace{-2mm}
+  \end{column}
+  \begin{column}{0.17\paperwidth}
+    \centering
+    \colorbox{white}{%
+      \hspace{2mm}%
+      \includegraphics[trim={30 80 660 50}, clip, height=6.5cm]{ocm_primary.png}%
+      \hspace{2mm}%
+    }
+  \end{column}
+\end{columns}
+\end{tcolorbox}
+
+\vspace{8mm}
+
+% ----------------------------------------------------------------------
+%  THREE-COLUMN BODY
+% ----------------------------------------------------------------------
+\begin{columns}[t]
+
+% ============================================================
+%  LEFT COLUMN  — Motivation / Data / Method
+% ============================================================
+\begin{column}{0.305\paperwidth}
+
+\begin{posterblock}{Motivation}
+\normalsize
+Climate change is reshaping U.S.\ health finance not only through extreme events but through \textbf{year-to-year volatility}. Insurers reprice on new information, hospitals absorb uncompensated care, and households accumulate medical debt with a lag. Yet most economic studies estimate \emph{level} effects of heat, drought, or pollution, treating a county with persistent exposure the same as one in transition.
+
+\vspace{2mm}
+\textbf{This poster asks:} does the \emph{change} in exposure from one year to the next \textemdash{} a weather swing \textemdash{} independently burden the health-finance system, above and beyond the level?
+
+\vspace{2mm}
+If costs are driven by volatility, \textbf{adaptation planning must price in transitions, not just averages}.
+\end{posterblock}
+
+\vspace{3mm}
+
+\begin{posterblock}{Data}
+\normalsize
+\begin{itemize}
+\setlength\itemsep{1mm}
+\item \textbf{Panel:} 3{,}155 U.S.\ counties \texttimes{} 2011--2023 (41{,}376 county-years)
+\item \textbf{Climate} (NOAA National Centers for Environmental Information): divisional temperature, precipitation, Cooling Degree Days (CDD), Heating Degree Days (HDD), Palmer Drought Severity Index (PDSI); 1990--2000 baseline for county-specific z-scores
+\item \textbf{Air quality} (U.S.\ Environmental Protection Agency, EPA): annual Median and Max Air Quality Index (AQI) by county
+\item \textbf{Health-finance outcomes:} medical debt in collections (Urban Institute); Benchmark Silver premium (Health Insurance Exchange data, HIX Compare; rating-area \textrightarrow{} county); hospital bad debt per capita (National Academy for State Health Policy Hospital Cost Tool, NASHP HCT)
+\item \textbf{Economic outcomes:} Per-Capita Personal Income (Bureau of Economic Analysis, BEA); median household income and civilian employment (U.S.\ Census American Community Survey, ACS)
+\end{itemize}
+\end{posterblock}
+
+\vspace{3mm}
+
+\begin{posterblock}{Empirical Strategy}
+\normalsize
+The primary specification isolates the marginal effect of a weather \emph{swing} while controlling for the prior year's level:
+
+\vspace{1mm}
+\begin{center}
+\setlength{\fboxsep}{3mm}
+\colorbox{softgray}{%
+\parbox{0.92\linewidth}{%
+\centering\large
+$Y_{it} = \beta_1\,\Delta X_{it} + \beta_2\,X_{i,t-1} + \gamma\mathbf{Z}_{it} + \alpha_i + \tau_t + \varepsilon_{it}$}}
+\end{center}
+\vspace{1mm}
+
+\begin{itemize}
+\setlength\itemsep{1mm}
+\item $\boldsymbol{\beta_1}$ \textbf{(key):} effect of a one-unit change in exposure from $t{-}1$ to $t$, holding last year's level fixed. $\boldsymbol{\beta_2}$ absorbs the residual level effect.
+\item $\boldsymbol{\alpha_i,\,\tau_t}$: county FE absorb time-invariant heterogeneity (climate zone, baseline health, demographics); year FE absorb national shocks (inflation, CRA changes). $\mathbf{Z}_{it}$ controls: real PCPI, household income, employment.
+\item \textbf{Clustering:} state-level primary; rating-area for premium outcomes that share rating-area pricing.
+\item \textbf{Local projections} (Jordà 2005) extend to horizons $h=0,1,2,3$, tracing dynamic impulse-response without imposing lag form.
+\item \textbf{Decompositions:} asymmetric splits $\Delta X$ into positive (escalation) vs negative (relief); onset/exit/persist isolates regime transitions.
+\item \textbf{Exclusions:} CO 2023 dropped (HB23-1126) so a debt-reporting policy change is not read as a climate effect.
+\end{itemize}
+
+\vspace{1mm}
+\textbf{896 coefficient estimates} across 5 specs \texttimes{} 7 outcomes \texttimes{} 7 exposures \texttimes{} 4 horizons.
+\end{posterblock}
+
+\end{column}
+
+% ============================================================
+%  MIDDLE COLUMN  — Finding 1 (AQI escalation + ratchet)
+% ============================================================
+\begin{column}{0.335\paperwidth}
+
+\begin{posterblock}{Finding 1 \textemdash{} AQI Swings Compound Over Time}
+\normalsize
+A one-unit positive swing in a county's Max AQI is associated with a \textbf{rising} stream of hospital bad debt across all four horizons, with the effect \emph{growing} over time (h=0: +0.005, p=0.001; h=3: +0.016, p\textless.0001). There is no recovery \textemdash{} the cost accumulates.
+
+\vspace{2mm}
+\begin{center}
+\includegraphics[width=0.78\linewidth]{plots/F1_aqi_compound.png}
+\end{center}
+
+\begin{callout}
+\normalsize\centering
+\textbf{A worsening air-quality year today adds to hospital bad debt \emph{three years later} \textemdash{} after claims mature, patients default, and losses are recognized.}
+\end{callout}
+\end{posterblock}
+
+\vspace{4mm}
+
+\begin{posterblock}{Finding 2 \textemdash{} The Ratchet: Relief Does Not Reverse}
+\normalsize
+Splitting the swing by direction uncovers a counterintuitive pattern. \textbf{A year in which a county's air quality \emph{improves} still raises hospital bad debt by +\$0.010 per capita} (p\textless.0001). A year in which air quality \emph{worsens} shows no significant contemporaneous effect. Bad debt climbs regardless of this year's trend \textemdash{} prior pollution exposure keeps converting into uncompensated care.
+
+\vspace{2mm}
+\begin{center}
+\includegraphics[width=0.78\linewidth]{plots/F2_aqi_ratchet.png}
+\end{center}
+
+\begin{callout}
+\normalsize\centering
+\textbf{The cost is a ratchet, not a thermostat.} Improving air quality does not unwind hospital bad debt within three years \textemdash{} prior exposure continues to mature into new uncompensated-care losses.
+\end{callout}
+
+\end{posterblock}
+
+\end{column}
+
+% ============================================================
+%  RIGHT COLUMN  — Premiums / Income / Takeaways
+% ============================================================
+\begin{column}{0.305\paperwidth}
+
+\begin{posterblock}{Finding 3 \textemdash{} Cold-Shock \emph{Onset} Prices Premiums}
+\normalsize
+The first year a county \emph{enters} a high-HDD regime: \textbf{+\$49.46 on the Benchmark Silver premium} (p=0.003). Exit and persistence are null \textemdash{} insurers price at the transition, then hold.
+
+\vspace{1mm}
+\begin{center}
+\includegraphics[width=0.72\linewidth]{plots/F3_hdd_onset.png}
+\end{center}
+\end{posterblock}
+
+\vspace{3mm}
+
+\begin{posterblock}{Finding 4 \textemdash{} Drought Swings Suppress Income}
+\normalsize
+A worsening PDSI swing cuts per-capita personal income for two years (h=1: $-$\$226, p\textless.0001; h=2: $-$\$144, p=0.002); concentrated in \textbf{drought-worsening swings} ($-$\$207, p=0.001), with employment loss ($-$142 jobs, p=0.006).
+
+\vspace{1mm}
+\begin{center}
+\includegraphics[width=0.72\linewidth]{plots/F4_pdsi_income.png}
+\end{center}
+\end{posterblock}
+
+\vspace{3mm}
+
+\begin{posterblock}{Takeaways}
+\normalsize
+\begin{itemize}
+\setlength\itemsep{2mm}
+\item \textbf{Volatility is its own exposure.} The swing channel is significant where the level channel was not (AQI $\to$ hospital bad debt).
+\item \textbf{Costs ratchet, not reverse.} Pollution relief does not refund hospital bad debt within three years; insurers reprice on shock \emph{onset}, not exit.
+\item \textbf{Drought volatility hits the macro base.} Income and employment contract for multiple years, feeding back into medical-debt formation.
+\end{itemize}
+\end{posterblock}
+
+\end{column}
+\end{columns}
+
+% ----------------------------------------------------------------------
+%  ACKNOWLEDGMENTS BAND
+% ----------------------------------------------------------------------
+\vspace{5mm}
+\begin{tcolorbox}[
+  enhanced,
+  colback=gwblue,
+  colframe=gwblue,
+  arc=0mm,
+  left=10mm,right=10mm,top=3mm,bottom=3mm,
+  boxrule=0pt
+]
+\centering\color{white}\normalsize
+\textbf{Acknowledgments.}\enspace Thanks to faculty \textbf{Avi Dor}, \textbf{Susan Anenberg}, \textbf{Eric Luo}, and \textbf{Cindy Liu} for guidance on specification, data, and interpretation.
+\end{tcolorbox}
+
+\end{frame}
+\end{document}

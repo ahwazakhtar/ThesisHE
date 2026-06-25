@@ -6,6 +6,9 @@
 !*/
 !*.md
 !*.r
+!*.pdf
+!*.tex
+!*.html
 !.gitignore
 .claude/session_edits.log
 !.claude/settings.json

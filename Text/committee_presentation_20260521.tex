@@ -1,0 +1,580 @@
+\documentclass[aspectratio=169,11pt]{beamer}
+
+% ── Packages ──────────────────────────────────────────────────────────────────
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{array}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{xcolor}
+\usepackage{tikz}
+\usetikzlibrary{calc, positioning}
+\usepackage{amsmath}
+\usepackage{hyperref}
+\usepackage{siunitx}
+\usepackage{colortbl}
+
+% ── Colour Palette ────────────────────────────────────────────────────────────
+\definecolor{DeepNavy}{HTML}{2E4057}
+\definecolor{Teal}{HTML}{048A81}
+\definecolor{WarmOrange}{HTML}{E85D04}
+\definecolor{SoftPurple}{HTML}{9D4EDD}
+\definecolor{WarmGray}{HTML}{8A8A8A}
+\definecolor{LightGray}{HTML}{F2F2F2}
+\definecolor{Cream}{HTML}{FFFDF7}
+\definecolor{DeepRed}{HTML}{C1121F}
+\definecolor{Gold}{HTML}{D4A017}
+
+% ── Theme Setup ───────────────────────────────────────────────────────────────
+\usetheme{default}
+\setbeamertemplate{navigation symbols}{}
+\setbeamertemplate{headline}{}
+\setbeamercolor{background canvas}{bg=Cream}
+\setbeamercolor{frametitle}{fg=DeepNavy,bg=Cream}
+\setbeamerfont{frametitle}{series=\bfseries,size=\large}
+
+\setbeamertemplate{frametitle}{%
+  \vspace*{0.3em}%
+  \insertframetitle%
+  \ifx\insertframesubtitle\empty\else
+    \\[0.1em]{\footnotesize\color{WarmGray}\parbox{\textwidth}{\insertframesubtitle}}%
+  \fi
+  \par\vspace*{0.15em}%
+  \textcolor{Teal}{\rule{\textwidth}{0.5pt}}%
+}
+
+\setbeamertemplate{footline}{%
+  \hfill{\color{WarmGray}\tiny\insertframenumber\hspace{0.5em}}%
+  \vspace{0.3em}%
+}
+
+\setbeamercolor{itemize item}{fg=Teal}
+\setbeamercolor{itemize subitem}{fg=WarmOrange}
+\setbeamertemplate{itemize item}{\small\raisebox{0.15ex}{\textbullet}}
+\setbeamertemplate{itemize subitem}{\scriptsize\raisebox{0.15ex}{\textbullet}}
+
+% ── Custom Macros ─────────────────────────────────────────────────────────────
+\newcommand{\emphcolor}[1]{{\color{WarmOrange}\textbf{#1}}}
+\newcommand{\tealtext}[1]{{\color{Teal}#1}}
+\newcommand{\navytext}[1]{{\color{DeepNavy}#1}}
+\newcommand{\graytext}[1]{{\color{WarmGray}#1}}
+
+\newcommand{\transitionslide}[2]{%
+  \begingroup
+  \setbeamercolor{background canvas}{bg=DeepNavy}
+  \setbeamertemplate{footline}{}
+  \begin{frame}[plain]
+    \begin{tikzpicture}[overlay]
+      \draw[Teal, opacity=0.3, line width=8pt]
+        (-1,-1) -- ++(20,0) -- ++(0,12) -- cycle;
+    \end{tikzpicture}
+    \vspace{1.8cm}
+    \hspace{0.8cm}%
+    {\color{white}\bfseries\LARGE\parbox{13cm}{#1}}\\[0.6em]
+    \hspace{0.8cm}%
+    {\color{Teal}\normalsize\parbox{13cm}{#2}}
+  \end{frame}%
+  \endgroup
+}
+
+% ── Document ──────────────────────────────────────────────────────────────────
+\begin{document}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% Slide 1 — Title
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\begingroup
+\setbeamercolor{background canvas}{bg=DeepNavy}
+\setbeamertemplate{footline}{}
+\begin{frame}[plain]
+  \begin{tikzpicture}[overlay]
+    \node[text=Teal, opacity=0.12, font=\fontsize{140}{140}\selectfont]
+      at (10, 2.5) {\(\sim\)};
+  \end{tikzpicture}
+  \vspace{0.9cm}
+  \hspace{0.6cm}%
+  {\color{white}\bfseries\fontsize{22}{28}\selectfont
+    \parbox{13cm}{Committee Feedback Response\\April 2026}}
+  \par\vspace{0.45em}
+  \hspace{0.6cm}%
+  {\color{WarmOrange}\rule{12cm}{2pt}}
+  \par\vspace{0.45em}
+  \hspace{0.6cm}%
+  {\color{Teal}\normalsize Random Effects, Post-Exit Dynamics, Never-Exposed DiD, and Propagation Pathways}
+  \par\vspace{0.35em}
+  \hspace{0.6cm}%
+  {\color{WarmGray}\small Ahwaz Akhtar \(\cdot\) George Washington University \(\cdot\) May 2026}
+\end{frame}
+\endgroup
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% Slide 2 — What the Committee Asked
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\begin{frame}{What the Committee Asked}
+  \framesubtitle{Five concerns across three domains, all addressed in this update except humidity}
+  \begin{columns}[T]
+    \begin{column}{0.47\textwidth}
+      \textbf{\tealtext{Econometric}}
+      \begin{itemize}\itemsep0.15em
+        \item \emphcolor{Check random effects} as an alternative to FE
+        \item \emphcolor{Lag / exit tests}: what happens when a county leaves a shock state?
+        \item Find \emphcolor{natural experiments} for DiD --- are there never-exposed counties?
+      \end{itemize}
+      \vspace{0.4em}
+      \textbf{\tealtext{General}}
+      \begin{itemize}\itemsep0.15em
+        \item \emphcolor{Propagation pathways} must be backed by evidence (heat \(\to\) delayed care; cold \(\to\) utilization shifts)
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.47\textwidth}
+      \textbf{\tealtext{Environmental}}
+      \begin{itemize}\itemsep0.15em
+        \item Add \emphcolor{humidity} (PRISM \texttt{tdmean}) at state level
+      \end{itemize}
+      \vspace{0.5em}
+      \textbf{\tealtext{Response structure}}\\[0.2em]
+      \footnotesize
+      \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.55\linewidth}>{\raggedright\arraybackslash}p{0.32\linewidth}@{}}
+        \toprule
+        Concern & Status \\
+        \midrule
+        Random effects & Done \\
+        Post-exit dynamics & Done \\
+        Never-exposed DiD & Done \\
+        Propagation pathways & Done \\
+        Humidity (PRISM) & \emphcolor{Parked} \\
+        \bottomrule
+      \end{tabular}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% SECTION 1 — Random Effects
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\transitionslide{Random-Effects Robustness}{Hausman tests across all primary state and county outcomes}
+
+\begin{frame}{Random Effects Is Rejected; Headline Findings Survive}
+  \framesubtitle{Hausman test on primary FE specs; State + Year two-way effects matched in plm}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \textbf{\tealtext{Design}}
+      \begin{itemize}\itemsep0.15em
+        \item \texttt{plm::plm(model="within"|"random", effect="twoways")} mirroring the \texttt{fixest::feols} primary specs
+        \item Hausman \texttt{phtest} on each FE/RE pair
+        \item 11 outcomes estimable (4 state, 7 county); 2 state outcomes failed RE fit on thin panels
+      \end{itemize}
+      \vspace{0.3em}
+      \textbf{\tealtext{Verdict}}
+      \begin{itemize}\itemsep0.15em
+        \item \emphcolor{RE rejected for every estimable outcome at \(p < 10^{-9}\)}
+        \item Headline state findings (Drought lag-2, Cold lag-1) have the \emphcolor{same sign} in RE
+        \item Only Medicaid Per Enrollee shows material FE/RE divergence (\(\sim\)2\(\times\))
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \textbf{\tealtext{Hausman test results}}\\[0.25em]
+      \scriptsize
+      \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.46\linewidth}rr@{}}
+        \toprule
+        Outcome & \(\chi^2\) & \(p\)-value \\
+        \midrule
+        \multicolumn{3}{l}{\textit{State}} \\
+        Medical Debt Share          & 233.6 & 4.5e-40 \\
+        Total PC Health Exp         & 247.9 & 5.7e-43 \\
+        Medicaid PE Health Exp      & 81.3  & 2.3e-10 \\
+        Medicare PE Health Exp      & 834.4 & 2.1e-166 \\
+        \midrule
+        \multicolumn{3}{l}{\textit{County}} \\
+        Medical Debt Share          & 23905 & $<$1e-300 \\
+        Benchmark Silver Real       & 23545 & $<$1e-300 \\
+        PCPI Real                   & 5809  & $<$1e-300 \\
+        Civilian Employed           & 220.2 & 4.6e-41 \\
+        \bottomrule
+      \end{tabular}
+      \vspace{0.35em}
+      \graytext{\scriptsize Source: \texttt{Analysis/random\_effects\_hausman.csv}}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% SECTION 2 — Post-Exit Dynamics
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\transitionslide{Post-Exit Dynamics}{When a county leaves shock state, what happens to spending?}
+
+\begin{frame}{Post-Exit Local Projections, \(h = 0, 1, 2, 3\)}
+  \framesubtitle{Block A: \(Y_{i,t+h} \sim \text{Exit}_{i,t} \mid \text{fips}+\text{Year}\); Block B: \(\text{Shock}_{i,t-1} \times \text{NoShock}_{i,t}\) interaction}
+  \begin{columns}[T]
+    \begin{column}{0.31\textwidth}
+      \textbf{\tealtext{Drought\_Exit}}
+      \begin{itemize}\itemsep0.12em
+        \item \emphcolor{PCPI partial scarring}: \(+\$1{,}044\) p.c. at \(h=2\) (\(p=0.0002\))
+        \item Recovery rebounds but does not fully restore pre-shock income
+        \item Confirmed by Block B interaction (\(+964\) at \(h=2\), \(p=0.010\))
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.31\textwidth}
+      \textbf{\tealtext{HDD\_Exit}}
+      \begin{itemize}\itemsep0.12em
+        \item \emphcolor{Immediate hospital-cost relief}: \(-3.13\) per-capita at \(h=0\) (\(p=0.014\))
+        \item Sustained at \(h=2\): \(-2.88\) (\(p=0.034\))
+        \item Cold-shock cost is in the \emphcolor{exposure}, not lasting damage
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.31\textwidth}
+      \textbf{\tealtext{CDD\_Exit}}
+      \begin{itemize}\itemsep0.12em
+        \item Persistent employment benefits after exit
+        \item Likely part secular regional trend (caveated in synthesis)
+        \item Phase 2 LP rejects within-county heat scarring
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \vspace{0.6em}
+  \begin{center}
+    \footnotesize\graytext{Output: \texttt{Analysis/delta\_coefs.csv} (896 \(\to\) 1664 rows, \(+\)768 Exit-LP cells); 42 plots in \texttt{Analysis/plots/delta\_exit\_dynamics/}}
+  \end{center}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% SECTION 3 — Never-Exposed DiD
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\transitionslide{Diff-in-Diff with Never-Exposed Controls}{Sharp natural experiment + Callaway-Sant'Anna long-run profiles}
+
+\begin{frame}{Phase 0: Are There Never-Exposed Counties?}
+  \framesubtitle{Inventory of zero-event counties over 2011--2023; feasibility memo selected primary cohorts}
+  \begin{columns}[T]
+    \begin{column}{0.52\textwidth}
+      \textbf{\tealtext{Never-exposed pool by shock}}\\[0.25em]
+      \scriptsize
+      \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.50\linewidth}rrr@{}}
+        \toprule
+        Shock & Total & Never-exposed & Share \\
+        \midrule
+        Extreme Drought (PDSI \(\le -4\))    & 3{,}225 & \textbf{2{,}534} & 78.6\% \\
+        High HDD (top quintile)              & 3{,}225 & \textbf{2{,}303} & 71.4\% \\
+        High CDD (top quintile)              & 3{,}225 & \textbf{2{,}121} & 65.8\% \\
+        High AQI Max ($>$100)                & 3{,}225 & 100              & \emphcolor{3.1\%} \\
+        \bottomrule
+      \end{tabular}
+      \vspace{0.45em}
+      \begin{itemize}\itemsep0.15em
+        \item Drought, HDD, CDD all have large never-exposed pools
+        \item \emphcolor{AQI dropped from DiD}: 3.1\% control pool too thin
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.42\textwidth}
+      \textbf{\tealtext{Candidate sharp events}}\\[0.25em]
+      \scriptsize
+      \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.50\linewidth}rr@{}}
+        \toprule
+        Event & Onsets & Onset rate \\
+        \midrule
+        \emphcolor{2012 Midwest Drought} & 139 & 4.4\% \\
+        2022 Drought                     & 110 & 3.5\% \\
+        \emphcolor{2013 HDD (cold)}      & 407 & 13.0\% \\
+        2018 CDD (heat)                  & 250 & 8.0\% \\
+        2023 AQI (wildfire smoke)        & 336 & 34.1\% \\
+        \bottomrule
+      \end{tabular}
+      \vspace{0.35em}
+      \graytext{\scriptsize Source: \texttt{Analysis/never\_exposed\_event\_year.csv}}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{2012 Midwest Drought: The Cleanest Natural Experiment}
+  \framesubtitle{139 first-event counties (treatment) vs.\ 2{,}534 never-exposed (control), 2011--2023}
+  \begin{columns}[T]
+    \begin{column}{0.50\textwidth}
+      \textbf{\tealtext{Design}}\\[0.2em]
+      \footnotesize
+      \(Y_{it} = \alpha_i + \gamma_t + \tau\,(\text{Treated}_i \times \text{Post}_t) + \varepsilon_{it}\)
+      \begin{itemize}\itemsep0.15em
+        \item Treated: first-ever Extreme Drought event = 2012
+        \item Control: never experienced Extreme Drought in panel window
+        \item Cluster: state; SE: \texttt{feols(\(\ldots\), cluster="State")}
+      \end{itemize}
+      \vspace{0.4em}
+      \textbf{\tealtext{Why this is the cleanest piece in the thesis}}
+      \begin{itemize}\itemsep0.15em
+        \item Within-county LP cannot rule out recurring-shock confounding
+        \item 2x2 against never-exposed \emphcolor{closes that loophole}
+        \item Drought 2012 is a documented historical event with well-defined geography
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.46\textwidth}
+      \textbf{\tealtext{2x2 ATT results}}\\[0.25em]
+      \footnotesize
+      \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.48\linewidth}rr@{}}
+        \toprule
+        Outcome & ATT & \(p\) \\
+        \midrule
+        Medical Debt Share        & \(-0.0062\) & 0.49 \\
+        Hosp Bad Debt PC          & \(+6.26\)   & 0.29 \\
+        \emphcolor{PCPI Real}     & \emphcolor{\(-\$1{,}311\)} & \emphcolor{0.027} \\
+        Med HH Income Real        & \(-\$992\)  & 0.24 \\
+        \emphcolor{Civilian Employed} & \emphcolor{\(-2{,}053\)} & \emphcolor{0.0001} \\
+        Benchmark Silver Real     & --- & ACA collinearity \\
+        \bottomrule
+      \end{tabular}
+      \vspace{0.45em}
+      \graytext{\scriptsize Source: \texttt{Analysis/did/did\_2x2\_drought\_2012.csv}}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+\begin{frame}{Callaway-Sant'Anna: Long-Run Cold-State Scarring}
+  \framesubtitle{Manual CS estimator via \texttt{fixest} (R \texttt{did} package unavailable); never-treated controls; cohort-weighted event-time profile}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{\tealtext{Drought (4 cohorts, 268 treated)}}
+      \begin{itemize}\itemsep0.12em
+        \item PCPI at \(e=0\): \emphcolor{\(-\$1{,}050\)} (\(p=0.002\))
+        \item Civilian Employed at \(e=0\): \(-142\) (\(p=0.002\))
+        \item Civilian Employed at \(e=11\): \(-3{,}915\) (\(p=0.0001\))
+      \end{itemize}
+      \vspace{0.4em}
+      \textbf{\tealtext{HDD (2 cohorts, 230 treated)}}
+      \begin{itemize}\itemsep0.12em
+        \item Civilian Employed at \(e=10\): \emphcolor{\(-4{,}982\)} (\(p=0.003\))
+        \item Medical Debt Share at \(e=10\): \emphcolor{\(+4.9\) pp} (\(p=0.0002\))
+        \item Cumulative scarring through \(e=6\)--10
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{\tealtext{CDD: noisy, regional confounds}}
+      \begin{itemize}\itemsep0.12em
+        \item Treatment concentrated in TX/GA/MS/FL
+        \item Controls dominated by northern states
+        \item Signs reverse across horizons --- \emphcolor{de-emphasize}
+      \end{itemize}
+      \vspace{0.4em}
+      \textbf{\tealtext{Output}}
+      \begin{itemize}\itemsep0.12em
+        \item \texttt{Analysis/did/did\_cs\_att\_gt.csv} (427 ATT(g,t) cells)
+        \item \texttt{did\_cs\_event\_time.csv} (cohort-weighted profiles)
+        \item 28 plots in \texttt{Analysis/plots/did/}
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% SECTION 4 — LP vs DiD Reconciliation
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\transitionslide{LP vs.\ DiD: Apparent Tension, Real Complementarity}{The two designs answer different questions; the cold-scarring puzzle resolves}
+
+\begin{frame}{LP and DiD Are Complementary, Not Contradictory}
+  \framesubtitle{Within-county dynamics vs.\ persistent treated-vs-never-exposed gap}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{\tealtext{Local Projections / Exit-LP}}
+      \begin{itemize}\itemsep0.15em
+        \item Estimand: within-county response when shock state changes year-over-year
+        \item HDD\_Exit \(\to\) hospital-cost relief at \(h=0\)
+        \item \emphcolor{Read:} no within-county cold scarring after recovery
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{\tealtext{CS-DiD with never-exposed}}
+      \begin{itemize}\itemsep0.15em
+        \item Estimand: persistent gap between ever-treated and never-treated populations
+        \item HDD long-run: \(-4{,}982\) jobs and \(+4.9\)pp debt share at \(e=10\)
+        \item \emphcolor{Read:} treated counties end up worse off long-run
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \vspace{0.7em}
+  \begin{center}
+  \footnotesize
+  \fbox{\parbox{0.92\textwidth}{\centering
+    \textbf{\tealtext{Reconciliation:}} cold-shock counties \emph{recover} when shocks end (LP),
+    but they \emph{spend more years in shock state} than never-exposed counties do,
+    so the \emphcolor{population gap accumulates} (CS-DiD). Both are correct;
+    they measure different things.}}
+  \end{center}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% SECTION 5 — Propagation Pathways
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\transitionslide{Propagation Pathways}{Evidence-backed mechanisms linking climate shocks to health-finance outcomes}
+
+\begin{frame}{Pathway-to-Empirics Mapping}
+  \framesubtitle{Each headline channel is now anchored to 2--4 peer-reviewed references with direction and time-scale}
+  \footnotesize
+  \begin{tabular}{@{}>{\raggedright\arraybackslash}p{0.22\linewidth}>{\raggedright\arraybackslash}p{0.30\linewidth}>{\raggedright\arraybackslash}p{0.21\linewidth}>{\raggedright\arraybackslash}p{0.19\linewidth}@{}}
+    \toprule
+    Pathway & Time-scale claim & Where identified & Strength \\
+    \midrule
+    Heat \(\to\) delayed care
+      & Within-year deferral; lag-1/2 utilization
+      & County Spec 2, CS-DiD CDD
+      & Moderate \\
+    Cold \(\to\) utilization shift
+      & Contemporaneous + lag-1; long-run scarring at \(e\geq 8\)
+      & State \texttt{cold\_shock\_lag1}, CS-DiD HDD
+      & Strong \\
+    Drought \(\to\) income \(\to\) debt
+      & Lag-1, lag-2 income; debt follows
+      & State \texttt{drought\_lag2}, 2012 DiD, Exit-LP recovery
+      & \emphcolor{Strongest} \\
+    AQI \(\to\) respiratory / cardiac
+      & Within-year, episodic spikes
+      & County continuous AQI, event-study \texttt{High\_AQI\_Max}
+      & Limited \\
+    \bottomrule
+  \end{tabular}
+  \vspace{0.6em}
+  \textbf{\tealtext{Selected references}}
+  \begin{itemize}\itemsep0.12em
+    \item \footnotesize \textbf{Drought \(\to\) income:} Hornbeck (2012, AER); Burke-Hsiang-Miguel (2015, Nature); Carleton et al.\ (2022, QJE)
+    \item \footnotesize \textbf{Cold:} Desch\^enes-Moretti (2009, REStat); Gasparrini et al.\ (2015, Lancet); Andrews et al.\ (2017)
+    \item \footnotesize \textbf{Heat / delayed care:} Sun et al.\ (2021); White (2017, JAERE); Karlsson-Ziebarth (2018, JEEM)
+    \item \footnotesize \textbf{AQI:} Deryugina et al.\ (2019, AER); Schlenker-Walker (2016, REStud); Currie-Walker (2011, AEJ:Applied)
+  \end{itemize}
+  \begin{center}
+    \graytext{\scriptsize Full lit review: \texttt{Text/propagation\_pathways.md} (18 cited references)}
+  \end{center}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% SECTION 6 — Humidity (Parked)
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\transitionslide{Humidity: Parked Pending Tooling}{PRISM \texttt{tdmean} endpoint identified; raster aggregation packages not installed}
+
+\begin{frame}{Humidity Integration --- Status and Resumption Plan}
+  \framesubtitle{Phase 4 deferred; the highest-priority residual gap from committee feedback}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{\tealtext{What we know}}
+      \begin{itemize}\itemsep0.15em
+        \item Endpoint:\\ {\small\texttt{services.nacse.org/prism/data/get/us/4km/tdmean/<YYYYMM>}}
+        \item Returns zipped BIL raster (confirmed HTTP 200)
+        \item No state-aggregate API; must aggregate locally
+        \item Estimated 408 monthly rasters; \(\sim\)1.5 GB on disk
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{\tealtext{Blocker}}
+      \begin{itemize}\itemsep0.15em
+        \item Raster \(\to\) state polygon aggregation needs \texttt{terra}, \texttt{sf}, \texttt{tigris} in R
+        \item None installed in local R 4.2.2; Windows install pulls heavy system deps (GDAL/GEOS/PROJ)
+      \end{itemize}
+      \vspace{0.4em}
+      \textbf{\tealtext{Resumption (when packages available)}}
+      \begin{itemize}\itemsep0.15em
+        \item Build \texttt{download\_prism\_humidity.R}, \texttt{process\_state\_humidity.R}
+        \item Integrate into state pipeline; re-run \texttt{run\_analysis.R}
+        \item Test whether \emphcolor{drought lag-2} and \emphcolor{cold lag-1} survive
+      \end{itemize}
+    \end{column}
+  \end{columns}
+  \vspace{0.4em}
+  \begin{center}
+    \graytext{\scriptsize Reference: \texttt{memory/project\_humidity\_phase4.md}}
+  \end{center}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% SECTION 7 — What Changed Substantively
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\transitionslide{What Changed Substantively}{New evidence, sharper identification, resolved puzzles}
+
+\begin{frame}{The Analysis Now Has Two Pieces of Stronger Identification}
+  \framesubtitle{And one genuine puzzle resolved by treating LP and DiD as complementary}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{\tealtext{New evidence}}
+      \begin{itemize}\itemsep0.15em
+        \item \emphcolor{2012 Drought 2x2} is now the cleanest single identification piece (PCPI \(-\$1{,}311\); Employed \(-2{,}053\))
+        \item \emphcolor{HDD long-run scarring} (\(-4{,}982\) jobs at \(e=10\); \(+4.9\)pp debt share at \(e=10\)) was not visible in the previous within-county LP framework
+        \item Drought\_Exit shows \emphcolor{partial income scarring} --- recovery rebounds but does not fully restore
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{\tealtext{Resolved puzzle}}
+      \begin{itemize}\itemsep0.15em
+        \item Cold-shock counties \emphcolor{recover on exit} (no within-county scarring)
+        \item But the ever-treated population \emphcolor{ends up worse off} long-run (DiD)
+        \item Both findings are correct; they measure different things
+      \end{itemize}
+      \vspace{0.3em}
+      \textbf{\tealtext{Methodological closure}}
+      \begin{itemize}\itemsep0.15em
+        \item Random effects rejected; FE is the right spec
+        \item AQI exclusion from DiD now defensible (3.1\% never-exposed)
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% SECTION 8 — Caveats
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\begin{frame}{Open Caveats and Residual Risks}
+  \framesubtitle{What the committee should know is still not addressed}
+  \begin{columns}[T]
+    \begin{column}{0.48\textwidth}
+      \textbf{\tealtext{Humidity confounding}}
+      \begin{itemize}\itemsep0.15em
+        \item PRISM \texttt{tdmean} not yet a control
+        \item Headline drought lag-2 and cold lag-1 effects \emphcolor{have not been stress-tested} against humidity
+        \item Mitigation: Phase 4 resumption plan in place
+      \end{itemize}
+      \vspace{0.4em}
+      \textbf{\tealtext{CDD CS-DiD region confound}}
+      \begin{itemize}\itemsep0.15em
+        \item Treatment concentrated in southern states; controls in north
+        \item Even two-way FE leaves regional secular trends
+        \item Reported as suggestive; \emphcolor{de-emphasized}
+      \end{itemize}
+    \end{column}
+    \begin{column}{0.48\textwidth}
+      \textbf{\tealtext{Multiple testing}}
+      \begin{itemize}\itemsep0.15em
+        \item 427 ATT(g,t) cells \(\times\) 7 outcomes \(\times\) up to 11 event-times
+        \item Headline cells survive Bonferroni within-shock
+        \item Smaller-cohort cells do not --- flagged in synthesis
+      \end{itemize}
+      \vspace{0.4em}
+      \textbf{\tealtext{County-master deduping}}
+      \begin{itemize}\itemsep0.15em
+        \item Master is not strict one-row-per-(fips, year) due to rating-area joins
+        \item Deduped in every committee-feedback script
+        \item Underlying fix deferred in parent track
+      \end{itemize}
+    \end{column}
+  \end{columns}
+\end{frame}
+
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+% Closing
+% ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+\begingroup
+\setbeamercolor{background canvas}{bg=DeepNavy}
+\setbeamertemplate{footline}{}
+\begin{frame}[plain]
+  \begin{tikzpicture}[overlay]
+    \node[text=Teal, opacity=0.12, font=\fontsize{140}{140}\selectfont]
+      at (10, 2.5) {?};
+  \end{tikzpicture}
+  \vspace{2.4cm}
+  \hspace{0.8cm}%
+  {\color{white}\bfseries\fontsize{32}{36}\selectfont
+    \parbox{13cm}{Thank you.}}
+  \par\vspace{0.6em}
+  \hspace{0.8cm}%
+  {\color{WarmOrange}\rule{12cm}{2pt}}
+  \par\vspace{0.6em}
+  \hspace{0.8cm}%
+  {\color{Teal}\Large Discussion and questions}
+  \par\vspace{0.4em}
+  \hspace{0.8cm}%
+  {\color{WarmGray}\small Track artifacts at\\ \hspace*{0.6em}\texttt{conductor/tracks/committee\_feedback\_april\_2026/}}
+\end{frame}
+\endgroup
+
+\end{document}

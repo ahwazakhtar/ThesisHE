@@ -1,0 +1,1686 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Technical Note: Empirical Framework — Akhtar (2026)</title>
+
+  <!-- MathJax 3 for equation rendering -->
+  <script>
+    MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']],
+        tags: 'ams'
+      },
+      options: { skipHtmlTags: ['script','noscript','style','textarea','pre'] }
+    };
+  </script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml.js" async></script>
+
+  <style>
+    /* -------------------------------------------------- typography */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Georgia", "Times New Roman", serif;
+      font-size: 16px;
+      line-height: 1.65;
+      color: #1a1a1a;
+      background: #fafaf8;
+    }
+
+    /* -------------------------------------------------- page layout */
+    .page {
+      max-width: 820px;
+      margin: 0 auto;
+      padding: 60px 48px 80px;
+      background: #fff;
+      border-left: 1px solid #e0ddd6;
+      border-right: 1px solid #e0ddd6;
+      min-height: 100vh;
+    }
+
+    /* -------------------------------------------------- header */
+    .doc-header {
+      border-bottom: 2px solid #1a1a1a;
+      padding-bottom: 20px;
+      margin-bottom: 36px;
+    }
+    .doc-title {
+      font-size: 1.55rem;
+      font-weight: bold;
+      letter-spacing: -0.01em;
+      margin-bottom: 8px;
+    }
+    .doc-subtitle {
+      font-size: 0.97rem;
+      color: #444;
+    }
+    .doc-meta {
+      margin-top: 10px;
+      font-size: 0.88rem;
+      color: #666;
+      font-style: italic;
+    }
+
+    /* -------------------------------------------------- headings */
+    h1 { font-size: 1.2rem; font-weight: bold; margin: 36px 0 10px; border-bottom: 1px solid #ccc; padding-bottom: 4px; }
+    h2 { font-size: 1.05rem; font-weight: bold; margin: 26px 0 8px; color: #1a1a1a; }
+    h3 { font-size: 0.97rem; font-weight: bold; margin: 20px 0 6px; color: #333; }
+
+    /* -------------------------------------------------- body text */
+    p { margin: 10px 0; }
+    ul, ol { margin: 10px 0 10px 28px; }
+    li { margin: 4px 0; }
+
+    /* -------------------------------------------------- specification boxes */
+    .spec-box {
+      background: #f5f4f0;
+      border-left: 3px solid #4a6fa5;
+      padding: 14px 18px;
+      margin: 16px 0;
+      font-family: "Georgia", serif;
+    }
+    .spec-box .label {
+      font-size: 0.78rem;
+      font-weight: bold;
+      letter-spacing: 0.06em;
+      color: #4a6fa5;
+      text-transform: uppercase;
+      margin-bottom: 6px;
+    }
+
+    /* -------------------------------------------------- tables */
+    table {
+      border-collapse: collapse;
+      margin: 14px 0;
+      font-size: 0.93rem;
+      width: 100%;
+    }
+    th {
+      background: #f0ede6;
+      border: 1px solid #cbc8c0;
+      padding: 7px 12px;
+      text-align: left;
+      font-weight: bold;
+    }
+    td {
+      border: 1px solid #cbc8c0;
+      padding: 6px 12px;
+    }
+    tr:nth-child(even) td { background: #faf9f6; }
+
+    /* -------------------------------------------------- worked example */
+    .worked-example {
+      border: 1px solid #b5c7e0;
+      background: #f0f5fb;
+      border-radius: 4px;
+      padding: 18px 22px;
+      margin: 20px 0;
+    }
+    .worked-example .we-title {
+      font-size: 0.85rem;
+      font-weight: bold;
+      letter-spacing: 0.06em;
+      color: #2c5282;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    /* -------------------------------------------------- note / caveat */
+    .note {
+      border-left: 3px solid #c8a84b;
+      background: #fdf8ec;
+      padding: 10px 14px;
+      margin: 14px 0;
+      font-size: 0.92rem;
+    }
+    .note strong { color: #8a6800; }
+
+    /* -------------------------------------------------- verdict pill */
+    .verdict {
+      display: inline-block;
+      font-size: 0.82rem;
+      font-weight: bold;
+      padding: 1px 8px;
+      border-radius: 3px;
+      letter-spacing: 0.03em;
+    }
+    .verdict-scar  { background: #fde8e8; color: #9b1c1c; border: 1px solid #f5c6c6; }
+    .verdict-sym   { background: #e8f5e9; color: #1b5e20; border: 1px solid #c8e6c9; }
+
+    /* -------------------------------------------------- two-col layout */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 14px 0; }
+    .col-card { background: #f5f4f0; border: 1px solid #ddd; border-radius: 3px; padding: 12px 16px; font-size: 0.93rem; }
+    .col-card h4 { font-size: 0.88rem; font-weight: bold; margin-bottom: 6px; color: #333; }
+
+    /* -------------------------------------------------- section separator */
+    .section-sep { border: none; border-top: 1px solid #ddd; margin: 40px 0; }
+
+    /* -------------------------------------------------- footer */
+    .doc-footer {
+      margin-top: 60px;
+      border-top: 1px solid #ccc;
+      padding-top: 14px;
+      font-size: 0.84rem;
+      color: #777;
+    }
+
+    /* -------------------------------------------------- print */
+    @media print {
+      body { background: white; }
+      .page { border: none; padding: 20px; }
+    }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ========== HEADER ========== -->
+  <div class="doc-header">
+    <div class="doc-title">Technical Note: Empirical Framework</div>
+    <div class="doc-subtitle">
+      Climate Shocks, Health Costs, and Provider Heterogeneity — Three Papers
+    </div>
+    <div class="doc-meta">Ahwaz Akhtar &nbsp;·&nbsp; GWU &nbsp;·&nbsp; June 2026</div>
+  </div>
+
+  <!-- ========== OVERVIEW ========== -->
+  <p>
+    This note describes the identification strategy, shock definitions, and estimation
+    procedure for the three empirical papers in the thesis.
+    
+    Section&nbsp;1 introduces the two data panels.
+    Sections&nbsp;2–4 cover each paper in turn.
+    Section&nbsp;5 collects inference details.
+  </p>
+
+  <!-- ========== SECTION 1: DATA ========== -->
+  <h1>1. Two Estimation Panels</h1>
+
+  <p>
+    The thesis uses two distinct unit-of-observation panels that share the same
+    county-level climate shock series but measure different outcome domains.
+  </p>
+
+  <div class="two-col">
+    <div class="col-card">
+      <h4>Panel A — County × Year (demand / consumer side)</h4>
+      <ul>
+        <li><strong>Unit:</strong> county FIPS code × calendar year</li>
+        <li><strong>Window:</strong> 2011–2023 (13 years)</li>
+        <li><strong>N:</strong> ~41,400 county-years, 3,155 counties</li>
+        <li><strong>Outcomes:</strong> HIX benchmark premium, medical-debt share,
+            personal income per capita, civilian employment</li>
+        <li><strong>Fixed effects:</strong> county FE + year FE</li>
+        <li><strong>Clustering:</strong> state (nests rating areas)</li>
+      </ul>
+    </div>
+    <div class="col-card">
+      <h4>Panel B — Hospital × Year (supply / provider side)</h4>
+      <ul>
+        <li><strong>Unit:</strong> hospital CMS Certification Number (CCN) × year</li>
+        <li><strong>Window:</strong> 2011–2023</li>
+        <li><strong>N:</strong> ~59,900 hospital-years, 5,119 hospitals</li>
+        <li><strong>Outcomes:</strong> operating margin, net margin, uncompensated care
+            (dollars, % of net patient revenue)</li>
+        <li><strong>Fixed effects:</strong> hospital (CCN) FE + year FE</li>
+        <li><strong>Clustering:</strong> state</li>
+      </ul>
+    </div>
+  </div>
+
+  <p>
+    Each hospital is geo-coded to a single county (modal county per ZIP code, hospital
+    location — not the residential catchment allocation used for consumer debt).
+    The county-level climate shocks are then attached to the hospital by that county
+    mapping, so the hospital panel uses the <em>same</em> shock indicators as the county panel.
+  </p>
+
+  <h2>1.1 Binary shock indicators</h2>
+
+  <p>
+    All three papers use the same four binary shock series, constructed at the county × year
+    level:
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Indicator</th><th>Definition</th><th>Source</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><code>Is_Extreme_Drought</code></td>
+        <td>PDSI $\leq -4$ in county $c$, year $t$ (extreme drought, Palmer scale)</td>
+        <td>NOAA NCEI</td>
+      </tr>
+      <tr>
+        <td><code>High_CDD</code></td>
+        <td>Cooling degree-days in top quartile of county $c$'s historical distribution</td>
+        <td>NOAA NCEI</td>
+      </tr>
+      <tr>
+        <td><code>High_HDD</code></td>
+        <td>Heating degree-days in top quartile of county $c$'s historical distribution</td>
+        <td>NOAA NCEI</td>
+      </tr>
+      <tr>
+        <td><code>High_AQI_Max</code></td>
+        <td>Maximum annual AQI $> 100$ in county $c$, year $t$ (unhealthy threshold)</td>
+        <td>EPA AQS</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    Shocks are denoted generically as $S_{ct} \in \{0, 1\}$, where $c$ indexes the county
+    and $t$ indexes the year. For the hospital panel, a hospital $i$ inherits the shock of
+    its location county: $S_{it} \equiv S_{c(i),t}$.
+  </p>
+
+  <div class="note">
+    <strong>Note on "treatment":</strong> These are <em>recurring binary shocks</em>, not
+    one-time absorbing treatments. A county can be in drought in 2013, out in 2014–2016,
+    back in drought in 2017, and so on. This distinguishes the design from canonical
+    staggered-adoption DiD (e.g., Callaway–Sant'Anna): the estimator does not assume a
+    single irreversible treatment date, and the persistence analysis below is specifically
+    designed to exploit this entry/exit variation.
+    As a complementary identification check, §2.5–2.6 collapse the recurring series to a
+    <em>first-onset cohort</em> and run a clean never-exposed-control difference-in-differences
+    around the 2012 Midwest drought.
+  </div>
+
+  <hr class="section-sep">
+
+  <!-- ========== SECTION 2: PAPER 1 ========== -->
+  <h1>2. Paper 1 — Incidence: Do Climate Shocks Raise Health Costs?</h1>
+
+  <p>
+    Paper 1 asks whether contemporaneous and lagged shock exposure shifts the <em>level</em>
+    of the outcome. The specification is a standard distributed-lag two-way fixed-effects model.
+    Sections&nbsp;2.1–2.4 develop that model; §2.5–2.6 add a sharper, single-event
+    difference-in-differences cross-check that answers the same incidence question with a
+    never-exposed control group.
+  </p>
+
+  <h2>2.1 Specification</h2>
+
+  <div class="spec-box">
+    <div class="label">Paper 1 estimating equation (county panel)</div>
+    $$
+    Y_{ct} = \alpha_c + \gamma_t + \sum_{k=0}^{2} \beta_k \, S_{c,t-k} + \mathbf{X}_{ct}'\delta + \varepsilon_{ct}
+    \tag{1}
+    $$
+    <p style="margin-top:8px;font-size:0.92rem;">
+      where $\alpha_c$ are county fixed effects, $\gamma_t$ are year fixed effects,
+      $S_{c,t-k}$ is the binary shock indicator lagged $k$ years, and $\mathbf{X}_{ct}$
+      are time-varying controls (log CPI-deflated income per capita, unemployment rate,
+      Medicaid expansion indicator). The hospital-panel specification replaces $c$ with
+      hospital CCN $i$ and $\alpha_c$ with $\alpha_i$.
+    </p>
+    <p style="margin-top:8px;font-size:0.92rem;">
+      <strong>How many regressions?</strong> Equation (1) is estimated <strong>once per
+      (outcome, shock) pair</strong> — a single pooled regression on all ~41,400
+      county-year observations. The three shock terms $S_{c,t},\, S_{c,t-1},\, S_{c,t-2}$
+      all enter the right-hand side of that one regression simultaneously; there is no
+      loop over individual years or counties.
+    </p>
+  </div>
+
+  <p>
+    The three terms $\beta_0, \beta_1, \beta_2$ are recovered from that single regression.
+    They trace how the outcome responds in the shock year itself, one year after, and two
+    years after a shock year — all identified jointly from the same estimation.
+  </p>
+
+  <h2>2.2 What is the comparison?</h2>
+
+  <p>
+    The county and year fixed effects give the estimator a precise comparison group.
+    Suppose Maricopa County, Arizona enters extreme drought in 2012
+    ($S_{c,2012} = 1$, having been out of drought in 2010 and 2011).
+  </p>
+  <ul>
+    <li>
+      <strong>County FE ($\alpha_c$)</strong> absorbs the time-invariant average level of
+      the outcome for Maricopa County — its baseline premium cost, demographics, and
+      healthcare market structure. This removes the comparison problem of "Arizona counties
+      are permanently more expensive than Vermont counties."
+    </li>
+    <li>
+      <strong>Year FE ($\gamma_{2012}$)</strong> absorbs the national average change in
+      2012 common to all counties — ACA rollout effects, general medical inflation, any
+      aggregate macroeconomic movement. This removes the comparison problem of "all
+      counties' premiums rose in 2012."
+    </li>
+  </ul>
+  <p>
+    After these two absorptions, $\hat{\beta}_0$ asks: <em>did Maricopa County's 2012
+    outcome deviate from its own historical average by more than the corresponding
+    deviation for counties that were not in drought in 2012?</em>
+    The control group for $\hat{\beta}_0$ is every county with $S_{c,2012} = 0$
+    — observed in the same year, each adjusted for its own county-level average.
+    $\hat{\beta}_1$ uses the same logic one year displaced: the "treated" counties are those
+    with $S_{c,2011} = 1$, and the control is counties with $S_{c,2011} = 0$, both
+    measured in 2012 outcomes. $\hat{\beta}_2$ repeats for the 2010 drought vintage
+    measured in 2012 outcomes.
+  </p>
+  <p>
+    The identifying variation is therefore counties that <em>switch</em> drought status
+    across years. A county that is always in drought or never in drought contributes to the
+    precision of the county FE but not to identification of $\hat{\beta}_k$; the informative
+    observations are the within-county year-to-year changes that coincide with
+    entering or leaving a shock state.
+  </p>
+
+  <h2>2.3 Cumulative effect</h2>
+
+  <p>
+    To see where the cumulative effect comes from, trace what happens to a single
+    shock year in the distributed-lag structure. Suppose Maricopa County is in drought
+    only in 2012 ($S_{c,2012} = 1$; all other years $= 0$). That one event appears
+    three times in the pooled panel regression:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Panel year ($t$)</th>
+        <th>Which regressor carries the 2012 drought</th>
+        <th>Coefficient estimated</th>
+        <th>Meaning</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>2012</td>
+        <td>$S_{c,2012}$ (contemporaneous)</td>
+        <td>$\hat{\beta}_0$</td>
+        <td>Effect on the outcome in the drought year itself</td>
+      </tr>
+      <tr>
+        <td>2013</td>
+        <td>$S_{c,t-1} = S_{c,2012}$ (one-year lag)</td>
+        <td>$\hat{\beta}_1$</td>
+        <td>Residual effect one year after the drought</td>
+      </tr>
+      <tr>
+        <td>2014</td>
+        <td>$S_{c,t-2} = S_{c,2012}$ (two-year lag)</td>
+        <td>$\hat{\beta}_2$</td>
+        <td>Residual effect two years after the drought</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    Each row is a separate observation in the same regression. The distributed-lag
+    model picks up the 2012 drought's contribution in each outcome year.
+    The <strong>cumulative effect</strong> sums across all three:
+    $$
+    \hat{\beta}_{\text{cum}} = \hat{\beta}_0 + \hat{\beta}_1 + \hat{\beta}_2
+    \tag{2}
+    $$
+    This is the total change in the outcome accumulated over the drought year and the
+    two years following — the area under the three-period impulse response.
+    It answers: <em>if a county experiences one year of drought, by how much does the
+    outcome shift in total across the contemporaneous and two subsequent years?</em>
+  </p>
+
+  <p>
+    Because all three $\hat{\beta}_k$ come from the same regression, the cumulative
+    estimate is a linear combination of coefficients that share a joint covariance
+    structure. Its variance is:
+    $$
+    \widehat{\operatorname{Var}}\!\left(\hat{\beta}_{\text{cum}}\right)
+    = \sum_{j=0}^{2}\sum_{k=0}^{2} \widehat{\operatorname{Cov}}\!\left(\hat{\beta}_j, \hat{\beta}_k\right)
+    \tag{3}
+    $$
+    computed from the state-clustered variance–covariance matrix. Ignoring the
+    off-diagonal covariance terms (as one would if summing three separate regressions)
+    would give the wrong standard error. The Wald $z$-test uses the full $3\times3$
+    block (implementation: <code>lincom()</code> in <code>Code/cumulative_dose.R</code>).
+  </p>
+
+  <h2>2.4 Selected headline results</h2>
+
+  <table>
+    <thead>
+      <tr><th>Panel</th><th>Shock</th><th>Outcome</th><th>Cumulative $\hat{\beta}$</th><th>$p$</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Hospital</td>
+        <td>High_CDD (heat)</td>
+        <td>Uncompensated care (% NPR)</td>
+        <td>$+1.22$ pp</td>
+        <td>0.063</td>
+      </tr>
+      <tr>
+        <td>Hospital</td>
+        <td>High_HDD (cold)</td>
+        <td>Uncompensated care (\$2023)</td>
+        <td>$+\$1.55$M per hospital</td>
+        <td>0.022</td>
+      </tr>
+      <tr>
+        <td>Hospital</td>
+        <td>Is_Extreme_Drought</td>
+        <td>Uncompensated care (% NPR)</td>
+        <td>$-1.68$ pp</td>
+        <td>0.032</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="note">
+    <strong>Drought sign caveat:</strong> The negative drought coefficient on uncompensated
+    care is a measurement artifact, not a causal benefit. Credit-bureau and billing measures
+    of health-cost distress systematically undercount in drought-stricken areas (lower
+    insurance rates, lower utilization, thinner credit files). This recurs across the demand
+    and supply sides and is flagged throughout.
+  </div>
+
+  <!-- ---- DiD: natural experiment ---- -->
+  <h2>2.5 A sharper control group: the 2012 Midwest drought as a natural experiment</h2>
+
+  <p>
+    The distributed-lag model in §2.1 identifies $\hat{\beta}_k$ from <em>every</em> county
+    that switches drought status — including counties that flicker in and out of drought
+    repeatedly and counties hit in many different years. That is statistically efficient, but
+    the control group for any given drought year ($S_{c,t}=0$) silently includes counties that
+    were droughted in <em>other</em> years. The committee asked for a complementary design that
+    removes this contamination: isolate one large, well-understood event, and compare the
+    counties it hit <em>for the first time</em> against counties that were <em>never</em> hit
+    at all. The 2012 Midwest drought — the most geographically extensive single-year extreme
+    drought in the 2011–2023 panel — is the natural candidate.
+  </p>
+
+  <div class="spec-box">
+    <div class="label">§2.5 estimating equation — sharp 2×2 difference-in-differences</div>
+    $$
+    Y_{ct} = \alpha_c + \gamma_t
+           + \tau \,\bigl(\text{Treated}_c \times \text{Post}_t\bigr)
+           + \varepsilon_{ct}
+    \tag{D1}
+    $$
+    <p style="margin-top:8px;font-size:0.92rem;">
+      $\text{Treated}_c = 1$ if county $c$'s <em>first-ever</em> extreme-drought year in the
+      panel is 2012; $\text{Post}_t = 1$ for $t \geq 2012$. The county FE absorbs the
+      time-invariant $\text{Treated}_c$ main effect and the year FE absorbs the $\text{Post}_t$
+      main effect, so only the interaction survives — $\hat{\tau}$ is the average treatment
+      effect on the treated (ATT).
+    </p>
+    <p style="margin-top:8px;font-size:0.92rem;">
+      <strong>Treated vs. control.</strong> Treated $= 139$ counties (first-onset 2012);
+      control $= 2{,}534$ counties that are <em>never</em> in extreme drought across all
+      thirteen years. Counties that are droughted but whose first onset is some other year are
+      <em>excluded</em> from this estimation — that exclusion is exactly what makes the control
+      group clean. Estimated once per (outcome) with <code>feols(Y ~ Treated:Post | fips_code + Year)</code>,
+      clustered at the state level.
+    </p>
+  </div>
+
+  <h2>2.5.1 What is the comparison?</h2>
+
+  <p>
+    The contrast with §2.2 is precise. In the distributed-lag model, $\hat{\beta}_0$'s control
+    group was "every county not in drought <em>this</em> year" — which includes a county that
+    was in drought last year or will be next year. Here the control group is purified to
+    counties that are <em>never</em> droughted in the whole window. The 2012 drought cohort is
+    then compared, before vs. after 2012, to that never-exposed pool, before vs. after 2012:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th></th>
+        <th>Pre (2011)</th>
+        <th>Post (2012–2023)</th>
+        <th>Within-group change</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>Treated</strong> (139 first-onset-2012 counties)</td>
+        <td>$\bar{Y}^{T}_{\text{pre}}$</td>
+        <td>$\bar{Y}^{T}_{\text{post}}$</td>
+        <td>$\Delta^{T} = \bar{Y}^{T}_{\text{post}} - \bar{Y}^{T}_{\text{pre}}$</td>
+      </tr>
+      <tr>
+        <td><strong>Control</strong> (2,534 never-exposed counties)</td>
+        <td>$\bar{Y}^{C}_{\text{pre}}$</td>
+        <td>$\bar{Y}^{C}_{\text{post}}$</td>
+        <td>$\Delta^{C} = \bar{Y}^{C}_{\text{post}} - \bar{Y}^{C}_{\text{pre}}$</td>
+      </tr>
+      <tr style="background:#f0f5fb;">
+        <td colspan="3" style="text-align:right;"><strong>Difference-in-differences</strong></td>
+        <td>$\hat{\tau} = \Delta^{T} - \Delta^{C}$</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    The two-way FE regression (D1) is the multi-year, multi-county generalization of this 2×2
+    table: it replaces the single post mean with a FE-adjusted average over all post years and
+    all 2,534 control counties, but $\hat{\tau}$ has exactly the 2×2 interpretation — <em>how
+    much more did the treated counties' outcome move, relative to never-droughted counties,
+    after the 2012 drought hit?</em>
+  </p>
+
+  <h2>2.5.2 Worked numerical example</h2>
+
+  <div class="worked-example">
+    <div class="we-title">Example: 2012 Midwest Drought → Personal Income per Capita (PCPI, \$2023)</div>
+
+    <p>
+      The specification is equation (D1) with $Y = $ <code>PCPI_Real</code>,
+      estimated on the 139 treated + 2,534 never-exposed counties,
+      $N = 34{,}355$ county-years, clustered at the state level
+      (<code>Code/run_did_analysis.R</code>).
+    </p>
+
+    <h3 style="margin-top:14px;">Step 1 — The 2×2 arithmetic</h3>
+
+    <p>
+      These are the <em>actual</em> sample group means (county-year averages of
+      <code>PCPI_Real</code>, in \$2023). Pre $=$ 2011 (the only pre-drought year in the panel);
+      Post $=$ 2012–2023. Real personal income per capita rose nationally over the decade, so
+      <em>both</em> groups go up — the question is by how much less the treated group rose:
+    </p>
+
+    <table style="margin:10px 0;">
+      <thead>
+        <tr><th></th><th>Pre (2011)</th><th>Post (2012–2023 avg)</th><th>Change $\Delta$</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Treated</strong> (139 counties)</td>
+          <td style="font-family:monospace;">\$48,488</td>
+          <td style="font-family:monospace;">\$51,435</td>
+          <td style="font-family:monospace;">+\$2,946</td>
+        </tr>
+        <tr>
+          <td><strong>Control</strong> (2,534 counties)</td>
+          <td style="font-family:monospace;">\$49,297</td>
+          <td style="font-family:monospace;">\$53,554</td>
+          <td style="font-family:monospace;">+\$4,257</td>
+        </tr>
+        <tr style="background:#f0f5fb;">
+          <td colspan="3" style="text-align:right;"><strong>$\hat{\tau} = \Delta^{T} - \Delta^{C}$</strong></td>
+          <td style="font-family:monospace;"><strong>−\$1,311</strong></td>
+        </tr>
+      </tbody>
+    </table>
+
+    <p>
+      Both groups grew, but the drought cohort grew <strong>\$1,311 per capita less</strong>
+      ($\$2{,}946 - \$4{,}257$). That gap — not the raw post-period difference — is the causal
+      estimate, because the control's $+\$4{,}257$ captures the national income growth the
+      treated counties would have enjoyed absent the drought. With a single pre-period, the
+      two-way FE regression (D1) returns this 2×2 difference exactly: $\hat{\tau} = -\$1{,}311$.
+    </p>
+
+    <h3 style="margin-top:14px;">Step 2 — Inference</h3>
+
+    <p>
+      The state-clustered standard error is $\widehat{\operatorname{SE}}(\hat{\tau}) = 576$:
+      $$
+      z = \frac{\hat{\tau}}{\widehat{\operatorname{SE}}(\hat{\tau})}
+        = \frac{-1{,}311}{576} = -2.28
+      \qquad p = 0.027
+      $$
+      We reject the null of no income effect at the 5% level.
+    </p>
+
+    <h3 style="margin-top:14px;">Step 3 — The employment companion</h3>
+
+    <p>
+      Re-running (D1) with $Y = $ <code>Civilian_Employed</code> on the same cohort gives a
+      sharper result:
+      $$
+      \hat{\tau} = -2{,}053 \text{ persons}, \quad
+      \widehat{\operatorname{SE}} = 478, \quad
+      z = -4.29, \quad p = 0.0001
+      $$
+      The 2012 drought cohort lost about 2,053 employed persons per county relative to
+      never-droughted counties.
+    </p>
+
+    <p style="margin-top:10px;">
+      <span class="verdict verdict-scar">INCIDENCE CONFIRMED — income &amp; jobs fall</span>
+      &nbsp; The clean never-exposed design recovers a negative real-economy incidence of
+      drought — a per-capita income decline and an employment decline — that is robust to the
+      contamination concern in §2.2. This is the design the write-up leads with, because it has
+      the largest control pool and the most transparent counterfactual.
+    </p>
+  </div>
+
+  <div class="note">
+    <strong>Why are the medical-debt outcomes null here?</strong> In the same 2×2,
+    <code>Medical_Debt_Share</code> ($\hat{\tau} = -0.006$, $p=0.49$) and
+    <code>Hosp_BadDebt_PerCapita</code> ($\hat{\tau} = +6.3$, $p=0.29$) are insignificant.
+    This is expected, not contradictory: the 2×2 averages the effect over <em>eleven</em>
+    post-drought years, while the local-projection analysis (Paper 2) finds the debt response
+    peaks at $h = 1\text{–}2$ and fades. A long-run average of a transient spike is close to
+    zero. The real-economy outcomes (income, employment), by contrast, are persistent and so
+    survive the averaging.
+  </div>
+
+  <!-- ---- DRDID robustness ---- -->
+  <h2>2.5.3 Doubly-robust check: conditional parallel trends</h2>
+
+  <p>
+    The sharp 2×2 assumes <em>unconditional</em> parallel trends — that, absent the drought,
+    the treated counties' outcomes would have moved like the never-exposed pool's. That is a
+    strong assumption here, because the two groups are compositionally different: the 139
+    treated counties are disproportionately rural agricultural counties of Georgia, the
+    Mountain West, and the Plains, while the 2,534 never-exposed counties skew more urban,
+    coastal, and eastern. If those county types were on different secular trajectories (farm
+    economy cycles, rural population decline) for reasons unrelated to drought, the 2×2 would
+    mistake that divergence for a treatment effect.
+  </p>
+
+  <p>
+    The frontier response is to move to <em>conditional</em> parallel trends via the
+    Sant'Anna–Zhao (2020) <strong>doubly-robust</strong> DiD: it combines an outcome-regression
+    and a propensity-score model, and is consistent if <em>either</em> is correctly specified.
+    We condition only on <strong>pre-treatment baseline (2011)</strong> covariates — log
+    population, baseline median household income, and Census division. We deliberately do
+    <em>not</em> condition on contemporaneous income, employment, or premiums: those are
+    <em>mediators</em> of the climate shock, and controlling for them would be post-treatment
+    bias (a "bad control" that absorbs part of the very effect being estimated).
+  </p>
+
+  <div class="spec-box">
+    <div class="label">§2.5.3 estimator — Sant'Anna–Zhao doubly-robust ATT</div>
+    $$
+    \widehat{\tau}_{\text{dr}} = \mathbb{E}\!\left[\left(\frac{D}{\mathbb{E}[D]}
+      - \frac{\hat{\pi}(X)\,(1-D)/(1-\hat{\pi}(X))}{\mathbb{E}[\hat{\pi}(X)(1-D)/(1-\hat{\pi}(X))]}\right)
+      \bigl(\Delta Y - \widehat{m}_0(X)\bigr)\right]
+    \tag{D2}
+    $$
+    <p style="margin-top:8px;font-size:0.92rem;">
+      $\Delta Y$ is the unit's pre-to-post outcome change (post collapsed to the 2012–2023
+      mean), $\hat{\pi}(X)$ the estimated propensity score, and $\widehat{m}_0(X)$ the
+      control-group outcome-change regression, all on baseline covariates $X$. Estimated with
+      <code>DRDID::drdid</code> (improved/locally-efficient form) on the 2012 cohort vs. the
+      never-exposed controls. Implementation: <code>Code/did_robustness/02_doubly_robust_did.R</code>.
+    </p>
+  </div>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Outcome</th>
+        <th>Unconditional 2×2 $\hat{\tau}$</th>
+        <th>Doubly-robust $\hat{\tau}_{\text{dr}}$</th>
+        <th>DR 95% CI</th>
+        <th>Verdict</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>PCPI per capita (\$2023)</td>
+        <td>$-\$1,311$</td>
+        <td>$\mathbf{-\$1,451}$</td>
+        <td>[$-2{,}461$, $-441$]</td>
+        <td><span class="verdict verdict-scar">Confirmed — stronger</span></td>
+      </tr>
+      <tr>
+        <td>Civilian employed</td>
+        <td>$-2,053$</td>
+        <td>$\mathbf{-871}$</td>
+        <td>[$-1{,}719$, $-23$]</td>
+        <td><span class="verdict verdict-sym">Attenuated ~58%</span></td>
+      </tr>
+      <tr>
+        <td>Median HH income (\$2023)</td>
+        <td>$-\$992$</td>
+        <td>$-\$1,186$</td>
+        <td>[$-2{,}140$, $-232$]</td>
+        <td><span class="verdict verdict-scar">Confirmed</span></td>
+      </tr>
+      <tr>
+        <td>Medical-debt share</td>
+        <td>$-0.006$ (n.s.)</td>
+        <td>$-0.011$</td>
+        <td>[$-0.019$, $-0.002$]</td>
+        <td><span class="verdict verdict-sym">Measurement-fragile</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    The <strong>income</strong> result is robust to conditioning — it is essentially unchanged,
+    if anything slightly stronger ($-\$1,451$). The <strong>employment</strong> result is
+    <em>not</em>: conditioning on baseline composition shrinks it by roughly 58% (from $-2,053$
+    to $-871$), with a confidence interval that now barely excludes zero. The income effect is
+    therefore the credible headline; the employment effect should be read as a weaker,
+    composition-sensitive secondary finding.
+  </p>
+
+  <div class="note">
+    <strong>Does the 2012 effect generalize?</strong> Re-estimating the doubly-robust design as
+    a full Callaway–Sant'Anna model across <em>all</em> drought cohorts (2011–2022, never-treated
+    controls, same baseline covariates) yields a <em>null</em> average: PCPI $+\$350$ (s.e. 585),
+    employment $+2{,}609$ (s.e. 2,245), both insignificant, and the pooled employment event-study
+    even shows positive pre-trends. The negative real-economy effect is thus specific to the 2012
+    natural experiment — the largest, cleanest single event — and should not be presented as the
+    effect of a <em>typical</em> drought cohort.
+  </div>
+
+  <div class="note">
+    <strong>Two caveats carried throughout.</strong> (i) <em>Estimand.</em> Treatment is
+    recurring: the 2012 cohort is actually in extreme drought only ~13% of its post-2012
+    county-years, so $\hat{\tau}$ is an <em>intent-to-treat</em> "effect of first drought onset,"
+    not the effect of being currently droughted. (ii) <em>Label.</em> The "2012 Midwest drought"
+    name is historical shorthand; the extreme-PDSI cohort is concentrated in Georgia, the
+    Mountain West, and the Plains rather than the Midwest proper.
+  </div>
+
+  <h2>2.6 Callaway–Sant'Anna extension: event-time profiles</h2>
+
+  <p>
+    The sharp 2×2 uses a single cohort and a single pre-period. A natural generalization keeps
+    the never-exposed control group but admits <em>multiple</em> first-onset cohorts (counties
+    whose first drought is 2011, 2012, 2013, 2021, 2022), estimates a separate ATT for each
+    cohort against the never-treated controls, and then aggregates by event time
+    $e = t - g$ (years since a cohort's onset year $g$), weighting by cohort size. This is the
+    Callaway–Sant'Anna (2021) group-time ATT estimator.
+  </p>
+
+  <div class="note">
+    <strong>Reconciling with "recurring shocks" (§1).</strong> The §1 note flagged that our
+    shocks are recurring, not absorbing — which is why canonical staggered-adoption DiD is not
+    the <em>primary</em> design. The DiD here sidesteps that by defining each cohort on its
+    <em>first</em> onset and using only never-treated counties as controls. It deliberately
+    trades away the entry/exit richness (which Paper 2 exploits via onset/exit states) in
+    exchange for a clean, contamination-free counterfactual. The two designs answer different
+    questions and are reported as complementary, not competing.
+  </div>
+
+  <p>
+    Because the local <code>did</code> R package would not build on the project toolchain, the
+    group-time ATTs are implemented manually with <code>fixest::feols</code> (per-cohort 2×2
+    against never-treated, aggregated to event time) — also more consistent with the project's
+    <code>fixest</code>-only convention. The drought cohorts and their sizes are 2011 (251),
+    2012 (139), 2013 (30), 2021 (50), 2022 (49). The headline aggregated cells:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Event time $e$</th>
+        <th>Outcome</th>
+        <th>$\widehat{\text{ATT}}_e$</th>
+        <th>$p$</th>
+        <th>Cohorts pooled (treated $N$)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>$e = 0$</td>
+        <td>PCPI per capita (\$2023)</td>
+        <td>$-\$1,050$</td>
+        <td>0.0018</td>
+        <td>4 cohorts (268)</td>
+      </tr>
+      <tr>
+        <td>$e = 0$</td>
+        <td>Civilian employed</td>
+        <td>$-142$</td>
+        <td>0.0016</td>
+        <td>4 cohorts (268)</td>
+      </tr>
+      <tr>
+        <td>$e = 11$</td>
+        <td>Civilian employed</td>
+        <td>$-3,915$</td>
+        <td>0.0001</td>
+        <td>1 cohort — 2012 (139)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    The event-time profile tells a compounding story: the contemporaneous ($e=0$) income hit
+    of about \$1,050 per capita matches the sharp 2×2, and the employment effect, small on
+    impact, deepens to roughly $-3{,}915$ jobs eleven years out — though only the large 2012
+    cohort survives to that horizon, so the long-run cell rests on a single cohort and is read
+    as suggestive of persistence rather than a precise decade-out point estimate.
+  </p>
+
+  <div class="note">
+    <strong>Parallel-trends caveat.</strong> The panel starts in 2011, so the 2012 cohort has
+    only a single pre-period ($e = -1$) and a formal pre-trend test is not feasible for it; the
+    diagnostic is a visual event-study plot (<code>Analysis/plots/did/eventstudy_*.png</code>),
+    which shows reasonably flat pre-periods for the drought PCPI and employment outcomes. The
+    analogous heat (CDD) DiD is <em>not</em> given headline status: CDD treatment concentrates
+    in southern states and never-exposed controls in northern states, so two-way FE cannot rule
+    out region-secular trends. Drought is the cleanest event and the one the write-up leads with.
+  </div>
+
+  <div class="note">
+    <strong>How this sits beside Papers 1–2.</strong> The distributed-lag TWFE (§2.1) and the
+    local projection (Paper 2) identify <em>dynamic responses to year-over-year changes</em> in
+    shock status; the DiD here identifies the <em>persistent treated-vs-never-exposed gap</em>.
+    They are complementary lenses on the same shock, and where they appear to disagree (e.g.,
+    Paper 2's "no incremental scarring" reading of cold spells vs. the DiD's long-run gap) the
+    resolution is that each design defines a different estimand — the LP measures the response
+    around entry and exit, the DiD measures the cost of <em>being</em> a shock-exposed county.
+  </div>
+
+  <hr class="section-sep">
+
+  <!-- ========== SECTION 3: PAPER 2 ========== -->
+  <h1>3. Paper 2 — Persistence: Scarring, Reversibility, and Cumulative Dose</h1>
+
+  <p>
+    Paper 2 asks two questions about dynamics: (A) Is the cost of a shock symmetrically
+    reversed when the shock ends, or does it leave a lasting imprint?  (B) Does repeated
+    exposure accumulate, compressing outcomes progressively?
+    These are answered by two complementary estimators applied to both panels.
+  </p>
+
+  <h2>3.1 Transition-state definitions</h2>
+
+  <p>
+    The first step converts the binary shock series into a <em>transition state</em> that
+    characterizes how the county (or hospital) arrived at its current shock status.
+    Let $S_{it}$ and $S_{i,t-1}$ be the current and lagged shock indicator.
+    The four possible states and their dummies are:
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>$(S_{it},\, S_{i,t-1})$</th>
+        <th>State label</th>
+        <th>Dummy</th>
+        <th>Interpretation</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>$(1, 0)$</td>
+        <td><strong>Onset</strong></td>
+        <td>$D^{on}_{it}$</td>
+        <td>First year of a new shock spell — "just treated"</td>
+      </tr>
+      <tr>
+        <td>$(1, 1)$</td>
+        <td><strong>Persist</strong></td>
+        <td>$D^{per}_{it}$</td>
+        <td>Continuation of an ongoing spell</td>
+      </tr>
+      <tr>
+        <td>$(0, 1)$</td>
+        <td><strong>Exit</strong></td>
+        <td>$D^{ex}_{it}$</td>
+        <td>First year after a spell ends — "just de-treated"</td>
+      </tr>
+      <tr style="background:#f5f4f0; font-style:italic;">
+        <td>$(0, 0)$</td>
+        <td>Out (omitted)</td>
+        <td>—</td>
+        <td>Not in shock this year <em>or</em> last year — reference group</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    The transition dummies are undefined when either $S_{it}$ or $S_{i,t-1}$ is missing
+    (these observations are dropped). All three dummies are constructed inside
+    <code>make_transitions()</code> in <code>Code/run_hospital_persistence.R</code>.
+  </p>
+
+  <div class="note">
+    <strong>DiD analogy:</strong>
+    $D^{on}_{it} = 1$ is the "newly treated" group in a DiD.
+    $D^{ex}_{it} = 1$ is the "de-treated" group — a reversal experiment.
+    The omitted category $(0,0)$ is the "never-treated this period or last period" control.
+    $D^{per}_{it} = 1$ has no clean DiD analogue; it captures the effect of being in the
+    <em>interior</em> of a sustained treatment spell.
+  </div>
+
+  <h2>3.2 The local-projection estimating equation</h2>
+
+  <p>
+    Paper 2 uses a Jordà (2005) local-projection approach: instead of estimating a
+    single dynamic model and propagating it forward analytically, a separate pooled
+    panel regression is estimated for each forecast horizon $h$. The estimating
+    equation at horizon $h$ is:
+  </p>
+
+  <div class="spec-box">
+    <div class="label">Paper 2 estimating equation — onset/persist/exit</div>
+    $$
+    Y_{i,t+h} = \alpha_i + \gamma_t + \beta^{on}_h \, D^{on}_{it} + \beta^{per}_h \, D^{per}_{it} + \beta^{ex}_h \, D^{ex}_{it} + \varepsilon_{i,t+h}
+    \tag{4}
+    $$
+    <p style="margin-top:8px;font-size:0.92rem;">
+      The left-hand side is the <em>level</em> of $Y$ measured $h$ years after the
+      transition year $t$. The transition dummies on the right-hand side are always
+      indexed by $t$ — the year in which the county changed shock state.
+      Unit and year fixed effects ($\alpha_i, \gamma_t$) absorb time-invariant
+      heterogeneity and common time trends, with $\gamma_t$ indexed by the
+      transition year $t$, not the outcome year $t+h$.
+    </p>
+    <p style="margin-top:8px;font-size:0.92rem;">
+      <strong>How many regressions?</strong> Equation (4) is estimated
+      <strong>three times per (outcome, shock) pair</strong> — once for $h=0$, once
+      for $h=1$, once for $h=2$ — each time as a single pooled panel regression over
+      all county-year (or hospital-year) observations. There is no loop over years or
+      counties; all units and all years enter each regression together.
+    </p>
+  </div>
+
+  <p>The three regressions differ only in their left-hand side and their usable sample:</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Horizon $h$</th>
+        <th>Left-hand side</th>
+        <th>Right-hand side transition dummies</th>
+        <th>Sample lost</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>$h = 0$</td>
+        <td>$Y_{i,t}$ (outcome in the transition year)</td>
+        <td>$D^{on}_{it},\, D^{per}_{it},\, D^{ex}_{it}$</td>
+        <td>None (~41,400 obs.)</td>
+      </tr>
+      <tr>
+        <td>$h = 1$</td>
+        <td>$Y_{i,t+1}$ (outcome one year later)</td>
+        <td>$D^{on}_{it},\, D^{per}_{it},\, D^{ex}_{it}$</td>
+        <td>Last year of panel (~38,200 obs.)</td>
+      </tr>
+      <tr>
+        <td>$h = 2$</td>
+        <td>$Y_{i,t+2}$ (outcome two years later)</td>
+        <td>$D^{on}_{it},\, D^{per}_{it},\, D^{ex}_{it}$</td>
+        <td>Last two years of panel (~35,000 obs.)</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    Each of the three regressions yields its own set of coefficient estimates
+    $(\hat{\beta}^{on}_h, \hat{\beta}^{per}_h, \hat{\beta}^{ex}_h)$ and its own
+    clustered variance–covariance matrix. The symmetry test in §3.4 is performed
+    separately at each horizon using that horizon's vcov.
+  </p>
+
+  <h2>3.3 Interpretation of the three coefficients</h2>
+
+  <p>
+    All coefficients in equation (4) are measured relative to the reference group $(0,0)$:
+  </p>
+
+  <ul>
+    <li>
+      $\hat{\beta}^{on}_h$: the average change in $Y_{i,t+h}$ for a unit in its
+      <em>first</em> shock year, relative to a unit that had no shock in either $t$ or $t-1$.
+      This is the "treatment onset" effect $h$ periods forward.
+    </li>
+    <li>
+      $\hat{\beta}^{per}_h$: the effect for units still <em>inside</em> an ongoing spell.
+      Relative to the onset coefficient, it tells you whether staying in the shock is more
+      or less damaging than just entering it.
+    </li>
+    <li>
+      $\hat{\beta}^{ex}_h$: the effect in the <em>first year after</em> the shock ends.
+      If the shock were fully transitory and reversible, $\hat{\beta}^{ex}_h$ would be
+      zero — the "de-treated" units would look identical to the "never-treated" control.
+      A nonzero $\hat{\beta}^{ex}_h$ means the exit period differs from the reference even
+      after the shock has cleared.
+    </li>
+  </ul>
+
+  <h2>3.3a What is the comparison for each transition state?</h2>
+
+  <p>
+    The unit and year FEs work the same way as in Paper 1: they absorb each county's
+    (or hospital's) permanent level and the common year trend, leaving within-unit
+    deviations as the variation. The key addition is that the comparison group is
+    now <em>defined by transition state</em>, not just by the contemporaneous shock value.
+  </p>
+
+  <p>
+    <strong>Onset ($D^{on}_{ct} = 1$, i.e., $S_{ct}=1,\, S_{c,t-1}=0$).</strong>
+    Suppose Maricopa County, AZ is not in drought in 2011 but enters drought in 2012.
+    Its 2012 transition state is Onset. For horizon $h=0$, $\hat{\beta}^{on}_0$
+    compares Maricopa's 2012 outcome — as a within-county deviation from its own
+    average — to the within-county deviations of all counties whose transition
+    state in 2012 is the reference $(0,0)$: not in drought this year or last year.
+    Counties in the Persist or Exit state in 2012 are in the regression but assigned
+    to different dummies; they do not contaminate the Onset estimate.
+  </p>
+
+  <p>
+    <strong>Persist ($D^{per}_{ct} = 1$, i.e., $S_{ct}=1,\, S_{c,t-1}=1$).</strong>
+    Suppose Maricopa remains in drought in 2013 as well ($S_{c,2013}=1$). Its 2013
+    transition state is Persist. $\hat{\beta}^{per}_0$ compares Maricopa's 2013
+    within-county deviation to the same $(0,0)$ reference counties in 2013.
+    This answers: how does the <em>interior</em> of a sustained drought spell differ
+    from never being in drought — in the same year, after removing each unit's
+    permanent level?
+  </p>
+
+  <p>
+    <strong>Exit ($D^{ex}_{ct} = 1$, i.e., $S_{ct}=0,\, S_{c,t-1}=1$).</strong>
+    Suppose drought clears in 2014 ($S_{c,2014}=0$, $S_{c,2013}=1$). Maricopa's
+    2014 transition state is Exit. $\hat{\beta}^{ex}_0$ compares Maricopa's 2014
+    within-county deviation to $(0,0)$ reference counties in 2014. The drought is
+    <em>gone</em> in 2014 — if $\hat{\beta}^{ex}_0 \neq 0$, it means the county
+    does not immediately revert to its pre-shock trajectory even though the shock
+    has cleared. That is what scarring means empirically.
+  </p>
+
+  <div class="note">
+    <strong>One regression, three simultaneous comparisons.</strong>
+    All three dummies enter a <em>single</em> regression at each horizon $h$, so
+    the reference $(0,0)$ group is the common benchmark for Onset, Persist, and Exit
+    simultaneously. The regression partitions the county-year observations by which
+    of the four transition states they occupy in year $t$; the $(0,0)$ category is the
+    omitted group. Year FEs absorb any common shock in $t$ that would otherwise
+    confound the comparison.
+  </div>
+
+  <h2>3.4 The symmetry (scarring) test</h2>
+
+  <p>
+    "Reversibility" has a precise formulation. If a shock is <em>fully reversible</em>,
+    the cost of entering (relative to never being hit) should be exactly undone on exit.
+    The onset and exit coefficients would then be equal in magnitude but opposite in sign,
+    so their sum is zero.
+    The formal null is:
+  </p>
+
+  $$
+  H_0:\; \beta^{on}_h + \beta^{ex}_h = 0 \qquad (\text{fully reversible})
+  \tag{5}
+  $$
+
+  <p>
+    Define the <strong>asymmetry statistic</strong>:
+    $$
+    \hat{L}_h = \hat{\beta}^{on}_h + \hat{\beta}^{ex}_h
+    \tag{6}
+    $$
+    Because both coefficients come from the <em>same</em> regression at horizon $h$,
+    their covariance is estimable from the single fitted model's variance–covariance matrix.
+    The standard error of $\hat{L}_h$ is:
+    $$
+    \widehat{\operatorname{SE}}(\hat{L}_h)
+    = \sqrt{\,\widehat{\operatorname{Var}}(\hat{\beta}^{on}_h)
+           + \widehat{\operatorname{Var}}(\hat{\beta}^{ex}_h)
+           + 2\,\widehat{\operatorname{Cov}}(\hat{\beta}^{on}_h,\hat{\beta}^{ex}_h)\,}
+    \tag{7}
+    $$
+    The test statistic is:
+    $$
+    z_h = \frac{\hat{L}_h}{\widehat{\operatorname{SE}}(\hat{L}_h)} \;\xrightarrow{d}\; \mathcal{N}(0,1)
+    \tag{8}
+    $$
+    under $H_0$, using state-clustered standard errors throughout.
+  </p>
+
+  <p><strong>Interpretation of $\hat{L}_h$:</strong></p>
+  <ul>
+    <li>
+      $\hat{L}_h = 0$: onset and exit are mirror images — the shock is fully reversible.
+    </li>
+    <li>
+      $\hat{L}_h \neq 0$ and we reject $H_0$: the dynamics are <strong>asymmetric</strong>.
+    </li>
+    <li>
+      The <em>sign</em> of $\hat{L}_h$ and the signs of the individual coefficients together
+      tell the economic story (scarring vs. over-recovery vs. a non-monotone path).
+    </li>
+  </ul>
+
+  <div class="note">
+    <strong>Why not run two separate regressions?</strong> Estimating onset and exit in
+    separate models would require an assumption about independence (or use a bootstrap).
+    The joint specification recovers $\widehat{\operatorname{Cov}}(\hat{\beta}^{on},\hat{\beta}^{ex})$
+    directly from the model, so the test is a standard Wald linear combination — no
+    additional assumption beyond the regression itself.
+  </div>
+
+  <!-- ---- WORKED EXAMPLE ---- -->
+  <h2>3.5 Worked numerical example</h2>
+
+  <div class="worked-example">
+    <div class="we-title">Example: Extreme Drought → Hospital Operating Margin, Horizon $h = 0$</div>
+
+    <p>
+      The specification is equation (4) with $Y =$ <code>Hosp_OperatingMargin</code>,
+      shock = <code>Is_Extreme_Drought</code>, horizon $h = 0$. The model is:
+      $$
+      \text{OpMargin}_{i,t} = \alpha_i + \gamma_t
+        + \beta^{on}_0 \, D^{on}_{it}
+        + \beta^{per}_0 \, D^{per}_{it}
+        + \beta^{ex}_0 \, D^{ex}_{it}
+        + \varepsilon_{it}
+      $$
+      estimated by <code>feols</code> (Correia 2016, <em>fixest</em>),
+      $N = 57{,}302$ hospital-years, clustered at the state level.
+    </p>
+
+    <h3 style="margin-top:14px;">Step 1 — Point estimates</h3>
+
+    <table style="margin:10px 0;">
+      <thead>
+        <tr><th>Coefficient</th><th>Estimate</th><th>Meaning</th></tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>$\hat{\beta}^{on}_0$</td>
+          <td style="font-family:monospace;">+0.01586</td>
+          <td>First drought year vs. (0,0): margin 1.59 pp higher</td>
+        </tr>
+        <tr>
+          <td>$\hat{\beta}^{per}_0$</td>
+          <td style="font-family:monospace;">−0.00168</td>
+          <td>Continued drought year vs. (0,0)</td>
+        </tr>
+        <tr>
+          <td>$\hat{\beta}^{ex}_0$</td>
+          <td style="font-family:monospace;">+0.01089</td>
+          <td>First post-drought year vs. (0,0): margin still 1.09 pp higher</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h3 style="margin-top:14px;">Step 2 — Asymmetry statistic</h3>
+
+    <p>
+      If the shock were fully reversible, the onset coefficient (+1.59 pp) should be
+      undone on exit: $\hat{\beta}^{ex}_0 \approx -0.0159$ and
+      $\hat{\beta}^{on}_0 + \hat{\beta}^{ex}_0 \approx 0$.
+      Instead:
+      $$
+      \hat{L}_0 = \hat{\beta}^{on}_0 + \hat{\beta}^{ex}_0
+               = 0.01586 + 0.01089 = 0.02675
+      $$
+      Both coefficients are positive: entering a drought <em>and</em> exiting a drought
+      are each associated with higher margins relative to the never-shocked reference.
+      The exit state does not "unwind" the onset — it remains elevated.
+    </p>
+
+    <h3 style="margin-top:14px;">Step 3 — Standard error from the joint vcov</h3>
+
+    <p>
+      Let $V$ be the $3 \times 3$ state-clustered variance–covariance matrix for
+      $(\hat{\beta}^{on}_0, \hat{\beta}^{per}_0, \hat{\beta}^{ex}_0)$.
+      We need only the $(1,1)$, $(3,3)$, and $(1,3)$ entries:
+      $$
+      \widehat{\operatorname{SE}}(\hat{L}_0)
+      = \sqrt{V_{11} + V_{33} + 2 V_{13}}
+      = 0.00981
+      $$
+      (reported directly by <code>transition_symmetry_test()</code>
+      in <code>Code/transition_symmetry.R</code>).
+    </p>
+
+    <h3 style="margin-top:14px;">Step 4 — Test</h3>
+
+    <p>
+      $$
+      z_0 = \frac{0.02675}{0.00981} = 2.73
+      \qquad
+      p = 2 \times \Phi(-2.73) \approx 0.0064
+      $$
+      We reject $H_0: \beta^{on}_0 + \beta^{ex}_0 = 0$ at the 1% level.
+    </p>
+
+    <p style="margin-top:10px;">
+      <span class="verdict verdict-scar">ASYMMETRIC — scarring</span>
+      &nbsp; The drought shock leaves a net imprint: even after drought conditions clear,
+      the hospital's operating margin does not revert to the pre-shock reference level.
+      This pattern (positive onset <em>and</em> positive exit, both relative to never-shocked)
+      is consistent with survivorship and financial adaptation — hospitals that pass through
+      a drought spell and remain in the panel are systematically different from hospitals
+      that never face such shocks — rather than straightforward financial deterioration.
+      Uncompensated care follows a parallel asymmetric pattern with negative coefficients
+      throughout (both entry and exit associated with <em>lower</em> measured uncompensated
+      care, a measurement-fragility finding discussed under Paper 1).
+    </p>
+  </div>
+
+  <h2>3.6 Cumulative dose (second persistence lens)</h2>
+
+  <p>
+    The onset/exit specification in §3.2–3.5 isolates the dynamics <em>around a single
+    spell</em> — what happens at entry and immediately after exit. A separate question is
+    whether the <em>total stock</em> of climate exposure accumulated over a unit's history
+    has a monotone dose-response relationship with outcomes: does a hospital (or county)
+    with ten shock-years behind it look systematically different from one with two? This
+    is the "wear and tear vs. adaptation" test.
+  </p>
+
+  <h3>Building the dose counter</h3>
+
+  <p>
+    For each unit $i$, define the running count of shock-positive years up to and
+    including year $t$:
+    $$
+    C_{it} = \sum_{s \leq t} S_{is}
+    \tag{9}
+    $$
+    The counter increments by 1 in every shock year and <strong>never resets</strong>
+    when the unit exits and re-enters the shock state — it measures total accumulated
+    exposure, not current exposure.
+  </p>
+
+  <p>
+    Concretely, suppose Hospital H is in a county that experiences the following
+    <code>Any_Climate_Shock</code> sequence (drought <em>or</em> extreme heat <em>or</em>
+    extreme cold in the hospital's county):
+  </p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Year</th>
+        <th>$S_{it}$ (any shock this year)</th>
+        <th>$C_{it}$ (cumulative shock-years to date)</th>
+        <th>Dose bin</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr><td>2011</td><td>0</td><td>0</td><td>0 (reference)</td></tr>
+      <tr><td>2012</td><td>1</td><td>1</td><td>1–3</td></tr>
+      <tr><td>2013</td><td>1</td><td>2</td><td>1–3</td></tr>
+      <tr><td>2014</td><td>0</td><td>2</td><td>1–3 &nbsp;← counter does not reset on exit</td></tr>
+      <tr><td>2015</td><td>0</td><td>2</td><td>1–3</td></tr>
+      <tr><td>2016</td><td>1</td><td>3</td><td>1–3</td></tr>
+      <tr><td>2017</td><td>1</td><td>4</td><td>4–6</td></tr>
+      <tr><td>2018</td><td>0</td><td>4</td><td>4–6</td></tr>
+      <tr><td>2019</td><td>1</td><td>5</td><td>4–6</td></tr>
+      <tr><td>2020</td><td>1</td><td>6</td><td>4–6</td></tr>
+      <tr><td>2021</td><td>0</td><td>6</td><td>4–6</td></tr>
+      <tr><td>2022</td><td>1</td><td>7</td><td>7–9</td></tr>
+      <tr><td>2023</td><td>1</td><td>8</td><td>7–9</td></tr>
+    </tbody>
+  </table>
+
+  <p>
+    Each row is one observation in the panel regression. The regressor $C_{it}$ varies
+    within hospital $i$ across years — it is this within-hospital variation in accumulated
+    dose that identifies the dose-response, after the hospital FE absorbs Hospital H's
+    permanent (time-invariant) level of, say, operating margin.
+  </p>
+
+  <h3>Two estimating equations</h3>
+
+  <p><strong>Specification A — Linear + quadratic dose-response</strong> (one regression per outcome):</p>
+
+  <div class="spec-box">
+    <div class="label">§3.6 Spec A — quadratic dose-response</div>
+    $$
+    Y_{it} = \alpha_i + \gamma_t + \beta_1 C_{it} + \beta_2 C_{it}^2 + \varepsilon_{it}
+    \tag{10}
+    $$
+    <p style="margin-top:8px;font-size:0.92rem;">
+      Estimated once per outcome on the full panel. $\beta_1$ and $\beta_2$ are recovered
+      jointly. The marginal effect of one additional accumulated shock-year, evaluated at
+      dose level $x$, is:
+      $$
+      \frac{\partial Y}{\partial C}\Bigg|_{C=x} = \beta_1 + 2\beta_2 x
+      $$
+      This is a linear combination of $\hat{\beta}_1$ and $\hat{\beta}_2$ with weights
+      $(1,\; 2x)$, tested via the <code>lincom()</code> Wald procedure using the joint
+      vcov. For Hospital H above, evaluating at $x = 5$ cumulative shock-years gives
+      the marginal effect on operating margin of gaining one more shock-year when already
+      at five years of prior exposure.
+    </p>
+  </div>
+
+  <p>
+    <strong>Reported result.</strong> For operating margin, the estimated marginal effect
+    at $x = 5$ is $+0.0023$ (p = 0.010); at $x = 10$ it shrinks to $+0.0018$ (p = 0.14).
+    The positive sign at moderate dose indicates that hospitals which have accumulated
+    more shock-years are not deteriorating — the likely reading is survivorship
+    (financially weaker hospitals exit the panel first) or operational adaptation.
+  </p>
+
+  <p><strong>Specification B — Dose bins</strong> (one regression per outcome):</p>
+
+  <div class="spec-box">
+    <div class="label">§3.6 Spec B — binned dose</div>
+    $$
+    Y_{it} = \alpha_i + \gamma_t
+      + \delta_{1\text{–}3}\,\mathbf{1}[C_{it} \in 1\text{–}3]
+      + \delta_{4\text{–}6}\,\mathbf{1}[C_{it} \in 4\text{–}6]
+      + \delta_{7\text{–}9}\,\mathbf{1}[C_{it} \in 7\text{–}9]
+      + \delta_{10+}\,\mathbf{1}[C_{it} \geq 10]
+      + \varepsilon_{it}
+    \tag{11}
+    $$
+    <p style="margin-top:8px;font-size:0.92rem;">
+      Reference category: $C_{it} = 0$ (no prior shock exposure). Each $\hat{\delta}$
+      is the average within-unit deviation in $Y$ for observations in that dose bin,
+      relative to zero-exposure observations in the same year (after year FE removal).
+      Hospital H contributes to the 1–3 bin in 2012–2016, to the 4–6 bin in 2017–2021,
+      and to the 7–9 bin in 2022–2023.
+    </p>
+  </div>
+
+  <p>
+    The key contrast is between the highest and lowest non-zero bins — a high-vs-low
+    test of whether long-exposed units differ from barely-exposed units:
+    $$
+    \hat{\Delta} = \hat{\delta}_{10+} - \hat{\delta}_{1\text{–}3}
+    \tag{12}
+    $$
+    computed via lincom from the same regression's joint vcov.
+    <strong>Reported result:</strong> for operating margin, $\hat{\Delta} = +0.018$
+    (p = 0.033) — hospitals in the 10+ bin outperform hospitals in the 1–3 bin by
+    1.8 pp on operating margin, again consistent with survivorship rather than
+    accumulating harm.
+  </p>
+
+  <div class="note">
+    <strong>Survivorship caveat.</strong> The panel is unbalanced: hospitals that
+    accumulate many shock-years and remain in the 2011–2023 window are a selected
+    sample of financially viable survivors. The positive dose-response on operating
+    margin does <em>not</em> mean climate exposure improves hospital finances; it means
+    the hospitals still in the data after repeated shocks are the resilient ones.
+    This is why the persistence story is anchored to the <strong>drought hysteresis
+    result</strong> from §3.4–3.5 (which does not require a long accumulation window),
+    not to the dose-response as a primary claim.
+  </div>
+
+  <hr class="section-sep">
+
+  <!-- ========== SECTION 4: PAPER 3 ========== -->
+  <h1>4. Paper 3 — Inequality and Provider Heterogeneity</h1>
+
+  <p>
+    Paper 3 asks whether the climate-shock effects documented in Papers 1 and 2 are
+    distributed evenly across the population and provider base, or concentrated in
+    already-disadvantaged groups.
+    The demand side uses county-level social vulnerability (CDC SVI) as the moderator;
+    the supply side uses hospital-level characteristics.
+  </p>
+
+  <h2>4.1 Specification</h2>
+
+  <div class="spec-box">
+    <div class="label">Paper 3 estimating equation — interaction / heterogeneity</div>
+    $$
+    Y_{it} = \alpha_i + \gamma_t + \beta S_{it} + \theta (S_{it} \times M_{it}) + \phi M_{it} + \mathbf{X}_{it}'\delta + \varepsilon_{it}
+    \tag{10}
+    $$
+    <p style="margin-top:8px;font-size:0.92rem;">
+      where $M_{it}$ is a moderator variable (binary or continuous).
+      $\beta$ is the shock effect for units with $M = 0$.
+      $\theta$ is the <em>differential</em> shock effect for high-$M$ relative to low-$M$ units.
+      The total marginal shock effect at moderator level $m$ is $\beta + \theta \cdot m$.
+    </p>
+  </div>
+
+  <h2>4.2 Moderators</h2>
+
+  <div class="two-col">
+    <div class="col-card">
+      <h4>County panel — demand side</h4>
+      <ul>
+        <li><strong>SVI quartile</strong> (CDC/ATSDR Social Vulnerability Index, overall
+            and four themes: socioeconomic status, household characteristics, racial/ethnic
+            minority status, housing/transportation type)</li>
+        <li>Quartile 4 = most vulnerable counties; interaction dummy $= \mathbf{1}[\text{SVI}_{ct} \geq Q_4]$</li>
+      </ul>
+    </div>
+    <div class="col-card">
+      <h4>Hospital panel — supply side</h4>
+      <ul>
+        <li><strong>SafetyNet</strong>: top-quartile Medicaid + uncompensated payer mix</li>
+        <li><strong>Ownership</strong>: Non-Profit / For-Profit / Government (two dummies)</li>
+        <li><strong>MedicaidExpansion</strong>: state-year ACA expansion status</li>
+        <li><strong>MarketConcentration</strong>: county-year HHI from NPR shares by health system
+            (HighConcentration $\geq 0.25$)</li>
+      </ul>
+    </div>
+  </div>
+
+  <h2>4.3 Reading the marginal effects</h2>
+
+  <p>
+    The coefficient of interest is $\hat{\theta}$: does the shock effect differ between
+    high-$M$ and low-$M$ units? The two marginal effects are:
+  </p>
+
+  <table>
+    <thead>
+      <tr><th>Group</th><th>Marginal shock effect</th><th>Standard error</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Low $M$ ($M=0$)</td>
+        <td>$\hat{\beta}$</td>
+        <td>$\widehat{\operatorname{SE}}(\hat{\beta})$</td>
+      </tr>
+      <tr>
+        <td>High $M$ ($M=1$)</td>
+        <td>$\hat{\beta} + \hat{\theta}$</td>
+        <td>$\sqrt{V_{\beta\beta} + V_{\theta\theta} + 2V_{\beta\theta}}$</td>
+      </tr>
+      <tr>
+        <td>Differential</td>
+        <td>$\hat{\theta}$</td>
+        <td>$\widehat{\operatorname{SE}}(\hat{\theta})$</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    The high-$M$ marginal effect is again a linear combination from the same model's
+    vcov. The verdict distinguishes two directions:
+  </p>
+
+  <ul>
+    <li>
+      For outcomes where a <em>larger value</em> = more strain (e.g., uncompensated
+      care %), a positive $\hat{\theta}$ ($\hat{\theta} > 0$) means <strong>strain
+      concentrates in high-$M$ units</strong>.
+    </li>
+    <li>
+      For outcomes where a <em>more-negative value</em> = more strain (e.g., operating
+      margin), a negative $\hat{\theta}$ means concentration in vulnerable units.
+    </li>
+  </ul>
+
+  <h2>4.4 Selected results</h2>
+
+  <table>
+    <thead>
+      <tr><th>Shock × Moderator</th><th>Outcome</th><th>$\hat{\theta}$ direction</th><th>$p$</th><th>Verdict</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>High_CDD × SafetyNet</td>
+        <td>Uncomp. care % NPR</td>
+        <td>Higher for SafetyNet</td>
+        <td>0.021</td>
+        <td><span class="verdict verdict-scar">Concentration in safety-net</span></td>
+      </tr>
+      <tr>
+        <td>Drought × SVI (county)</td>
+        <td>Personal income p.c.</td>
+        <td>Larger loss in high-SVI</td>
+        <td>&lt;0.05</td>
+        <td><span class="verdict verdict-scar">Amplified in vulnerable counties</span></td>
+      </tr>
+      <tr>
+        <td>High_HDD × SafetyNet</td>
+        <td>Uncomp. care % NPR</td>
+        <td>Higher for non-safety-net</td>
+        <td>0.011</td>
+        <td><span class="verdict verdict-sym">Reversed (non-SN)</span></td>
+      </tr>
+      <tr>
+        <td>Drought × MedicaidExpansion</td>
+        <td>Uncomp. care % NPR</td>
+        <td>Higher in expansion states</td>
+        <td>&lt;0.001</td>
+        <td><span class="verdict verdict-sym">Expansion state (surprising)</span></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    The key headline is that <em>heat</em>-driven uncompensated care concentrates in
+    safety-net hospitals (the supply-side analogue of high-SVI county amplification on the
+    demand side). However, interactions are shock- and outcome-specific: not all
+    shock-moderator combinations point in the "vulnerability amplifies" direction, and
+    results are reported transparently.
+  </p>
+
+  <hr class="section-sep">
+
+  <!-- ========== SECTION 5: INFERENCE ========== -->
+  <h1>5. Inference Details</h1>
+
+  <h2>5.1 Variance estimator</h2>
+
+  <p>
+    All standard errors are clustered at the <strong>state level</strong> throughout
+    (county panel: $\sim 50$ clusters; hospital panel: $\sim 50$ clusters).
+    State-level clustering is conservative relative to county-level clustering and
+    accounts for within-state correlation in both the shock series and the outcome
+    series.
+    For HIX premium outcomes specifically, the county panel also reports
+    rating-area–clustered SEs as a robustness check, since counties sharing a rating
+    area have identical premiums by construction.
+  </p>
+
+  <h2>5.2 Linear combinations and Wald tests</h2>
+
+  <p>
+    All post-estimation quantities — cumulative distributed-lag effects (equation 2–3),
+    asymmetry statistics (equation 6–7), marginal effects at moderator values
+    (Section 4.3), and dose-level marginal effects — are computed via the
+    <code>lincom()</code> helper (weights vector $\mathbf{w}$):
+    $$
+    \hat{L} = \mathbf{w}' \hat{\boldsymbol{\beta}}, \qquad
+    \widehat{\operatorname{Var}}(\hat{L}) = \mathbf{w}' \hat{V} \mathbf{w}
+    \tag{11}
+    $$
+    where $\hat{V}$ is the state-clustered variance–covariance matrix of the
+    full coefficient vector $\hat{\boldsymbol{\beta}}$. The $z$-statistic uses the
+    normal approximation; all hypothesis tests are two-tailed at the $\alpha = 0.05$
+    level unless noted.
+  </p>
+
+  <h2>5.3 Estimation software</h2>
+
+  <p>
+    All models are estimated using <code>fixest::feols</code> (Correia, Zylkin, and
+    Bergé, 2020), which implements the within-group demeaning for two-way fixed effects
+    and exports the full clustered vcov for the post-estimation lincom steps.
+    Interaction models use <code>feols(Y ~ S * M | unit + Year)</code>, which correctly
+    includes main effects, the interaction term, and absorbs both fixed-effect
+    dimensions simultaneously.
+  </p>
+
+  <h2>5.4 Panel structure and observation counts</h2>
+
+  <table>
+    <thead>
+      <tr><th>Panel</th><th>Unit FE</th><th>Year FE</th><th>Clusters</th><th>Approx. $N$</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>County × year</td>
+        <td>3,155 county FE</td>
+        <td>13 year FE</td>
+        <td>~50 states</td>
+        <td>41,400</td>
+      </tr>
+      <tr>
+        <td>Hospital × year</td>
+        <td>5,119 hospital (CCN) FE</td>
+        <td>13 year FE</td>
+        <td>~50 states</td>
+        <td>59,900</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <p>
+    Horizon regressions ($h=1,2$) lose the last $h$ years of the panel on the
+    left-hand side, reducing $N$ by roughly $h/13$ per horizon.
+    The shock lag in Paper 1 ($k=1,2$) analogously drops the first $k$ years on
+    the right-hand side.
+  </p>
+
+  <hr class="section-sep">
+
+  <!-- ========== QUICK-REFERENCE APPENDIX ========== -->
+  <h1>Appendix: Quick-Reference Summary</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Paper</th>
+        <th>Estimating equation</th>
+        <th>LHS</th>
+        <th>Key quantity</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong>1 — Incidence</strong></td>
+        <td>$Y_{it} = \alpha_i + \gamma_t + \sum_{k=0}^2 \beta_k S_{i,t-k} + \varepsilon$</td>
+        <td>Level of outcome in year $t$</td>
+        <td>Cumulative $\hat{\beta}_{cum} = \sum_k \hat{\beta}_k$ (Wald)</td>
+      </tr>
+      <tr>
+        <td><strong>1-DiD — Incidence (natural experiment)</strong></td>
+        <td>$Y_{ct} = \alpha_c + \gamma_t + \tau\,(\text{Treated}_c \!\times\! \text{Post}_t) + \varepsilon$</td>
+        <td>Level of outcome in year $t$</td>
+        <td>ATT $\hat{\tau} = \Delta^{T} - \Delta^{C}$; CS event-time $\widehat{\text{ATT}}_e$</td>
+      </tr>
+      <tr>
+        <td><strong>2A — Persistence (onset/exit)</strong></td>
+        <td>$Y_{i,t+h} = \alpha_i + \gamma_t + \beta^{on} D^{on} + \beta^{per} D^{per} + \beta^{ex} D^{ex} + \varepsilon$</td>
+        <td>Level of outcome $h$ years forward</td>
+        <td>Asymmetry $\hat{L}_h = \hat{\beta}^{on} + \hat{\beta}^{ex}$ (Wald, joint vcov)</td>
+      </tr>
+      <tr>
+        <td><strong>2B — Persistence (dose)</strong></td>
+        <td>$Y_{it} = \alpha_i + \gamma_t + \beta_1 C_{it} + \beta_2 C_{it}^2 + \varepsilon$</td>
+        <td>Level of outcome in year $t$</td>
+        <td>Marginal effect at dose $x$: $\hat{\beta}_1 + 2\hat{\beta}_2 x$ (Wald)</td>
+      </tr>
+      <tr>
+        <td><strong>3 — Heterogeneity</strong></td>
+        <td>$Y_{it} = \alpha_i + \gamma_t + \beta S_{it} + \theta (S_{it} \!\times\! M_{it}) + \phi M_{it} + \varepsilon$</td>
+        <td>Level of outcome in year $t$</td>
+        <td>Differential effect $\hat{\theta}$; marginal at $M=1$: $\hat{\beta}+\hat{\theta}$</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <!-- ========== FOOTER ========== -->
+  <div class="doc-footer">
+    Prepared for committee review &nbsp;·&nbsp; June 2026 &nbsp;·&nbsp;
+    All estimation in R (<code>fixest</code> package).
+    Shock construction: <code>Code/process_county_climate.R</code>,
+    <code>Code/process_hospital_panel.R</code>.
+    Persistence helpers: <code>Code/transition_symmetry.R</code>,
+    <code>Code/cumulative_dose.R</code>.
+    Natural-experiment DiD: <code>Code/run_did_analysis.R</code>.
+  </div>
+
+</div>
+</body>
+</html>
