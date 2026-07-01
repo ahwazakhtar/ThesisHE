@@ -48,3 +48,30 @@ The integration of Air Quality Index (AQI) shocks into the county-level analysis
 
 ## 4. Conclusion
 The addition of AQI has successfully identified a new dimension of climate risk: **delayed financial toxicity from air quality degradation.** While drought hurts at the state level, poor air quality hurts consumer credit health at the local level, specifically in population centers.
+
+## 5. Mechanisms — what explains the reduced form (external-reader response)
+
+The `mechanism_channels_20260625` track bounds the agricultural income channel an external
+reviewer proposed and identifies what else is in play. Full detail:
+`Analysis/mechanism/mechanism_channels.md` (literature-grounded channel map) and
+`Analysis/mechanism/mechanism_verdict.md` (in-panel estimates; coefficient tables and forest
+plots under `Analysis/mechanism/`). Verdict — **agriculture is one channel, not the channel:**
+
+- **Morbidity / utilization (non-agricultural, cleanest).** Regressing county Medicare outcomes
+  (CMS Geographic Variation, 2014–2023) on the shocks: heat → +$112–$177/beneficiary standardized
+  spending and +7.8–9.5 ED visits/1,000; cold → both at a 2-yr lag; **AQI → +4.8/+3.3/+2.8 ED
+  visits/1,000** (all sig) — reproduces Deryugina et al. (2019). This is the "Cold Effect"
+  mechanism (note 3 above) confirmed as a real health-utilization pathway, not just a premium
+  correlation, and it works for air quality too.
+- **Labor exposure, not cropland.** Cold→employment *survives/strengthens* in the bottom
+  ag-dependence tercile (−2,011 jobs, p=0.05); heat→employment loads on the climate-exposed
+  **non-farm** employment share (−689, p=0.009).
+- **Energy burden** — a distinct distributional channel (heat damage concentrates in high-burden
+  counties, −1,380 jobs, p<0.001; only r=0.11 with SVI, so not an SVI restatement). Directly
+  substantiates the "energy poverty" reading of note 3.
+- **Agriculture** — real but event-specific (2012 drought cohort) and partly **population
+  selection** (drought → net out-migration next year, p=0.05).
+
+Lead the mechanism narrative with morbidity/utilization + labor exposure (robust, non-agricultural,
+in-panel); present energy burden as an independent distributional channel; concede agriculture as a
+narrower, event-specific contributor. Medical debt remains the measurement-fragile outcome.

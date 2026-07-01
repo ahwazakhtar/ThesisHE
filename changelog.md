@@ -2,6 +2,70 @@
 
 ---
 
+## 2026-07-01 (Session 8)
+
+Implemented the **Mechanisms — Agricultural Channel & Beyond** track
+(`mechanism_channels_20260625`) end to end: literature-grounded channel map, a five-source
+data build, the ag-vs-labor separability estimation plus a Medicare morbidity channel, and the
+reviewer-facing verdict. Answers the external reader's central question — *how much of the
+reduced-form climate→health-cost result cannot be explained by agriculture?* Verdict:
+**agriculture is one channel, not the channel**; the morbidity/utilization and labor-exposure
+channels are robust, non-agricultural, and reproduced in-panel.
+
+### Literature review (deep-research, verified)
+- New `Analysis/mechanism/mechanism_channels.md` — 8-channel map grounded in an adversarially-
+  verified web pass (25 primary sources, 24 confirmed/1 refuted). Refuted & flagged do-not-cite:
+  Deschênes–Greenstone's +$1.3B aggregate farm-profit figure (Fisher et al. 2012). Gaps noted:
+  hospital-finance (own track) and health-insurance-pricing/migration (caveats).
+
+### Phase 1 — five-source data build (all self-logged to `Analysis/mechanism/build_logs/`)
+- **Ag dependence:** `download_county_agriculture.R` (USDA ERS 2015 typology CSV + BEA CAINC5N
+  LineCode 81/35) + `process_county_agriculture.R` → `intermediate_ag_dependence.rds`. 444
+  farming-dependent counties (matches ERS headline); `Farm_Earnings_Share` baseline-avg 2001–2010.
+- **Industry composition:** `download_county_industry.R` (ACS C24030) + `process_county_industry.R`
+  → `intermediate_industry_composition.rds`. `ClimateExposed_NonFarm_Share` (the variable that
+  separates the labor channel from agriculture) + `Ag_Emp_Share`, baseline-avg + annual.
+- **Migration:** `download_county_migration.R` + `process_county_migration.R` → IRS SOI
+  county-to-county, net-migration rate 2012–2021. (2021 coverage drops — 2020-21 disclosure/COVID.)
+- **Medicare:** `download_county_medicare.R` (resolves URL via CMS data.json) + `process_county_medicare.R`
+  → CMS Geographic Variation county PUF, 2014–2023. Fix: select-only read via `colClasses="NULL"`
+  (full-char read segfaults the 58MB/246-col file).
+- **Energy burden:** `download_county_energy.R` (51 state LEAD ZIPs → county AMI CSV, discard ZIP) +
+  `process_county_energy.R` → household-weighted energy burden (overall + low-income ≤80% AMI),
+  2022 vintage (time-invariant). Low-income 8.9% vs 3.4% overall.
+- **Validation:** `Code/diagnostics/check_mechanism_merge.R` — all five merge onto the county
+  master at 97.3–98.5% (unmatched ~2% = known FIPS boundary cases: CT 2022 planning regions, AK/CO
+  renames). Tests: `Code/tests/test_mechanism_data.R` (6 pass).
+
+### Phase 2 — estimation (fixest, County+Year FE, state-clustered)
+- `run_mechanism_agriculture.R` → `ag_channel_coefs.csv`: ag-bound (interaction + bottom-ag-tercile)
+  and labor test (`ClimateExposed_NonFarm_Share`). Cold→employment survives/strengthens in low-ag
+  counties (−2,011, p=0.05); heat→employment loads on non-farm labor (−689, p=0.009).
+- `run_mechanism_medicare.R` → `medicare_channel_coefs.csv`: heat/cold/AQI raise Medicare
+  standardized spending and ED visits (heat +$112/+$177 spending; AQI +4.8/+3.3/+2.8 ED visits) —
+  reproduces Deryugina et al. 2019 in-panel. Entirely non-agricultural, directly measured.
+- `run_mechanism_secondary.R` → `energy_channel_coefs.csv` + `migration_selection_coefs.csv`:
+  heat damage concentrates in high-energy-burden counties (−1,380 jobs, p<0.001); energy burden
+  only r=0.11 with SVI (a distinct axis). Drought → net out-migration next year (p=0.05) → part of
+  the scar is selection.
+- `run_mechanism_synthesis.R` → 3 forest plots (`Analysis/mechanism/plots/`).
+- Verdict: `Analysis/mechanism/mechanism_verdict.md`. Tests: `Code/tests/test_mechanism_estimation.R`
+  (synthetic sign-recovery + tercile split + CSV integrity; 5 pass).
+
+### Phases 4–5 — write-ups (`Text/technical_note_empirical_framework.html`)
+- New **§1.2** shocks-as-distributional-draws (z-score anchored to the frozen 1990–2000 baseline;
+  answers the "anticipatable given historical averages" concern) and **§1.3** multiple/repeated-shock
+  handling (distributed lags + compound/`Any_Shock` + cumulative dose).
+- New **§6 Mechanisms** — the separability test and the reviewer-facing verdict paragraph.
+- Mechanisms subsection folded into `Analysis/county_analysis_summary.md` (§5).
+
+### Notes / decisions
+- Moderators are STRUCTURAL/baseline (never contemporaneous farm income — bad control).
+- `effect_bottom/effect_overall` ratio is unstable when the overall effect ≈ 0 — lead on
+  significance/sign, not the raw ratio.
+- Medicare = 65+/disabled population (the temperature/pollution-sensitive group per the canonical
+  lit) and 2014–2023 only.
+
 ## 2026-06-25 (Session 7)
 
 DiD frontier-methods robustness for the 2012-drought natural experiment, plus the

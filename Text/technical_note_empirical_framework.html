@@ -290,6 +290,65 @@
     around the 2012 Midwest drought.
   </div>
 
+  <h2>1.2 Shocks as draws from each county's own distribution</h2>
+
+  <p>
+    A natural question (raised in external review) is whether these are genuine <em>shocks</em>
+    or merely weather that is "unanticipatable given historical averages." The construction
+    answers this directly: every shock is defined as a <strong>departure from the individual
+    county's own long-run distribution</strong>, not from a national or cross-county threshold.
+    A "shock" is therefore, by construction, an unusually high draw <em>relative to what that
+    county has historically experienced</em>.
+  </p>
+
+  <ul>
+    <li><strong>Binary indicators.</strong> <code>High_CDD</code> / <code>High_HDD</code> mark a
+        year in the <em>top quartile of county $c$'s own historical degree-day distribution</em>;
+        <code>Is_Extreme_Drought</code> marks PDSI $\leq -4$ on the Palmer scale, an absolute
+        extremity anchored to local moisture conditions.</li>
+    <li><strong>Continuous z-scores.</strong> The companion measures $Z^{\text{Temp}}_{ct}$ and
+        $Z^{\text{Precip}}_{ct}$ are standardized deviations,
+        $$ Z_{ct} \;=\; \frac{x_{ct} - \bar{x}_c^{\,[1990\text{–}2000]}}
+                                  {s_c^{\,[1990\text{–}2000]}}, $$
+        where the per-county mean $\bar{x}_c$ and standard deviation $s_c$ are computed over a
+        fixed <strong>1990–2000 baseline window</strong> that <em>precedes</em> the 2011–2023
+        study period. The baseline statistics are frozen: they are estimated once, before the
+        analysis window, and never re-estimated on study-period data.</li>
+  </ul>
+
+  <div class="note">
+    <strong>Why this addresses the "anticipation" concern.</strong> Because the yardstick is each
+    county's own 1990–2000 distribution, a shock is an event in the tail of the distribution the
+    county's residents, firms, and insurers would have formed expectations around. It is not a
+    secular trend (absorbed by county fixed effects) nor a nationally common shock (absorbed by
+    year fixed effects); it is idiosyncratic, county-specific tail realization — the very object a
+    "draw from a distribution" framing has in mind. Anchoring to a pre-study baseline also removes
+    any mechanical dependence between the shock definition and the outcomes measured in 2011–2023.
+  </div>
+
+  <h2>1.3 Handling multiple and repeated shocks</h2>
+
+  <p>
+    A second review question concerns counties that experience <em>several</em> shocks — different
+    hazards in the same year, or the same hazard repeatedly. The framework already absorbs shock
+    multiplicity through three complementary devices, so no county's multi-shock exposure is
+    silently collapsed to a single indicator:
+  </p>
+
+  <ul>
+    <li><strong>Distributed lags.</strong> Every specification includes the contemporaneous shock
+        plus its first and second lags ($S_{ct}, S_{c,t-1}, S_{c,t-2}$), so a shock in consecutive
+        years contributes through multiple coefficients rather than being overwritten.</li>
+    <li><strong>Compound / any-shock indicators.</strong> A composite <code>Any_Shock</code>
+        indicator (and interacted compound specifications) capture the effect of being hit by
+        <em>at least one</em> hazard, and of co-occurring hazards, separately from the single-hazard
+        series.</li>
+    <li><strong>Cumulative dose.</strong> The persistence analysis (§3.6) replaces the on/off
+        indicator with a running <em>count of shock-years</em> a county has accumulated
+        (<code>cumulative_dose.R</code>), directly modelling repeated exposure as an increasing dose
+        rather than a sequence of independent one-off events.</li>
+  </ul>
+
   <hr class="section-sep">
 
   <!-- ========== SECTION 2: PAPER 1 ========== -->
@@ -1621,6 +1680,75 @@
     The shock lag in Paper 1 ($k=1,2$) analogously drops the first $k$ years on
     the right-hand side.
   </p>
+
+  <hr class="section-sep">
+
+  <!-- ========== SECTION 6: MECHANISMS ========== -->
+  <h1>6. Mechanisms: What Explains the Reduced-Form Results?</h1>
+
+  <p>
+    The papers above establish credible reduced-form relationships between climate/pollution
+    shocks and health-cost outcomes. External review asked the natural follow-up: <em>through what
+    channels</em>, and in particular, how much of the effect is the obvious <strong>agricultural
+    income channel</strong> (drought/cold devastate farming → depress local income → drive the
+    premium/debt/employment results) versus something else? This section summarizes the mechanism
+    analysis (full detail in <code>Analysis/mechanism/mechanism_channels.md</code> — a
+    literature-grounded channel map — and <code>Analysis/mechanism/mechanism_verdict.md</code> —
+    the in-panel estimates).
+  </p>
+
+  <h2>6.1 The separability test</h2>
+
+  <p>
+    We bound the agricultural channel with a structural, pre-treatment moderator and a subsample
+    reading. Agricultural dependence is measured as a <em>time-invariant</em> county attribute
+    (USDA ERS 2015 farming-dependent typology; baseline 2001–2010 farm-earnings share) — never
+    contemporaneous farm income, which would be a bad control on the causal path. For each
+    (outcome, shock) pair we estimate an interaction $S_{ct}\times \text{Ag}_c$ (does the effect
+    <em>load</em> on farm counties?) and re-estimate within the <strong>bottom tercile of
+    agricultural dependence</strong> (urban/service counties, where a surviving effect is by
+    construction <em>not</em> agricultural). A parallel moderator — the share of employment in
+    climate-exposed <em>non-farm</em> industries (construction, mining, manufacturing, transport,
+    utilities), from ACS C24030 — tests whether the residual is <strong>broad labor exposure</strong>
+    rather than cropland (Graff Zivin–Neidell; Somanathan et al.; the Deryugina–Hsiang weekday-only
+    US income signature).
+  </p>
+
+  <h2>6.2 Verdict — agriculture is one channel, not the channel</h2>
+
+  <ul>
+    <li><strong>A morbidity / healthcare-utilization channel, entirely non-agricultural, is the
+        cleanest-identified result.</strong> Regressing county Medicare outcomes (CMS Geographic
+        Variation PUF, 2014–2023) on the shocks: heat raises standardized spending
+        (+\$112 to +\$177 per beneficiary, $p<0.02$) and ED visits (+7.8 to +9.5 per 1,000);
+        cold raises both at a two-year lag; and <strong>poor air quality raises ED visits</strong>
+        (+4.8 / +3.3 / +2.8 per 1,000, all significant) — an in-panel reproduction of Deryugina
+        et&nbsp;al. (2019). None of this passes through farm income.</li>
+    <li><strong>It is labor exposure, not cropland.</strong> The cold→employment effect
+        <em>survives and strengthens</em> in the least-agricultural counties (bottom-ag-tercile
+        $-2{,}011$ jobs, $p=0.05$), and the heat→employment effect loads on the climate-exposed
+        non-farm employment share ($S\times\text{Labor}$: $-689$, $p=0.009$).</li>
+    <li><strong>Energy burden is a distinct distributional channel.</strong> Heat damage
+        concentrates in high-energy-burden counties (DOE LEAD; $S\times$burden $-1{,}380$ jobs,
+        $p<0.001$). Notably it is only weakly correlated with the social-vulnerability index
+        ($r=0.11$), so it adds an independent margin rather than restating the high-SVI result.</li>
+    <li><strong>The agricultural channel is real but narrower.</strong> Clean farm-dependence
+        interactions are noisy in the recurring-treatment panel; consistent with the DiD-robustness
+        track (§2.5), the drought→income effect is <em>event-specific</em> (2012 cohort) rather than
+        a general "droughted-county" law. Part of the drought scar is also
+        <strong>population selection</strong>: drought raises net out-migration the following year
+        (IRS SOI flows, $-0.0021$, $p=0.05$).</li>
+  </ul>
+
+  <div class="note">
+    <strong>One-paragraph answer to the reviewer.</strong> Most of what the reduced form picks up
+    is <em>not</em> the agricultural income channel. The health-cost/utilization response is
+    measured directly in Medicare data and is agriculture-free; the employment response is broad
+    labor exposure that survives in non-farm counties; and the distributional amplification runs
+    through energy burden as much as through farming. Agriculture contributes a real but
+    event-specific, partly selection-driven drought effect — a bound on, not the whole of, the
+    phenomenon.
+  </div>
 
   <hr class="section-sep">
 
