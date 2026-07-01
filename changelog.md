@@ -58,6 +58,9 @@ channels are robust, non-agricultural, and reproduced in-panel.
   handling (distributed lags + compound/`Any_Shock` + cumulative dose).
 - New **§6 Mechanisms** — the separability test and the reviewer-facing verdict paragraph.
 - Mechanisms subsection folded into `Analysis/county_analysis_summary.md` (§5).
+- New `Text/reviewer_response_mechanisms.md` — sendable point-by-point response to the external
+  reader (agricultural-channel bound + other channels + shocks-as-distribution + multiple-shock),
+  citing the in-panel estimates.
 
 ### Notes / decisions
 - Moderators are STRUCTURAL/baseline (never contemporaneous farm income — bad control).
