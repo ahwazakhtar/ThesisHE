@@ -2,6 +2,47 @@
 
 ---
 
+## 2026-07-02 (Session 9)
+
+Writing-only session: built a reusable **NBER economist writing-style skill** and used it to
+produce mechanism-focused write-ups for the external-reader (Josh Graff Zivin) exchange. No R code
+or conductor tracks touched.
+
+### `.claude/skills/nber-economist-writing-style/` (new)
+- `SKILL.md` + `reference/exemplars.md` — a writing skill reverse-engineered from `Text/w33491.pdf`
+  (Aguilar-Gomez, Graff Zivin & Neidell 2025, "Hot and Crowded"). Encodes six non-negotiables:
+  first-person-plural active present tense; every number anchored to a baseline; graded hedging;
+  disarm-the-alternative; proof-like signposting; and **state-plainly / no antithetical "X, not Y"
+  epigrams** — verified against the source (0 such epigrams in 30 pages; "rather than" used only 3×,
+  always for a substantive mechanism contrast). `exemplars.md` carries annotated model sentences and
+  a before→after "what the original does NOT do" table.
+
+### `Text/reviewer_response_mechanisms_nber.md` (new)
+- Point-by-point external-reader response re-styled in NBER voice; all findings/numbers preserved.
+  Coefficients anchored to baselines where available; two `[TK]` baseline denominators remain (the
+  Medicare per-beneficiary mean and the ED rate per 1,000).
+
+### `Text/reviewer_response_mechanisms_email.md` (new)
+- Email-length (~300-word) version, then rewritten to mimic the exemplar sentence formation (disarm
+  move, signpost connectives, the "real but narrow" cadence). Single-author "I".
+
+### `Text/mechanisms_section.md` (new)
+- The response recast as a self-contained paper **§6 Mechanisms**: numbered subsections, a
+  Data-and-design specification paragraph, a channel-selection rationale, the four channels
+  (morbidity/utilization, labor exposure, energy burden, provider-finance) plus agriculture (the
+  tested hypothesis) and migration (a caveat), and a `## References` list in NBER format. Two
+  references incomplete pending user detail: **Audi et al. (2024–25)** and **Doremus et al. (2022)**.
+
+### `Text/thesis_paper_abstracts.md` (modified)
+- Wove mechanism findings into the existing three-essay structure: Essay 1 gains the Medicare
+  morbidity channel + "agriculture one channel among several"; Essay 2's blanket "not explained by
+  migration" refined to the drought-scar out-migration selection finding; Essay 3 gains the
+  energy-burden margin (r = 0.11 with SVI) and the safety-net-hospital supply-side strain; umbrella
+  updated in parallel. Added `J21` to Essay 1 JEL codes. (A standalone `thesis_mechanism_rollup.md`
+  was created then deleted once the findings were woven in.)
+
+---
+
 ## 2026-07-01 (Session 8)
 
 Implemented the **Mechanisms — Agricultural Channel & Beyond** track
