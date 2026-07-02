@@ -136,18 +136,53 @@ loads on the `Ag_Dependence` interaction.
   outcomes; a feasible suggestive proxy uses HDD/CDD against the SVI split (Phase 3 optional
   estimate).
 
-### 5. Hospital / provider-finance channel  *(GAP — likely our own contribution)*
-- **Story:** Climate shocks raise uncompensated care and compress hospital operating margins,
-  which feeds back into local pricing and access.
-- **Evidence:** **No external paper surfaced** in the verified set that quantifies climate
-  shocks → hospital operating margins / uncompensated care. The closest verified material is the
-  disaster-cost literature (US natural disasters ≈ $1.8T, 2010–2023; hurricanes ~60%).
-- **Disposition:** This is the domain of the **`hospital_supply_side_20260615` track** (NASHP
-  hospital-year panel). Treat the thesis's own supply-side results as **primary evidence** for
-  this channel and cross-reference them — do **not** re-estimate here. Flag in the write-up as a
-  relatively **original contribution**, since the external literature is thin.
-- **Separable from agriculture? Partially.** Hospital strain in low-ag counties would again be
-  non-agricultural; the supply-side track's provider-heterogeneity results speak to this.
+### 5. Hospital / provider-finance channel  *(confirmed gap — our result matches the sparse literature)*
+*(Dedicated supply-side literature review, 2026-07-02.)*
+- **Story:** Climate shocks raise uncompensated care / compress hospital operating margins, feeding
+  back into local pricing and access.
+- **State of the literature (now surveyed):** the hospital-finance-specific, drought/chronic-stress
+  version of this question is **genuinely understudied**. The evidence base for "climate strains
+  hospital finances" rests almost entirely on **acute, physically-destructive** events — hurricanes
+  and wildfires (Katrina: 5 New Orleans hospitals, GAO-08-681R, $135M→$405M cumulative operating
+  losses from post-storm labor costs; Sandy NYC HHC ≈ $810M; Camp Fire / Feather River permanent
+  closure) — whose mechanism (building damage, evacuation, elevated labor cost) has **no drought
+  analog.** The best-*identified* paper is Wilkoff, Lopez, Murphy & Tzur-Ilan (working paper): wildfire
+  smoke raises hospital **municipal-bond borrowing costs** (~$1.6M extra interest on a $90M issue),
+  a chronic-exposure channel closer to drought's character.
+- **Our null/negative result is CONSISTENT with the literature, not an anomaly.** The one study that
+  runs the same regression logic — Audi, Hamadi et al. (2024–25), FEMA hurricane-risk percentile on a
+  hospital financial ratio for ~1,030 Southeastern hospitals — found a **paradoxical** sign (higher
+  risk → *better* cost-to-charge ratio; authors flag "requires further investigation"). Our
+  `hospital_supply_side` incidence result (drought → **lower** uncompensated care, −$6.2M cumulative,
+  p<1e-11; **null** operating margins) points the same way.
+- **Why a null/negative is theoretically sensible (four literature-backed reasons):**
+  1. **Federal buffers sever the income→uninsurance→uncompensated-care chain** the reviewer assumes —
+     Section 1135 Medicaid disaster waivers, crop insurance / USDA disaster payments, and DSH.
+  2. **Demand surges are revenue-positive** — heat/pollution ED visits are billable admissions
+     (Channel 3), which can offset expected "strain."
+  3. **Deferred elective care + selective out-migration lowers *measured* uncompensated care
+     mechanically** without improving underlying finances — and uncompensated care is a discretionary
+     accounting category (bad-debt vs. charity classification varies by policy), i.e. as
+     **measurement-fragile** as credit-bureau medical debt.
+  4. **Hospital distress is driven by capital structure / occupancy / ownership, not local income** —
+     a national Altman-Z study (7,900 hospital-years) found median income and uninsured rate
+     *insignificant* for distress (urban odds actually higher).
+- **The gap is confirmed, not tested-and-rejected:** the rural-hospital-closure prediction literature
+  (systematic review, BMC HSR 2025; Sheps/Holmes distress models) **omits climate and agricultural
+  variables entirely.** No peer-reviewed paper links farm-income/commodity/drought shocks to
+  hospital-level finances; even the 1980s Farm Crisis lacks a hospital-specific quantitative study.
+- **Caveat — reverse causality:** the rural-closure→local-economy DiD literature (Vogler SSRN 3750200;
+  Alexander & Richards, *JPubE* 2023) runs the *opposite* direction, and some work finds local decline
+  *precedes* closure — so any drought→closure claim must guard against reverse causality.
+- **Disposition:** owned by the **`hospital_supply_side_20260615` track** (NASHP hospital-year panel);
+  cross-reference, don't re-estimate the incidence models here. Frame the thesis's own supply-side
+  results as **filling a genuine gap**, with the null/negative response explained by the four
+  mechanisms above rather than treated as a puzzle. Provider *heterogeneity* (does any strain
+  concentrate in safety-net / high-Medicaid / non-expansion hospitals?) is the natural separability
+  test — see the verdict doc.
+- **Separable from agriculture? Partially.** Strain surviving in low-ag counties would again be
+  non-agricultural; safety-net/ownership heterogeneity (well-documented: safety-net operating margins
+  >6× lower; Medicaid-expansion protective) is where the action would be if it exists.
 
 ### 6. Insurance-pricing / climate-risk channel  *(GAP for health insurance)*
 - **Story:** Climate risk feeds into premiums — well documented for **property** insurance,

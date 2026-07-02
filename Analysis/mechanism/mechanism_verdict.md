@@ -83,6 +83,35 @@ would survive in any county with a hospital.
   the reviewer's "other channels" question specifically anticipated. (Heat shows *in*-migration,
   but that is confounded by Sun Belt growth and is not interpreted as a shock response.)
 
+## 5. The provider / hospital-finance channel — a genuine gap, and our null is the expected result
+*(`hospital_supply_side_20260615` track; supply-side literature reviewed 2026-07-02)*
+
+The demand-side reviewer question has a supply-side twin: do climate shocks strain *hospitals*? The
+`hospital_supply_side` incidence models find **drought → lower uncompensated care** (−$6.2M cumulative,
+p<1e-11) and **null operating margins** — counterintuitive at first glance. The literature review
+resolves this: it is the **expected** result, not an anomaly.
+
+- **The one comparable study finds the same paradox.** Audi, Hamadi et al. (2024–25) regress FEMA
+  hurricane-risk on a hospital financial ratio for ~1,030 hospitals and find higher risk → *better*
+  cost-to-charge ratio ("requires further investigation"). Same sign as ours.
+- **A null/negative is theoretically sound.** Federal buffers (Section 1135 Medicaid waivers, crop
+  insurance / USDA disaster payments, DSH) sever the farm-income→uninsurance→uncompensated-care chain;
+  climate demand surges are *revenue-positive* (billable ED visits); deferred care + out-migration
+  lower *measured* uncompensated care mechanically; and hospital distress is driven by capital
+  structure/occupancy/ownership, not local income (a national Altman-Z study found income/uninsured
+  insignificant). Uncompensated care is also a discretionary accounting category — as
+  measurement-fragile as credit-bureau medical debt.
+- **The gap is confirmed.** The rural-hospital-closure prediction literature omits climate/agricultural
+  variables entirely; the "climate strains hospitals" evidence base is all *acute* destructive events
+  (hurricanes/wildfires) with no drought analog. So the thesis's supply-side work **fills a real gap**
+  rather than contradicting an established finding.
+- **Reverse-causality caveat:** the closure→local-economy DiD literature (Vogler; Alexander & Richards)
+  runs the opposite direction — guard any drought→closure claim accordingly.
+- **Open (not yet run):** the provider *separability/heterogeneity* test — attach ag-dependence to the
+  hospital panel (by hospital county) and interact shocks with `SafetyNet` — would show whether the
+  (weak) provider effect at least concentrates where the literature predicts (safety-net, high-Medicaid,
+  non-expansion). Feasible with the existing panel; not yet estimated.
+
 ---
 
 ## Answering the reviewer's ratio question directly
