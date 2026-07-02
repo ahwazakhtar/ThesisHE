@@ -180,9 +180,12 @@ loads on the `Ag_Dependence` interaction.
   mechanisms above rather than treated as a puzzle. Provider *heterogeneity* (does any strain
   concentrate in safety-net / high-Medicaid / non-expansion hospitals?) is the natural separability
   test — see the verdict doc.
-- **Separable from agriculture? Partially.** Strain surviving in low-ag counties would again be
-  non-agricultural; safety-net/ownership heterogeneity (well-documented: safety-net operating margins
-  >6× lower; Medicaid-expansion protective) is where the action would be if it exists.
+- **Separable from agriculture? Yes — now tested** (`run_mechanism_provider.R`). The drought →
+  uncompensated-care effect is **not** agricultural: `Drought × Ag_z` null, and the effect survives
+  unchanged in the bottom ag tercile (−0.0043, p=0.01). And the provider heterogeneity the literature
+  predicts is present: **heat raises uncompensated care significantly more at safety-net hospitals**
+  (`CDD × SafetyNet` +0.023 Lag1 p<0.001, +0.020 Lag2 p<1e-4) — the supply-side face of the morbidity
+  channel, on the providers least able to buffer it.
 
 ### 6. Insurance-pricing / climate-risk channel  *(GAP for health insurance)*
 - **Story:** Climate risk feeds into premiums — well documented for **property** insurance,

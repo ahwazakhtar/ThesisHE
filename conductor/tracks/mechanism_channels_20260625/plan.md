@@ -76,10 +76,21 @@ morbidity channel.
       (2) cold-employment survives/strengthens in low-ag counties + heat-employment loads on non-farm
       labor; (3) agricultural signature is real but event-specific (2012) and partly selection.
 
-**Phase 2 COMPLETE (2026-07-01).** Ag bound + labor test + Medicare morbidity + energy-burden +
-migration selection all estimated; verdict written. Lead the write-up with morbidity + labor
-exposure (robust, non-agricultural, in-panel); energy burden as independent distributional channel;
-agriculture as narrower event-specific contributor.
+- [x] **Task 2g: Provider-channel separability + heterogeneity (Channel 5).** Added 2026-07-02.
+      Supply-side literature surveyed (Sonnet agent): our hospital-finance null is EXPECTED (matches
+      Audi et al. 2024-25 paradoxical sign; understudied gap; 4 buffer/utilization mechanisms). Then
+      `Code/run_mechanism_provider.R` → `Analysis/mechanism/provider_channel_coefs.csv` (hospital-year
+      panel, CCN+Year FE): (i) drought → uncompensated-care is **not** agricultural (`Drought×Ag_z`
+      null; survives in bottom ag tercile −0.0043 p=0.01); (ii) **heat raises uncompensated care more
+      at safety-net hospitals** (`CDD×SafetyNet` +0.023 Lag1 p<0.001, +0.020 Lag2 p<1e-4) — the
+      supply-side face of the morbidity channel. Folded into `mechanism_channels.md` §5,
+      `mechanism_verdict.md` §5, and `Text/reviewer_response_mechanisms.md`.
+
+**Phase 2 COMPLETE (2026-07-01; provider channel added 2026-07-02).** Ag bound + labor test + Medicare
+morbidity + energy-burden + migration selection + provider (supply-side) all estimated; verdict
+written. Lead the write-up with morbidity + labor exposure (robust, non-agricultural, in-panel);
+energy burden as independent distributional channel; provider strain concentrated in safety-net
+hospitals; agriculture as narrower event-specific contributor.
 
 ## Phase 3: Other channels (bounded, suggestive)
 

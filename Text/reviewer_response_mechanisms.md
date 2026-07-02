@@ -63,8 +63,8 @@ Agriculture contributes a real but event-specific, partly selection-driven droug
 
 ## 2. What other channels are in play?
 
-Beyond morbidity and labor exposure, two further channels — one estimated, one flagged honestly as
-a caveat:
+Beyond morbidity and labor exposure, three further channels — two estimated (energy burden and the
+supply-side provider channel), one flagged honestly as a caveat (migration):
 
 - **Energy burden (a distinct distributional channel).** Using DOE LEAD data, heat damage
   concentrates in high-energy-burden counties (interaction **−1,380 jobs**, p < 0.001; **−$370
@@ -73,14 +73,36 @@ a caveat:
   affordability/adaptation mechanism of Doremus et al. (2022) and Barreca et al. (2016), where
   low-income households (who bear ~2.6× the burden: 8.9% vs 3.4% of income) cut necessities to pay
   energy bills.
+- **The supply-side (provider-finance) channel — a real gap, and an instructive result.** You asked
+  about mechanisms; the demand-side question has a supply-side twin — do these shocks strain
+  *hospitals*? I built this on a hospital-year panel (NASHP, ~5,100 hospitals, 2011–2023) and want to
+  be transparent about a counterintuitive finding and how it resolves.
+  - **Drought is associated with *lower* uncompensated care and *null* operating margins** — the
+    opposite of a naive "climate strains hospitals" story. This is not an anomaly: it matches the only
+    comparable study (Audi et al. 2024–25, which regresses FEMA hurricane-risk on a hospital financial
+    ratio and finds the same paradoxical sign), and it is *theoretically* expected — federal buffers
+    (Section 1135 Medicaid disaster waivers, crop insurance / USDA disaster payments, DSH) sever the
+    farm-income → uninsurance → uncompensated-care chain; climate demand surges are revenue-*positive*
+    (billable ED visits); and deferred elective care plus out-migration lower *measured* uncompensated
+    care mechanically. The published rural-hospital-closure literature omits climate and agricultural
+    variables entirely, so this is a genuine gap the thesis fills rather than a contested result.
+  - **Crucially for your question, this provider effect is *not* agricultural either.** The drought →
+    uncompensated-care effect does not load on farm counties (interaction null) and *survives
+    essentially unchanged in the least-agricultural counties* (−0.0043 vs −0.0051 overall, p = 0.01) —
+    so it is a general accounting/utilization response, not a farm-income channel.
+  - **And where provider strain *does* appear, it concentrates exactly where theory predicts — safety-net
+    hospitals.** Interacting the shocks with a safety-net indicator, **extreme heat raises
+    uncompensated care significantly more at safety-net hospitals** (+0.023 at a one-year lag, p < 0.001;
+    +0.020 at two years, p < 0.0001) — consistent with safety-net providers (operating margins >6× lower)
+    absorbing the demand-side morbidity surge of Channel 1. This is the supply-side face of the same
+    morbidity mechanism, landing on the providers least able to buffer it.
+
 - **Migration / selection (a bound, not a decomposition).** You rightly worry about adjustment
   margins. Using IRS county-to-county flows, drought raises net **out-migration** the following year
   (−0.0021, p = 0.05), so part of the persistent drought "scar" reflects *who leaves* rather than
   same-population loss. I report this as a caveat on the scarring interpretation rather than a clean
   channel. (I do not read the heat → in-migration coefficient as a shock response; it is confounded
   by secular Sun Belt growth.)
-- **Hospital/provider finance** is developed in a separate supply-side track and cross-referenced,
-  not re-estimated here.
 
 I should also flag one landmine the literature review surfaced: I do **not** rely on the original
 Deschênes–Greenstone (2007) aggregate farm-profit figure, which contained coding errors later

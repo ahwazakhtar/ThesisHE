@@ -107,10 +107,16 @@ resolves this: it is the **expected** result, not an anomaly.
   rather than contradicting an established finding.
 - **Reverse-causality caveat:** the closure→local-economy DiD literature (Vogler; Alexander & Richards)
   runs the opposite direction — guard any drought→closure claim accordingly.
-- **Open (not yet run):** the provider *separability/heterogeneity* test — attach ag-dependence to the
-  hospital panel (by hospital county) and interact shocks with `SafetyNet` — would show whether the
-  (weak) provider effect at least concentrates where the literature predicts (safety-net, high-Medicaid,
-  non-expansion). Feasible with the existing panel; not yet estimated.
+- **Separability/heterogeneity test — now run** (`Code/run_mechanism_provider.R` →
+  `provider_channel_coefs.csv`, hospital-year panel, CCN+Year FE, state-clustered):
+  - **The drought → uncompensated-care effect is NOT agricultural.** `Drought × Ag_z` is null
+    (p=0.24–0.41) and the effect *survives essentially unchanged in the bottom ag-dependence tercile*
+    (−0.0043, p=0.01, vs −0.0051 overall) — a general accounting/utilization response, not a farm channel.
+  - **Where provider strain appears, it concentrates in safety-net hospitals, as theory predicts.**
+    `Heat(CDD) × SafetyNet` on uncompensated-care %NPR is strongly positive: **+0.023 at Lag1 (p<0.001),
+    +0.020 at Lag2 (p<0.0001)** — safety-net providers (margins >6× lower) absorb the demand-side
+    morbidity surge (Channel 1). This is the supply-side face of the morbidity channel, landing on the
+    providers least able to buffer it. (Drought × SafetyNet is positive but insignificant.)
 
 ---
 
