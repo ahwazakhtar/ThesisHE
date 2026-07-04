@@ -85,23 +85,36 @@ in parallel with essay drafting. Tier 2 is gated on Tier-1 drafts existing.
 
 - [x] **2.1 Premium pass-through / mediation (T1.1).** Built `Code/run_premium_mediation.R`
   (R 4.2.2) with tested helpers `add_shock_lags` / `mediation_decompose`.
-    - **(i) Pass-through ρ — CORRECTED 2026-07-04 for rate-filing timing** (reviewer flag: ACA
-      plan-year-t rates are locked ~mid-t-1 on ~t-2 claims experience, so a year-t shock is NOT in
-      the insurer info set → contemporaneous coefficients can't be pass-through). Re-specified on
-      **LAGGED shocks only, t-2 = primary window.** Result: **only heat passes through**, at t-2
-      (benchmark **+$19.6/mo**, RA p=0.010; bronze +$12.6/mo, RA p=0.006 — ≈3.4–5.2% of the $375
-      mean, sign- and timing-consistent). **Drought does not pass through** (null); **cold t-2 is
-      robustly NEGATIVE** (−$17/mo, RA p≤0.001 — a puzzle the claims mechanism can't rationalize;
-      reported, not interpreted as pass-through). The old contemporaneous "cold +$28" headline was
-      an artifact and is dropped. (NB: abstract's "+$18 drought premium" does *not* replicate.)
-    - **(ii) Mediation:** **93% (cold, lag1) to 99% (drought, lag2) of the shock→medical-debt
-      effect survives premium adjustment** — debt runs *outside* the priced contract, sharpening
-      the unpriced-margin claim. Difference-method (not causal); premiums RA-level (lower bound);
-      marketplace-era sample (2014–2023, 23,577 county-years → base debt coefs exceed full-panel
-      headlines, but the surviving *fraction* is sample-invariant).
-    - Outputs: `Analysis/mediation/{premium_passthrough,debt_mediation}.csv` +
-      `premium_mediation_summary.md`; NBER write-up `Text/premium_mediation_writeup.md`. Tests
-      (identity + lag alignment + same-sample) pass. `4de9e39`
+    - **(i) Pass-through — TWO corrections applied. Final verdict: NO COHERENT pass-through.**
+      (1) rate-filing timing → lagged shocks only (t-2 primary); (2) a **Fable econometric review**
+      caught that the county+Year-FE spec is confounded (≈86% of premium variance is state×year;
+      rates set at rating-area level, reviewed per state), and that adding State×Year FE
+      *over-absorbs* (any legal statewide pass-through lives in the deleted state×year cell) — so
+      "collapse ⇒ confound" is an invalid inference. Re-specified as a **two-level decomposition**:
+      **PRIMARY rating-area×year** (RA + State^Year FE, pop-wtd, state-clustered) — within-state
+      local margin; **SECONDARY state×year** (State+Year FE) — between-state; county specs kept as a
+      labeled **transparency trail** (misspecified). Result: **the cold t-2 coefficient flips sign
+      across levels** (−$15.5 county → +$12.6 RA → −$16.7 state) and so does heat (+$19.5 → −$10.5 →
+      +$93) — sign-instability = no stable price response. Within-state estimates are small (few % of
+      $375) and incoherent; between-state heat is large (+$54–93/mo = 14–25%) but ~10× too big for a
+      claims channel and cold's sign is backwards vs the project's own Medicare result (cold RAISES
+      spending) → temperature-anomaly correlate of premium *levels*, not pricing. Drought null
+      everywhere. Grounded in single statewide risk pool + unit-cost-only geographic factor + Part
+      153 risk adjustment. The earlier "only heat passes through / cold negative" reading is
+      **retracted** as a county-spec artifact.
+    - **(ii) Mediation:** **92% (cold, lag1) to 99% (drought, lag2) of the shock→medical-debt
+      effect survives premium adjustment** — now framed as the *corollary* of the null/incoherent
+      first stage (no premium channel to travel through), sharpening the located unpriced margin.
+      Difference-method (not causal); premiums RA-level (lower bound); marketplace-era 2014–2025.
+      Added the cross-level asymmetry caveat (State^Year FE is right for the state-set premium, NOT
+      for household outcomes — cross-ref `cross_level_symmetry`).
+    - Bugs fixed en route (Fable review): **484 duplicate county-year rows** (split counties)
+      deduped as a T1.2 stopgap; **≤2023 filter dropped 2024–25 premiums** — extended to 2025; the
+      `| p_ra < 0.05` significance cherry-pick removed (state clustering primary). CLAUDE.md master
+      dims are stale (now 119,300 rows, 1990–2026) — fix at session end.
+    - Outputs: `Analysis/mediation/{premium_passthrough,debt_mediation}.csv` (4 specs) +
+      `premium_mediation_summary.md`; rewritten NBER write-up `Text/premium_mediation_writeup.md`.
+      Tests (identity + lag alignment + same-sample + generalized `group` param) pass. `4de9e39`+fix
 - [ ] **2.2 Data-integrity fix (T1.2).** Enforce one-row-per-county-year in
   `Code/create_county_master.R` upstream (resolve the ~3% multi-rating-area duplicates once,
   with a documented rule); add a build-time assertion (`stopifnot` uniqueness on fips×year).
@@ -157,10 +170,17 @@ in parallel with essay drafting. Tier 2 is gated on Tier-1 drafts existing.
   before the Tier-1 essay drafts exist.
 - **Author-decision gates:** T0.4 (Ch. 3 structure) is not something this track can answer —
   it drafts the memo and waits. T1.3 is the hedge if the committee still wants policy content.
-- **Premium pass-through MUST respect ACA rate-filing timing (T1.1 lesson).** Plan-year-t
-  individual-market rates are filed ~mid-t-1 on experience through ~t-2 and locked before the
-  plan year; no mid-year re-rating. So a shock→premium regression must use **lagged shocks only**
-  (t-2 primary, t-1 partial) — a contemporaneous shock is not in the insurer's information set and
-  its coefficient has no pass-through reading. Corrected finding: only **heat at t-2** passes
-  through (~$13-20/mo); cold/drought do not. Any future premium-response spec must drop the
-  contemporaneous term.
+- **ACA premium pass-through: TWO binding design rules (T1.1 lessons).**
+  (a) *Rate-filing timing* — plan-year-t rates are filed ~mid-t-1 on experience through ~t-2 and
+  locked before the plan year (no mid-year re-rating), so a shock→premium regression must use
+  **lagged shocks only** (t-2 primary); a contemporaneous shock is not in the insurer info set.
+  (b) *Level of analysis* — ACA premiums are NOT a county object: they are set at the rating-area
+  level, reviewed per state, and **≈86% of premium variance is state×year**. A county+Year-FE
+  premium regression is confounded (state-year premium dynamics load onto county shocks), and
+  adding State×Year FE **over-absorbs** (legal statewide pass-through lives in the deleted cell) —
+  so "collapse under State×Year FE ⇒ confound" is an *invalid* inference. Estimate at the levels
+  the institutions use: **rating-area×year** (within-state, primary) and **state×year** (between-
+  state, secondary); treat county specs as a transparency trail only. Verdict: **no coherent
+  pass-through** — coefficients flip sign across levels; between-state heat is too large + cold
+  mis-signed vs the Medicare morbidity result. Cluster on **state** (not RA — RA understates SEs
+  for state-level shocks). This over-rode the earlier "only heat passes through" reading.

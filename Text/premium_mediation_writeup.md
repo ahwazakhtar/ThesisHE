@@ -6,54 +6,102 @@
 The proposal set out to estimate two objects the reduced form leaves implicit: the rate at which
 climate shocks pass through into health-insurance premiums, and the extent to which the medical debt
 that follows a shock is the downstream trace of those higher premiums. Both are recoverable from the
-county panel, and together they locate where in the insurance system a weather shock becomes a
-household liability.
+county panel, but the first turns entirely on a question of units, because ACA premiums are not a
+county object.
 
-The pass-through has to be measured with the rate-setting calendar in mind. Insurers file
-individual-market rates for plan year *t* around the middle of year *t−1*, using claims experience
-through roughly *t−2*, and those rates are locked before the plan year begins; mid-year re-rating is
-not permitted. A weather shock realized during year *t* is therefore absent from the insurer's
-information set when the year-*t* premium is set, so only *lagged* shocks can pass through, with the
-two-year lag the fully-observed window and the one-year lag only partial. Estimating the premium on
-lagged shocks accordingly, the pass-through is weak and specific to heat. An extreme-heat year raises
-the benchmark silver premium two years later by about \$20 per month and the lowest-cost bronze
-premium by about \$13 per month—roughly 3 to 5 percent of the \$375 average benchmark—significant
-under rating-area clustering (*p* = 0.01 and 0.006). This is the one response that is consistent in
-both timing and sign with insurers pricing a realized morbidity surge: heat raises Medicare spending
-and emergency-department use two years out, and rates move with it. Drought produces no reliable
-premium response at any lag, and cold produces a two-year coefficient that is negative and precise
-(about −\$17 per month), a sign the claims mechanism cannot rationalize and that I read as an
-artifact of risk-adjustment transfers or market selection rather than evidence that cold lowers
-premiums. The defensible conclusion is narrow: of the three hazards, only heat passes through into
-premiums, and only at the lag the filing cycle allows.
+## The level of analysis is the whole problem
 
-Whether that pass-through carries the debt is a separate question, and the answer is largely no.
-Re-estimating the shock-to-debt relationships with and without contemporaneous and lagged benchmark
-premiums on the identical sample, the debt effects are almost untouched by premium adjustment. Of
-the cold-driven increase in the medical-debt share at a one-year lag, 93 percent survives the
-addition of premium controls; of the two-year drought effect, 99 percent survives. The
-premium-mediated portion is on the order of a twentieth to a hundredth of each effect. This is what
-one would expect given the pass-through estimates: the two hazards that generate the debt, cold and
-drought, are precisely the two that do not raise premiums, so there is no premium channel available
-to carry their effect. The medical debt that accumulates after a shock arrives through the more
-direct route of out-of-pocket costs and lost income landing on household balance sheets, the same
-real-economy channel the income and employment results trace.
+Individual-market rates are built at the geographic rating-area level, from a single statewide risk
+pool, and filed and reviewed one state at a time. In the data this administrative structure is
+overwhelming: about 86 percent of the variance in the benchmark premium is state-by-year, and only
+roughly a third of its standard deviation is within a state in a given year. A regression of a
+premium on a county-level shock with county and national-year fixed effects therefore identifies
+almost nothing local; it lets state-by-year premium dynamics — the post-2017 "silver loading" spike,
+insurer entry and exit, 1332 waivers — load onto whatever county variable happens to correlate with
+them. The rate-filing calendar compounds the point: plan-year-*t* rates are filed around mid-*t−1* on
+claims experience through roughly *t−2*, so only *lagged* shocks are even eligible to pass through,
+with the two-year lag the fully-observed window.
 
-Read together, the two estimates sharpen the dissertation's claim of an unpriced margin, and locate
-it. Premiums respond to the environmental signal only for heat and only at the rate-cycle lag, so
-the market prices a slice of the risk. But the hazards that drive the household debt burden pass
-through neither into premiums nor through them, so that burden sits outside the priced insurance
-contract. The unpriced margin is not a general failure to see climate in the data; it is
-specifically the cold- and drought-driven health-cost incidence that the individual market never
-reprices.
+The tell that the county specification is not identifying pass-through is that its coefficients are
+not stable in sign. The two-year cold coefficient on the benchmark premium runs −\$15.5 per month
+under county and year fixed effects, +\$12.6 once the estimate is taken within states, and −\$16.7
+between states; the heat coefficient runs +\$19.5, then −\$10.5, then +\$93. A genuine price response
+does not change sign with the fixed-effect structure. Each apparent effect is an artifact of which
+slice of variance — within-state or between-state — the fixed effects leave standing. Adding
+state-by-year fixed effects to the county regression collapses both the +\$19.5 heat and the −\$15.5
+cold coefficients to about +\$2 (*p* = 0.53 and 0.47), which is where the earlier, spurious county
+results came from.
+
+The question is therefore estimated at the two levels the institutions actually use, each mapped to
+a distinct margin.
+
+## Within states: no coherent local pass-through
+
+The geographic rating factor is the only channel through which a purely local shock could enter a
+premium, so the within-state test — rating-area by year, with rating-area and state-by-year fixed
+effects — is the one that speaks to the local margin. Here the estimates are small, a few percent of
+the \$375 average benchmark, and they do not cohere. Cold carries a positive coefficient that is
+marginally significant (+\$12.6, *p* = 0.03 on the benchmark; +\$8.9, *p* = 0.01 on bronze), but that
+sign reverses between states and is not accompanied by any heat response (heat is −\$10.5, *p* = 0.23).
+With six coefficients per premium tier and no agreement across tiers, levels, or hazards, the
+within-state evidence does not support a local pass-through. That reading is what the institutions
+predict: the rating factor is directed to provider *unit-cost* differences across areas rather than to
+local morbidity or utilization, the single risk pool averages a county shock across the whole state,
+and HHS risk adjustment (45 CFR Part 153) moves money between plans on relative enrollee risk, muting
+the incentive to price a local health shock in the first place.
+
+## Between states: co-movement that is not pricing
+
+The between-state test — state by year, with state and year fixed effects — recovers the statewide
+margin the index rate *may* legally reflect, and there the premium is not flat: state benchmark
+premiums rise with a two-year heat anomaly (+\$93 per month, *p* = 0.02; +\$54 on bronze, *p* = 0.01).
+Two features rule this out as claims pricing. The magnitude is implausible — \$93 is a quarter of the
+mean premium for a fully heat-exposed state-year, an order of magnitude larger than the roughly 1–2
+percent of claims that this project's own Medicare estimates attribute to a heat-driven morbidity
+surge. And the sign on cold is backwards for a claims story: the same Medicare analysis finds cold
+*raises* standardized spending, so pass-through pricing predicts a positive cold coefficient, whereas
+the state-level estimate is negative and insignificant (−\$16.7, *p* = 0.54). The between-state
+pattern reads as lagged temperature anomalies tracking the *level* of a state's premium trajectory,
+not as insurers repricing realized climate claims.
+
+## The unpriced margin, located
+
+Drought, the one hazard with enough within-county variation for the county design to say anything, is
+null at every level. Across all three levels and both premium tiers, no hazard produces a sign-stable,
+magnitude-credible pass-through. The honest conclusion is that the individual market does not
+coherently reprice the local health-cost consequences of climate shocks — which is the dissertation's
+unpriced margin, now located rather than asserted: the within-state margin where a local shock could
+enter is quiet, and the between-state co-movement that is not quiet is too large and mis-signed to be
+pricing. This sits comfortably in the literature, where health-insurer pass-through of cost shocks is
+partial even in the best cases and geographic pooling averages local shocks away, and where no prior
+work has estimated climate pass-through into health premiums at all.
+
+## Mediation: a corollary of the null first stage
+
+Whether premiums carry the medical debt that follows a shock is then nearly answered by the first
+stage. Re-estimating the shock-to-debt relationships with and without contemporaneous and lagged
+premiums on the identical sample, 92 percent of the one-year cold effect and 99 percent of the
+two-year drought effect survive premium adjustment. With no coherent premium response to the shocks
+in the first place, there is no premium channel for the debt to travel through, so the debt
+accumulates by the more direct route of out-of-pocket costs and lost income landing on household
+balance sheets — the same real-economy channel the income and employment results trace.
+
+One caution on method deserves to be explicit, because it governs how far the state-by-year fix
+travels. Absorbing state-by-year variation is the right benchmark *here* precisely because the
+premium is administratively generated at that level — the fixed effect removes the rate-setting
+process, not the treatment. Household outcomes are not state-set, and a cold wave is itself a
+state-level event, so the same fixed effect applied to debt, income, or employment would delete
+treatment rather than confounding. The asymmetry is deliberate and is developed in the cross-level
+symmetry results; it should not be read as license to absorb state-by-year variation from the
+household regressions.
 
 *Caveats.* The mediation is a difference-method decomposition rather than a causally identified
-mediation: the premium is itself an outcome of the shock, so the split into mediated and direct
-components assumes no premium-debt confounding conditional on the county and year fixed effects.
-Premiums enter at the rating-area level, so the mediated share is a lower bound on any true
-county-level premium channel. The premium series begins in 2014 with the ACA marketplaces, so both
-equations run on the 2014–2023 window (about 23,600 county-years); the base debt coefficients here
-are larger than the full-panel headlines because they are estimated on that later, marketplace-era
-sample, and it is the surviving *fraction*—invariant to the sample—that carries the mediation
-conclusion. The negative cold pass-through coefficient is reported for completeness but not
-interpreted as a premium response.
+mediation; the premium is itself a shock outcome, so the split assumes no premium-debt confounding
+given the fixed effects. Premiums enter at the rating-area level, so any mediated share is a lower
+bound on a county-level channel. The premium series begins in 2014 with the ACA marketplaces, so the
+mediation runs on 2014–2025 and its base debt coefficients exceed the full-panel headlines; the
+surviving *fraction*, invariant to the sample, carries the conclusion. Inference is clustered on
+state throughout — the level at which both the shocks and the rate-setting process operate; the
+rating-area-clustered variant, which uses more clusters and understates the correlated error, is
+reported but not used to judge significance. The multi-rating-area "split" counties are collapsed to
+one row per county-year here as a stopgap for the upstream one-row-per-county-year fix.

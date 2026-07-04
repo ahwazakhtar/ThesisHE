@@ -33,6 +33,22 @@ test_that("add_shock_lags aligns L1/L2 by county with no cross-county bleed", {
 })
 
 # ---------------------------------------------------------------------------
+test_that("add_shock_lags honors a non-default group (RA/state level panels)", {
+  # The aggregated pass-through panels lag within rating_area_id / State, not fips.
+  d <- data.frame(
+    rating_area_id = rep(c("CA01", "NY02"), each = 4),
+    Year = rep(2014:2017, times = 2),
+    fips_code = "X",                         # present but must be IGNORED as grouper
+    sh = c(0.1, 0.2, 0.3, 0.4,  0.5, 0.6, 0.7, 0.8),
+    stringsAsFactors = FALSE)
+  out <- add_shock_lags(d, "sh", max_lag = 1L, group = "rating_area_id")
+  ca <- out[out$rating_area_id == "CA01", ]
+  ny <- out[out$rating_area_id == "NY02", ]
+  expect_equal(ca$sh_L1, c(NA, 0.1, 0.2, 0.3))
+  expect_equal(ny$sh_L1, c(NA, 0.5, 0.6, 0.7))   # no bleed from CA's 0.4 into NY
+})
+
+# ---------------------------------------------------------------------------
 test_that("mediation_decompose satisfies the additive identity and fraction", {
   set.seed(101)
   n_c <- 60; yrs <- 2008:2019
