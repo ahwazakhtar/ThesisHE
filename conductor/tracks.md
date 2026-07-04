@@ -22,3 +22,5 @@ This file tracks all major tracks for the project. Each track has its own detail
   *Link: [./tracks/mechanism_channels_20260625/](./tracks/mechanism_channels_20260625/)*
 - [~] **Track: Thesis Completion — Roadmap Execution** (umbrella; drives the final push per `Plans/roadmap_recommendations_20260704.md`. Started Jul 2026)
   *Link: [./tracks/thesis_completion_20260704/](./tracks/thesis_completion_20260704/)*
+- [ ] **Track: Mechanisms Section — Second-Reviewer Revision** (revises `mechanism_channels_20260625` §6 per second-reviewer feedback; ~3-week response. Created Jul 2026)
+  *Link: [./tracks/mechanisms_revision_20260704/](./tracks/mechanisms_revision_20260704/)*
