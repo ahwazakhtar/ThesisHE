@@ -19,37 +19,34 @@ in parallel with essay drafting. Tier 2 is gated on Tier-1 drafts existing.
 
 ## Phase 0: Track setup & scoping
 
-- [ ] **0.1 Stand up the track.** Write `spec.md` + `plan.md`; register in
+- [x] **0.1 Stand up the track.** Write `spec.md` + `plan.md`; register in
   `conductor/tracks.md`; confirm both R toolchains and the existing script inventory
   (`Code/did_robustness/*` present; `run_demographic_mediators.R` present; mortality/policy/
-  pass-through scripts are net-new). Commit the scaffolding.
-- [ ] **0.2 Verify the wild-bootstrap script is runnable as-is.** Read
-  `Code/did_robustness/01_wild_cluster_bootstrap.R`; confirm it uses the FWL-demeaned residual
-  model (NOT `boottest` on the full 3,155-FE model, which hung and caused the cancelled run).
-  If it still has the naive full-FE call, apply the `fixest::demean` (FWL) fix before running.
+  pass-through scripts are net-new). Commit the scaffolding. `60f7c85`
+- [x] **0.2 Verify the wild-bootstrap script is runnable as-is.** Read
+  `Code/did_robustness/01_wild_cluster_bootstrap.R`; confirmed it **already** uses the
+  FWL-demeaned residual model (`fixest::demean` on both `y` and `TxP`, then `boottest` /
+  `.lm.fit` on the 1-regressor residual model) — NOT `boottest` on the full 3,155-FE model.
+  No fix needed; runnable as-is. `60f7c85`
 
 ## Phase 1: Tier 0 — inference protection & identification hardening (~2–3 weeks)
 
-- [ ] **1.1 Run few-treated-cluster inference (T0.1).** Execute
-  `Code/did_robustness/01_wild_cluster_bootstrap.R` on R 4.5.3.
-    - Wild cluster bootstrap-t (Webb, B=9999, null imposed) via `fwildclusterboot::boottest`
-      on the FWL-residualized 2×2; Fisher randomization inference (N=2000 placebo re-draws of
-      the 139 treated labels). Outcomes: PCPI_Real, Civilian_Employed, Med_HH_Income_Real,
-      Medical_Debt_Share.
-    - **Output:** `Analysis/did/robustness/wild_bootstrap_2x2.csv`.
-    - **Acceptance:** report `p_analytic` vs `p_wcb_webb` vs `p_randinf`; state whether income
-      (and employment) still clear 0.05 under the corrections.
-    - **Also:** mark `did_frontier_robustness_20260625` Phase 1 `[x]`.
-- [ ] **1.2 Close the DiD frontier track (T0.2).**
-    - Run `Code/did_robustness/04_synthesize_did_robustness.R` →
-      `Analysis/did/robustness/did_robustness_summary.md`.
-    - Fold the bootstrap p-values into `Text/technical_note_empirical_framework.{html,tex}`
-      §2.5 (the DRDID subsection is already there; add the wild-bootstrap line and decide on a
-      short HonestDiD limitation line).
-    - Write `Code/tests/test_did_robustness.R` (testthat): cohort construction matches
-      `run_did_analysis.R`; FWL-residualized point estimate equals the full-FE `feols` ATT;
-      randomization placebo distribution centers on 0; baseline covariates strictly 2011.
-    - **Also:** mark `did_frontier_robustness_20260625` Phases 4 & 5 `[x]`; close that track.
+- [x] **1.1 Run few-treated-cluster inference (T0.1).** Ran
+  `Code/did_robustness/01_wild_cluster_bootstrap.R` on R 4.5.3 (exit 0). **The income headline
+  survives:** PCPI_Real ATT −$1,311, p_analytic 0.028, **p_wcb 0.036, p_ri 0.0075**, WCB CI
+  [−2,911, −138] (excludes 0). Employment clears the few-cluster bar too (p_wcb 0.003, p_ri
+  0.037) but stays caveated on conditioning/generalization; the two null outcomes stay null.
+  This *confirmed* rather than weakened the one open econometric exposure. Marked
+  `did_frontier_robustness_20260625` Phase 1 `[x]`. `fdc0a25`
+- [x] **1.2 Close the DiD frontier track (T0.2).**
+    - Ran `04_synthesize_did_robustness.R` → `Analysis/did/robustness/did_robustness_summary.md`
+      (collates WCB/RI + DRDID + HonestDiD).
+    - Folded the bootstrap p-values into `Text/technical_note_empirical_framework.{html,tex}`
+      as §2.5.4 (few-treated-cluster note). *Left uncommitted — author has a concurrent edit in
+      those files.*
+    - Wrote `Code/tests/test_did_robustness.R` (5 tests, all pass on R 4.2.2).
+    - Marked `did_frontier_robustness_20260625` Phases 4 & 5 `[x]`; that track is effectively
+      closed (only the optional de Chaisemartin estimator remains → T3.2 below). `fdc0a25`
 - [ ] **1.3 Extend the 2012 DiD pre-period with BEA income (T0.3).**
     - New `Code/did_robustness/05_bea_pretrends_1990_2011.R` (R 4.5.3, or 4.2.2 if it needs no
       frontier package): pull county PCPI 1990–2011 from the socioeconomic intermediate; label
@@ -67,11 +64,15 @@ in parallel with essay drafting. Tier 2 is gated on Tier-1 drafts existing.
   ask for explicit sign-off that it replaces the structural model, and offer the
   sufficient-statistics section (T1.3) as the scaled-down policy component. **Hand to the
   author to send — user-decision gate; do not proceed to assume the answer.**
-- [ ] **1.5 Housekeeping (T0.5).**
-    - Fix the two incomplete references (Audi et al. 2024–25; Doremus et al. 2022) and the two
-      `[TK]` baseline denominators in the reviewer-response file.
-    - Delete stray `*.tmp.*` artifacts in `Code/`, `Text/`, `conductor/`.
-    - Work through the open Conductor verification gates (checklists, not analysis — batch them).
+- [~] **1.5 Housekeeping (T0.5).**
+    - [ ] Fix the two incomplete references (Audi et al. 2024–25; Doremus et al. 2022) and the
+      **four** `[TK]` baseline denominators in `Text/reviewer_response_mechanisms_nber.md`
+      (Medicare per-beneficiary mean; baseline ED rate/1,000; baseline county employment;
+      energy-burden jobs+income baselines). Denominators need sample means from the county
+      master / Medicare intermediate; refs need a lookup — carried into the next work block.
+    - [x] Deleted 25 stray `*.tmp.*` editor swap artifacts across `Code/`, `Text/`, `conductor/`
+      (all untracked; verified clean).
+    - [ ] Work through the open Conductor verification gates (checklists, not analysis — batch).
 - [ ] **Phase 1 checkpoint** — verification gate + git note.
 
 ## Phase 2: Tier 1 — write, and add stakes (~2–3 months)

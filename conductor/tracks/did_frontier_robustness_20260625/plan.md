@@ -2,10 +2,13 @@
 
 Track spec: `./spec.md`. Parent: `committee_feedback_april_2026` Phase 3.
 
-**Status: Phases 2 & 3 RUN (2026-06-25); Phases 1 & 4 pending.** Phase 1 (wild cluster
-bootstrap) was started and cancelled — still deferred. Phase 2 (doubly-robust) and Phase 3
-(HonestDiD) are complete with results recorded below. Phase 4 (synthesis + technical-note
-write-up) still to do.
+**Status: Phases 1–5 RUN (Phase 1, 4, 5 completed 2026-07-04 via the
+`thesis_completion_20260704` track, T0.1–T0.2).** Phase 1 (wild cluster bootstrap +
+randomization inference) is done — **the income headline survives** (see below). Phase 2
+(doubly-robust) and Phase 3 (HonestDiD) were complete 2026-06-25. Phase 4 synthesis run +
+technical note updated; Phase 5 testthat suite written and passing. Only the optional de
+Chaisemartin–D'Haultfœuille recurring-treatment estimator remains open (tracked as T2.2 of
+`thesis_completion_20260704`). **This track is effectively closed.**
 
 **Headline robustness verdict (Phases 2–3):** The **income** effect is robust — the
 covariate-conditional DRDID 2×2 confirms it (−$1,451, even stronger than the unconditional
@@ -36,17 +39,27 @@ project's R 4.2.2). Required packages are already installed in the 4.5.3 library
 - [x] **Confirm baseline covariate coverage at 2011:** Population 2,662/2,673;
   Med_HH_Income 2,618/2,673; Uninsured_Rate & Disability_Rate all-NA (excluded).
 
-## Phase 1: Few-treated-cluster inference (Objective 1)
+## Phase 1: Few-treated-cluster inference (Objective 1) — DONE 2026-07-04 (fdc0a25)
 
-- [ ] **Run** `Code/did_robustness/01_wild_cluster_bootstrap.R`.
-    - Wild cluster bootstrap-t (Webb, B=9999, null imposed) via `fwildclusterboot::boottest`
-      on the FWL-residualized 2×2 (partial out county+year FE first — boottest on the full
-      3,155-FE model is prohibitively slow; this was the cause of the cancelled run).
-    - Fisher randomization inference (N=2000 placebo re-draws of the 139 treated labels).
-    - Outcomes: PCPI_Real, Civilian_Employed, Med_HH_Income_Real, Medical_Debt_Share.
-    - **Output:** `Analysis/did/robustness/wild_bootstrap_2x2.csv`.
-    - **Acceptance:** report `p_analytic` vs `p_wcb_webb` vs `p_randinf`; state whether the
-      income and employment effects still clear 0.05 under the cluster-robust corrections.
+- [x] **Ran** `Code/did_robustness/01_wild_cluster_bootstrap.R` on R 4.5.3 (the script already
+  used the FWL-demeaned residual model, so the previously-cancelled full-FE `boottest` hang did
+  not recur). Wild cluster bootstrap-t (Webb, B=9999, null imposed) + Fisher randomization
+  inference (N=2000). **Output:** `Analysis/did/robustness/wild_bootstrap_2x2.csv`.
+
+    | Outcome | ATT | p_analytic | p_wcb_webb | p_randinf | WCB 95% CI |
+    |---|---|---|---|---|---|
+    | **PCPI_Real** | **−1,311** | 0.028 | **0.036** | **0.0075** | [−2,911, −138] |
+    | Civilian_Employed | −2,043 | 0.0001 | 0.0029 | 0.0365 | [−3,163, −1,043] |
+    | Med_HH_Income_Real | −991 | 0.237 | 0.268 | 0.0040 | [−3,261, 1,508] |
+    | Medical_Debt_Share | −0.006 | 0.497 | 0.598 | 0.0835 | [−0.022, 0.023] |
+
+    - **Verdict:** the **income headline survives** the few-treated-cluster correction (both
+      WCB and RI clear 0.05; CI excludes 0). Employment also clears the few-cluster bar
+      (p_wcb=0.003, p_ri=0.037) — its fragility (Phase 2 DRDID ~58% attenuation; pooled CS
+      reversal) is one of *conditioning* and *generalization*, NOT cluster count. The two null
+      outcomes stay null under WCB. This closes the one genuinely open econometric exposure
+      flagged in the roadmap: it *confirmed* rather than weakened the headline.
+    - 17 treated states (49 total); N≈34,000 county-years per outcome.
 
 ## Phase 2: Conditional parallel trends / doubly-robust (Objective 2)  — DONE 2026-06-25
 
@@ -92,25 +105,27 @@ project's R 4.2.2). Required packages are already installed in the 4.5.3 library
       2012 natural experiment's credibility rests on Phase 2 (DRDID 2×2) and Phase 1
       (cluster-robust inference), NOT on HonestDiD.
 
-## Phase 4: Synthesis & write-up (Objective 4)
+## Phase 4: Synthesis & write-up (Objective 4) — DONE 2026-07-04
 
-- [ ] **Run** `Code/did_robustness/04_synthesize_did_robustness.R` → `did_robustness_summary.md`.
-- [~] **Update** `Text/technical_note_empirical_framework.html`: **DONE for DRDID** — added
-  §2.5.3 "Doubly-robust check: conditional parallel trends" (eq. D2, unconditional-vs-DR
-  table, the "does it generalize?" pooled-CS null note, and the ITT-estimand + "Midwest"
-  misnomer caveats). **Still pending:** fold in Phase 1 wild-bootstrap p-values once run;
-  decide whether to add a short HonestDiD line (currently framed as a limitation rather than
-  a result, since it can't test the 2012 cohort).
-- [ ] **Optional:** evaluate de Chaisemartin–D'Haultfœuille `did_multiplegt_dyn` as a direct
-  recurring-treatment estimator (out of current scope; decision point for a follow-up).
+- [x] **Ran** `Code/did_robustness/04_synthesize_did_robustness.R` →
+  `Analysis/did/robustness/did_robustness_summary.md` (collates all three robustness layers:
+  wild bootstrap/RI, DRDID 2×2 + CS-dr, HonestDiD sensitivity).
+- [x] **Updated** `Text/technical_note_empirical_framework.{html,tex}`: added the §2.5.4
+  few-treated-cluster note (WCB + RI p-values, FWL rationale, "income survives / employment is
+  a conditioning-not-clustering fragility" verdict) alongside the existing DRDID §2.5.3.
+  *(Left uncommitted in the working tree — the author has a concurrent affiliation edit in
+  those files; folded in for their review, not swept into a conductor commit.)*
+- [ ] **Optional (deferred → T2.2 of `thesis_completion_20260704`):** de Chaisemartin–
+  D'Haultfœuille `did_multiplegt_dyn` as a direct recurring-treatment estimator.
 
-## Phase 5: Tests & conductor close-out
+## Phase 5: Tests & conductor close-out — DONE 2026-07-04 (fdc0a25)
 
-- [ ] **Tests** (`Code/tests/test_did_robustness.R`, testthat): cohort construction matches
-  `run_did_analysis.R`; FWL-residualized point estimate equals the full-FE `feols` ATT;
-  randomization-inference placebo distribution centers on 0; baseline covariates are
-  strictly pre-treatment (2011).
-- [ ] **Changelog / GEMINI / CLAUDE** updates and conductor commit per `workflow.md`.
+- [x] **Tests** `Code/tests/test_did_robustness.R` (testthat): first-onset cohort construction;
+  FWL-residualized 2×2 estimate == full two-way-FE `feols` ATT (identity licensing the fast
+  bootstrap); randomization-inference placebo centers on 0 under a true null; baseline
+  covariates strictly 2011. All 5 pass on R 4.2.2 (deliberately boottest-free). `fdc0a25`
+- [ ] **Changelog / GEMINI / CLAUDE** updates and conductor commit — at session end per
+  `workflow.md` (the `thesis_completion_20260704` track carries this forward).
 
 ---
 
