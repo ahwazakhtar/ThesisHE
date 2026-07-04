@@ -18,8 +18,8 @@ Phase 1 is the critical path and must land before Phase 2/3 numbers.
 
 ## Phase 0: Setup, environment & data acquisition
 
-- [ ] **0.1 Stand up the track.** Write `spec.md` + `plan.md`; register in `conductor/tracks.md`.
-  Commit.
+- [x] **0.1 Stand up the track.** Write `spec.md` + `plan.md`; register in `conductor/tracks.md`.
+  Commit. `3683ee4`
 - [ ] **0.2 Confirm the rerun surface.** Read `Code/run_mechanism_{agriculture,secondary,medicare,
   provider}.R`; identify every employment spec (level `Civilian_Employed`) that needs rescaling and
   every heat coefficient that needs the division×year-FE column. List them.
