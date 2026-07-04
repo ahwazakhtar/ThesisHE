@@ -20,3 +20,5 @@ This file tracks all major tracks for the project. Each track has its own detail
   *Link: [./tracks/did_frontier_robustness_20260625/](./tracks/did_frontier_robustness_20260625/)*
 - [~] **Track: Mechanisms — Agricultural Channel & Beyond** (Phases 0–6 implemented Jul 2026; Conductor verification gate open)
   *Link: [./tracks/mechanism_channels_20260625/](./tracks/mechanism_channels_20260625/)*
+- [~] **Track: Thesis Completion — Roadmap Execution** (umbrella; drives the final push per `Plans/roadmap_recommendations_20260704.md`. Started Jul 2026)
+  *Link: [./tracks/thesis_completion_20260704/](./tracks/thesis_completion_20260704/)*
