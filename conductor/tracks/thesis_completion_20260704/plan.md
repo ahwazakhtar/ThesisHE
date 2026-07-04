@@ -83,15 +83,21 @@ in parallel with essay drafting. Tier 2 is gated on Tier-1 drafts existing.
 
 ## Phase 2: Tier 1 — write, and add stakes (~2–3 months)
 
-- [ ] **2.1 Premium pass-through / mediation (T1.1).** New
-  `Code/run_premium_mediation.R` (R 4.2.2): (i) shock → benchmark premium pass-through ρ
-  (lagged claims-relevant shocks → `Benchmark_Silver_Real`, county+year FE, state-clustered,
-  rating-area-clustered variant); (ii) medical-debt share with/without premium controls →
-  fraction-of-effect-surviving decomposition (reuse `run_demographic_mediators.R` helpers).
-    - **Outputs:** `Analysis/mediation/premium_passthrough.csv`, `debt_mediation.csv`; a
-      write-up paragraph.
-    - **Test:** `testthat` — decomposition identity (total = mediated + direct) holds; lag
-      alignment correct.
+- [x] **2.1 Premium pass-through / mediation (T1.1).** Built `Code/run_premium_mediation.R`
+  (R 4.2.2) with tested helpers `add_shock_lags` / `mediation_decompose`.
+    - **(i) Pass-through ρ:** extreme cold → benchmark silver **+$28/mo (≈7% of the $375 mean;
+      state p=0.008, RA-clustered p<0.001)**; heat → +$21/mo at 2-yr lag (RA p=0.01); **drought
+      pass-through imprecise (+$14/mo, p=0.27)** — response concentrates in temperature hazards,
+      not a uniform climate repricing. (NB: abstract's "+$18 drought premium" does *not* replicate
+      in the county benchmark spec — flag for the author.)
+    - **(ii) Mediation:** **93% (cold, lag1) to 99% (drought, lag2) of the shock→medical-debt
+      effect survives premium adjustment** — debt runs *outside* the priced contract, sharpening
+      the unpriced-margin claim. Difference-method (not causal); premiums RA-level (lower bound);
+      marketplace-era sample (2014–2023, 23,577 county-years → base debt coefs exceed full-panel
+      headlines, but the surviving *fraction* is sample-invariant).
+    - Outputs: `Analysis/mediation/{premium_passthrough,debt_mediation}.csv` +
+      `premium_mediation_summary.md`; NBER write-up `Text/premium_mediation_writeup.md`. Tests
+      (identity + lag alignment + same-sample) pass. `4de9e39`
 - [ ] **2.2 Data-integrity fix (T1.2).** Enforce one-row-per-county-year in
   `Code/create_county_master.R` upstream (resolve the ~3% multi-rating-area duplicates once,
   with a documented rule); add a build-time assertion (`stopifnot` uniqueness on fips×year).
