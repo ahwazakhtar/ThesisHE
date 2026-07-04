@@ -85,11 +85,15 @@ in parallel with essay drafting. Tier 2 is gated on Tier-1 drafts existing.
 
 - [x] **2.1 Premium pass-through / mediation (T1.1).** Built `Code/run_premium_mediation.R`
   (R 4.2.2) with tested helpers `add_shock_lags` / `mediation_decompose`.
-    - **(i) Pass-through ρ:** extreme cold → benchmark silver **+$28/mo (≈7% of the $375 mean;
-      state p=0.008, RA-clustered p<0.001)**; heat → +$21/mo at 2-yr lag (RA p=0.01); **drought
-      pass-through imprecise (+$14/mo, p=0.27)** — response concentrates in temperature hazards,
-      not a uniform climate repricing. (NB: abstract's "+$18 drought premium" does *not* replicate
-      in the county benchmark spec — flag for the author.)
+    - **(i) Pass-through ρ — CORRECTED 2026-07-04 for rate-filing timing** (reviewer flag: ACA
+      plan-year-t rates are locked ~mid-t-1 on ~t-2 claims experience, so a year-t shock is NOT in
+      the insurer info set → contemporaneous coefficients can't be pass-through). Re-specified on
+      **LAGGED shocks only, t-2 = primary window.** Result: **only heat passes through**, at t-2
+      (benchmark **+$19.6/mo**, RA p=0.010; bronze +$12.6/mo, RA p=0.006 — ≈3.4–5.2% of the $375
+      mean, sign- and timing-consistent). **Drought does not pass through** (null); **cold t-2 is
+      robustly NEGATIVE** (−$17/mo, RA p≤0.001 — a puzzle the claims mechanism can't rationalize;
+      reported, not interpreted as pass-through). The old contemporaneous "cold +$28" headline was
+      an artifact and is dropped. (NB: abstract's "+$18 drought premium" does *not* replicate.)
     - **(ii) Mediation:** **93% (cold, lag1) to 99% (drought, lag2) of the shock→medical-debt
       effect survives premium adjustment** — debt runs *outside* the priced contract, sharpening
       the unpriced-margin claim. Difference-method (not causal); premiums RA-level (lower bound);
@@ -153,3 +157,10 @@ in parallel with essay drafting. Tier 2 is gated on Tier-1 drafts existing.
   before the Tier-1 essay drafts exist.
 - **Author-decision gates:** T0.4 (Ch. 3 structure) is not something this track can answer —
   it drafts the memo and waits. T1.3 is the hedge if the committee still wants policy content.
+- **Premium pass-through MUST respect ACA rate-filing timing (T1.1 lesson).** Plan-year-t
+  individual-market rates are filed ~mid-t-1 on experience through ~t-2 and locked before the
+  plan year; no mid-year re-rating. So a shock→premium regression must use **lagged shocks only**
+  (t-2 primary, t-1 partial) — a contemporaneous shock is not in the insurer's information set and
+  its coefficient has no pass-through reading. Corrected finding: only **heat at t-2** passes
+  through (~$13-20/mo); cold/drought do not. Any future premium-response spec must drop the
+  contemporaneous term.

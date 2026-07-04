@@ -9,13 +9,19 @@
 #   this closes the proposal promise and gives Essay 1 its insurer-side story.
 #
 # TWO EQUATIONS
-#   (i)  PASS-THROUGH (rho): do lagged claims-relevant shocks raise the benchmark
-#        premium? feols(Benchmark_Silver_Real ~ shock + L1 + L2 | fips + Year),
-#        state-clustered, with a rating-area-clustered variant. (Premiums are set
-#        at the rating-area level, so counties in a rating area share a premium by
-#        construction; state clustering nests rating areas, the RA-clustered
-#        variant is the robustness — mirrors run_county_analysis.R.) rho is the
-#        pass-through of a shock into next-years' premiums.
+#   (i)  PASS-THROUGH (rho): do claims-relevant shocks raise the benchmark premium?
+#        CRITICAL TIMING: ACA individual-market rates for plan year t are filed and
+#        LOCKED around mid-t-1, using claims experience through ~t-2 (partial t-1);
+#        mid-year re-rating is not allowed. So a year-t weather shock is NOT in the
+#        insurer's information set when the year-t premium is set, and the
+#        contemporaneous premium-on-shock coefficient has no pass-through reading.
+#        The regression therefore uses LAGGED shocks only:
+#          feols(Benchmark_Silver_Real ~ shock_L1 + shock_L2 | fips + Year),
+#        with t-2 the PRIMARY (fully-observed-at-filing) window and t-1 partial.
+#        State-clustered, with a rating-area-clustered variant. (Premiums are set at
+#        the rating-area level, so counties in a rating area share a premium; state
+#        clustering nests rating areas, RA-clustering is the robustness — mirrors
+#        run_county_analysis.R.) rho is the pass-through of a past shock into rates.
 #   (ii) MEDIATION: does the shock -> medical-debt-share effect run THROUGH
 #        premiums? Fit debt ~ shocks(+lags) with and without premium controls on
 #        the IDENTICAL sample and report the fraction of each shock effect that
@@ -113,20 +119,24 @@ if (sys.nframe() == 0L) {
 
   # Build 2 lags for the shocks AND the premium mediator.
   df <- add_shock_lags(df, c(shocks, premium, premium2), max_lag = 2L)
+  # Mediation (ii) uses the FULL shock dynamics (contemporaneous + lags); the debt
+  # outcome has no rate-filing timing constraint.
   shock_terms <- as.vector(t(outer(shocks, c("", "_L1", "_L2"), paste0)))  # 9 terms
+  # Pass-through (i) uses LAGGED shocks ONLY — see the timing note in the header.
+  passthrough_terms <- as.vector(t(outer(shocks, c("_L1", "_L2"), paste0))) # 6 terms
 
   # -----------------------------------------------------------------------
-  # (i) PASS-THROUGH rho: shocks -> benchmark premium
+  # (i) PASS-THROUGH rho: LAGGED shocks -> benchmark premium (t-2 primary)
   # -----------------------------------------------------------------------
-  cat("--- (i) Pass-through: shocks -> premium ---\n")
+  cat("--- (i) Pass-through: LAGGED shocks -> premium (rate-filing timing) ---\n")
   passthrough <- function(prem) {
-    f <- stats::as.formula(paste(prem, "~", paste(shock_terms, collapse = " + "),
+    f <- stats::as.formula(paste(prem, "~", paste(passthrough_terms, collapse = " + "),
                                  "| fips_code + Year"))
-    sub <- df[stats::complete.cases(df[, c(prem, shock_terms)]), ]
+    sub <- df[stats::complete.cases(df[, c(prem, passthrough_terms)]), ]
     m  <- feols(f, data = sub, cluster = ~State)
     cs <- coeftable(m)                                       # state-clustered
     cr <- coeftable(summary(m, cluster = ~rating_area_id))   # RA-clustered
-    do.call(rbind, lapply(shock_terms, function(t) data.frame(
+    do.call(rbind, lapply(passthrough_terms, function(t) data.frame(
       premium = prem, shock_term = t,
       estimate = cs[t, "Estimate"],
       se_state = cs[t, "Std. Error"], p_state = cs[t, 4],
@@ -135,10 +145,10 @@ if (sys.nframe() == 0L) {
   }
   pt <- rbind(passthrough(premium), passthrough(premium2))
   write_csv(pt, file.path(OUT, "premium_passthrough.csv"))
-  cat("Significant pass-through terms (state-clustered p<0.05):\n")
-  print(pt %>% filter(p_state < 0.05) %>%
-          mutate(across(c(estimate, se_state, p_state), ~signif(.x, 3))) %>%
-          select(premium, shock_term, estimate, se_state, p_state), row.names = FALSE)
+  cat("Lagged pass-through terms significant under EITHER clustering (t-2 = primary):\n")
+  print(pt %>% filter(p_state < 0.05 | p_ra < 0.05) %>%
+          mutate(across(c(estimate, p_state, p_ra), ~signif(.x, 3))) %>%
+          select(premium, shock_term, estimate, p_state, p_ra), row.names = FALSE)
 
   # -----------------------------------------------------------------------
   # (ii) MEDIATION: does shock -> debt run through premiums?
@@ -160,7 +170,7 @@ if (sys.nframe() == 0L) {
   # -----------------------------------------------------------------------
   # Summary md
   # -----------------------------------------------------------------------
-  sig_pt <- pt %>% filter(p_state < 0.05)
+  sig_pt <- pt %>% filter(p_state < 0.05 | p_ra < 0.05)   # sig under EITHER clustering
   md <- c(
     "# Premium Pass-through and Debt Mediation — Summary",
     "",
@@ -172,8 +182,13 @@ if (sys.nframe() == 0L) {
     "eq-(ii) base debt coefficients are therefore larger than the full-panel headlines_",
     "_(the surviving fraction, invariant to sample, carries the mediation conclusion)._",
     "",
-    "## (i) Pass-through rho: claims-relevant shocks -> benchmark premium",
-    if (nrow(sig_pt) == 0) "_No shock term significant at 0.05 (state-clustered)._" else
+    "## (i) Pass-through rho: LAGGED claims-relevant shocks -> benchmark premium",
+    "_ACA plan-year-t rates are filed ~mid-t-1 on experience through ~t-2, so only",
+    "LAGGED shocks can pass through; **t-2 is the primary (fully-observed) window**,",
+    "t-1 partial. Contemporaneous terms are excluded (not in the insurer info set)._",
+    "",
+    "Terms significant under either clustering:",
+    if (nrow(sig_pt) == 0) "_None at 0.05._" else
       knitr::kable(sig_pt %>% select(premium, shock_term, estimate, se_state,
                                      p_state, p_ra) %>%
                      mutate(across(where(is.numeric), ~signif(.x, 3))),
