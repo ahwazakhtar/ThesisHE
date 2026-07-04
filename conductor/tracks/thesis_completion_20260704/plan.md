@@ -47,23 +47,22 @@ in parallel with essay drafting. Tier 2 is gated on Tier-1 drafts existing.
     - Wrote `Code/tests/test_did_robustness.R` (5 tests, all pass on R 4.2.2).
     - Marked `did_frontier_robustness_20260625` Phases 4 & 5 `[x]`; that track is effectively
       closed (only the optional de Chaisemartin estimator remains → T3.2 below). `fdc0a25`
-- [ ] **1.3 Extend the 2012 DiD pre-period with BEA income (T0.3).**
-    - New `Code/did_robustness/05_bea_pretrends_1990_2011.R` (R 4.5.3, or 4.2.2 if it needs no
-      frontier package): pull county PCPI 1990–2011 from the socioeconomic intermediate; label
-      treated (first-onset-2012 cohort, mirroring `00_did_robustness_common.R`) vs never-exposed;
-      plot mean PCPI trajectories and estimate a pre-trend slope difference (event-study on
-      pre-periods, or treated×year interactions 1990–2011).
-    - **Outputs:** `Analysis/did/robustness/bea_pretrends_1990_2011.csv` + a figure under
-      `Analysis/did/robustness/`.
-    - **Acceptance:** figure + parallel-pre-trend test (slope difference, SE, p); one paragraph
-      in the technical note stating whether the two-decade pre-trends are parallel.
-    - **Test:** `testthat` — treated/never-exposed cohort sizes match the DiD cohort; pre-period
-      window is strictly ≤2011.
-- [ ] **1.4 Draft the committee memo on Chapter 3 (T0.4).** Write
-  `Text/committee_memo_ch3_structure.md`: state the Incidence/Persistence/Inequality structure,
-  ask for explicit sign-off that it replaces the structural model, and offer the
-  sufficient-statistics section (T1.3) as the scaled-down policy component. **Hand to the
-  author to send — user-decision gate; do not proceed to assume the answer.**
+- [x] **1.3 Extend the 2012 DiD pre-period with BEA income (T0.3).** Built
+  `Code/did_robustness/05_bea_pretrends_1990_2011.R` (R 4.2.2, no frontier package). Coverage is
+  excellent: all 139 treated + 2,483/2,534 control counties have PCPI every year 1990–2011 (21
+  pre-periods). **Result — linear differential pre-trend −$69/yr (SE 89, p=0.44): flat** (the
+  DiD-relevant threat is absent). Event-study joint Wald rejects (F=6.9, p<0.001) = modest
+  business-cycle rural-vs-urban wiggle, not secular drift — the composition DRDID conditions on
+  (and which *strengthens* the effect to −$1,451). Figure shows parallel pre-2012 trajectories
+  diverging after onset. Outputs: `bea_pretrends_1990_2011.{csv,png}` + build log. Technical-note
+  §2.5.5 paragraph added (uncommitted, author's file). Test `Code/tests/test_bea_pretrends.R`
+  passes (FIPS-padding trap, strict ≤2011 window, 139/2534 cohort match). `dcec119`
+- [x] **1.4 Draft the committee memo on Chapter 3 (T0.4).** Wrote
+  `Text/committee_memo_ch3_structure.md`: boxed decision question (does the three-essay structure
+  replace the structural Ch.3?), the proposal→now evolution, the sufficient-statistics section
+  offered as the bounded policy substitute, plus disclosures (hazard demotion; unestimated
+  premium→debt mediation). **Drafted; author must send. The DECISION itself remains an open
+  user-gate — T1.3 is the hedge regardless of the answer.** `2a2e826`
 - [~] **1.5 Housekeeping (T0.5).**
     - [ ] Fix the two incomplete references (Audi et al. 2024–25; Doremus et al. 2022) and the
       **four** `[TK]` baseline denominators in `Text/reviewer_response_mechanisms_nber.md`
