@@ -64,14 +64,21 @@ in parallel with essay drafting. Tier 2 is gated on Tier-1 drafts existing.
   premium→debt mediation). **Drafted; author must send. The DECISION itself remains an open
   user-gate — T1.3 is the hedge regardless of the answer.** `2a2e826`
 - [~] **1.5 Housekeeping (T0.5).**
-    - [ ] Fix the two incomplete references (Audi et al. 2024–25; Doremus et al. 2022) and the
-      **four** `[TK]` baseline denominators in `Text/reviewer_response_mechanisms_nber.md`
-      (Medicare per-beneficiary mean; baseline ED rate/1,000; baseline county employment;
-      energy-burden jobs+income baselines). Denominators need sample means from the county
-      master / Medicare intermediate; refs need a lookup — carried into the next work block.
     - [x] Deleted 25 stray `*.tmp.*` editor swap artifacts across `Code/`, `Text/`, `conductor/`
       (all untracked; verified clean).
-    - [ ] Work through the open Conductor verification gates (checklists, not analysis — batch).
+    - [~] **`[TK]` baseline denominators — computed, handed to author to insert.** Candidate
+      full-sample baselines (2014–2023 Medicare; 2011–2023 county master): Medicare std payment
+      **$10,359/beneficiary** (bene-wtd) → $112/$177/$75 = **1.1% / 1.7% / 0.7%**; ED visits
+      **629 per 1,000** → 7.8/9.5 = **1.2% / 1.5%**; mean county employment **50,113**; mean PCPI
+      **$46,269**. **NOT auto-inserted into `reviewer_response_mechanisms_nber.md`:** the −2,011
+      (bottom-ag-tercile) and −1,380 (high-energy-burden) employment effects are estimated in
+      *subsamples* of small rural counties, so their correct denominator is the subsample mean,
+      not the 50,113 overall mean — the author should confirm the intended base per marker.
+    - [ ] Complete the two references (Audi et al. 2024–25 — FEMA hurricane risk × hospital
+      financial ratio; Doremus et al. 2022 — energy-burden/affordability adaptation). Need the
+      author's exact citations; not guessed.
+    - [ ] Work through the open Conductor verification gates (human sign-off checklists — the
+      author must run these; they cannot be closed autonomously).
 - [ ] **Phase 1 checkpoint** — verification gate + git note.
 
 ## Phase 2: Tier 1 — write, and add stakes (~2–3 months)
