@@ -62,11 +62,13 @@ difference-in-differences robustness exercise, the drought → income effect app
 farm-dependence interactions are noisy in the recurring-treatment panel. I read agriculture as a
 bound on the phenomenon, not the whole of it.
 
-**One-paragraph answer.** Most of what the reduced form captures is *not* the agricultural income
-channel. The health-cost response is measured directly in Medicare data and is agriculture-free; the
-employment response is broad labor exposure that survives in non-farm counties; and the
-distributional amplification runs through energy burden as much as through farming (§2). Agriculture
-contributes a real but event-specific, partly selection-driven drought effect.
+**One-paragraph answer.** A substantial part of what the reduced form captures operates outside the
+agricultural income channel. The health-cost response is measured directly in Medicare data and
+requires no farm-income intermediary; the employment response loads on climate-exposed non-farm
+industries; and the distributional amplification operates through energy burden as well as farming
+(§2). Agriculture contributes a real but event-specific, partly selection-driven drought effect. The
+design bounds the agricultural channel rather than partitioning the effect into shares, so the claim
+is the well-identified one that agriculture cannot be the whole story.
 
 ## 2. What other channels are in play?
 
@@ -147,10 +149,12 @@ repeated exposure as an increasing dose rather than as independent one-offs.
 
 ## Bottom line
 
-Your instinct was the right one to test, and the test paid off. The reduced-form relationships are
-generated primarily by **non-agricultural** channels — a directly measured morbidity and utilization
-channel, broad labor exposure, and energy burden — with agriculture a real but narrower,
-event-specific, partly selection-driven contributor. I have added the mechanism map, the in-panel
+Your instinct was the right one to test, and the test paid off. The reduced-form relationships
+operate **substantially outside agriculture** — through a directly measured morbidity and utilization
+channel, broad labor exposure, and an energy-burden margin — with agriculture a real but narrower,
+event-specific, partly selection-driven contributor. The design bounds the agricultural channel
+rather than decomposing the effect into shares, so it establishes that agriculture is one channel
+among several rather than the channel. I have added the mechanism map, the in-panel
 estimates, and the two definitional write-ups you flagged. I would welcome your read on whether this
 bounds the agricultural channel to your satisfaction, and whether the non-agricultural channels are
 framed with the right degree of caution.
