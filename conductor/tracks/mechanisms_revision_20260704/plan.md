@@ -3,7 +3,7 @@
 Track spec: `./spec.md`. Source: `Plans/mechanisms_revision_plan_20260704.md`. Feedback:
 `Text/second_reviewer_feedback_mechanisms.md`. Parent: `mechanism_channels_20260625`.
 
-**Status: Phase 0 COMPLETE (2026-07-05). Phase 1 (rescaling gate) next — start at 1.1.** Phases map
+**Status: Phase 1 COMPLETE (2026-07-05; 1.1–1.3 done, checkpoint pending). Phase 2 next.** Phases map
 to the ~3-week sequence. **The organizing trick:
 Phase 1's rescaling campaign discharges A2 + B1(leads) + B2(division×year FE) in ONE grid rerun**;
 every downstream quantitative task (A1 table, A3 horse-race, C4 corrections) consumes that grid — so
@@ -77,18 +77,22 @@ Phase 1 is the critical path and must land before Phase 2/3 numbers.
     - **Cascade:** cold→employment is no longer a significant *overall* cell in logs → drop it from
       the A1 accounting table (3.1) significant-cells set; it is also a C4 casualty to pre-concede
       (2.2). §6.3 done; the **energy-burden paragraph (§6.5) rewrite waits on A3 (2.1)**. `ddfc448`
-- [ ] **1.2 [MUST] Free text batch** (no dependencies): A1 soften "runs primarily through" →
-  "operates substantially outside agriculture" (§6.6, §6 opener, NBER-response bottom line); C3 IRS
-  non-filer caveat (measured out-migration is a *lower bound* → selection share could be larger →
-  cuts against scarring); C2 trim the five provider-finance stories to the two evidenced; C1 reframe
-  Medicare as a **sentinel population** + the lag-structure-by-channel calendar (winter-t cold →
-  Aug-t+1 credit snapshot via 90–180-day collections; reuse the f35bf5f calendar-forensics move); C4
-  downgrade every p≈0.05 claim to "suggestive."
-- [ ] **1.3 [MUST] B1 event-study figure.** From the existing `Analysis/did/robustness/
-  dr_csdid_eventtime.csv` (+ `fixest::i(event_time, treat_cohort, ref=-1)` / LP-DiD for the 2012 2×2).
-  State explicitly the 2012 cohort has no testable pre-period (panel starts at its e=−1) — show the
-  2012 dynamic post-path + the pooled CS event-study with its disclosed employment pre-trends.
-- [ ] **Phase 1 checkpoint** — verification gate + git note.
+- [x] **1.2 [MUST] Free text batch.** All five edits made across `mechanisms_section.md` +
+  `reviewer_response_mechanisms_nber.md`: A1 softened ("operates substantially outside agriculture",
+  reframed as a *bound* not a share; removed the antithetical "is not" epigram) in §6 opener, §6.6,
+  and the NBER answer + bottom line; C1 Medicare **sentinel** reframe + lag-structure-by-channel
+  calendar (cold→debt t+1 via Aug credit snapshot; Medicare t+2 sequelae) in §6.2; C2 provider stories
+  trimmed 5→2 evidenced (federal buffers — crop-insurance leg testable; revenue-positive utilization),
+  rest set aside as untested; C3 IRS non-filer caveat (out-migration a lower bound → selection share
+  understated → strengthens the anti-scarring caveat); C4 migration p=0.05 → "suggestive." `885fbea`
+- [x] **1.3 [MUST] B1 event-study figure.** `Code/plot_did_eventstudy.R` →
+  `Analysis/mechanism/plots/did_eventstudy_pooled.png`: pooled CS-dr dynamic event-study (income +
+  employment, e∈[−6,6], 95% CI) from the existing `dr_csdid_eventtime.csv`. Caption states the 2012
+  cohort has no testable pre-period (leads come from 2013/2021/2022 cohorts). Figure shows both
+  real-economy outcomes rising *post*-onset in the pooled average (the disclosed "2012 doesn't
+  generalize" result) with the mild positive employment pre-trend visible. `187f84b`
+- [ ] **Phase 1 checkpoint** — verification gate + git note. *(All three Phase-1 tasks complete;
+  awaiting user sign-off. Then Phase 2.)*
 
 ## Phase 2: New evidence (Week 2 — three parallel lanes)
 
