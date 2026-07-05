@@ -20,19 +20,42 @@ Phase 1 is the critical path and must land before Phase 2/3 numbers.
 
 - [x] **0.1 Stand up the track.** Write `spec.md` + `plan.md`; register in `conductor/tracks.md`.
   Commit. `3683ee4`
-- [ ] **0.2 Confirm the rerun surface.** Read `Code/run_mechanism_{agriculture,secondary,medicare,
-  provider}.R`; identify every employment spec (level `Civilian_Employed`) that needs rescaling and
-  every heat coefficient that needs the division×year-FE column. List them.
-- [ ] **0.3 R 4.5.3 packages.** Install `wildrwolf` + `fwildclusterboot` (r-universe `s3alfisc`),
-  `DIDmultiplegtDYN`, `TwoWayFEWeights` (CRAN), `mutoss`. Confirm each loads. (Mirror the
-  `did_frontier_robustness` install pattern.)
-- [ ] **0.4 Pull the two quick-win datasets** (self-documenting scripts, headers cite endpoints):
-    - `download_census_sahie.R` → county×year 18–64 uninsured rate + income bands, 2011–2023
-      (census.gov/programs-surveys/sahie or Census API) → `Data/intermediate_sahie.rds`.
-    - `download_rma_cause_of_loss.R` → county×year drought-cause indemnities from RMA Summary of
-      Business (`colsom_2011.zip … colsom_2023.zip` at
-      `pubfs-rma.fpac.usda.gov/pub/Web_Data_Files/Summary_of_Business/cause_of_loss/`) →
-      `Data/intermediate_rma_indemnity.rds`. Report county-year match rate onto the master.
+- [x] **0.2 Confirm the rerun surface.** Read the four `run_mechanism_*.R`. Map below. `<pending>`
+    - **A2 (log employment) — two scripts:** `run_mechanism_agriculture.R` (`outcomes` L70,
+      `Civilian_Employed` a level; carries the −2,011-vs-−721 bottom-ag subsample AND the CDD×Labor_z
+      ≈ −689 interaction) and `run_mechanism_secondary.R` (`en_outcomes` L65; carries the
+      CDD×EnergyBurden_z ≈ −1,380 interaction). Income/debt outcomes are already scale-free.
+    - **B2 (division×year FE on heat) — all four, priority heat headlines:** heat→Medicare
+      (`run_mechanism_medicare.R`, outcomes `Mdcr_Std_Payment_PC`/`ER_Visits_per1000` — the key
+      survival test), heat→employment interactions (ag CDD×Labor_z; secondary CDD×EnergyBurden_z),
+      heat×safety-net→uncompensated care (`run_mechanism_provider.R`, outcomes `Hosp_UncompCare_*`).
+    - **B1 two headline pairs:** cold→log-employment (agriculture) + heat→Medicare (medicare).
+    - **A3 horse-race locus:** `run_mechanism_secondary.R` (energy burden) — add `poverty_z` +
+      baseline-own-climate_z alongside the existing `EnergyBurden_z`/`Ag_z`/`Labor_z`/`SVI_static`
+      (need to source poverty + baseline-CDD normals — check master/intermediates in 2.1).
+    - **C4 channel families:** morbidity=medicare, labor=agriculture(employment), energy=secondary,
+      provider=provider.
+    - **Convention note:** mechanism scripts lag as `_Lag1`/`_Lag2` (NOT `_L1`/`_L2`); these already
+      exist in the master. **F1 LEADS do not exist** — construct `*_Lead1` in the 1.1 rerun. Specs
+      per script: overall / interaction(shock×moderator_z) / bottom-tercile subsample; all
+      `feols(... | fips_code + Year, cluster="State")`.
+- [x] **0.3 R 4.5.3 packages.** `wildrwolf`, `DIDmultiplegtDYN`, `TwoWayFEWeights` all install and
+  **LOAD** (`fwildclusterboot` was already present; `wildrwolf` also needed `fabricatr` from CRAN).
+  **`mutoss` does NOT load** — it depends on Bioconductor's `multtest` (not CRAN). Not worth the
+  Bioconductor install: use base-R `p.adjust(., "BY")` (Benjamini–Yekutieli) + a hand-rolled BKY
+  two-stage for Anderson's sharpened q-values in C4. `<sha>`
+- [x] **0.4 Pulled the two quick-win datasets** (keyless/keyed; self-documenting; log to build_logs):
+    - `download_census_sahie.R` → `Data/intermediate_sahie.rds`: county×year 18–64 uninsured
+      (`Uninsured_18_64` all-income + `Uninsured_18_64_le138FPL` low-income proxy), Census SAHIE API
+      (AGECAT=1, PCTUI_PT), CENSUS_API_KEY. **40,855 county-years, full 2011–2023 (incl. 2023),
+      match 97.6%** of master county-years (gap = CT planning-region/AK FIPS churn). Mean 18–64
+      uninsured 15.5%.
+    - `download_rma_cause_of_loss.R` → `Data/intermediate_rma_indemnity.rds`: county×year
+      `Drought_Indemnity` / `Total_Indemnity` / `Drought_Indemnity_Share` / `Drought_Liability` from
+      RMA COL ZIPs (col map verified via loss-ratio identity — indemnity = col29). **35,523
+      county-years, 2011–2023, drought indemnity in 25,429; match 83.9%** of master (expected <100 —
+      only crop-loss county-years have rows; non-loss = NA→0 on join).
+    - Both `.rds` are gitignored (regenerate from the scripts). `<sha>`
 
 ## Phase 1: Rescaling gate + free text fixes (Week 1 — critical path)
 
