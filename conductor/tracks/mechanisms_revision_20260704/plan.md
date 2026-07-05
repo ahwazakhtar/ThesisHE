@@ -60,13 +60,23 @@ Phase 1 is the critical path and must land before Phase 2/3 numbers.
 
 ## Phase 1: Rescaling gate + free text fixes (Week 1 — critical path)
 
-- [ ] **1.1 [MUST] A2 rescaling campaign — the one grid.** Re-run every employment spec with
-  **log(Civilian_Employed)** (asinh sensitivity) + **per-1,000-workers**, and in the SAME rerun add
-  **F1 lead terms** (B1 placebos) and a **division×year-FE column** (B2 heat-trend). Outputs feed A1,
-  A3, C4. Rewrite §6.3 + the energy-burden paragraph in log points. **Fallback pre-commit:** if
-  "strengthens" dies in logs, downgrade to "survives" (separability only needs a nonzero low-ag
-  effect) and lean on the interaction reading (loads on non-farm exposed share). Test the outcome
-  transform + lead alignment.
+- [x] **1.1 [MUST] A2 rescaling campaign — the one grid.** Built
+  `Code/run_mechanism_employment_rescaled.R` (log/asinh/per-1000 employment + F1 leads + division×year
+  FE), tested helper `add_shock_leads` + transforms. Output `employment_rescaled_coefs.csv` (450 rows).
+  **FALLBACK TRIGGERED — the reviewer was right:**
+    - **A2:** cold→employment "strengthening" **dies in logs** — neither overall nor bottom-ag-tercile
+      is significant (all |est|<0.5 log-pts, p>0.15). The level −2,011-vs−721 was a county-size
+      artifact. → §6.3 rewritten to REST ON THE INTERACTION, not the cold subsample.
+    - **The labor channel survives via interactions (robust):** heat→emp loads on exposed-industry
+      share (CDD×Labor_z **−0.0052, p=0.006**) and energy burden (CDD×EnergyBurden_z **−0.0084,
+      p=0.005**), **both survive division×year FE** (−0.0042/−0.0078, p=0.015/0.002 — clears B2 for
+      these results). Energy-burden interaction surviving div×yr FE is a point in its favor ahead of
+      the A3 horse-race.
+    - **B1 leads:** cold null (pass); heat marginal (p=0.09, mild trend); **drought lead FAILS
+      (p=0.005)** — drought persistence, escalates the Phase-2 recurring-treatment work (2.4).
+    - **Cascade:** cold→employment is no longer a significant *overall* cell in logs → drop it from
+      the A1 accounting table (3.1) significant-cells set; it is also a C4 casualty to pre-concede
+      (2.2). §6.3 done; the **energy-burden paragraph (§6.5) rewrite waits on A3 (2.1)**. `ddfc448`
 - [ ] **1.2 [MUST] Free text batch** (no dependencies): A1 soften "runs primarily through" →
   "operates substantially outside agriculture" (§6.6, §6 opener, NBER-response bottom line); C3 IRS
   non-filer caveat (measured out-migration is a *lower bound* → selection share could be larger →
