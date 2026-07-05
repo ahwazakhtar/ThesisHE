@@ -20,7 +20,7 @@ Phase 1 is the critical path and must land before Phase 2/3 numbers.
 
 - [x] **0.1 Stand up the track.** Write `spec.md` + `plan.md`; register in `conductor/tracks.md`.
   Commit. `3683ee4`
-- [x] **0.2 Confirm the rerun surface.** Read the four `run_mechanism_*.R`. Map below. `<pending>`
+- [x] **0.2 Confirm the rerun surface.** Read the four `run_mechanism_*.R`. Map below. `6861d90`
     - **A2 (log employment) — two scripts:** `run_mechanism_agriculture.R` (`outcomes` L70,
       `Civilian_Employed` a level; carries the −2,011-vs-−721 bottom-ag subsample AND the CDD×Labor_z
       ≈ −689 interaction) and `run_mechanism_secondary.R` (`en_outcomes` L65; carries the
@@ -43,7 +43,7 @@ Phase 1 is the critical path and must land before Phase 2/3 numbers.
   **LOAD** (`fwildclusterboot` was already present; `wildrwolf` also needed `fabricatr` from CRAN).
   **`mutoss` does NOT load** — it depends on Bioconductor's `multtest` (not CRAN). Not worth the
   Bioconductor install: use base-R `p.adjust(., "BY")` (Benjamini–Yekutieli) + a hand-rolled BKY
-  two-stage for Anderson's sharpened q-values in C4. `<sha>`
+  two-stage for Anderson's sharpened q-values in C4. `6861d90`
 - [x] **0.4 Pulled the two quick-win datasets** (keyless/keyed; self-documenting; log to build_logs):
     - `download_census_sahie.R` → `Data/intermediate_sahie.rds`: county×year 18–64 uninsured
       (`Uninsured_18_64` all-income + `Uninsured_18_64_le138FPL` low-income proxy), Census SAHIE API
@@ -55,7 +55,7 @@ Phase 1 is the critical path and must land before Phase 2/3 numbers.
       RMA COL ZIPs (col map verified via loss-ratio identity — indemnity = col29). **35,523
       county-years, 2011–2023, drought indemnity in 25,429; match 83.9%** of master (expected <100 —
       only crop-loss county-years have rows; non-loss = NA→0 on join).
-    - Both `.rds` are gitignored (regenerate from the scripts). `<sha>`
+    - Both `.rds` are gitignored (regenerate from the scripts). `6861d90`
 
 ## Phase 1: Rescaling gate + free text fixes (Week 1 — critical path)
 
