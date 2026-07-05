@@ -3,7 +3,8 @@
 Track spec: `./spec.md`. Source: `Plans/mechanisms_revision_plan_20260704.md`. Feedback:
 `Text/second_reviewer_feedback_mechanisms.md`. Parent: `mechanism_channels_20260625`.
 
-**Status: Phase 0 (setup) not started.** Phases map to the ~3-week sequence. **The organizing trick:
+**Status: Phase 0 COMPLETE (2026-07-05). Phase 1 (rescaling gate) next — start at 1.1.** Phases map
+to the ~3-week sequence. **The organizing trick:
 Phase 1's rescaling campaign discharges A2 + B1(leads) + B2(division×year FE) in ONE grid rerun**;
 every downstream quantitative task (A1 table, A3 horse-race, C4 corrections) consumes that grid — so
 Phase 1 is the critical path and must land before Phase 2/3 numbers.
@@ -90,7 +91,8 @@ Phase 1 is the critical path and must land before Phase 2/3 numbers.
 - [ ] **2.2 [STR] C4 multiple-testing** (R 4.5.3, on the rescaled grid). Define families **per channel,
   pre-specified**. `wildrwolf::rwolf` (one call/channel; share a `param` via multi-LHS or a regressor
   alias; FWL/`demean` trick if slow) + one hand-rolled **Anderson (2008) index per channel** + sharpened
-  q-values (`mutoss::multiple.down`). Expected survivors: heat→ED, AQI→ED, safety-net; expected
+  q-values (base-R `p.adjust(.,"BY")` + hand-rolled BKY two-stage — `mutoss` needs Bioconductor, see
+  0.3). Expected survivors: heat→ED, AQI→ED, safety-net; expected
   casualties: bottom-tercile cold-emp, migration, cold→debt×Labor. Test the Anderson-index construction.
 - [ ] **2.3 [STR] C2 RMA provider-finance test.** drought→indemnity spike (mechanical first stage),
   then **drought × baseline-indemnity-intensity** on uncompensated care (federal-buffer prediction:
