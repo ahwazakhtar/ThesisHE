@@ -2,6 +2,37 @@
 
 ---
 
+## 2026-07-06 (Session 11)
+
+Infrastructure session, no estimation touched. Discovered the **SessionStart hook was
+mis-classifying finished tracks as "not started"** — it read `tracks.md` markers verbatim,
+but three tracks had their `plan.md` tasks marked `[x]`/`[~]` without the top-level registry
+marker being bumped. Fixed the three markers and **taught the hook to detect the drift
+itself** (plan.md is the source of truth), with a matching reconcile+commit step in the
+session-end skill. Two commits: `dbd6b6b` (infra) + this session-log commit (`tracks.md`).
+
+### `.claude/hooks/session_start.py` + `.claude/skills/session-end/SKILL.md` (`dbd6b6b`)
+- Hook now derives each track's **true marker** from its `plan.md` task lines (`[ ]` only if
+  nothing started; `[x]` only if *every* line incl. verification checkpoints is `[x]`; else
+  `[~]`) and emits a **read-only `⚠ Registry drift` warning** on mismatch — it never edits at
+  startup, so drift surfaces at task-selection time (where it actually bit) rather than only
+  at wrap-up. The `[ ]`→`[~]` bump is provably safe (can't over-promote); `[~]`→`[x]` is
+  reported but **never auto-closed over an open verification gate** (needs user sign-off).
+- session-end skill gains **Step 5 (reconcile the registry)**: run the detector, fix flagged
+  markers (char only, annotations preserved), stage `tracks.md` with the session commit.
+  Steps renumbered 5→9. Earned its keep immediately — the detector caught a third stale track
+  (`did_frontier_robustness`) that the manual first pass had missed.
+
+### `conductor/tracks.md` (3 markers reconciled)
+- `committee_feedback_april_2026` `[ ]`→`[~]` (Phases 0–5 complete & committed May 2026;
+  Phase 4 humidity parked by design; Conductor verification gate open).
+- `mechanisms_revision_20260704` `[ ]`→`[~]` (Phases 0–3 all complete & committed Jul 4–6,
+  response document drafted; three verification gates open).
+- `did_frontier_robustness_20260625` `[ ]`→`[~]` (Phases 1–5 run & effectively closed via
+  `thesis_completion` T0.1–T0.2; only the optional de Chaisemartin estimator remains → T2.2).
+- All commit SHAs cited in the three `plan.md` files were **verified present in git history**
+  before reconciling — the work was real; only the registry bookkeeping had lagged.
+
 ## 2026-07-06 (Session 10)
 
 Infrastructure/organization session: no estimation touched. Reorganized **`Analysis/`**

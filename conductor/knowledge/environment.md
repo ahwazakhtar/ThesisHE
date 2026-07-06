@@ -42,11 +42,21 @@ Read this before running R scripts, installing packages, or touching `.claude/` 
   Store stub on this machine and fails silently (both hooks were dead for two days in
   Jul 2026 before this was caught). Real interpreter: `C:\Python314\python.exe`.
 - Hooks in `.claude/hooks/`:
-  - `session_start.py` (SessionStart) — injects active tracks + next open tasks + git state.
+  - `session_start.py` (SessionStart) — injects active tracks + next open tasks + git state,
+    and **reconciles `tracks.md` markers against each `plan.md`** (the source of truth):
+    read-only `⚠ Registry drift` warning when the registry understates a track (tasks
+    `[x]`/`[~]` in plan.md but `[ ]` in the registry — the mis-classification that hid three
+    finished tracks in Jul 2026). Never edits at startup.
   - `track_edits.py` (PostToolUse on Edit|Write) — appends to `.claude/session_edits.log`.
   - `detect_wrapup.py` (UserPromptSubmit) — on wrap-up keywords, injects the edit log +
     diff stat and tells Claude to invoke the `session-end` skill.
-- Skills in `.claude/skills/`: `nber-economist-writing-style`, `session-end`.
+- **Registry-marker rule** (drift detector + session-end Step 5): a track's true marker is
+  derived from its `plan.md` task lines — `[ ]` only if nothing is started, `[x]` only if
+  *every* line incl. verification checkpoints is `[x]`, else `[~]`. `[ ]`→`[~]` is safe to
+  automate; `[~]`→`[x]` needs the user's verification sign-off, so the detector reports it but
+  never auto-closes. session-end Step 5 applies the fix and commits `tracks.md`.
+- Skills in `.claude/skills/`: `nber-economist-writing-style`, `session-end` (9 steps;
+  Step 5 = registry reconcile).
 - After editing a hook, self-test it by piping a sample JSON payload
   (`echo '{"tool_input":{"file_path":"X"}}' | python .claude/hooks/track_edits.py`).
 
