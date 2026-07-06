@@ -22,7 +22,7 @@ if not any(kw in prompt for kw in WRAPUP_KEYWORDS):
     sys.exit(0)
 
 # --- Session end detected: build context injection ---
-lines = ["[HOOK: Session end detected. Execute the Session End Protocol from CLAUDE.md.]\n"]
+lines = ["[HOOK: Session end detected. Invoke the `session-end` skill (Skill tool) and follow it.]\n"]
 
 # Append list of files edited this session
 log_path = os.path.join(os.getcwd(), ".claude", "session_edits.log")
