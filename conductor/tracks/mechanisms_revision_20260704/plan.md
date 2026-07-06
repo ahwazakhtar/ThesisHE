@@ -3,8 +3,9 @@
 Track spec: `./spec.md`. Source: `Plans/mechanisms_revision_plan_20260704.md`. Feedback:
 `Text/second_reviewer_feedback_mechanisms.md`. Parent: `mechanism_channels_20260625`.
 
-**Status: Phase 2 COMPLETE (2026-07-06; 2.1–2.4 done, checkpoint pending). Phase 3 (assembly) next.**
-Phases map to the ~3-week sequence. **The organizing trick:
+**Status: ALL PHASES COMPLETE (Phases 0–3, 2026-07-06). Checkpoints pending user sign-off.** Every
+reviewer point (A1–C4) addressed with new evidence + honest reframing; formal response drafted
+(`Text/response_to_second_reviewer.md`). Phases map to the ~3-week sequence. **The organizing trick:
 Phase 1's rescaling campaign discharges A2 + B1(leads) + B2(division×year FE) in ONE grid rerun**;
 every downstream quantitative task (A1 table, A3 horse-race, C4 corrections) consumes that grid — so
 Phase 1 is the critical path and must land before Phase 2/3 numbers.
@@ -128,19 +129,29 @@ Phase 1 is the critical path and must land before Phase 2/3 numbers.
 
 ## Phase 3: Assembly (Week 3)
 
-- [ ] **3.1 [STR] A1 accounting table** (needs A2 + C4 outputs). Columns: overall effect,
-  bottom-ag-tercile effect, share reproduced outside agriculture — rescaled units, significant cells
-  only, footnote = **upper bound under channel-homogeneity, not a decomposition**. Plus the hedged
-  order-of-magnitude compatibility paragraph (NOT the literal $177→1.1pp calibration).
-- [ ] **3.2 [STR] B2 harder-FE + Conley columns.** State×year FE where feasible (note premiums die
-  mechanically — rating areas are within-state); **Conley SEs** (`fixest::vcov_conley`, county
-  centroids in `Data/Geo/`, 200 km triangular primary + 2–3-cutoff robustness) alongside state
-  clustering on the heat headlines.
-- [ ] **3.3 [STR] C1 SAHIE working-age bridge.** shocks × county 18–64 uninsured share (SAHIE) as the
-  working-age moderator, full 2011–2023; CDC PLACES (2018–2023) as a secondary cross-check if cheap.
-- [ ] **3.4 [MUST] Rewrite §6 end-to-end** with the new numbers; draft the second-reviewer response
-  document; update `Text/reviewer_response_mechanisms_nber.md` and `mechanism_verdict.md`.
-- [ ] **Phase 3 checkpoint** — verification gate + git note.
+- [x] **3.1 [STR] A1 accounting table.** Built into the response document (`response_to_second_reviewer.md`,
+  §A1): per-cell overall / bounding-evidence / reading, framed as an **upper bound under
+  channel-homogeneity, not a decomposition**. Honest finding: recurring-panel real-economy overall
+  effects are near-null (drought→income lag2 p=0.06; cold→emp null in logs) so bottom-ag ratios are
+  uninformative — bounding rests on the 2012 DiD (income), the heat interaction (employment), and
+  Medicare (morbidity). Hedged order-of-magnitude compatibility argument used; literal $177→1.1pp
+  calibration declined (units/populations don't line up). `b7550e7`
+- [x] **3.2 [STR] B2 harder-FE + Conley columns.** `Code/run_mechanism_conley.R` (county centroids via
+  terra; `fixest::vcov_conley` 200/100/300 km). **Conley SEs tighter/comparable to state clustering**
+  (heat→Medicare p=0.0005; heat×exposed-industry p=0.033) → spatial correlation not inflating. State×Year
+  FE: heat×labor marginal (p=0.07), Medicare-spending attenuates — but ED/index/dCDH evidence holds.
+  §6.1 note added. `db86490`
+- [x] **3.3 [STR] C1 SAHIE working-age bridge.** `Code/run_mechanism_sahie_bridge.R`. shock×18–64
+  uninsured share on debt: interactions **NEGATIVE** (drought ≈−0.005/SD each lag p<0.03; heat −0.006
+  lag1 p=0.01) — the measurement-fragility footprint (credit-bureau debt under-captures the uninsured).
+  Turns C1 into a validation of the sentinel framing. §6.2 passage added. `1cba0a4`
+- [x] **3.4 [MUST] §6 revised + response document.** §6 rewritten section-by-section across Phases 1–3
+  (opener, §6.1 identification/robustness, §6.2 sentinel+calendar+SAHIE, §6.3 labor, §6.5 energy+provider,
+  §6.6). Consistency verified (no stale level numbers / "primarily" language). Formal
+  `Text/response_to_second_reviewer.md` drafted (all 9 points). NBER-response bottom line softened.
+  *(mechanism_verdict.md update optional — the response doc supersedes it.)* `b7550e7`
+- [ ] **Phase 3 checkpoint** — verification gate + git note. *(All Phase-3 tasks complete; awaiting
+  user sign-off. Track substantively done — see status.)*
 
 ---
 
