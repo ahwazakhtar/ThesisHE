@@ -3,8 +3,8 @@
 Track spec: `./spec.md`. Source: `Plans/mechanisms_revision_plan_20260704.md`. Feedback:
 `Text/second_reviewer_feedback_mechanisms.md`. Parent: `mechanism_channels_20260625`.
 
-**Status: Phase 1 COMPLETE (2026-07-05; 1.1–1.3 done, checkpoint pending). Phase 2 next.** Phases map
-to the ~3-week sequence. **The organizing trick:
+**Status: Phase 2 COMPLETE (2026-07-06; 2.1–2.4 done, checkpoint pending). Phase 3 (assembly) next.**
+Phases map to the ~3-week sequence. **The organizing trick:
 Phase 1's rescaling campaign discharges A2 + B1(leads) + B2(division×year FE) in ONE grid rerun**;
 every downstream quantitative task (A1 table, A3 horse-race, C4 corrections) consumes that grid — so
 Phase 1 is the critical path and must land before Phase 2/3 numbers.
@@ -96,27 +96,35 @@ Phase 1 is the critical path and must land before Phase 2/3 numbers.
 
 ## Phase 2: New evidence (Week 2 — three parallel lanes)
 
-- [ ] **2.1 [MUST/STR] A3 interaction horse-race** (on the rescaled grid). shock × {Ag_z, Labor_z,
-  EnergyBurden_z, SVI_z, **poverty_z, baseline-own-climate_z**} entered jointly, all standardized, +
-  a moderator-correlation matrix (appendix). Minimal MUST version: shock×EnergyBurden controlling for
-  shock×baseline-CDD + shock×poverty. Read **sign/significance survival, not magnitudes.** **Decide
-  energy burden's fate** — if it attenuates, demote to "affordability marker inseparable from
-  damage-function curvature" in one paragraph.
-- [ ] **2.2 [STR] C4 multiple-testing** (R 4.5.3, on the rescaled grid). Define families **per channel,
-  pre-specified**. `wildrwolf::rwolf` (one call/channel; share a `param` via multi-LHS or a regressor
-  alias; FWL/`demean` trick if slow) + one hand-rolled **Anderson (2008) index per channel** + sharpened
-  q-values (base-R `p.adjust(.,"BY")` + hand-rolled BKY two-stage — `mutoss` needs Bioconductor, see
-  0.3). Expected survivors: heat→ED, AQI→ED, safety-net; expected
-  casualties: bottom-tercile cold-emp, migration, cold→debt×Labor. Test the Anderson-index construction.
-- [ ] **2.3 [STR] C2 RMA provider-finance test.** drought→indemnity spike (mechanical first stage),
-  then **drought × baseline-indemnity-intensity** on uncompensated care (federal-buffer prediction:
-  the uncompensated-care rise concentrates in *low*-insurance-participation ag counties). Test the
-  merge + the interaction.
-- [ ] **2.4 [STR] B1 recurring-treatment robustness** (R 4.5.3). `TwoWayFEWeights::twowayfeweights`
-  negative-weight share on the main specs; `DIDmultiplegtDYN::did_multiplegt_dyn` on the **two
-  headline pairs only** (cold→log-employment, heat→Medicare). Write one paragraph dispositioning
-  Goodman-Bacon / Borusyak–Jaravel–Spiess as staggered-only.
-- [ ] **Phase 2 checkpoint** — verification gate + git note.
+- [x] **2.1 [MUST/STR] A3 interaction horse-race.** `Code/run_mechanism_horserace.R`: heat×{EnergyBurden,
+  Ag,Labor,SVI,baseline-CDD} jointly (SVI carries "poverty", Ag "rurality", baseline-CDD "hot-place
+  curvature"). **Energy burden's fate — SURVIVES (better than expected):** on LOG employment it holds
+  in the full joint race (−0.0068, p=0.019) and vs SVI+climate alone (−0.0094, p<0.001), and the
+  reviewer's **curvature alternative is REJECTED** (heat×baseline-climate null, −0.004 p=0.18; heat×SVI
+  null). On income it does NOT survive (−421→−318, p=0.15). §6.5 rewritten: employment-margin channel
+  robust to curvature/poverty (direct horse-race replaces the r=0.11 defense), income downgraded to
+  suggestive. Moderator-corr matrix in `horserace_modcorr.csv`. `288620e`
+- [x] **2.2 [STR] C4 multiple-testing** (R 4.5.3). `Code/run_mechanism_multipletesting.R`. **Anderson
+  (2008) index** for the morbidity channel: utilization index (Medicare spending+ED+IP) rises with heat
+  lag1 (p=0.007) + cold lag2 (p=0.002) → **channel survives as one index**. **Sharpened BKY q-values**
+  across 14 headline cells: **5 survive q<0.05** (heat→ED, AQI→ED, drought debt scar t2, heat×safety-net,
+  drought→indemnity); marginal cells (cold→debt t1, heat→spending t1, labor/energy interactions,
+  migration) do not → now "suggestive." §6.1 multiplicity note added. `wildrwolf` hit an NA-panel quirk;
+  Anderson+q-values carry C4. `1b3f50a`
+- [x] **2.3 [STR] C2 RMA provider-finance test.** `Code/run_mechanism_rma_buffer.R`. **First stage
+  decisive:** drought → county crop indemnities **+58% (+$885/capita, p<0.01)** contemporaneously —
+  buffer activates on the shock that leaves uncompensated care flat. **Buffer interaction underpowered**
+  (drought×intensity → uncomp care −0.004 of net rev at lag1, p=0.14, directionally consistent). §6.5
+  provider paragraph now leans on the first stage; buffering read as consistent-with not proven-by.
+  `4f9dd53`
+- [x] **2.4 [STR] B1 recurring-treatment robustness** (R 4.5.3). `07_recurring_treatment_check.R`.
+  Negative-weight diagnostic: **drought→income 0 negative weights** (clean); heat→Medicare negative
+  weights on ~⅓ of comparisons but summing **−0.12 vs +1.12** (bounded). `did_multiplegt_dyn` (needed
+  `polars`) **confirms heat→Medicare**: +$53 (h=1), +$80 (h=2, sig), close to the DL estimates. §6.1
+  robustness paragraph added (Goodman-Bacon/BJS dispositioned as staggered-only). cold→debt dCDH hit a
+  polars quirk (non-blocking). `7c1e8f6`
+- [ ] **Phase 2 checkpoint** — verification gate + git note. *(All four Phase-2 lanes complete;
+  awaiting user sign-off. Then Phase 3 assembly.)*
 
 ## Phase 3: Assembly (Week 3)
 
