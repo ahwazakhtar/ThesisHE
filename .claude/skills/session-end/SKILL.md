@@ -57,7 +57,31 @@ state lives in `plan.md` files, knowledge lives in `conductor/knowledge/`.
 If the session produced new analysis outputs: file them under `Analysis/<family>/`
 (never the root) and add/update the family's INDEX row (question, headline, read-first).
 
-## 5. Housekeeping sweep
+## 5. Reconcile the track registry against `plan.md`
+
+`conductor/tracks.md` markers drift stale when a track's tasks get marked `[x]`/`[~]` in
+its `plan.md` (the task-level source of truth) without the top-level registry marker being
+bumped — which makes the SessionStart hook mis-classify finished tracks as "not started."
+The SessionStart hook now detects this; act on it here. Run the detector:
+
+```bash
+python .claude/hooks/session_start.py
+```
+
+If it prints a `⚠ Registry drift` block, fix each flagged line in `conductor/tracks.md`,
+changing **only the marker character** (preserve the human-written annotation):
+
+- `[ ]` → `[~]` when plan.md shows any started/complete task.
+- `[~]` → `[x]` **only** when every task line *including* verification checkpoints is `[x]`
+  **and** the user has signed off those checkpoints — never auto-close a track over an open
+  verification gate.
+- "registry ahead of plan.md" → investigate (a reopened task or a stray edit); do not
+  blindly downgrade.
+
+Re-run the hook to confirm the drift block is gone. `tracks.md` gets committed in the next
+step.
+
+## 6. Housekeeping sweep
 
 Scan for session debris: editor swap artifacts (`**/*.tmp.*`), stray LaTeX build files
 outside their document folder, and outputs accidentally written to the `Analysis/` or
@@ -65,10 +89,11 @@ outside their document folder, and outputs accidentally written to the `Analysis
 approval** — list the candidates and ask before removing anything; when the user is
 unavailable, move debris to the nearest `_archive/` instead.
 
-## 6. Commit the session logs
+## 7. Commit the session logs
 
-Stage `changelog.md`, any modified `conductor/knowledge/*.md`, `CLAUDE.md`, and the
-`INDEX.md` files (only those actually modified) and commit:
+Stage `changelog.md`, any modified `conductor/knowledge/*.md`, `CLAUDE.md`,
+`conductor/tracks.md` (if reconciled in Step 5), and the `INDEX.md` files (only those
+actually modified) and commit:
 
 ```
 conductor(session): Log session changes and update project docs
@@ -76,7 +101,7 @@ conductor(session): Log session changes and update project docs
 
 Do not sweep unrelated working-tree changes into this commit.
 
-## 7. Push to the remote
+## 8. Push to the remote
 
 ```bash
 git push origin main
@@ -85,7 +110,7 @@ git push origin main
 If the push fails (auth, network, non-fast-forward), report the exact error and leave it
 to the user — do not force-push or rebase autonomously.
 
-## 8. Clear the session edit log
+## 9. Clear the session edit log
 
 ```bash
 rm -f .claude/session_edits.log

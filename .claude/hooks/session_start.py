@@ -34,6 +34,33 @@ def first_open_task(plan_path):
     return None
 
 
+def true_marker(plan_path):
+    """Registry marker implied by a plan's task lines: ' '/'~'/'x', or None.
+
+    ' '  → no task line has been started (all [ ])
+    '~'  → at least one [x]/[~] but not everything is [x] (work under way,
+           incl. the common 'all substantive tasks done, verification
+           checkpoint still open' case → the checkpoint's own [ ] keeps it '~')
+    'x'  → every task line, verification checkpoints included, is [x]
+    """
+    markers = []
+    try:
+        with open(plan_path, encoding="utf-8", errors="replace") as f:
+            for line in f:
+                m = re.match(r"\s*-\s\[([ ~x])\]", line)
+                if m:
+                    markers.append(m.group(1))
+    except OSError:
+        return None
+    if not markers:
+        return None
+    if all(m == "x" for m in markers):
+        return "x"
+    if any(m in ("x", "~") for m in markers):
+        return "~"
+    return " "
+
+
 def git(*args):
     try:
         out = subprocess.run(["git", *args], capture_output=True, text=True,
@@ -55,12 +82,19 @@ entries = re.findall(
     registry, flags=re.S,
 )
 
-active, not_started = [], []
+RANK = {" ": 0, "~": 1, "x": 2}
+
+active, not_started, drift = [], [], []
 for marker, name, folder in entries:
     if marker == "~":
         active.append((name.strip(), folder))
     elif marker == " ":
         not_started.append(folder)
+    # Reconcile the registry marker against the plan.md source of truth.
+    plan = os.path.join(ROOT, "conductor", "tracks", folder, "plan.md")
+    tm = true_marker(plan)
+    if tm is not None and RANK[tm] != RANK[marker]:
+        drift.append((folder, marker, tm))
 
 lines = ["[HOOK session-start] Conductor state (read plan.md before acting):", ""]
 
@@ -76,6 +110,21 @@ if active:
 if not_started:
     lines.append("")
     lines.append("Registered but not started: " + ", ".join(not_started))
+
+if drift:
+    lines.append("")
+    lines.append("⚠ Registry drift — tracks.md marker disagrees with plan.md "
+                 "(plan.md is source of truth):")
+    for folder, reg, tm in drift:
+        if RANK[tm] > RANK[reg]:
+            if reg == " ":
+                note = "started/complete but marked not-started → bump to [~]"
+            else:  # reg == "~", tm == "x"
+                note = ("all tasks incl. checkpoints [x] → consider closing to "
+                        "[x] (verification sign-off required)")
+        else:
+            note = "registry ahead of plan.md → investigate (reopened? bad edit?)"
+        lines.append(f"- {folder}: registry [{reg}] vs plan [{tm}] — {note}")
 
 branch = git("branch", "--show-current")
 dirty = git("status", "--porcelain")
