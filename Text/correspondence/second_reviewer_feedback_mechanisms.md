@@ -1,7 +1,7 @@
 # Second-Reviewer Feedback — Mechanisms Section (§6) and Agricultural-Channel Bounding
 
 **Received:** July 2026. **Target:** the mechanisms track (`mechanism_channels_20260625`) —
-`Text/mechanisms_section.md`, `Text/reviewer_response_mechanisms_nber.md`, and the four-channel
+`Text/drafts/mechanisms_section.md`, `Text/correspondence/reviewer_response_mechanisms_nber.md`, and the four-channel
 narrative (morbidity/utilization via Medicare, labor exposure, energy burden, provider-finance;
 agriculture as one channel among several).
 

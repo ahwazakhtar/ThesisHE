@@ -1,6 +1,6 @@
 # Mechanisms Section — Second-Reviewer Response Plan
 
-**Date:** July 2026. **Feedback:** `Text/second_reviewer_feedback_mechanisms.md` (points A1–A3, B1–B2, C1–C4).
+**Date:** July 2026. **Feedback:** `Text/correspondence/second_reviewer_feedback_mechanisms.md` (points A1–A3, B1–B2, C1–C4).
 **Inputs:** a Fable strategic review + three Sonnet reference/data lookups (DiD-robustness methods;
 multiple-testing corrections; morbidity/indemnity data feasibility). This plan integrates all four.
 

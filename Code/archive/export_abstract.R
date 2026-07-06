@@ -5,8 +5,8 @@ if (!require("pagedown")) install.packages("pagedown", repos = "http://cran.us.r
 library(rmarkdown)
 library(pagedown)
 
-md_path <- "Text/abstract_draft.md"
-html_path <- "Text/abstract_draft.html"
+md_path <- "Text/drafts/abstract_draft.md"
+html_path <- "Text/drafts/abstract_draft.html"
 pdf_path <- "Text/abstract_draft.pdf"
 
 # Convert MD to HTML first using a simple template or just basic render
@@ -27,12 +27,12 @@ tryCatch({
     # Attempt to render. This might still fail without pandoc.
     render("temp_abstract.Rmd", output_file = "abstract_draft.html")
     # If successful, try to print to PDF
-    chrome_print("Text/abstract_draft.html", output = pdf_path)
+    chrome_print("Text/drafts/abstract_draft.html", output = pdf_path)
     cat("Success! PDF created at:", pdf_path, "
 ")
 }, error = function(e) {
     cat("PDF Export failed:", conditionMessage(e), "
 ")
-    cat("However, you can open 'Text/abstract_draft.html' in your browser and 'Print to PDF'.
+    cat("However, you can open 'Text/drafts/abstract_draft.html' in your browser and 'Print to PDF'.
 ")
 })

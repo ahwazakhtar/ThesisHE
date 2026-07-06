@@ -47,7 +47,7 @@ Second, an **external reader challenge** (Josh Graff Zivin) — *how much of thi
 
 **The ongoing tightening.** The final push (July 2026) is still trimming. The premium pass-through analysis found **no coherent pass-through** — coefficients flip sign across levels of analysis — explicitly *retracting* an earlier "only heat passes through" reading as a county-spec artifact (`Analysis/mediation/premium_mediation_summary.md`). And the second-reviewer revision, re-running employment in logs, found the celebrated **−2,011 "cold effect strengthens in low-ag counties" was a county-size artifact in levels — it dies in logs** (commit `5c615dd`), while energy burden survived an interaction horse-race (`288620e`).
 
-> **⚠ Open inconsistency (as of 2026-07-06):** `Text/thesis_paper_abstracts.md` still headlines the −2,011 cold-employment "strengthens in least-agricultural counties" figure, which the mechanisms revision (`5c615dd`) shows dies when re-estimated in logs. Reconcile before Essay 1 is drafted.
+> **⚠ Open inconsistency (as of 2026-07-06):** `Text/drafts/thesis_paper_abstracts.md` still headlines the −2,011 cold-employment "strengthens in least-agricultural counties" figure, which the mechanisms revision (`5c615dd`) shows dies when re-estimated in logs. Reconcile before Essay 1 is drafted.
 
 ---
 
@@ -56,7 +56,7 @@ Second, an **external reader challenge** (Josh Graff Zivin) — *how much of thi
 | Claim | Fate | Why | Evidence |
 |---|---|---|---|
 | County employment effect of the 2012 drought | **Downgraded** to caveated-secondary | DRDID attenuates ~58% (−2,053→−871); pooled CS-dr reverses to +2,609 with positive pre-trends | `Analysis/did/robustness/did_robustness_summary.md`; `Analysis/mechanism/mechanism_verdict.md` §4; commits `141cb3a`, `fdc0a25` |
-| "Cold→employment strengthens in least-agricultural counties" (−2,011) | **Dies in logs** | Levels/county-size artifact; gone under log(employment) and per-1,000-workers | commit `5c615dd`; still in `Text/thesis_paper_abstracts.md` (conflict) |
+| "Cold→employment strengthens in least-agricultural counties" (−2,011) | **Dies in logs** | Levels/county-size artifact; gone under log(employment) and per-1,000-workers | commit `5c615dd`; still in `Text/drafts/thesis_paper_abstracts.md` (conflict) |
 | Credit-bureau medical debt as a headline outcome | **Downgraded** to measurement-fragile | EJ interaction reverses; sign flips across geographic scale (insurance + billing + credit-file selection) | `Analysis/state/synthesis.md` §9–10; `Analysis/exposure_index/synthesis.md` |
 | "2012 **Midwest** drought" label | **Retracted** as misnomer | Extreme-PDSI cohort is GA + Mountain West + Plains | `Analysis/mechanism/mechanism_verdict.md`; CLAUDE.md Session-7 notes |
 | ACA premium pass-through ("heat passes through") | **Retracted** | No coherent pass-through; sign-unstable across levels of analysis | `Analysis/mediation/premium_mediation_summary.md`; commits `4de9e39`, `d4c484a`, `f35bf5f` |

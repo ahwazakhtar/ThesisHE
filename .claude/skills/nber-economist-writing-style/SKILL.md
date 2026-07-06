@@ -4,7 +4,7 @@ description: Write or revise academic economics prose in the style of a modern N
 allowed-tools: Read, Write, Edit, Glob, Grep
 ---
 
-Write applied-economics prose in the voice of a modern NBER working paper. This style guide was reverse-engineered from `Text/w33491.pdf` (Aguilar-Gomez, Graff Zivin & Neidell 2025) — a climate-health econometrics paper that is a close cousin of this thesis. Annotated sentence-level exemplars live in `reference/exemplars.md`; read that file when you need concrete models to imitate.
+Write applied-economics prose in the voice of a modern NBER working paper. This style guide was reverse-engineered from `Text/reference/w33491.pdf` (Aguilar-Gomez, Graff Zivin & Neidell 2025) — a climate-health econometrics paper that is a close cousin of this thesis. Annotated sentence-level exemplars live in `reference/exemplars.md`; read that file when you need concrete models to imitate.
 
 ## When to apply
 

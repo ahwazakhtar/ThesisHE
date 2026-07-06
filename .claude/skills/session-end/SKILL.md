@@ -28,7 +28,7 @@ conductor tracks touched.
 
 ### `.claude/skills/nber-economist-writing-style/` (new)
 - `SKILL.md` + `reference/exemplars.md` — a writing skill reverse-engineered from
-  `Text/w33491.pdf`. Encodes six non-negotiables: … (what + why, not a diff dump)
+  `Text/reference/w33491.pdf`. Encodes six non-negotiables: … (what + why, not a diff dump)
 ```
 
 ## 2. Merge lessons into the knowledge base

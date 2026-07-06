@@ -2,7 +2,7 @@
 
 **To:** Dissertation author
 **Re:** What happened in the pass-through/mediation analysis, why the specification changed twice, and why the final answer is a *located null* rather than a failed estimate
-**Files:** `Analysis/mediation/premium_mediation_summary.md`, `Analysis/mediation/premium_passthrough.csv`, `Code/run_premium_mediation.R`, `Text/premium_mediation_writeup.md`
+**Files:** `Analysis/mediation/premium_mediation_summary.md`, `Analysis/mediation/premium_passthrough.csv`, `Code/run_premium_mediation.R`, `Text/drafts/premium_mediation_writeup.md`
 
 ---
 

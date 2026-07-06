@@ -1,7 +1,7 @@
 # Track Specification: Persistence Extensions
 
 ## Description
-Addresses the gaps identified in `Text/persistence.txt` after the April 2026 committee feedback work. Six gaps that the committee_feedback_april_2026 track did not close: ex-ante hypothesis framing, symmetric Onset/Persist LP horizons, continuously-exposed sub-population analysis, demographic-change / migration mediators, cumulative shock-years dose analysis, and HDD/CDD threshold sensitivity. CBSA-level robustness is explicitly excluded per user direction.
+Addresses the gaps identified in `Text/_archive/persistence.txt` after the April 2026 committee feedback work. Six gaps that the committee_feedback_april_2026 track did not close: ex-ante hypothesis framing, symmetric Onset/Persist LP horizons, continuously-exposed sub-population analysis, demographic-change / migration mediators, cumulative shock-years dose analysis, and HDD/CDD threshold sensitivity. CBSA-level robustness is explicitly excluded per user direction.
 
 ## Objectives
 - **Hypothesis framing:** Make ex-ante predictions explicit in the synthesis docs; identify findings that are surprising vs.\ expected.

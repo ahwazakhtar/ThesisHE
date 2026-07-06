@@ -180,7 +180,7 @@
   <div class="doc-header">
     <div class="doc-title">Technical Note: Empirical Framework</div>
     <div class="doc-subtitle">
-      Climate Shocks, Health Costs, and Provider Heterogeneity — Three Papers
+      Climate Shocks, Health Costs, and Provider Heterogeneity (Three Papers)
     </div>
     <div class="doc-meta">Ahwaz Akhtar &nbsp;·&nbsp; GWU &nbsp;·&nbsp; June 2026</div>
   </div>
@@ -818,6 +818,44 @@
     therefore the credible headline; the employment effect should be read as a weaker,
     composition-sensitive secondary finding.
   </p>
+
+  <div class="note">
+    <strong>§2.5.4 Few-treated-cluster inference.</strong> Sixty-seven percent of the 139
+    treated counties sit in four states (GA 45, CO 21, NE 17, NM 10; 17 states in all), so the
+    state-clustered analytic $p$-values above — read off the asymptotic normal — risk
+    over-rejection when treatment variation lives in few clusters. Two cluster-robust
+    corrections address this: a wild cluster bootstrap-$t$ (Cameron–Gelbach–Miller 2008, Webb
+    six-point weights, null imposed, $B=9{,}999$) and Fisher randomization inference (2,000
+    re-draws of the 139 treated labels from the 2,673-county pool), both computed on the
+    Frisch–Waugh–Lovell-residualized $2\times2$ (county and year FE partialled out first, so the
+    bootstrap need not carry 3,155 absorbed effects). The income headline survives:
+    $p_{\text{analytic}}=0.028$, $p_{\text{wcb}}=0.036$, $p_{\text{RI}}=0.007$, with a bootstrap
+    CI of $[-2{,}911,\,-138]$ that excludes zero. Employment also clears the few-cluster bar
+    ($p_{\text{wcb}}=0.003$, $p_{\text{RI}}=0.037$), so its fragility is one of
+    <em>conditioning</em> (§2.5.3) and generalization, not of cluster count; the medical-debt-share
+    null is unchanged. Implementation:
+    <code>Code/did_robustness/01_wild_cluster_bootstrap.R</code>.
+  </div>
+
+  <div class="note">
+    <strong>§2.5.5 A two-decade pre-trend (the single-pre-period fix).</strong> Because the county
+    panel begins in 2011, the 2012 cohort has one pre-period and parallel trends is untestable
+    within the panel — the reason a HonestDiD sensitivity analysis could only be run on the pooled
+    multi-cohort event study, not the 2012 cohort in isolation.
+    BEA CAINC1 per-capita income, however, extends back to 1990, giving <em>21</em> pre-treatment
+    years for the same 139 treated and 2,534 never-exposed counties. Over 1990–2011 the
+    treated-vs-control differential <em>linear</em> trend — the drift that would actually bias a
+    DiD by extrapolating into the post-period — is $-\$69$/yr (s.e. 89, $p=0.44$): economically and
+    statistically flat. A year-by-year event study (relative to 2011) does reject the joint null of
+    no pre-treatment gaps ($F=6.9$, $p<0.001$), but that reflects modest, business-cycle-correlated
+    wiggles between rural-agricultural (treated) and urban (control) counties, not a secular
+    divergence — exactly the composition the doubly-robust estimator conditions on, and which only
+    <em>strengthens</em> the income effect ($-\$1{,}451$). The trajectories move together before 2012
+    and visibly diverge after (figure:
+    <code>Analysis/did/robustness/bea_pretrends_1990_2011.png</code>). The flat linear pre-trend is
+    the corroborating defense the single-pre-period design previously lacked. Implementation:
+    <code>Code/did_robustness/05_bea_pretrends_1990_2011.R</code>.
+  </div>
 
   <div class="note">
     <strong>Does the 2012 effect generalize?</strong> Re-estimating the doubly-robust design as

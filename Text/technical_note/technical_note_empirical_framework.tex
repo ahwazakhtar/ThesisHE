@@ -30,7 +30,7 @@
 
 \title{\vspace{-1.2cm}\bfseries An Empirical Framework for the Health-Cost
 Incidence, Persistence, and Distributional Burden of Climate Shocks}
-\author{Ahwaz Akhtar\\[-2pt]\normalsize Boston University}
+\author{Ahwaz Akhtar\\[-2pt]\normalsize GWU}
 \date{\normalsize June 2026}
 
 \begin{document}
@@ -163,6 +163,35 @@ measurement-fragile. Re-estimated as a full Callaway--Sant'Anna model across
 negative real-economy effect is specific to the large, clean 2012 event and is an
 intent-to-treat ``effect of first onset.''
 \end{table}
+
+The unconditional $2\times2$ also leans on \emph{few treated clusters}: 67\% of the 139
+treated counties sit in four states (GA, CO, NE, NM; 17 states in all), so state-clustered
+analytic $p$-values risk over-rejection when treatment variation lives in few clusters. A
+wild cluster bootstrap-$t$ (Cameron--Gelbach--Miller 2008, Webb weights, null imposed,
+$B=9{,}999$) and Fisher randomization inference (2{,}000 re-draws of the treated labels),
+both computed on the Frisch--Waugh--Lovell-residualized model so the bootstrap need not
+carry 3{,}155 absorbed effects, confirm the income headline: $p_{\mathrm{wcb}}=0.036$ and
+$p_{\mathrm{RI}}=0.007$ (analytic $0.027$), with a bootstrap CI $[-2{,}911,\,-138]$ that
+excludes zero. Employment likewise clears the few-cluster bar ($p_{\mathrm{wcb}}=0.003$),
+so its fragility is one of \emph{conditioning} (above), not cluster count; the
+medical-debt-share null is unchanged. Implementation:
+\texttt{did\_robustness/01\_wild\_cluster\_bootstrap.R}.
+
+Because the county panel begins in 2011, the 2012 cohort has a single pre-period and
+parallel trends is untestable within the panel. BEA CAINC1 per-capita income, however,
+runs back to 1990, giving \emph{21} pre-treatment years for the same 139 treated and
+2{,}534 never-exposed counties. Over 1990--2011 the treated-vs-control differential
+\emph{linear} trend---the drift that would bias a DiD by extrapolating into the
+post-period---is $-\$69$ per year (s.e.\ 89, $p=0.44$), i.e.\ economically and
+statistically flat. A year-by-year event study (relative to 2011) does reject the joint
+null of no pre-treatment gaps ($F=6.9$, $p<0.001$), but this reflects modest, business-cycle-
+correlated wiggles between rural-agricultural (treated) and urban (control) counties rather
+than a secular divergence---precisely the compositional difference the doubly-robust
+estimator conditions on, and which it shows only \emph{strengthens} the income effect
+($-\$1{,}451$). The two-decade trajectories move together before 2012 and visibly diverge
+after (Fig.\ in \texttt{Analysis/did/robustness/bea\_pretrends\_1990\_2011.png}); the flat
+linear pre-trend is the corroborating defense the single-pre-period design previously lacked.
+Implementation: \texttt{did\_robustness/05\_bea\_pretrends\_1990\_2011.R}.
 
 %================================================================
 \section{Paper 2 --- Persistence: scarring, reversibility, dose}

@@ -1,6 +1,6 @@
 # Pathway Descriptives (Committee Feedback Phase 5)
 #
-# Companion to Text/propagation_pathways.md. Produces descriptive evidence
+# Companion to Text/drafts/propagation_pathways.md. Produces descriptive evidence
 # for the propagation pathways named there, using the existing annual
 # county and state panels (no new data acquisition).
 #
@@ -251,7 +251,7 @@ summary_lines <- c(
   paste0("**Date:** ", Sys.Date()),
   paste0("**Source script:** `Code/run_pathway_descriptives.R`"),
   "",
-  "Companion descriptive evidence for `Text/propagation_pathways.md`. ",
+  "Companion descriptive evidence for `Text/drafts/propagation_pathways.md`. ",
   "All figures generated from the existing annual county panel ",
   "(`Data/county_level_master.csv`, restricted to 2011-2023).",
   "",

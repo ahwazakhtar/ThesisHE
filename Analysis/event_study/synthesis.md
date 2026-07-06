@@ -14,7 +14,7 @@ Generated: 2026-03-04 15:15
 
 ## Ex-Ante Hypotheses and Predictions (Persistence Extensions — Phase 0)
 
-*Added 2026-06-09. Directional and timing predictions implied by the propagation-pathway literature (`Text/propagation_pathways.md`), committed **before** reading the impulse-response estimates below. The "Surprise audit" at the end of this document tags each key finding against these priors so the committee can see where the dynamics depart from the pre-registered story.*
+*Added 2026-06-09. Directional and timing predictions implied by the propagation-pathway literature (`Text/drafts/propagation_pathways.md`), committed **before** reading the impulse-response estimates below. The "Surprise audit" at the end of this document tags each key finding against these priors so the committee can see where the dynamics depart from the pre-registered story.*
 
 | Shock | Outcome | Predicted sign | Predicted dynamics | Basis (pathway → literature) |
 |-------|---------|:--------------:|--------------------|------------------------------|
@@ -369,7 +369,7 @@ Pre-trend failures already flagged in Key Finding 3 (above) for the LP framework
 | Post-exit dynamics (Phase 2) | `Analysis/delta/synthesis.md` | Key Finding 7 above |
 | DiD with never-exposed (Phase 3) | `Analysis/did/did_results.md` | Key Finding 8 above |
 | Humidity / PRISM tdmean (Phase 4) | Done — `Analysis/state/humidity_sensitivity.csv` | State summary §6.4; cold-lag finding survives |
-| Propagation pathways (Phase 5) | `Text/propagation_pathways.md`, `Analysis/pathways/synthesis.md` | Pathway-to-empirics mapping |
+| Propagation pathways (Phase 5) | `Text/drafts/propagation_pathways.md`, `Analysis/pathways/synthesis.md` | Pathway-to-empirics mapping |
 
 ---
 

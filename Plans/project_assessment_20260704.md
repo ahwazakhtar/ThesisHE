@@ -8,7 +8,7 @@
 
 ### The original proposal (October 28, 2025)
 
-`Text/v2_Akhtar_Proposal.pdf`, "The Financial Impacts of Climate Shocks on Healthcare," framed the dissertation around a demand / supply / structural triad:
+`Text/reference/v2_Akhtar_Proposal.pdf`, "The Financial Impacts of Climate Shocks on Healthcare," framed the dissertation around a demand / supply / structural triad:
 
 > "This dissertation investigates how climate shocks propagate through U.S. healthcare financing on both the **demand (households/insurers) and supply (hospitals) sides**, and then embeds those empirical relationships in a **structural policy model**."
 
@@ -20,7 +20,7 @@
 
 Headline hazards as proposed: **extreme heat, wildfire smoke/PM2.5, FEMA disaster events.**
 
-An even earlier kernel (`Text/abstract_draft.md`, the EUHEA proposal) was a single state-level paper, "The Lagged Financial Burden of Climate Shocks (1996–2025)": drought and temperature anomalies → premiums, medical debt, and systemic spending at 0/1/2-year lags. That distributed-lag reduced form remained the empirical spine of everything that followed.
+An even earlier kernel (`Text/drafts/abstract_draft.md`, the EUHEA proposal) was a single state-level paper, "The Lagged Financial Burden of Climate Shocks (1996–2025)": drought and temperature anomalies → premiums, medical debt, and systemic spending at 0/1/2-year lags. That distributed-lag reduced form remained the empirical spine of everything that followed.
 
 ### How the framing evolved (five stages)
 
@@ -36,7 +36,7 @@ An even earlier kernel (`Text/abstract_draft.md`, the EUHEA proposal) was a sing
 
 ## Part II — The dissertation as it stands (the three essays)
 
-Current abstracts: `Text/thesis_paper_abstracts.md`. Umbrella title: *"Climate Shocks and the Financial Health of American Households: Incidence, Persistence, and Inequality."*
+Current abstracts: `Text/drafts/thesis_paper_abstracts.md`. Umbrella title: *"Climate Shocks and the Financial Health of American Households: Incidence, Persistence, and Inequality."*
 
 | Essay | Question | Core designs | Headline results |
 |---|---|---|---|

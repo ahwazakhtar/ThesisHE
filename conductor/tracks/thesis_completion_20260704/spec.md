@@ -36,7 +36,7 @@ machinery.
   This is the only open item that can *retroactively weaken an existing headline*, so it is
   first. Closes `did_frontier_robustness_20260625` **Phase 1**.
 - **T0.2 Close the DiD frontier track.** Run `04_synthesize_did_robustness.R`, fold the
-  bootstrap p-values into `Text/technical_note_empirical_framework.{html,tex}`, write the
+  bootstrap p-values into `Text/technical_note/technical_note_empirical_framework.{html,tex}`, write the
   Phase-5 `testthat` suite. Closes `did_frontier_robustness_20260625` **Phases 4–5**.
 - **T0.3 Extend the 2012 DiD pre-period with BEA income (1990–2011).** The panel starts 2011
   so the 2012 cohort has *no testable pre-period* — the single biggest identification hole in

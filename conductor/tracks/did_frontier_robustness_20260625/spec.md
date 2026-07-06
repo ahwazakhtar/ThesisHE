@@ -54,7 +54,7 @@ New, self-contained, and isolated from the main pipeline:
 - `Code/did_robustness/03_honestdid_sensitivity.R` — Objective 3.
 - `Code/did_robustness/04_synthesize_did_robustness.R` — collation to markdown.
 - Outputs under `Analysis/did/robustness/` (CSVs + summary md; gitignored like other Analysis CSVs).
-- Update to `Text/technical_note_empirical_framework.html` §2.5–2.6 once results exist.
+- Update to `Text/technical_note/technical_note_empirical_framework.html` §2.5–2.6 once results exist.
 
 Out of scope (noted as candidates, not committed): de Chaisemartin–D'Haultfœuille
 `did_multiplegt_dyn` for genuinely recurring (on/off) treatment; Borusyak–Jaravel–Spiess

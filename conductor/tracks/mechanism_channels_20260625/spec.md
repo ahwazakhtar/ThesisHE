@@ -1,7 +1,7 @@
 # Track Specification: Mechanisms — Agricultural Channel & Beyond
 
 **Created:** 2026-06-25
-**Origin:** External-reader feedback (`Text/external_reader_feedback.md`).
+**Origin:** External-reader feedback (`Text/correspondence/external_reader_feedback.md`).
 
 ## Description
 An external reviewer's central critique: the thesis presents credible **reduced-form**

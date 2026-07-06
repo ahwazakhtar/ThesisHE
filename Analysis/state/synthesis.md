@@ -39,7 +39,7 @@ This document summarizes the execution of the state-level analysis plan, investi
 
 ## 3a. Ex-Ante Hypotheses and Predictions (Persistence Extensions — Phase 0)
 
-*Added 2026-06-09. The committee asked for an explicit "where should we be surprised?" lens. The table below states the directional and timing predictions implied by the propagation-pathway literature (`Text/propagation_pathways.md`) **before** consulting our estimates. Committing to priors up front is what makes a genuine surprise visible; §4.6 then tags each headline result against these priors.*
+*Added 2026-06-09. The committee asked for an explicit "where should we be surprised?" lens. The table below states the directional and timing predictions implied by the propagation-pathway literature (`Text/drafts/propagation_pathways.md`) **before** consulting our estimates. Committing to priors up front is what makes a genuine surprise visible; §4.6 then tags each headline result against these priors.*
 
 | Shock | Outcome | Predicted sign | Predicted time-scale | Basis (pathway → literature) |
 |-------|---------|:--------------:|----------------------|------------------------------|
@@ -101,13 +101,13 @@ The committee asked whether the LP/FE results could be replicated using a sharp 
 - **2012 Midwest drought 2×2 DiD** (139 treated counties, 2,534 never-exposed):
     - **PCPI_Real ATT = −$1,311 (p=0.027)**
     - **Civilian_Employed ATT = −2,053 (p=0.0001)**
-    - These are *county-level* outcomes; their state-level analogues in this summary's headline (Medical Debt) work through the income channel documented in `Text/propagation_pathways.md` §3.
+    - These are *county-level* outcomes; their state-level analogues in this summary's headline (Medical Debt) work through the income channel documented in `Text/drafts/propagation_pathways.md` §3.
 - **HDD Callaway-Sant'Anna long-run profile:** Civilian_Employed loss compounds to −4,982 by event-time 10 (p=0.003); Medical_Debt_Share rises +4.9 percentage points at e=10 (p=0.0002). This *long-run cold-state scarring* is consistent with the state-level `is_cold_shock_lag1` finding and extends it across multi-year horizons.
 - **Implication for the write-up:** The headline state-level effects survive being recast as a never-exposed-controlled DiD design at the county level. The 2012 drought is now the cleanest single piece of identification in the thesis.
 
 ### 6.3 Propagation pathways now evidence-backed — Phase 5
 
-Source: `Text/propagation_pathways.md` · Descriptives: `Analysis/pathways/synthesis.md`
+Source: `Text/drafts/propagation_pathways.md` · Descriptives: `Analysis/pathways/synthesis.md`
 
 The four pathways underlying the headline findings (heat → delayed care, cold → shifted utilization, drought → income → debt, AQI → respiratory/cardiac) are now anchored to 18 cited references with effect-direction and time-scale claims. The drought→income→debt pathway has the strongest convergence: Hornbeck (2012), Burke-Hsiang-Miguel (2015), Carleton et al. (2022), and our own 2012 DiD all point the same direction at consistent 1- to 3-year horizons.
 
@@ -130,7 +130,7 @@ PRISM `tdmean` (mean dew point) was acquired as annual 4km CONUS grids from the 
 | Random effects check | Done — RE rejected, headlines survive | §6.1, `Analysis/robustness/synthesis.md` |
 | Post-exit dynamics | Done — see `Analysis/delta/synthesis.md` | County-level (delta + LP) |
 | Natural-experiment DiD with never-exposed | Done — Drought 2012 is cleanest | §6.2, `Analysis/did/did_results.md` |
-| Propagation evidence | Done — 18 references + descriptive plots | §6.3, `Text/propagation_pathways.md` |
+| Propagation evidence | Done — 18 references + descriptive plots | §6.3, `Text/drafts/propagation_pathways.md` |
 | Humidity (PRISM tdmean) | Done — cold-lag finding survives; humidity itself raises medical debt | §6.4, `Analysis/state/humidity_sensitivity.csv` |
 
 ### 6.6 Supply side restored — hospital-finance analysis (Chapter 2)

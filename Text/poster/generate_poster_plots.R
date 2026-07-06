@@ -1,10 +1,10 @@
 # ============================================================================
 #  REACH Poster — Publication-quality plot regeneration
 #  Reads Analysis/delta_coefs.csv and emits four poster-ready PNGs into
-#  Poster/plots/ with human-readable axis labels and large fonts.
+#  Text/poster/plots/ with human-readable axis labels and large fonts.
 #
 #  Usage (from project root):
-#    Rscript Poster/generate_poster_plots.R
+#    Rscript Text/poster/generate_poster_plots.R
 # ============================================================================
 
 suppressPackageStartupMessages({
@@ -13,7 +13,7 @@ suppressPackageStartupMessages({
   library(ggplot2)
 })
 
-here <- function(...) file.path("Poster", ...)
+here <- function(...) file.path("Text/poster", ...)
 if (!dir.exists(here("plots"))) dir.create(here("plots"), recursive = TRUE)
 
 coefs <- read_csv("Analysis/delta_coefs.csv", show_col_types = FALSE)
@@ -158,7 +158,7 @@ ggsave(here("plots/F4_pdsi_income.png"), p4,
        width = 9, height = 6.2, dpi = 200, bg = "white")
 
 cat("Generated poster plots:\n")
-cat("  Poster/plots/F1_aqi_compound.png\n")
-cat("  Poster/plots/F2_aqi_ratchet.png\n")
-cat("  Poster/plots/F3_hdd_onset.png\n")
-cat("  Poster/plots/F4_pdsi_income.png\n")
+cat("  Text/poster/plots/F1_aqi_compound.png\n")
+cat("  Text/poster/plots/F2_aqi_ratchet.png\n")
+cat("  Text/poster/plots/F3_hdd_onset.png\n")
+cat("  Text/poster/plots/F4_pdsi_income.png\n")

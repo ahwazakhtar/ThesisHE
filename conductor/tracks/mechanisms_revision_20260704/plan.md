@@ -1,11 +1,11 @@
 # Implementation Plan: Mechanisms Section — Second-Reviewer Revision
 
 Track spec: `./spec.md`. Source: `Plans/mechanisms_revision_plan_20260704.md`. Feedback:
-`Text/second_reviewer_feedback_mechanisms.md`. Parent: `mechanism_channels_20260625`.
+`Text/correspondence/second_reviewer_feedback_mechanisms.md`. Parent: `mechanism_channels_20260625`.
 
 **Status: ALL PHASES COMPLETE (Phases 0–3, 2026-07-06). Checkpoints pending user sign-off.** Every
 reviewer point (A1–C4) addressed with new evidence + honest reframing; formal response drafted
-(`Text/response_to_second_reviewer.md`). Phases map to the ~3-week sequence. **The organizing trick:
+(`Text/correspondence/response_to_second_reviewer.md`). Phases map to the ~3-week sequence. **The organizing trick:
 Phase 1's rescaling campaign discharges A2 + B1(leads) + B2(division×year FE) in ONE grid rerun**;
 every downstream quantitative task (A1 table, A3 horse-race, C4 corrections) consumes that grid — so
 Phase 1 is the critical path and must land before Phase 2/3 numbers.
@@ -148,7 +148,7 @@ Phase 1 is the critical path and must land before Phase 2/3 numbers.
 - [x] **3.4 [MUST] §6 revised + response document.** §6 rewritten section-by-section across Phases 1–3
   (opener, §6.1 identification/robustness, §6.2 sentinel+calendar+SAHIE, §6.3 labor, §6.5 energy+provider,
   §6.6). Consistency verified (no stale level numbers / "primarily" language). Formal
-  `Text/response_to_second_reviewer.md` drafted (all 9 points). NBER-response bottom line softened.
+  `Text/correspondence/response_to_second_reviewer.md` drafted (all 9 points). NBER-response bottom line softened.
   *(mechanism_verdict.md update optional — the response doc supersedes it.)* `b7550e7`
 - [ ] **Phase 3 checkpoint** — verification gate + git note. *(All Phase-3 tasks complete; awaiting
   user sign-off. Track substantively done — see status.)*

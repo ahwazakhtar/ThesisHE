@@ -1,7 +1,7 @@
 # Track Specification: Mechanisms Section — Second-Reviewer Revision
 
 **Created:** 2026-07-04
-**Origin:** Second-reviewer feedback (`Text/second_reviewer_feedback_mechanisms.md`), triaged in
+**Origin:** Second-reviewer feedback (`Text/correspondence/second_reviewer_feedback_mechanisms.md`), triaged in
 `Plans/mechanisms_revision_plan_20260704.md` (Fable strategic review + three Sonnet reference/data
 lookups).
 **Parent:** `mechanism_channels_20260625` (this revises that track's §6 output — the four-channel
@@ -55,8 +55,8 @@ to A3 and B2).
 - **Re-estimation surface:** `Code/run_mechanism_{agriculture,secondary,medicare,provider}.R` (the
   mechanism scripts), plus new helper/analysis scripts for the horse-race, RW/Anderson, RMA test,
   event-study figure, and SAHIE bridge. Outputs under `Analysis/mechanism/`.
-- **Prose:** `Text/mechanisms_section.md` (§6.3, §6.5, §6.6 carry the exposed claims),
-  `Text/reviewer_response_mechanisms_nber.md`, and a new response-to-second-reviewer document.
+- **Prose:** `Text/drafts/mechanisms_section.md` (§6.3, §6.5, §6.6 carry the exposed claims),
+  `Text/correspondence/reviewer_response_mechanisms_nber.md`, and a new response-to-second-reviewer document.
 - **New data:** Census SAHIE (county×year 18–64 uninsured, 2011–2023), USDA RMA Cause-of-Loss
   indemnities (county×year, drought cause, 2011–2023). New intermediates in `Data/`.
 

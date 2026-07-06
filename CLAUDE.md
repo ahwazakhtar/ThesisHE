@@ -51,7 +51,7 @@ there) — do not append session-numbered lists here.
 | `Code/` | R scripts: `download_*` → `process_*`/`create_*` → `run_*` (+ `tests/`, `did_robustness/`, `diagnostics/`) |
 | `Data/` | Raw + processed data; masters: `state_level_analysis_master.csv`, `county_level_master.csv` |
 | `Analysis/` | Outputs, one folder per analysis family; **start at `Analysis/INDEX.md`** |
-| `Text/` | Proposals, abstracts, technical note, response docs |
+| `Text/` | Writing, one folder per family (`drafts/`, `technical_note/`, `correspondence/`, `presentations/`, `submissions/`, `poster/`, `reference/`) — **start at `Text/INDEX.md`**; never write to the `Text/` root |
 | `Plans/` | ALL planning documents go here |
 | `conductor/` | Workflow (`workflow.md`), track registry (`tracks.md`), specs/plans, `knowledge/` |
 | `.claude/` | Hooks (`session_start`, `track_edits`, `detect_wrapup`) + skills |

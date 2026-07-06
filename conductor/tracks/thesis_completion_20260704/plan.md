@@ -41,7 +41,7 @@ in parallel with essay drafting. Tier 2 is gated on Tier-1 drafts existing.
 - [x] **1.2 Close the DiD frontier track (T0.2).**
     - Ran `04_synthesize_did_robustness.R` → `Analysis/did/robustness/did_robustness_summary.md`
       (collates WCB/RI + DRDID + HonestDiD).
-    - Folded the bootstrap p-values into `Text/technical_note_empirical_framework.{html,tex}`
+    - Folded the bootstrap p-values into `Text/technical_note/technical_note_empirical_framework.{html,tex}`
       as §2.5.4 (few-treated-cluster note). *Left uncommitted — author has a concurrent edit in
       those files.*
     - Wrote `Code/tests/test_did_robustness.R` (5 tests, all pass on R 4.2.2).
@@ -58,7 +58,7 @@ in parallel with essay drafting. Tier 2 is gated on Tier-1 drafts existing.
   §2.5.5 paragraph added (uncommitted, author's file). Test `Code/tests/test_bea_pretrends.R`
   passes (FIPS-padding trap, strict ≤2011 window, 139/2534 cohort match). `dcec119`
 - [x] **1.4 Draft the committee memo on Chapter 3 (T0.4).** Wrote
-  `Text/committee_memo_ch3_structure.md`: boxed decision question (does the three-essay structure
+  `Text/correspondence/committee_memo_ch3_structure.md`: boxed decision question (does the three-essay structure
   replace the structural Ch.3?), the proposal→now evolution, the sufficient-statistics section
   offered as the bounded policy substitute, plus disclosures (hazard demotion; unestimated
   premium→debt mediation). **Drafted; author must send. The DECISION itself remains an open
@@ -113,7 +113,7 @@ in parallel with essay drafting. Tier 2 is gated on Tier-1 drafts existing.
       `| p_ra < 0.05` significance cherry-pick removed (state clustering primary). CLAUDE.md master
       dims are stale (now 119,300 rows, 1990–2026) — fix at session end.
     - Outputs: `Analysis/mediation/{premium_passthrough,debt_mediation}.csv` (4 specs) +
-      `premium_mediation_summary.md`; rewritten NBER write-up `Text/premium_mediation_writeup.md`.
+      `premium_mediation_summary.md`; rewritten NBER write-up `Text/drafts/premium_mediation_writeup.md`.
       Tests (identity + lag alignment + same-sample + generalized `group` param) pass. `4de9e39`+fix
 - [ ] **2.2 Data-integrity fix (T1.2).** Enforce one-row-per-county-year in
   `Code/create_county_master.R` upstream (resolve the ~3% multi-rating-area duplicates once,
@@ -133,7 +133,7 @@ in parallel with essay drafting. Tier 2 is gated on Tier-1 drafts existing.
     - **Test:** `testthat` — aggregation sums reconcile to per-unit estimates; error bands
       propagate the coefficient SEs.
 - [ ] **2.4 Essay 1 full draft (T1.4).** Assemble the job-market paper from existing parts
-  (`Text/thesis_paper_abstracts.md`, `technical_note_empirical_framework`, `mechanisms_section.md`,
+  (`Text/drafts/thesis_paper_abstracts.md`, `technical_note_empirical_framework`, `mechanisms_section.md`,
   reviewer responses, decks) using the `nber-economist-writing-style` skill. Lead with income,
   caveat employment, frame debt as measurement, lead mechanisms with morbidity + labor exposure.
   **Output:** `Text/essay1_incidence_draft.md` (or `.tex`).

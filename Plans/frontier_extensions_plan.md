@@ -1,6 +1,6 @@
 # Frontier Extensions Plan: From Reduced-Form Evidence to Policy Microsimulation
 
-**Purpose:** Map how far the project can be pushed — technically and in policy relevance — building on the delivered empirical engine. Anchored in the October 2025 proposal's Chapter 3 microsimulation spec (`Text/v2_Akhtar_Proposal.pdf`, pp. 33–37), the committee memo's acknowledged departure (`Text/committee_memo_ch3_structure.md`), and a full inventory of data/methods assets in hand.
+**Purpose:** Map how far the project can be pushed — technically and in policy relevance — building on the delivered empirical engine. Anchored in the October 2025 proposal's Chapter 3 microsimulation spec (`Text/reference/v2_Akhtar_Proposal.pdf`, pp. 33–37), the committee memo's acknowledged departure (`Text/correspondence/committee_memo_ch3_structure.md`), and a full inventory of data/methods assets in hand.
 **Compiled:** 2026-07-06. Companion document: `Plans/results_evolution_narrative.md`.
 
 ---
@@ -50,7 +50,7 @@ The inventory (see data-asset detail in section 7) shows the microsimulation is 
 Tiers are ordered by (value ÷ effort) and are separable — each tier is a complete, defensible deliverable even if the next is never built.
 
 ### Tier 0 — Hygiene before any extension (days)
-1. **Reconcile `Text/thesis_paper_abstracts.md` with `5c615dd`**: the −2,011 "strengthens in low-ag counties" claim died in logs but still headlines Essay 1's abstract.
+1. **Reconcile `Text/drafts/thesis_paper_abstracts.md` with `5c615dd`**: the −2,011 "strengthens in low-ag counties" claim died in logs but still headlines Essay 1's abstract.
 2. Finish the premium-mediation writeup loop (`Analysis/mediation/` is untracked; commit it) and fill the two `[TK]` denominators + two incomplete references flagged in Session 9.
 3. Close the open verification gates in `conductor/tracks.md` where user-driven.
 

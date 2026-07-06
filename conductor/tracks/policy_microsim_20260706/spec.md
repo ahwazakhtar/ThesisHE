@@ -1,7 +1,7 @@
 # Track Specification: Policy Frontier — Sufficient-Statistics Microsimulation
 
 **Created:** 2026-07-06
-**Origin:** Session-10 synthesis (`Plans/frontier_extensions_plan.md`), which mapped the October 2025 proposal (`Text/v2_Akhtar_Proposal.pdf`, pp. 3, 33–37) against delivered work and found the Chapter-3 policy microsimulation to be the largest unbuilt promise. Companion diagnostics: `Plans/results_evolution_narrative.md`, `Plans/methods_retrospective.md`.
+**Origin:** Session-10 synthesis (`Plans/frontier_extensions_plan.md`), which mapped the October 2025 proposal (`Text/reference/v2_Akhtar_Proposal.pdf`, pp. 3, 33–37) against delivered work and found the Chapter-3 policy microsimulation to be the largest unbuilt promise. Companion diagnostics: `Plans/results_evolution_narrative.md`, `Plans/methods_retrospective.md`.
 
 ## Description
 
@@ -15,7 +15,7 @@ counterfactual ACA subsidy design under climate risk:
 > payment, geographically targeted premium support, disaster-triggered cost-sharing waivers,
 > and provider stabilization instruments." (proposal p. 3)
 
-The committee memo (`Text/committee_memo_ch3_structure.md`) records that this was dropped when
+The committee memo (`Text/correspondence/committee_memo_ch3_structure.md`) records that this was dropped when
 Chapter 3 became the "Unequal Weather" inequality essay, and proposes a bounded
 "sufficient-statistics policy section" (~2 weeks) as a substitute. **This track executes that
 substitute first (Phase 1), then — gated on a committee decision — builds the lean version of
@@ -98,7 +98,7 @@ never built.
 
 - **Gate A (after Phase 1):** committee decides whether the thesis defends with the policy
   section alone or proceeds to the microsimulation (Phases 2–4). Send/refresh
-  `Text/committee_memo_ch3_structure.md` with Phase-1 results attached.
+  `Text/correspondence/committee_memo_ch3_structure.md` with Phase-1 results attached.
 - **Gate B (after Phase 4):** proceed to the projection layer (Phase 5) only if timeline
   permits; it is job-market-paper material, not a defense requirement.
 
