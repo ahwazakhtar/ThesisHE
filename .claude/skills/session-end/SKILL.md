@@ -57,10 +57,18 @@ state lives in `plan.md` files, knowledge lives in `conductor/knowledge/`.
 If the session produced new analysis outputs: file them under `Analysis/<family>/`
 (never the root) and add/update the family's INDEX row (question, headline, read-first).
 
-## 5. Commit the session logs
+## 5. Housekeeping sweep
 
-Stage `changelog.md`, any modified `conductor/knowledge/*.md`, `CLAUDE.md`, and
-`Analysis/INDEX.md` (only those actually modified) and commit:
+Scan for session debris: editor swap artifacts (`**/*.tmp.*`), stray LaTeX build files
+outside their document folder, and outputs accidentally written to the `Analysis/` or
+`Text/` roots (file those into the right family folder). **Deletions require the user's
+approval** — list the candidates and ask before removing anything; when the user is
+unavailable, move debris to the nearest `_archive/` instead.
+
+## 6. Commit the session logs
+
+Stage `changelog.md`, any modified `conductor/knowledge/*.md`, `CLAUDE.md`, and the
+`INDEX.md` files (only those actually modified) and commit:
 
 ```
 conductor(session): Log session changes and update project docs
@@ -68,8 +76,18 @@ conductor(session): Log session changes and update project docs
 
 Do not sweep unrelated working-tree changes into this commit.
 
-## 6. Clear the session edit log
+## 7. Push to the remote
+
+```bash
+git push origin main
+```
+
+If the push fails (auth, network, non-fast-forward), report the exact error and leave it
+to the user — do not force-push or rebase autonomously.
+
+## 8. Clear the session edit log
 
 ```bash
 rm -f .claude/session_edits.log
 ```
+(Sanctioned by this protocol — no separate deletion approval needed for this one file.)

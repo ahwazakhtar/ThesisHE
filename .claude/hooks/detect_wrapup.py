@@ -22,7 +22,10 @@ if not any(kw in prompt for kw in WRAPUP_KEYWORDS):
     sys.exit(0)
 
 # --- Session end detected: build context injection ---
-lines = ["[HOOK: Session end detected. Invoke the `session-end` skill (Skill tool) and follow it.]\n"]
+lines = ["[HOOK: A wrap-up phrase was detected. If the user is signaling the end of the "
+         "session, invoke the `session-end` skill (Skill tool) and follow it. If they are "
+         "only asking about or mentioning the protocol (false positive), ignore this and "
+         "answer normally.]\n"]
 
 # Append list of files edited this session
 log_path = os.path.join(os.getcwd(), ".claude", "session_edits.log")
