@@ -24,3 +24,5 @@ This file tracks all major tracks for the project. Each track has its own detail
   *Link: [./tracks/thesis_completion_20260704/](./tracks/thesis_completion_20260704/)*
 - [ ] **Track: Mechanisms Section — Second-Reviewer Revision** (revises `mechanism_channels_20260625` §6 per second-reviewer feedback; ~3-week response. Created Jul 2026)
   *Link: [./tracks/mechanisms_revision_20260704/](./tracks/mechanisms_revision_20260704/)*
+- [ ] **Track: Policy Frontier — Sufficient-Statistics Microsimulation** (executes the proposal's Ch.3 policy calculator per `Plans/frontier_extensions_plan.md`; Phase 1 = committee memo's bounded policy section, Phases 2–4 committee-gated, Phase 5 optional projection layer. Created Jul 2026)
+  *Link: [./tracks/policy_microsim_20260706/](./tracks/policy_microsim_20260706/)*
