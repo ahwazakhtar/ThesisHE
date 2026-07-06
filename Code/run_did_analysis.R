@@ -4,7 +4,7 @@
 # smaller scale 'natural experiments' so we can do diff-in-diffs. Are there
 # never exposed counties?"
 #
-# Phase 0 (`Analysis/did_feasibility_memo.md`) selected:
+# Phase 0 (`Analysis/did/did_feasibility_memo.md`) selected:
 #   - 2012 Midwest drought as the primary natural-experiment cohort
 #     (139 treated counties, 2,534 never-exposed controls)
 #   - 2013 HDD onset as secondary candidate (407 treated, 2,303 controls)

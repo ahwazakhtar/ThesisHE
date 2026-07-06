@@ -7,8 +7,8 @@
 # state headline outcomes with vs without the demographic controls.
 #
 # Outputs:
-#   Analysis/demographic_response_state_coefs.csv
-#   Analysis/demographic_mediator_state_decomposition.csv
+#   Analysis/demographic_mediators/demographic_response_state_coefs.csv
+#   Analysis/demographic_mediators/demographic_mediator_state_decomposition.csv
 # ---------------------------------------------------------------------------
 
 suppressPackageStartupMessages({ library(dplyr); library(readr); library(fixest) })
@@ -65,7 +65,7 @@ for (d in mediators) {
     mediator = d, shock = sh, estimate = get_cell(ct, sh, "Estimate"),
     p.value = get_cell(ct, sh, "Pr(>|t|)"), N = nobs(m), stringsAsFactors = FALSE)
 }
-fs_df <- bind_rows(fs); write_csv(fs_df, "Analysis/demographic_response_state_coefs.csv")
+fs_df <- bind_rows(fs); write_csv(fs_df, "Analysis/demographic_mediators/demographic_response_state_coefs.csv")
 cat("  significant (p<0.05):", sum(fs_df$p.value < 0.05, na.rm=TRUE), "of", nrow(fs_df), "\n")
 
 # ---- 2. Mediator decomposition --------------------------------------------
@@ -90,7 +90,7 @@ for (o in outcomes) {
       stringsAsFactors = FALSE)
   }
 }
-dec_df <- bind_rows(dec); write_csv(dec_df, "Analysis/demographic_mediator_state_decomposition.csv")
+dec_df <- bind_rows(dec); write_csv(dec_df, "Analysis/demographic_mediators/demographic_mediator_state_decomposition.csv")
 print(as.data.frame(dec_df %>% mutate(across(c(est_base,est_with_demog,fraction_surviving), ~signif(.x,3))) %>%
   select(outcome, shock, est_base, est_with_demog, fraction_surviving)), row.names = FALSE)
 cat("\n=== State Demographic Mediator Analysis Complete ===\n")

@@ -10,7 +10,7 @@
 # and the interaction is identified off only 51 SVI values, so this is a
 # robustness mirror of the county EJ result, not a replacement.
 #
-# Output: Analysis/exposure_interaction_state_coefs.csv
+# Output: Analysis/exposure_index/exposure_interaction_state_coefs.csv
 # ---------------------------------------------------------------------------
 
 suppressPackageStartupMessages({ library(dplyr); library(readr); library(fixest) })
@@ -97,7 +97,7 @@ for (sh in shock_specs) {
 }
 
 res <- bind_rows(rows)
-write_csv(res, "Analysis/exposure_interaction_state_coefs.csv")
+write_csv(res, "Analysis/exposure_index/exposure_interaction_state_coefs.csv")
 cat(sprintf("\nSaved %d state interaction rows.\n", nrow(res)))
 cat("\nVerdict counts:\n"); print(table(res$ej_verdict))
 cat("\n=== Significant state Shock x SVI interactions (p<0.10) ===\n")

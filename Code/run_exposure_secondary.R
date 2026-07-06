@@ -9,9 +9,9 @@
 #                                      national/state trend.
 #
 # Outputs:
-#   Analysis/exposure_chei_coefs.csv
-#   Analysis/exposure_robustness.csv
-#   Analysis/exposure_personyears_trend.csv
+#   Analysis/exposure_index/exposure_chei_coefs.csv
+#   Analysis/exposure_index/exposure_robustness.csv
+#   Analysis/exposure_index/exposure_personyears_trend.csv
 #   Analysis/plots/exposure_index/{chei_*, personyears_trend}.png
 # ---------------------------------------------------------------------------
 
@@ -70,7 +70,7 @@ for (idx in c("CHEI_heat", "CHEI_cold")) {
   }
 }
 chei_df <- bind_rows(chei_rows)
-write_csv(chei_df, "Analysis/exposure_chei_coefs.csv")
+write_csv(chei_df, "Analysis/exposure_index/exposure_chei_coefs.csv")
 print(as.data.frame(chei_df %>% mutate(across(c(estimate,std.error,p.value), ~signif(.x,3)))), row.names = FALSE)
 
 # ---- 4b. Robustness: stratified + time-varying SVI ------------------------
@@ -115,7 +115,7 @@ for (s in shocks) {
   }
 }
 rob_df <- bind_rows(rob_rows)
-write_csv(rob_df, "Analysis/exposure_robustness.csv")
+write_csv(rob_df, "Analysis/exposure_index/exposure_robustness.csv")
 cat(sprintf("Robustness rows: %d (stratified + time-varying-SVI)\n", nrow(rob_df)))
 
 # ---- 4c. Lancet-style person-years of extreme-temperature exposure --------
@@ -125,7 +125,7 @@ df$PY_cold <- person_years_exposure(df$Population, df$High_HDD, na_indicator_zer
 trend <- df %>% group_by(Year) %>%
   summarise(PersonYears_Heat = sum(PY_heat, na.rm = TRUE),
             PersonYears_Cold = sum(PY_cold, na.rm = TRUE), .groups = "drop")
-write_csv(trend, "Analysis/exposure_personyears_trend.csv")
+write_csv(trend, "Analysis/exposure_index/exposure_personyears_trend.csv")
 print(as.data.frame(trend %>% mutate(across(-Year, ~ round(.x/1e6, 1)))), row.names = FALSE)
 
 tl <- trend %>% tidyr::pivot_longer(-Year, names_to = "type", values_to = "person_years") %>%

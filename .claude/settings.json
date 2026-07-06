@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/track_edits.py"
+            "command": "python .claude/hooks/track_edits.py"
           }
         ]
       }
@@ -16,7 +16,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/detect_wrapup.py"
+            "command": "python .claude/hooks/detect_wrapup.py"
           }
         ]
       }

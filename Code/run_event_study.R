@@ -14,8 +14,8 @@ library(fixest)
 library(ggplot2)
 
 input_path      <- "Data/county_level_master.csv"
-output_coefs    <- "Analysis/event_study_coefs.csv"
-output_results  <- "Analysis/event_study_results.txt"
+output_coefs    <- "Analysis/event_study/event_study_coefs.csv"
+output_results  <- "Analysis/event_study/event_study_results.txt"
 plot_dir_es     <- "Analysis/plots/event_study"
 plot_dir_rob    <- "Analysis/plots/robustness"
 

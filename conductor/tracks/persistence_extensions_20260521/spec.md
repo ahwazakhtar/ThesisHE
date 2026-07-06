@@ -21,7 +21,7 @@ Addresses the gaps identified in `Text/persistence.txt` after the April 2026 com
 - New `Code/run_cumulative_dose.R` for cumulative-shock-years analysis.
 - Extensions to `Code/download_county_socioeconomic.R` and `Code/process_county_socioeconomic.R` for migration / age variables; new `Code/run_demographic_mediators.R`.
 - New `Code/run_threshold_sensitivity.R` for the p70/p80/p90 sweep.
-- Hypothesis-framing additions to `Analysis/state_analysis_summary.md` and `Analysis/event_study_synthesis.md`.
+- Hypothesis-framing additions to `Analysis/state/synthesis.md` and `Analysis/event_study/synthesis.md`.
 
 ## Acceptance Criteria
 - Synthesis docs lead each finding block with an ex-ante prediction and flag surprises.

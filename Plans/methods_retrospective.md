@@ -1,7 +1,7 @@
 # Methods Retrospective: How the Toolkit Evolved
 
 **Purpose:** The methodological companion to `Plans/results_evolution_narrative.md` — not what was found, but how the estimation, inference, and design choices evolved; what triggered each change; which methods failed and were corrected; and what is worth carrying to future projects.
-**Compiled:** 2026-07-06, from `Analysis/econometric_review.md`, `changelog.md` (2026-02-19 → 2026-07-02), the estimation scripts under `Code/` and `Code/did_robustness/`, and the track specs.
+**Compiled:** 2026-07-06, from `Analysis/memos/econometric_review.md`, `changelog.md` (2026-02-19 → 2026-07-02), the estimation scripts under `Code/` and `Code/did_robustness/`, and the track specs.
 
 ---
 
@@ -14,7 +14,7 @@
 | S2 (2026-03-02) | Look-ahead bias in shock definition | **Z-scores re-anchored to frozen 1990–2000 per-county baseline** (was full-sample) | Shocks become surprises relative to *pre-study* climate | `changelog.md` 2026-03-02; `process_county_climate.R` |
 | S2 (2026-03-02) | Unweighted AQI mean; z-score AQI unreliable | EPA-threshold AQI; **strict population weights, no `Pop_Wt=1` fallback**; z-score `AQI_Shock` dropped | Uses the hard health thresholds AQI actually has; no silent imputation | `process_county_aqi.R`, `process_aqi_data.R` |
 | S3 (2026-03-03) | Identical-by-construction prices within rating areas (review §1) | **State clustering primary + RA-clustered SE variants for premiums** | Honest inference when the price is coarser than the county | `run_county_analysis.R` `*_RA_Cluster` |
-| S3 (2026-03-03) | VIF inflation from PDSI/PHDI/PMDI block (review §2A) | **VIF-based pruning** → `drought_vars_primary`; 9-var block demoted to robustness | Interpretable drought coefficients (max VIF ~4.96) | `Analysis/county_vif_diagnostics.txt` |
+| S3 (2026-03-03) | VIF inflation from PDSI/PHDI/PMDI block (review §2A) | **VIF-based pruning** → `drought_vars_primary`; 9-var block demoted to robustness | Interpretable drought coefficients (max VIF ~4.96) | `Analysis/county/county_vif_diagnostics.txt` |
 | S3 (2026-03-03) | Blanket CO/MN/NY exclusion over-dropped data | **Exclusion redesigned** via `debt_reporting_policy` table → CO-2023 only | Recovers ~2,600 county-years without contaminating the outcome | `run_county_analysis.R:33-90` |
 | S3 (2026-03-03) | Annual-mean PDSI smooths transient droughts | **`pdsi_min`** (worst month) → `is_extreme_drought_peak` | Captures within-year drought peaks the mean hides | `process_state_climate.R` |
 | S4 | Static distributed-lag TWFE can't trace dynamics | **Dynamic DL + Jordà local projections** h∈{−2..+3}; **renamed** "event study" → "impulse response to recurring shocks" | Onset timing, pre-trends, building effects; honesty about non-absorbing treatment | `run_event_study.R:1-9` |
@@ -67,7 +67,7 @@
 
 ---
 
-## 4. `Analysis/econometric_review.md`: demanded vs. done
+## 4. `Analysis/memos/econometric_review.md`: demanded vs. done
 
 | Review critique | Response | Status |
 |---|---|---|

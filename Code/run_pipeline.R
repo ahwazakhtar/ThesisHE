@@ -132,7 +132,7 @@ build_step_registry <- function() {
       script = "Code/run_analysis.R",
       description = "Estimate state-level FE models",
       required_inputs = c("Data/analysis_ready_dataset.csv"),
-      required_outputs = c("Analysis/regression_results_summary.csv")
+      required_outputs = c("Analysis/state/regression_results_summary.csv")
     ),
     list(
       id = "county_process_population",
@@ -207,7 +207,7 @@ build_step_registry <- function() {
       script = "Code/run_county_analysis.R",
       description = "Estimate county-level FE models and robustness checks",
       required_inputs = c("Data/county_level_master.csv"),
-      required_outputs = c("Analysis/county_analysis_results.txt", "Analysis/county_regression_coefs.csv")
+      required_outputs = c("Analysis/county/county_analysis_results.txt", "Analysis/county/county_regression_coefs.csv")
     )
   )
 }

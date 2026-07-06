@@ -49,10 +49,11 @@ This is an academic econometrics thesis investigating relationships between envi
 | `Data/State_Policy_Data/` | Unemployment, Personal Income, CPI (FRED/BEA) |
 | `Data/state_level_analysis_master.csv` | Consolidated state-level panel |
 | `Data/county_level_master.csv` | Consolidated county-level panel |
-| `Analysis/` | Regression outputs, tables, reports |
-| `Analysis/regression_results_summary.csv` | Coefficients, SEs, p-values for primary models |
-| `Analysis/state_analysis_summary.md` | State-level regression workflow and findings |
-| `Analysis/econometric_review.md` | Expert review of econometric specifications |
+| `Analysis/` | Regression outputs, tables, reports — one folder per analysis family |
+| `Analysis/INDEX.md` | **Read this first for any results question** — maps every family to its headline finding and read-first file |
+| `Analysis/state/regression_results_summary.csv` | Coefficients, SEs, p-values for primary models |
+| `Analysis/state/synthesis.md` | State-level regression workflow and findings |
+| `Analysis/memos/econometric_review.md` | Expert review of econometric specifications |
 | `Text/` | Documentation, proposals, abstracts |
 | `Plans/` | All planning documents must go here |
 
@@ -156,6 +157,8 @@ rm -f .claude/session_edits.log
 
 ## Project-Specific Notes
 
+- **`Analysis/` layout (reorganized Jul 2026):** one folder per analysis family (`state/`, `county/`, `event_study/`, `delta/`, `cumulative_dose/`, `persistent_exposure/`, `exposure_index/`, `demographic_mediators/`, `hospital/`, `did/`, `mechanism/`, `mediation/`, `descriptive/`, `robustness/`, `threshold_sensitivity/`, `pathways/`, `memos/`). Each family's primary narrative is `synthesis.md`; run logs go in `<family>/build_logs/`; figures stay in `plots/<family>/`. **Never write a new output to the `Analysis/` root** — new scripts write to `Analysis/<family>/` and add a row to `Analysis/INDEX.md`. Refresh `INDEX.md` at session end. Historical docs (`plan.md` files, `changelog.md`) intentionally still cite the old root paths.
+- **Hooks must invoke `python`, not `python3`** — on this machine `python3` resolves to the Microsoft Store stub and fails silently (discovered Jul 2026 when both hooks were found dead).
 - R-based project — no frontend, no deployment pipeline, no mobile testing. Disregard those sections of `workflow.md`.
 - Tests use `testthat`. Coverage target >80% for new code.
 - All planning documents go in `Plans/`.
@@ -177,8 +180,8 @@ rm -f .claude/session_edits.log
 - `process_zip_county_map.R` is the sole canonical county debt/cost processor. `process_medical_debt_county.R` is archived.
 - Medical debt reporting-rule exclusions: The Urban Institute county panel uses August credit bureau snapshots. CO HB23-1126 effective Aug 7 2023 — CO 2023 only is excluded. NY Fair Medical Debt Reporting Act effective Dec 13 2023 — falls after the Aug 2023 snapshot, NO exclusion needed. MN Debt Fairness Act effective Oct 1 2024 — outside panel window, NO exclusion needed. Both `run_descriptive_stats.R` and `run_county_analysis.R` implement this via a `debt_reporting_policy` table (CO, 2023–2023 only). The 2022–2023 national CRA voluntary changes affect all states equally — no state-specific exclusions warranted.
 - `process_state_climate.R` outputs both `pdsi_mean` (annual mean) and `pdsi_min` (annual minimum = worst drought month). `analysis_pre_processing.R` derives `pdsi_level` from `pdsi_mean` and `is_extreme_drought_peak` from `pdsi_min < -4`. Both are lagged and included in `run_analysis.R` regressions. `pdsi_min` captures transient within-year drought peaks that the mean smooths over.
-- County drought block multicollinearity: `run_county_analysis.R` primary specs use PDSI only (`drought_vars_primary`: pdsi_val + Lag1/Lag2) to avoid VIF inflation from near-collinear PDSI/PHDI/PMDI. Full 9-variable block retained as `drought_vars_robust_full` for optional robustness specs. VIF computed via auxiliary OLS on within-transformed predictor matrix; logged to `Analysis/county_vif_diagnostics.txt`. Post-pruning VIFs confirmed acceptable (max ~5.33).
-- State AQI aggregation: `process_aqi_data.R` uses strict population weights — counties with missing population are dropped from `AQI_Median_Wtd` (no `Pop_Wt=1` fallback). Equal-weight robustness series `AQI_Median_EW` computed alongside. Diagnostics written to `Analysis/state_aqi_weight_diagnostics.csv`.
+- County drought block multicollinearity: `run_county_analysis.R` primary specs use PDSI only (`drought_vars_primary`: pdsi_val + Lag1/Lag2) to avoid VIF inflation from near-collinear PDSI/PHDI/PMDI. Full 9-variable block retained as `drought_vars_robust_full` for optional robustness specs. VIF computed via auxiliary OLS on within-transformed predictor matrix; logged to `Analysis/county/county_vif_diagnostics.txt`. Post-pruning VIFs confirmed acceptable (max ~5.33).
+- State AQI aggregation: `process_aqi_data.R` uses strict population weights — counties with missing population are dropped from `AQI_Median_Wtd` (no `Pop_Wt=1` fallback). Equal-weight robustness series `AQI_Median_EW` computed alongside. Diagnostics written to `Analysis/state/state_aqi_weight_diagnostics.csv`.
 - Rating area structure in premium models: counties sharing a rating area have identical premiums by construction. Primary models cluster at state level (which nests rating areas). For premium outcomes (`Benchmark_Silver_Real`, `Lowest_Bronze_Real`), `run_county_analysis.R` also produces rating-area-clustered SE variants (`*_RA_Cluster`). The existing rating-area aggregation robustness block (lines 153–243) remains as a separate robustness check. Median rating area has 4 counties; 33.5% are 1-to-1.
 
 ### Lessons learned (Session 5, Jun 2026)

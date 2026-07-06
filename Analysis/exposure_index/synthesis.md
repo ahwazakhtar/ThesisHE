@@ -4,7 +4,7 @@ Adds a *hazard × exposure × vulnerability* layer to the county analysis, inspi
 
 ## Primary: does structural vulnerability amplify climate health-costs?
 
-`Y ~ Shock + Shock × SVI_static + controls | fips_code + Year` (state-clustered). The interaction is FE-identified (the time-invariant SVI main effect is absorbed), and the marginal shock effect at vulnerability percentile `q` is `β_shock + β_int·q`. EJ **amplification** = the interaction pushes the shock's effect further in the *adverse* direction at high SVI (adverse = debt/premiums up, income/employment down). `Analysis/exposure_interaction_coefs.csv`, 30 models.
+`Y ~ Shock + Shock × SVI_static + controls | fips_code + Year` (state-clustered). The interaction is FE-identified (the time-invariant SVI main effect is absorbed), and the marginal shock effect at vulnerability percentile `q` is `β_shock + β_int·q`. EJ **amplification** = the interaction pushes the shock's effect further in the *adverse* direction at high SVI (adverse = debt/premiums up, income/employment down). `Analysis/exposure_index/exposure_interaction_coefs.csv`, 30 models.
 
 ### Amplification IS present for the real-economy outcomes
 
@@ -23,17 +23,17 @@ Three significant interactions go the *other* way: the credit-bureau **medical-d
 
 ## Secondary
 
-**Composite CHEI** (`build_chei` = z(thermal hazard) × SVI, standardized; `Analysis/exposure_chei_coefs.csv`). The headline is `CHEI_heat → Med_HH_Income_Real` **−$435 per SD (p=0.0002)** — vulnerability-weighted heat exposure tracks lower median household income — alongside `CHEI_heat → PCPI_Real` +$1,270 (p=0.007); the per-capita-vs-median split mirrors the heat income pattern seen elsewhere in the thesis.
+**Composite CHEI** (`build_chei` = z(thermal hazard) × SVI, standardized; `Analysis/exposure_index/exposure_chei_coefs.csv`). The headline is `CHEI_heat → Med_HH_Income_Real` **−$435 per SD (p=0.0002)** — vulnerability-weighted heat exposure tracks lower median household income — alongside `CHEI_heat → PCPI_Real` +$1,270 (p=0.007); the per-capita-vs-median split mirrors the heat income pattern seen elsewhere in the thesis.
 
-**Robustness** (`Analysis/exposure_robustness.csv`). Median-SVI-split headline models corroborate the interaction direction (e.g., High_HDD → PCPI −$317 in high-SVI vs −$85 in low-SVI counties), though subsample splits lose power relative to the interaction. Re-running the interactions with the **time-varying** `SVI_yr` instead of `SVI_static` leaves the conclusions qualitatively unchanged.
+**Robustness** (`Analysis/exposure_index/exposure_robustness.csv`). Median-SVI-split headline models corroborate the interaction direction (e.g., High_HDD → PCPI −$317 in high-SVI vs −$85 in low-SVI counties), though subsample splits lose power relative to the interaction. Re-running the interactions with the **time-varying** `SVI_yr` instead of `SVI_static` leaves the conclusions qualitatively unchanged.
 
-**Lancet-style exposure** (`Analysis/exposure_personyears_trend.csv`). Person-years of extreme-temperature exposure (population × High_CDD / High_HDD): U.S. heat exposure runs ~70–105 million person-years/year — 3–5× cold exposure — the population-weighted hazard metric the Lancet Countdown reports.
+**Lancet-style exposure** (`Analysis/exposure_index/exposure_personyears_trend.csv`). Person-years of extreme-temperature exposure (population × High_CDD / High_HDD): U.S. heat exposure runs ~70–105 million person-years/year — 3–5× cold exposure — the population-weighted hazard metric the Lancet Countdown reports.
 
 ## State-level mirror (Cross-Level Symmetry track)
 
-`Code/run_exposure_index_state.R` population-weights county SVI to a state vulnerability index and re-runs the interactions in the state pipeline (`Analysis/exposure_interaction_state_coefs.csv`). With only 51 states the interaction is coarse, but the EJ signal persists: **cold (is_high_hdd) → Total_Per_Capita_Health_Exp amplifies in vulnerable states** (+$1,720, p=0.0002) and cold → medical debt amplifies (+0.067, p=0.03). 
+`Code/run_exposure_index_state.R` population-weights county SVI to a state vulnerability index and re-runs the interactions in the state pipeline (`Analysis/exposure_index/exposure_interaction_state_coefs.csv`). With only 51 states the interaction is coarse, but the EJ signal persists: **cold (is_high_hdd) → Total_Per_Capita_Health_Exp amplifies in vulnerable states** (+$1,720, p=0.0002) and cold → medical debt amplifies (+0.067, p=0.03). 
 
 **Notable state↔county divergence on medical debt:** at the *county* level the debt response concentrates in *less*-vulnerable counties (credit-bureau artifact), but at the *state* level cold → medical debt *amplifies* in vulnerable states. State aggregation smooths the county credit-reporting heterogeneity, so the debt-EJ direction is aggregation-sensitive — reinforcing that the debt outcome is the measurement-fragile one, while the income/health-spending amplification is consistent across levels.
 
 ## Bottom line for the thesis
-Adding a vulnerability layer **sharpens** the headline findings into an EJ statement: climate shocks impose larger *income, employment, and premium* costs on structurally vulnerable counties. The lone exception — credit-bureau medical debt concentrating in *less*-vulnerable counties — is a known data-measurement artifact and is flagged as such. Cross-referenced in `Analysis/state_analysis_summary.md` §9.
+Adding a vulnerability layer **sharpens** the headline findings into an EJ statement: climate shocks impose larger *income, employment, and premium* costs on structurally vulnerable counties. The lone exception — credit-bureau medical debt concentrating in *less*-vulnerable counties — is a known data-measurement artifact and is flagged as such. Cross-referenced in `Analysis/state/synthesis.md` §9.

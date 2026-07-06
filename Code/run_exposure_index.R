@@ -14,7 +14,7 @@
 # climate cost is larger where structural vulnerability is higher.
 #
 # Outputs:
-#   Analysis/exposure_interaction_coefs.csv   (Shock, Shock x SVI, marginal effects)
+#   Analysis/exposure_index/exposure_interaction_coefs.csv   (Shock, Shock x SVI, marginal effects)
 #   Analysis/plots/exposure_index/*.png
 # ---------------------------------------------------------------------------
 
@@ -119,8 +119,8 @@ for (sp in shock_specs) {
 }
 
 res <- bind_rows(rows)
-write_csv(res, "Analysis/exposure_interaction_coefs.csv")
-cat(sprintf("\nSaved %d interaction rows to Analysis/exposure_interaction_coefs.csv\n", nrow(res)))
+write_csv(res, "Analysis/exposure_index/exposure_interaction_coefs.csv")
+cat(sprintf("\nSaved %d interaction rows to Analysis/exposure_index/exposure_interaction_coefs.csv\n", nrow(res)))
 
 cat("\n=== Significant Shock x SVI interactions (p_int<0.10), with EJ verdict ===\n")
 print(as.data.frame(res %>% filter(ej_verdict != "ns") %>%

@@ -106,4 +106,4 @@ $$ Y_{c,s,t} = \alpha_c + \gamma_t + \sum_{l=0}^{2} \beta_{1,l} \cdot \text{Drou
 4.  **Script 4: `run_county_analysis.R`**
     *   Executes primary County-Year FE models (Unweighted and Weighted).
     *   Performs Rating Area level aggregation and re-estimation for robustness.
-    *   Exports results to `Analysis/county_analysis_results.txt`.
+    *   Exports results to `Analysis/county/county_analysis_results.txt`.

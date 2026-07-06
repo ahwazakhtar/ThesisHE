@@ -283,10 +283,10 @@ From the dose-response spec: `Shock_Count` = marginal effect per additional shoc
 
 | File | Description |
 |------|-------------|
-| `Analysis/event_study_coefs.csv` | All 852 coefficient rows (raw) |
-| `Analysis/event_study_tables.csv` | Formatted h=0 results table |
-| `Analysis/event_study_full_results.csv` | All horizons, primary specs |
-| `Analysis/event_study_results.txt` | DL model summaries (text) |
+| `Analysis/event_study/event_study_coefs.csv` | All 852 coefficient rows (raw) |
+| `Analysis/event_study/event_study_tables.csv` | Formatted h=0 results table |
+| `Analysis/event_study/event_study_full_results.csv` | All horizons, primary specs |
+| `Analysis/event_study/event_study_results.txt` | DL model summaries (text) |
 | `Analysis/plots/synthesis_significance_heatmap.png` | h=0 significance heatmap |
 | `Analysis/plots/synthesis_dynamic_profiles.png` | LP impulse-response panel |
 | `Analysis/plots/synthesis_robustness_panel.png` | DL vs LP vs LP+History (Medical Debt Share, Silver Premium) |
@@ -297,7 +297,7 @@ From the dose-response spec: `Shock_Count` = marginal effect per additional shoc
 
 ## Key Finding 7: Post-Exit Dynamics (Committee Feedback Phase 2)
 
-Added 2026-05-21. Track: `committee_feedback_april_2026`. The April 2026 committee asked: "if a county was in a shock one year and then it exits, what effect does it have on the spending?" This question is answered by the post-exit LP extension built into `Code/run_delta_analysis.R` (Block A: `Drought_Exit`/`CDD_Exit`/`HDD_Exit` LP h=0..3; Block B: `Shock_{t-1} × NoShock_t` interaction). Full results in `Analysis/delta_coefs.csv` (`approach = "Delta_Exit_LP"` and `"Delta_Exit_Interaction"`); synthesis in `Analysis/delta_analysis_synthesis.md`.
+Added 2026-05-21. Track: `committee_feedback_april_2026`. The April 2026 committee asked: "if a county was in a shock one year and then it exits, what effect does it have on the spending?" This question is answered by the post-exit LP extension built into `Code/run_delta_analysis.R` (Block A: `Drought_Exit`/`CDD_Exit`/`HDD_Exit` LP h=0..3; Block B: `Shock_{t-1} × NoShock_t` interaction). Full results in `Analysis/delta/delta_coefs.csv` (`approach = "Delta_Exit_LP"` and `"Delta_Exit_Interaction"`); synthesis in `Analysis/delta/synthesis.md`.
 
 Headline within-county recovery dynamics:
 - **Drought_Exit → PCPI_Real partial scarring.** Peak at h=2 (+$1,044 per capita, p=0.0002); the recovery rebounds but does not fully restore the pre-shock level over the horizon window.
@@ -306,7 +306,7 @@ Headline within-county recovery dynamics:
 
 ## Key Finding 8: DiD with Never-Exposed Controls (Committee Feedback Phase 3)
 
-Added 2026-05-21. Source: `Code/run_did_analysis.R`. Memo: `Analysis/did/did_results.md`. Pre-feasibility: `Analysis/did_feasibility_memo.md`.
+Added 2026-05-21. Source: `Code/run_did_analysis.R`. Memo: `Analysis/did/did_results.md`. Pre-feasibility: `Analysis/did/did_feasibility_memo.md`.
 
 The Phase 3 DiD layer complements the LP/event-study framework above by anchoring identification in *never-exposed* controls (counties with zero events 2011–2023 per Phase 0 inventory). Two designs:
 
@@ -320,8 +320,8 @@ The Phase 3 DiD layer complements the LP/event-study framework above by anchorin
 ## Key Finding 9: Supply-Side Incidence — climate shocks → hospital uncompensated care
 
 Added 2026-06-16. Track: `hospital_supply_side_20260615`. Full write-up:
-`Analysis/hospital_supply_side_synthesis.md`. Source: `Code/run_hospital_incidence.R`
-(`Analysis/hospital_incidence_coefs.csv`), on the hospital (CCN) × year panel
+`Analysis/hospital/synthesis.md`. Source: `Code/run_hospital_incidence.R`
+(`Analysis/hospital/hospital_incidence_coefs.csv`), on the hospital (CCN) × year panel
 `Data/intermediate_hospital_panel.rds` (NASHP HCT; 59,896 hospital-years,
 5,119 hospitals, 2011–2023; hospital + year FE, state-clustered).
 
@@ -365,11 +365,11 @@ Pre-trend failures already flagged in Key Finding 3 (above) for the LP framework
 
 | Concern | Primary artifact | Cross-reference |
 |---------|------------------|-----------------|
-| Random effects (Phase 1) | `Analysis/random_effects_robustness.md` | State-level only; county-level Hausman not run |
-| Post-exit dynamics (Phase 2) | `Analysis/delta_analysis_synthesis.md` | Key Finding 7 above |
+| Random effects (Phase 1) | `Analysis/robustness/synthesis.md` | State-level only; county-level Hausman not run |
+| Post-exit dynamics (Phase 2) | `Analysis/delta/synthesis.md` | Key Finding 7 above |
 | DiD with never-exposed (Phase 3) | `Analysis/did/did_results.md` | Key Finding 8 above |
-| Humidity / PRISM tdmean (Phase 4) | Done — `Analysis/humidity_sensitivity.csv` | State summary §6.4; cold-lag finding survives |
-| Propagation pathways (Phase 5) | `Text/propagation_pathways.md`, `Analysis/pathway_descriptives_summary.md` | Pathway-to-empirics mapping |
+| Humidity / PRISM tdmean (Phase 4) | Done — `Analysis/state/humidity_sensitivity.csv` | State summary §6.4; cold-lag finding survives |
+| Propagation pathways (Phase 5) | `Text/propagation_pathways.md`, `Analysis/pathways/synthesis.md` | Pathway-to-empirics mapping |
 
 ---
 
@@ -392,10 +392,10 @@ Each dynamic finding is tagged against the prediction it tested (see "Ex-Ante Hy
 
 ## Persistence Extensions (track `persistence_extensions_20260521`)
 
-Three follow-on analyses extend the dynamics above; full detail in `Analysis/delta_analysis_synthesis.md` and `Analysis/persistent_exposure_synthesis.md`.
+Three follow-on analyses extend the dynamics above; full detail in `Analysis/delta/synthesis.md` and `Analysis/persistent_exposure/synthesis.md`.
 
-**Three-way transition decomposition (Phase 1).** Onset, Persist, and Exit estimated jointly per horizon (vs. the never-transitioned 0→0 reference) with a formal symmetry test β_Onset + β_Exit = 0 (`Code/transition_symmetry.R`, `Analysis/delta_symmetry_test.csv`, 168 tests / 28 reject). Headline: **Drought → Medical_Debt_Share at h=2 is asymmetric (+0.0182, p=0.0015)** — drought debt scars rather than reversing on exit; income (PCPI) shows a *symmetric* h=1–2 overshoot; HDD → hospital bad debt at h=3 is over-relief. 83% of tests do not reject, with asymmetries concentrated on the theorized channels.
+**Three-way transition decomposition (Phase 1).** Onset, Persist, and Exit estimated jointly per horizon (vs. the never-transitioned 0→0 reference) with a formal symmetry test β_Onset + β_Exit = 0 (`Code/transition_symmetry.R`, `Analysis/delta/delta_symmetry_test.csv`, 168 tests / 28 reject). Headline: **Drought → Medical_Debt_Share at h=2 is asymmetric (+0.0182, p=0.0015)** — drought debt scars rather than reversing on exit; income (PCPI) shows a *symmetric* h=1–2 overshoot; HDD → hospital bad debt at h=3 is over-relief. 83% of tests do not reject, with asymmetries concentrated on the theorized channels.
 
-**Cumulative-dose response (Phase 3).** Counting running shock-years per county (`Analysis/cumulative_dose_coefs.csv`) shows persistence is **shock-specific**: cold *compounds* (HDD → Civilian_Employed monotone −1,269/−3,267/−5,353/−6,936 across 1–3/4–6/7–9/10+; year-10-vs-1 = −5,668, p<0.0001, converging with the CS-DiD long-run cold scarring above), heat *saturates* (CDD debt marginal effect turns negative by year 10), and drought is *episodic* (only 1 county reaches 10+ cumulative drought-years).
+**Cumulative-dose response (Phase 3).** Counting running shock-years per county (`Analysis/cumulative_dose/cumulative_dose_coefs.csv`) shows persistence is **shock-specific**: cold *compounds* (HDD → Civilian_Employed monotone −1,269/−3,267/−5,353/−6,936 across 1–3/4–6/7–9/10+; year-10-vs-1 = −5,668, p<0.0001, converging with the CS-DiD long-run cold scarring above), heat *saturates* (CDD debt marginal effect turns negative by year 10), and drought is *episodic* (only 1 county reaches 10+ cumulative drought-years).
 
-**Continuously-exposed cohorts (Phase 2).** Always-exposed (≥10/13 yr) vs never-exposed counties: the largest persistent debt gap is for chronic heat (CDD Always +9.9 pp), but it is a standing *level* difference, not a widening trajectory — complementary to the onset CS-DiD. See `Analysis/persistent_exposure_synthesis.md`.
+**Continuously-exposed cohorts (Phase 2).** Always-exposed (≥10/13 yr) vs never-exposed counties: the largest persistent debt gap is for chronic heat (CDD Always +9.9 pp), but it is a standing *level* difference, not a widening trajectory — complementary to the onset CS-DiD. See `Analysis/persistent_exposure/synthesis.md`.

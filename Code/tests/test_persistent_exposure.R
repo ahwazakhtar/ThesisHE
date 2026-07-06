@@ -50,7 +50,7 @@ test_that("custom thresholds reclassify counts", {
 # ---------------------------------------------------------------------------
 # Integration: the inventory output, once produced, is well-formed.
 test_that("persistent_exposure_inventory.csv is well-formed", {
-  path <- "Analysis/persistent_exposure_inventory.csv"
+  path <- "Analysis/persistent_exposure/persistent_exposure_inventory.csv"
   skip_if_not(file.exists(path),
               "inventory missing; run run_persistent_exposure.R first")
   inv <- read.csv(path, stringsAsFactors = FALSE)

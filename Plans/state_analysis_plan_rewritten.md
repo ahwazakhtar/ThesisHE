@@ -129,7 +129,7 @@ Apply FDR adjustments across secondary outcomes and exposures as sensitivity.
 ## 11. Expected Artifacts
 
 - Analysis/regression_results_premiums.csv
-- Analysis/state_analysis_summary.md
+- Analysis/state/synthesis.md
 - Analysis/Figures/lag_effect_plot.png
 
 Notes:

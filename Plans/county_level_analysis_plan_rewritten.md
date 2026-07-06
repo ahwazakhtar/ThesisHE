@@ -114,9 +114,9 @@ Apply FDR adjustments across secondary outcomes and exposures as sensitivity.
 
 ## 11. Expected Artifacts
 
-- Analysis/county_analysis_results.txt
+- Analysis/county/county_analysis_results.txt
 - Analysis/Figures/county_lag_effects.png
-- Analysis/county_analysis_summary.md
+- Analysis/county/synthesis.md
 
 Notes:
 - Avoid claims beyond actual data coverage.

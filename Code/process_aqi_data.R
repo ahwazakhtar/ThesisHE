@@ -24,7 +24,7 @@ run_process_aqi_data <- function(config = list()) {
   county_aqi_rds     <- config$county_aqi_rds     %||% "Data/intermediate_aqi.rds"
   pop_rds            <- config$pop_rds            %||% "Data/intermediate_pop.rds"
   output_path        <- config$output_path        %||% "Data/state_aqi_consolidated.csv"
-  diagnostics_path   <- config$diagnostics_path   %||% "Analysis/state_aqi_weight_diagnostics.csv"
+  diagnostics_path   <- config$diagnostics_path   %||% "Analysis/state/state_aqi_weight_diagnostics.csv"
 
   cat("Aggregating County AQI to State Level (Strict Population Weights + EW Robustness)...\n")
 

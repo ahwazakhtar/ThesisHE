@@ -121,7 +121,7 @@ Scope: `Code/run_event_study.R` and related outputs/tests
 - Why this matters:
   - Compound events are rare, which inflates uncertainty and sensitivity to specification choices.
 - Evidence:
-  - Shock co-occurrence table in run log: `Analysis/run_event_study_20260303_134746.stdout.log:12`, `Analysis/run_event_study_20260303_134746.stdout.log:13`
+  - Shock co-occurrence table in run log: `Analysis/event_study/build_logs/run_event_study_20260303_134746.stdout.log:12`, `Analysis/event_study/build_logs/run_event_study_20260303_134746.stdout.log:13`
   - Counts imply `Shock_Count >= 2` is 2,510 out of 112,267 non-missing county-years (~2.24%).
 - Consequence if unchanged:
   - Compound coefficients may be unstable and over-interpreted.

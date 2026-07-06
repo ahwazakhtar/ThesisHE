@@ -23,8 +23,8 @@ source("Code/transition_symmetry.R")  # transition_symmetry_test()
 source("Code/cumulative_dose.R")      # add_cumulative_shock_years(), lincom()
 
 PANEL_RDS   <- "Data/intermediate_hospital_panel.rds"
-OUT_COEFS   <- "Analysis/hospital_persistence_coefs.csv"
-OUT_RESULTS <- "Analysis/hospital_persistence_results.txt"
+OUT_COEFS   <- "Analysis/hospital/hospital_persistence_coefs.csv"
+OUT_RESULTS <- "Analysis/hospital/hospital_persistence_results.txt"
 
 OUTCOMES <- c("Hosp_UncompCare_PctNPR", "Hosp_OperatingMargin")
 SHOCKS   <- c("Is_Extreme_Drought", "High_CDD", "High_HDD")

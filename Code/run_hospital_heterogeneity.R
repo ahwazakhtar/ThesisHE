@@ -28,8 +28,8 @@ suppressPackageStartupMessages({
 source("Code/cumulative_dose.R")  # lincom()
 
 PANEL_RDS <- "Data/intermediate_hospital_panel.rds"
-OUT_COEFS <- "Analysis/hospital_heterogeneity_coefs.csv"
-OUT_RES   <- "Analysis/hospital_heterogeneity_results.txt"
+OUT_COEFS <- "Analysis/hospital/hospital_heterogeneity_coefs.csv"
+OUT_RES   <- "Analysis/hospital/hospital_heterogeneity_results.txt"
 PLOT_DIR  <- "Analysis/plots/hospital"
 
 SHOCKS   <- c("Is_Extreme_Drought", "High_CDD", "High_HDD")

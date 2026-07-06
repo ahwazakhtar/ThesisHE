@@ -75,8 +75,8 @@ Each headline below is tagged against the §3a prediction it was meant to test: 
 
 ## 5. Artifacts
 *   **Processed Data:** `Data/analysis_ready_dataset.csv`
-*   **Results Table:** `Analysis/regression_results_summary.csv`
-*   **Diagnostics:** `Analysis/vif_diagnostics.txt`
+*   **Results Table:** `Analysis/state/regression_results_summary.csv`
+*   **Diagnostics:** `Analysis/state/vif_diagnostics.txt`
 
 ---
 
@@ -86,7 +86,7 @@ Track: [`committee_feedback_april_2026`](../conductor/tracks/committee_feedback_
 
 ### 6.1 Random-effects robustness (Hausman) — Phase 1
 
-Source: `Code/run_re_robustness.R` · Memo: `Analysis/random_effects_robustness.md`
+Source: `Code/run_re_robustness.R` · Memo: `Analysis/robustness/synthesis.md`
 
 - The Hausman test rejects RE in favor of FE for **every estimable outcome** at p < 1e-9 (4 state outcomes converged; 2 — Emp_Contrib_Single_Real and Medical_Debt_Median_Real — failed to fit RE due to thin MEPS-IC year coverage).
 - **Headline-coefficient verdict:** RE estimates on `is_extreme_drought_lag2` and `is_cold_shock_lag1` have the same sign as FE; the rejection of RE is driven by precision on lagged terms rather than coefficient reversals. The single outcome with material FE-RE divergence is Medicaid_Per_Enrollee_Health_Exp_Real (RE ≈ 2× FE on cold-shock terms) — reported in the memo for transparency.
@@ -94,7 +94,7 @@ Source: `Code/run_re_robustness.R` · Memo: `Analysis/random_effects_robustness.
 
 ### 6.2 Natural-experiment DiD with never-exposed controls — Phase 3
 
-Source: `Code/run_did_analysis.R` · Memo: `Analysis/did/did_results.md`. Pre-feasibility memo: `Analysis/did_feasibility_memo.md`.
+Source: `Code/run_did_analysis.R` · Memo: `Analysis/did/did_results.md`. Pre-feasibility memo: `Analysis/did/did_feasibility_memo.md`.
 
 The committee asked whether the LP/FE results could be replicated using a sharp natural experiment with never-exposed counties as controls. The Phase 0 inventory found large never-exposed pools for Drought (78.6%), HDD (71.4%), and CDD (65.8%); AQI was dropped from the DiD scope (3.1% never-exposed too thin).
 
@@ -107,13 +107,13 @@ The committee asked whether the LP/FE results could be replicated using a sharp 
 
 ### 6.3 Propagation pathways now evidence-backed — Phase 5
 
-Source: `Text/propagation_pathways.md` · Descriptives: `Analysis/pathway_descriptives_summary.md`
+Source: `Text/propagation_pathways.md` · Descriptives: `Analysis/pathways/synthesis.md`
 
 The four pathways underlying the headline findings (heat → delayed care, cold → shifted utilization, drought → income → debt, AQI → respiratory/cardiac) are now anchored to 18 cited references with effect-direction and time-scale claims. The drought→income→debt pathway has the strongest convergence: Hornbeck (2012), Burke-Hsiang-Miguel (2015), Carleton et al. (2022), and our own 2012 DiD all point the same direction at consistent 1- to 3-year horizons.
 
 ### 6.4 Humidity now controlled — Phase 4 complete
 
-Source: `Code/download_prism_humidity.R` → `Code/process_state_humidity.R` → `Data/intermediate_humidity.rds` · Sensitivity: `Analysis/humidity_sensitivity.csv`
+Source: `Code/download_prism_humidity.R` → `Code/process_state_humidity.R` → `Data/intermediate_humidity.rds` · Sensitivity: `Analysis/state/humidity_sensitivity.csv`
 
 PRISM `tdmean` (mean dew point) was acquired as annual 4km CONUS grids from the open PRISM web service (`services.nacse.org`, no API key) for 2009–2025 and aggregated to a state-year panel by **area-weighted zonal mean** using the Census 2018 cartographic state boundaries (`terra`). PRISM's native Celsius is retained as `tdmean_C` and converted to `tdmean_F` for consistency with the project's Fahrenheit convention. Coverage is CONUS only, so **Alaska and Hawaii are NA** (the web service does not yet serve those regions); all 48 contiguous states + DC are covered. Annual mean dew points range 22.4–64.8 °F (mountain-west to Gulf Coast), as expected.
 
@@ -127,16 +127,16 @@ PRISM `tdmean` (mean dew point) was acquired as annual 4km CONUS grids from the 
 
 | Concern | Status | Where addressed |
 |---------|--------|-----------------|
-| Random effects check | Done — RE rejected, headlines survive | §6.1, `Analysis/random_effects_robustness.md` |
-| Post-exit dynamics | Done — see `Analysis/delta_analysis_synthesis.md` | County-level (delta + LP) |
+| Random effects check | Done — RE rejected, headlines survive | §6.1, `Analysis/robustness/synthesis.md` |
+| Post-exit dynamics | Done — see `Analysis/delta/synthesis.md` | County-level (delta + LP) |
 | Natural-experiment DiD with never-exposed | Done — Drought 2012 is cleanest | §6.2, `Analysis/did/did_results.md` |
 | Propagation evidence | Done — 18 references + descriptive plots | §6.3, `Text/propagation_pathways.md` |
-| Humidity (PRISM tdmean) | Done — cold-lag finding survives; humidity itself raises medical debt | §6.4, `Analysis/humidity_sensitivity.csv` |
+| Humidity (PRISM tdmean) | Done — cold-lag finding survives; humidity itself raises medical debt | §6.4, `Analysis/state/humidity_sensitivity.csv` |
 
 ### 6.6 Supply side restored — hospital-finance analysis (Chapter 2)
 
 Added 2026-06-16. Track: `hospital_supply_side_20260615`. Full write-up:
-`Analysis/hospital_supply_side_synthesis.md`.
+`Analysis/hospital/synthesis.md`.
 
 The proposal's **Chapter 2 (supply side)** is now built out. A hospital (CCN) ×
 year panel (`Data/intermediate_hospital_panel.rds`, NASHP HCT — 59,896
@@ -169,7 +169,7 @@ Track: [`persistence_extensions_20260521`](../conductor/tracks/persistence_exten
 
 **Finding — demographics do *not* mediate the shock effects (a clean null).**
 - *First stage:* shocks barely move demographics — only 2 of 27 shock→demographic coefficients are significant, both tiny (High_CDD lag-2 → Pct_Age_65plus +0.0017, p=0.004; High_CDD → Pct_Owner_Occupied −0.0020, p=0.044). ACS 5-year estimates are moving averages, so annual demographic response is heavily smoothed — this is partly a power statement.
-- *Decomposition:* the shock coefficients on Medical_Debt_Share, Hosp_BadDebt, and PCPI are essentially unchanged when the three demographic controls are added — fraction of the effect surviving is **0.94–1.04** for the debt and hospital outcomes (`Analysis/demographic_mediator_decomposition.csv`). The only material attenuation is on the (already small/insignificant) PCPI cold effect (0.58).
+- *Decomposition:* the shock coefficients on Medical_Debt_Share, Hosp_BadDebt, and PCPI are essentially unchanged when the three demographic controls are added — fraction of the effect surviving is **0.94–1.04** for the debt and hospital outcomes (`Analysis/demographic_mediators/demographic_mediator_decomposition.csv`). The only material attenuation is on the (already small/insignificant) PCPI cold effect (0.58).
 
 **Implication.** The headline mechanisms (drought→income→debt; cold→utilization) are **not artifacts of population turnover, aging, or tenure shifts** — they survive demographic adjustment intact. This closes a confounding channel a discussant might raise, with the caveat that ACS smoothing limits detection of fast demographic responses.
 
@@ -177,7 +177,7 @@ Track: [`persistence_extensions_20260521`](../conductor/tracks/persistence_exten
 
 ## 8. Persistence Extensions — HDD/CDD Threshold Sensitivity (Phase 5)
 
-Source: `Code/run_threshold_sensitivity.R` · `Analysis/threshold_sensitivity_coefs.csv` · plots in `Analysis/plots/threshold_sensitivity/`.
+Source: `Code/run_threshold_sensitivity.R` · `Analysis/threshold_sensitivity/threshold_sensitivity_coefs.csv` · plots in `Analysis/plots/threshold_sensitivity/`.
 
 `High_CDD`/`High_HDD` flag a year above the national **p80** of the 1990–2000 baseline. We re-derived the flags at **p70, p80, p90** and re-estimated the primary state spec and county Spec 2, extracting the CDD/HDD coefficients at each cut-point (252 rows).
 
@@ -187,7 +187,7 @@ Source: `Code/run_threshold_sensitivity.R` · `Analysis/threshold_sensitivity_co
 
 ### 8.1 Onset / Persist / Exit symmetry (Phase 1) — cross-reference
 
-The county-level transition analysis (full detail in `Analysis/delta_analysis_synthesis.md`, "Three-Way Transition Decomposition") tests whether the cost of entering a shock is undone on leaving it (β_Onset + β_Exit = 0; `Code/transition_symmetry.R`, `Analysis/delta_symmetry_test.csv`). The result reinforces the state drought headline: **Drought → Medical Debt is asymmetric at h=2 (+0.0182, p=0.0015) — it scars rather than reversing on exit**, the county-level mechanism behind the state `is_extreme_drought_lag2` finding. Cumulative-dose analysis (Phase 3) further shows cold employment damage *compounds* with accumulated exposure while heat debt *saturates*.
+The county-level transition analysis (full detail in `Analysis/delta/synthesis.md`, "Three-Way Transition Decomposition") tests whether the cost of entering a shock is undone on leaving it (β_Onset + β_Exit = 0; `Code/transition_symmetry.R`, `Analysis/delta/delta_symmetry_test.csv`). The result reinforces the state drought headline: **Drought → Medical Debt is asymmetric at h=2 (+0.0182, p=0.0015) — it scars rather than reversing on exit**, the county-level mechanism behind the state `is_extreme_drought_lag2` finding. Cumulative-dose analysis (Phase 3) further shows cold employment damage *compounds* with accumulated exposure while heat debt *saturates*.
 
 ### 8.2 Persistence Extensions — artifact index
 
@@ -204,11 +204,11 @@ The county-level transition analysis (full detail in `Analysis/delta_analysis_sy
 
 ## 9. Climate–Health Exposure Index — EJ Amplification (track `climate_health_exposure_index`)
 
-Source: `Code/run_exposure_index.R` + `Code/run_exposure_secondary.R` · Detail: `Analysis/exposure_index_synthesis.md`. Adds a *hazard × exposure × vulnerability* layer (CDC SVI) and tests whether climate→health-cost effects are amplified in structurally vulnerable counties via `Y ~ Shock + Shock × SVI | fips + Year`.
+Source: `Code/run_exposure_index.R` + `Code/run_exposure_secondary.R` · Detail: `Analysis/exposure_index/synthesis.md`. Adds a *hazard × exposure × vulnerability* layer (CDC SVI) and tests whether climate→health-cost effects are amplified in structurally vulnerable counties via `Y ~ Shock + Shock × SVI | fips + Year`.
 
 **Verdict — vulnerability amplifies harm for the real-economy outcomes.** In high-SVI counties, **heat costs jobs** (Civilian_Employed +878 at low SVI → −184 at high, p=0.001), **cold's income hit is ~8× larger** (PCPI −$56 → −$472, p=0.056), and **drought raises ACA premiums** (benchmark −$54 → +$16, p=0.001). The composite `CHEI_heat → Med_HH_Income` is −$435/SD (p=0.0002). 
 
-**Caveat.** The *credit-bureau medical-debt* response runs the other way — concentrated in *less*-vulnerable counties — a measurement artifact (poorer/uninsured counties accrue less *measured* debt), not evidence against EJ harm. Lancet-style person-years of extreme-temperature exposure (~70–105M/yr heat, 3–5× cold) are reported in `Analysis/exposure_personyears_trend.csv`.
+**Caveat.** The *credit-bureau medical-debt* response runs the other way — concentrated in *less*-vulnerable counties — a measurement artifact (poorer/uninsured counties accrue less *measured* debt), not evidence against EJ harm. Lancet-style person-years of extreme-temperature exposure (~70–105M/yr heat, 3–5× cold) are reported in `Analysis/exposure_index/exposure_personyears_trend.csv`.
 
 ---
 
@@ -216,8 +216,8 @@ Source: `Code/run_exposure_index.R` + `Code/run_exposure_secondary.R` · Detail:
 
 Three single-level analyses were mirrored to the other level to check state↔county consistency.
 
-- **Humidity → county** (`Code/process_county_humidity.R`, `Code/run_county_humidity_sensitivity.R`; `Analysis/county_humidity_sensitivity.csv`). PRISM tdmean aggregated to counties; the headline **county cold findings survive humidity adjustment** (High_HDD → Hosp_BadDebt 4.93→4.71, p=0.04; → benchmark premium 28.1→23.2, p=0.01; High_CDD → Med_HH_Income −297→−295, p=0.007). Mirrors the state result (§6.4): the cold/drought findings are not humidity confounding at either level.
-- **Demographic mediators → state** (`Code/run_demographic_mediators_state.R`; `Analysis/demographic_mediator_state_decomposition.csv`). Population-weighted state demographics; the shock effects on debt and health spending **survive demographic adjustment** (fraction surviving ≈ 0.92–1.04), the same clean null as the county analysis (§7).
-- **Exposure Index (SVI) → state** — see `Analysis/exposure_index_synthesis.md` ("State-level mirror"): EJ amplification on health spending persists at the state level; the medical-debt EJ *direction* is aggregation-sensitive (a debt-measurement caveat).
+- **Humidity → county** (`Code/process_county_humidity.R`, `Code/run_county_humidity_sensitivity.R`; `Analysis/county/county_humidity_sensitivity.csv`). PRISM tdmean aggregated to counties; the headline **county cold findings survive humidity adjustment** (High_HDD → Hosp_BadDebt 4.93→4.71, p=0.04; → benchmark premium 28.1→23.2, p=0.01; High_CDD → Med_HH_Income −297→−295, p=0.007). Mirrors the state result (§6.4): the cold/drought findings are not humidity confounding at either level.
+- **Demographic mediators → state** (`Code/run_demographic_mediators_state.R`; `Analysis/demographic_mediators/demographic_mediator_state_decomposition.csv`). Population-weighted state demographics; the shock effects on debt and health spending **survive demographic adjustment** (fraction surviving ≈ 0.92–1.04), the same clean null as the county analysis (§7).
+- **Exposure Index (SVI) → state** — see `Analysis/exposure_index/synthesis.md` ("State-level mirror"): EJ amplification on health spending persists at the state level; the medical-debt EJ *direction* is aggregation-sensitive (a debt-measurement caveat).
 
 **Takeaway:** the two robustness nulls (humidity, demographics) and the income/health-spending EJ amplification replicate across state and county; only the credit-bureau **medical-debt** outcome behaves differently across levels, consistent with it being the measurement-fragile outcome throughout the thesis.

@@ -35,7 +35,7 @@ the consumer-side county-summed `Hosp_BadDebt_PerCapita`.
 
 ## Paper 1 — Incidence: do climate shocks strain hospital finances?
 
-Source: `Code/run_hospital_incidence.R` → `Analysis/hospital_incidence_coefs.csv`,
+Source: `Code/run_hospital_incidence.R` → `Analysis/hospital/hospital_incidence_coefs.csv`,
 plots in `Analysis/plots/hospital/`. Distributed-lag IRF
 (`Shock + Lag1 + Lag2 | CCN + Year`); cumulative = sum over h = 0,1,2.
 
@@ -72,7 +72,7 @@ plots in `Analysis/plots/hospital/`. Distributed-lag IRF
 ## Paper 2 — Persistence: do hospital-finance hits scar or compound?
 
 Source: `Code/run_hospital_persistence.R` →
-`Analysis/hospital_persistence_coefs.csv`. (A) Onset/Persist/Exit symmetry
+`Analysis/hospital/hospital_persistence_coefs.csv`. (A) Onset/Persist/Exit symmetry
 (reuses `Code/transition_symmetry.R`); (B) cumulative climate-shock-years dose
 (reuses `Code/cumulative_dose.R`). Hospital + year FE.
 
@@ -108,7 +108,7 @@ into margin collapse over this window; the persistence story is about
 ## Paper 3 — Inequality / provider heterogeneity (PRIMARY)
 
 Source: `Code/run_hospital_heterogeneity.R` →
-`Analysis/hospital_heterogeneity_coefs.csv`, plots in
+`Analysis/hospital/hospital_heterogeneity_coefs.csv`, plots in
 `Analysis/plots/hospital/`. `Y ~ Shock × M | CCN + Year`; marginal shock effect
 read at each moderator level; verdict is **outcome-aware** (higher
 uncompensated %NPR = more strain; more-negative operating margin = more strain).
@@ -175,9 +175,9 @@ misbehave" caveats appear on both the consumer and provider ledgers.
 | File | Contents |
 |------|----------|
 | `Data/intermediate_hospital_panel.rds` | Hospital-year panel (gitignored) |
-| `Analysis/hospital_incidence_coefs.csv` | Distributed-lag IRF coefficients |
-| `Analysis/hospital_persistence_coefs.csv` | Symmetry + dose coefficients |
-| `Analysis/hospital_heterogeneity_coefs.csv` | Shock × moderator marginals + verdicts |
+| `Analysis/hospital/hospital_incidence_coefs.csv` | Distributed-lag IRF coefficients |
+| `Analysis/hospital/hospital_persistence_coefs.csv` | Symmetry + dose coefficients |
+| `Analysis/hospital/hospital_heterogeneity_coefs.csv` | Shock × moderator marginals + verdicts |
 | `Analysis/hospital_*_results.txt` | Full model summaries |
 | `Analysis/plots/hospital/` | IRF and heterogeneity plots |
 

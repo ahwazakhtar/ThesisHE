@@ -3,7 +3,7 @@
 **Date:** 2026-05-21
 **Purpose:** Background section supporting the empirical claims in the state and county analyses. Each pathway below names the proposed causal mechanism, cites peer-reviewed evidence supporting the direction and timing, and links to the empirical channel through which the effect is identified in our panel.
 
-The committee asked that the propagation pathways underlying the headline findings — Extreme Drought (2-year lag) and Cold Shocks (1-year lag) raising Medical Debt and Insurance Premiums — be backed by evidence rather than asserted. This document addresses that request. Descriptive evidence from our own panel is reported separately in `Analysis/plots/pathways/` and summarized in `Analysis/pathway_descriptives_summary.md`.
+The committee asked that the propagation pathways underlying the headline findings — Extreme Drought (2-year lag) and Cold Shocks (1-year lag) raising Medical Debt and Insurance Premiums — be backed by evidence rather than asserted. This document addresses that request. Descriptive evidence from our own panel is reported separately in `Analysis/plots/pathways/` and summarized in `Analysis/pathways/synthesis.md`.
 
 ---
 

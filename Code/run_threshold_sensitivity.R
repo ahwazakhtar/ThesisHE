@@ -16,7 +16,7 @@
 # 2011-2023 only). is_cold_shock_lag1 (z-temperature based, NOT a CDD/HDD cut) is
 # reported for the state to confirm it is invariant to these cut-points.
 #
-# Output: Analysis/threshold_sensitivity_coefs.csv ; plots in
+# Output: Analysis/threshold_sensitivity/threshold_sensitivity_coefs.csv ; plots in
 #         Analysis/plots/threshold_sensitivity/
 # ---------------------------------------------------------------------------
 
@@ -139,8 +139,8 @@ for (cn in names(cutoffs)) {
 # Export + plots
 # ===========================================================================
 res <- bind_rows(rows)
-write_csv(res, "Analysis/threshold_sensitivity_coefs.csv")
-cat(sprintf("\nSaved %d coefficient rows to Analysis/threshold_sensitivity_coefs.csv\n", nrow(res)))
+write_csv(res, "Analysis/threshold_sensitivity/threshold_sensitivity_coefs.csv")
+cat(sprintf("\nSaved %d coefficient rows to Analysis/threshold_sensitivity/threshold_sensitivity_coefs.csv\n", nrow(res)))
 
 cat("\n=== County Spec 2: High_HDD_Lag1 across cut-points (the cold-burden lag) ===\n")
 print(as.data.frame(res %>% filter(level=="County_Spec2", term=="High_HDD_Lag1") %>%

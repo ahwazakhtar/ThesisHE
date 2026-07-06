@@ -97,7 +97,7 @@ Based on `Data/data sources.txt` and script inspection:
     3.  **Feature Engineering:** Run `Code/analysis_pre_processing.R` to generate climate shocks (bins) and lags.
     4.  **Analysis:** Run `Code/run_analysis.R` to execute the Fixed-Effects models.
     5.  **County Socioeconomic Data:** Run `Code/download_county_socioeconomic.R` then `Code/process_county_socioeconomic.R` to populate `Data/intermediate_socioeconomic.rds`.
-    6.  **Descriptive Stats:** Run `Code/run_descriptive_stats.R` to regenerate `Analysis/descriptive_stats_summary.csv` and plots in `Analysis/plots/`.
+    6.  **Descriptive Stats:** Run `Code/run_descriptive_stats.R` to regenerate `Analysis/descriptive/descriptive_stats_summary.csv` and plots in `Analysis/plots/`.
     7.  **Review:** Examine the statistical results in `Analysis/` and the research abstract in `Text/`.
 
 ANY planning document must go into the `Plans/' folder.

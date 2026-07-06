@@ -4,10 +4,10 @@
 **Source script:** `Code/run_never_exposed_inventory.R`
 **Inputs read:** `Data/county_level_master.csv` (3,225 counties × 13 years, 2011–2023)
 **Outputs:**
-- `Analysis/never_exposed_inventory.csv` — one row per (county × shock)
-- `Analysis/never_exposed_summary.csv` — per-shock totals
-- `Analysis/never_exposed_by_state.csv` — per-shock × state
-- `Analysis/never_exposed_event_year.csv` — per-shock × year onset counts
+- `Analysis/persistent_exposure/never_exposed_inventory.csv` — one row per (county × shock)
+- `Analysis/persistent_exposure/never_exposed_summary.csv` — per-shock totals
+- `Analysis/persistent_exposure/never_exposed_by_state.csv` — per-shock × state
+- `Analysis/persistent_exposure/never_exposed_event_year.csv` — per-shock × year onset counts
 
 ---
 
@@ -31,7 +31,7 @@ Notes:
 
 ## 3. Geographic concentration of treatment
 
-Top-10 ever-exposed states per shock (from `Analysis/never_exposed_by_state.csv`):
+Top-10 ever-exposed states per shock (from `Analysis/persistent_exposure/never_exposed_by_state.csv`):
 
 - **Drought:** TX (188), GA (59), NE (47), CA (41), CO (41), NM (29), OK (21), KS (19), NV (16), LA (15). Treatment runs through the Great Plains, Texas, and the Mountain West; large never-exposed pool in the East and upper Midwest.
 - **HDD:** MN (87/87), MI (81/83), IA (76/99), WI (72/72), SD (66/66), MT (56/56), ND (53/53), NE (49/93), NY (44/62), CO (41/64). Treatment clusters in the Upper Midwest and Northern Plains; never-exposed pool dominates the South.

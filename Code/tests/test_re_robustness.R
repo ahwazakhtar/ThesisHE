@@ -85,8 +85,8 @@ test_that("RE point estimate is close to FE when unit FE is uncorrelated with X"
 
 # ---------------------------------------------------------------------------
 test_that("run_re_robustness.R outputs exist and are well-formed", {
-  results_path <- "Analysis/random_effects_results.csv"
-  hausman_path <- "Analysis/random_effects_hausman.csv"
+  results_path <- "Analysis/robustness/random_effects_results.csv"
+  hausman_path <- "Analysis/robustness/random_effects_hausman.csv"
   skip_if_not(file.exists(results_path),
               "random_effects_results.csv missing; run run_re_robustness.R first")
   skip_if_not(file.exists(hausman_path),

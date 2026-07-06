@@ -1,16 +1,16 @@
 # Publication-Grade Descriptive Statistics for County-Level Panel
 #
 # Produces:
-#   Analysis/descriptive_stats_summary.csv
-#   Analysis/descriptive_stats_table_main.csv
-#   Analysis/descriptive_stats_table_main.tex
-#   Analysis/descriptive_period_comparison.csv
-#   Analysis/descriptive_period_comparison.tex
-#   Analysis/descriptive_missingness_by_year.csv
-#   Analysis/descriptive_missingness_summary.csv
-#   Analysis/descriptive_correlation_matrix.csv
-#   Analysis/descriptive_tables.tex
-#   Analysis/descriptive_stats_report.md
+#   Analysis/descriptive/descriptive_stats_summary.csv
+#   Analysis/descriptive/descriptive_stats_table_main.csv
+#   Analysis/descriptive/descriptive_stats_table_main.tex
+#   Analysis/descriptive/descriptive_period_comparison.csv
+#   Analysis/descriptive/descriptive_period_comparison.tex
+#   Analysis/descriptive/descriptive_missingness_by_year.csv
+#   Analysis/descriptive/descriptive_missingness_summary.csv
+#   Analysis/descriptive/descriptive_correlation_matrix.csv
+#   Analysis/descriptive/descriptive_tables.tex
+#   Analysis/descriptive/synthesis.md
 #   Analysis/plots/fig1_climate_shock_prevalence.png
 #   Analysis/plots/fig2_outcome_index_trends.png
 #   Analysis/plots/fig3_distribution_shift.png
@@ -846,14 +846,14 @@ run_descriptive_stats <- function(
     ) else NULL,
     "",
     "Main output tables:",
-    "- `Analysis/descriptive_stats_summary.csv`: numeric table with tails, winsorized moments, and weighted moments.",
-    "- `Analysis/descriptive_stats_table_main.csv`: manuscript-ready condensed table.",
-    "- `Analysis/descriptive_stats_table_main.tex`: LaTeX table for manuscript integration.",
-    "- `Analysis/descriptive_period_comparison.csv`: early vs late period changes.",
-    "- `Analysis/descriptive_period_comparison.tex`: LaTeX period-comparison table.",
-    "- `Analysis/descriptive_tables.tex`: compile-ready LaTeX document with both descriptive tables.",
-    "- `Analysis/descriptive_missingness_by_year.csv`: annual missingness diagnostics.",
-    "- `Analysis/descriptive_correlation_matrix.csv`: pairwise correlation matrix for core variables.",
+    "- `Analysis/descriptive/descriptive_stats_summary.csv`: numeric table with tails, winsorized moments, and weighted moments.",
+    "- `Analysis/descriptive/descriptive_stats_table_main.csv`: manuscript-ready condensed table.",
+    "- `Analysis/descriptive/descriptive_stats_table_main.tex`: LaTeX table for manuscript integration.",
+    "- `Analysis/descriptive/descriptive_period_comparison.csv`: early vs late period changes.",
+    "- `Analysis/descriptive/descriptive_period_comparison.tex`: LaTeX period-comparison table.",
+    "- `Analysis/descriptive/descriptive_tables.tex`: compile-ready LaTeX document with both descriptive tables.",
+    "- `Analysis/descriptive/descriptive_missingness_by_year.csv`: annual missingness diagnostics.",
+    "- `Analysis/descriptive/descriptive_correlation_matrix.csv`: pairwise correlation matrix for core variables.",
     "",
     "---",
     "",

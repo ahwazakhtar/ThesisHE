@@ -1,6 +1,6 @@
 # Structured Review of Analysis Plans
 
-This review evaluates `state_analysis_plan.md` and `county_level_analysis_plan.md` with reference to `GEMINI.md` and `Analysis/econometric_review.md`. It focuses on scope, data construction, identification, econometric robustness, and execution risks from a PhD-level economics perspective.
+This review evaluates `state_analysis_plan.md` and `county_level_analysis_plan.md` with reference to `GEMINI.md` and `Analysis/memos/econometric_review.md`. It focuses on scope, data construction, identification, econometric robustness, and execution risks from a PhD-level economics perspective.
 
 ## Executive Summary
 
@@ -8,7 +8,7 @@ This review evaluates `state_analysis_plan.md` and `county_level_analysis_plan.m
 2. Time coverage is overstated in several places. The actual sample will vary substantially by outcome (HIX premiums, medical debt, hospital data), which must be documented explicitly.
 3. Climate shock definitions rely on full-sample means and quintiles, which can introduce look-ahead bias and conflate trend with shock. A fixed baseline period or rolling baseline is needed.
 4. Inference is fragile with 50 state clusters. Standard clustered SEs are likely understated; small-sample corrections or wild cluster bootstrap should be routine.
-5. The MAUP concerns in `Analysis/econometric_review.md` are real. County-level premium regressions cannot claim county-level variation in treatment; inference must respect rating-area or state-level treatment granularity.
+5. The MAUP concerns in `Analysis/memos/econometric_review.md` are real. County-level premium regressions cannot claim county-level variation in treatment; inference must respect rating-area or state-level treatment granularity.
 
 ## 1. Scope and Research Design
 
@@ -40,7 +40,7 @@ This review evaluates `state_analysis_plan.md` and `county_level_analysis_plan.m
 
 ### 3.3 Mapping and Aggregation
 
-1. Rating Area to county is a broadcast. This creates artificial precision and inflates effective sample size. This is acknowledged in `Analysis/econometric_review.md` and must be repeated explicitly in the plan.
+1. Rating Area to county is a broadcast. This creates artificial precision and inflates effective sample size. This is acknowledged in `Analysis/memos/econometric_review.md` and must be repeated explicitly in the plan.
 2. ZIP to county mapping using residential ratios is standard, but the crosswalk is time-varying. The plan should verify that the crosswalk year matches the hospital data year and state clearly how missing ZIPs are handled.
 3. State-level drought applied to counties is valid for estimating state-level exposure impacts, but county-level FE with state-level treatment can induce large within-state correlation in errors, reinforcing the need for state clustering.
 
@@ -114,7 +114,7 @@ This review evaluates `state_analysis_plan.md` and `county_level_analysis_plan.m
 4. Pre-specify primary outcomes and exposures to reduce multiple testing concerns.
 5. Add placebo leads and extended lag sensitivity.
 
-## Notes on `Analysis/econometric_review.md`
+## Notes on `Analysis/memos/econometric_review.md`
 
 1. The MAUP warning is correct and should be echoed explicitly in the county plan narrative.
 2. State-level clustering is non-negotiable for drought and rating-area premiums. The plan should treat county-level clustering as invalid for these outcomes.

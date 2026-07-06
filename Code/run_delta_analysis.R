@@ -13,8 +13,8 @@
 #   - Binary onset/exit: Drought_Onset / Drought_Exit indicators
 #
 # Outputs:
-#   Analysis/delta_coefs.csv          — tidy coefficient table
-#   Analysis/delta_results.txt        — full model summaries
+#   Analysis/delta/delta_coefs.csv          — tidy coefficient table
+#   Analysis/delta/delta_results.txt        — full model summaries
 #   Analysis/plots/delta/             — coefficient plots
 #   Analysis/plots/delta_robustness/  — asymmetry and onset/exit plots
 
@@ -27,8 +27,8 @@ library(ggplot2)
 source("Code/transition_symmetry.R")  # Phase 1: beta_Onset + beta_Exit = 0 Wald test
 
 input_path     <- "Data/county_level_master.csv"
-output_coefs   <- "Analysis/delta_coefs.csv"
-output_results <- "Analysis/delta_results.txt"
+output_coefs   <- "Analysis/delta/delta_coefs.csv"
+output_results <- "Analysis/delta/delta_results.txt"
 plot_dir       <- "Analysis/plots/delta"
 plot_dir_rob   <- "Analysis/plots/delta_robustness"
 plot_dir_exit  <- "Analysis/plots/delta_exit_dynamics"
@@ -539,15 +539,15 @@ if (length(symmetry_rows) > 0) {
   symmetry_df <- symmetry_df[, c("shock", "outcome", "horizon", "weighting", "N",
                                  "beta_onset", "beta_exit", "asymmetry",
                                  "std.error", "z.value", "p.value", "reject_symmetry")]
-  write.csv(symmetry_df, "Analysis/delta_symmetry_test.csv", row.names = FALSE)
-  cat("Symmetry test results saved to: Analysis/delta_symmetry_test.csv (",
+  write.csv(symmetry_df, "Analysis/delta/delta_symmetry_test.csv", row.names = FALSE)
+  cat("Symmetry test results saved to: Analysis/delta/delta_symmetry_test.csv (",
       nrow(symmetry_df), " rows)\n", sep = "")
 }
 
 # 10. VIF Diagnostics ------------------------------------------------------
 
 cat("\n=== VIF Diagnostics (Delta + Lagged Level Block) ===\n")
-vif_log <- file("Analysis/delta_vif_diagnostics.txt", "w")
+vif_log <- file("Analysis/delta/delta_vif_diagnostics.txt", "w")
 
 for (spec in delta_specs[1:3]) {  # spot-check first 3 exposures
   for (o in outcomes[1:2]) {
@@ -584,7 +584,7 @@ for (spec in delta_specs[1:3]) {  # spot-check first 3 exposures
 }
 
 close(vif_log)
-cat("VIF diagnostics saved to Analysis/delta_vif_diagnostics.txt\n")
+cat("VIF diagnostics saved to Analysis/delta/delta_vif_diagnostics.txt\n")
 
 # 11. Combine & Export Coefficients ----------------------------------------
 
@@ -795,8 +795,8 @@ if (nrow(trans_long) > 0) {
   write.csv(
     trans_long %>% select(shock, outcome, horizon, transition,
                           estimate, std.error, p.value, N),
-    "Analysis/delta_transition_summary.csv", row.names = FALSE)
-  cat("Three-way transition summary saved to: Analysis/delta_transition_summary.csv\n")
+    "Analysis/delta/delta_transition_summary.csv", row.names = FALSE)
+  cat("Three-way transition summary saved to: Analysis/delta/delta_transition_summary.csv\n")
 
   trans_colors <- c("Onset" = "#B2182B", "Persist" = "#4DAF4A", "Exit" = "#2166AC")
   for (sh in unique(trans_long$shock)) {

@@ -16,8 +16,8 @@
 # so demographics are slow-moving compositional controls, not annual shocks.
 #
 # Outputs:
-#   Analysis/demographic_response_coefs.csv          (first stage)
-#   Analysis/demographic_mediator_decomposition.csv  (base vs +demographics)
+#   Analysis/demographic_mediators/demographic_response_coefs.csv          (first stage)
+#   Analysis/demographic_mediators/demographic_mediator_decomposition.csv  (base vs +demographics)
 #   Analysis/plots/demographic_mediators/*.png
 # ---------------------------------------------------------------------------
 
@@ -87,7 +87,7 @@ for (d in mediators) {
   }
 }
 fs_df <- bind_rows(fs_rows)
-write_csv(fs_df, "Analysis/demographic_response_coefs.csv")
+write_csv(fs_df, "Analysis/demographic_mediators/demographic_response_coefs.csv")
 cat("First-stage coefs saved (", nrow(fs_df), " rows)\n", sep = "")
 cat("  Significant shock->demographic links (p<0.05):\n")
 print(as.data.frame(fs_df %>% filter(p.value < 0.05) %>%
@@ -119,7 +119,7 @@ for (o in outcomes) {
   }
 }
 dec_df <- bind_rows(dec_rows)
-write_csv(dec_df, "Analysis/demographic_mediator_decomposition.csv")
+write_csv(dec_df, "Analysis/demographic_mediators/demographic_mediator_decomposition.csv")
 cat("Decomposition saved (", nrow(dec_df), " rows)\n", sep = "")
 print(as.data.frame(dec_df %>%
                       mutate(across(c(est_base, est_with_demog, fraction_surviving), ~signif(.x, 3))) %>%

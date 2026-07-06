@@ -7,7 +7,7 @@
 # (tdmean_F + lag1 + lag2) on the IDENTICAL humidity-available sample — isolating
 # the effect of controlling for humidity from the sample change.
 #
-# Output: Analysis/county_humidity_sensitivity.csv
+# Output: Analysis/county/county_humidity_sensitivity.csv
 # ---------------------------------------------------------------------------
 
 suppressPackageStartupMessages({ library(dplyr); library(readr); library(fixest) })
@@ -60,7 +60,7 @@ for (o in outcomes) {
     stringsAsFactors = FALSE)
 }
 res <- bind_rows(rows)
-write_csv(res, "Analysis/county_humidity_sensitivity.csv")
+write_csv(res, "Analysis/county/county_humidity_sensitivity.csv")
 cat(sprintf("Saved %d rows (humidity-available N varies by outcome).\n", nrow(res)))
 
 cat("\n=== County climate coefficients: with vs without humidity (High_CDD / High_HDD) ===\n")

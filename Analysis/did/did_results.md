@@ -2,7 +2,7 @@
 
 **Date:** 2026-05-21
 **Source script:** `Code/run_did_analysis.R`
-**Phase 0 feasibility memo:** `Analysis/did_feasibility_memo.md`
+**Phase 0 feasibility memo:** `Analysis/did/did_feasibility_memo.md`
 **Tests:** `Code/tests/test_did_analysis.R` (5/5 pass)
 
 **Outputs:**
@@ -51,7 +51,7 @@ Implements the committee's third econometric ask: a natural-experiment diff-in-d
 
 ### Note on the treated cohort size discrepancy
 
-Phase 0's `Analysis/never_exposed_event_year.csv` reported 407 county-onsets for HDD in 2013, but the 2×2 above uses only **171** treated counties. The difference: Phase 0 measures *new onsets* (transitions 0→1 from any prior year), while the 2×2 cohort uses *first event year* (counties that had never experienced High_HDD before 2013). The cleaner natural-experiment population is the first-event cohort, hence the smaller number here. The same logic explains the Drought 2012 cohort (139 first-event counties vs 139 new-onset counties — they happen to match exactly for drought 2012).
+Phase 0's `Analysis/persistent_exposure/never_exposed_event_year.csv` reported 407 county-onsets for HDD in 2013, but the 2×2 above uses only **171** treated counties. The difference: Phase 0 measures *new onsets* (transitions 0→1 from any prior year), while the 2×2 cohort uses *first event year* (counties that had never experienced High_HDD before 2013). The cleaner natural-experiment population is the first-event cohort, hence the smaller number here. The same logic explains the Drought 2012 cohort (139 first-event counties vs 139 new-onset counties — they happen to match exactly for drought 2012).
 
 ## 3. Phase 3b — Callaway-Sant'Anna event-time profiles
 

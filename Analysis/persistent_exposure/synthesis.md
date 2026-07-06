@@ -1,7 +1,7 @@
 # Continuously-Exposed Sub-Population Analysis (Persistence Extensions — Phase 2)
 
 **Script:** `Code/run_persistent_exposure.R` · **Cohort helper:** `Code/exposure_cohorts.R`
-**Outputs:** `Analysis/persistent_exposure_inventory.csv`, `…_cohort_summary.csv`, `…_contrast.csv`, `…_dynamic.csv`, `Analysis/plots/persistent_exposure/`
+**Outputs:** `Analysis/persistent_exposure/persistent_exposure_inventory.csv`, `…_cohort_summary.csv`, `…_contrast.csv`, `…_dynamic.csv`, `Analysis/plots/persistent_exposure/`
 
 ## Question
 

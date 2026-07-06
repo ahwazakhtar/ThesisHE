@@ -3,8 +3,8 @@
 **Date:** 2026-05-21
 **Source script:** `Code/run_re_robustness.R`
 **Outputs:**
-- `Analysis/random_effects_results.csv` — long: outcome × term × FE/RE estimates and per-pair Hausman test
-- `Analysis/random_effects_hausman.csv` — one row per outcome with Hausman χ², df, p-value
+- `Analysis/robustness/random_effects_results.csv` — long: outcome × term × FE/RE estimates and per-pair Hausman test
+- `Analysis/robustness/random_effects_hausman.csv` — one row per outcome with Hausman χ², df, p-value
 
 ## 1. Question
 
@@ -59,7 +59,7 @@ These two outcomes are reported as FE-only here. The substantive interpretation 
 
 ## 5. FE vs. RE coefficient comparison (selected headline shocks)
 
-Highlights from `Analysis/random_effects_results.csv` (state level, headline contemporaneous and lagged shocks):
+Highlights from `Analysis/robustness/random_effects_results.csv` (state level, headline contemporaneous and lagged shocks):
 
 | Outcome | Term | FE estimate | RE estimate | FE − RE |
 |---------|------|-------------|-------------|---------|
@@ -77,10 +77,10 @@ For Medical_Debt_Share, Medicare_PE, and Total_PC_Health_Exp, FE and RE point es
 
 - The committee question is answered: **the random-effects estimator is statistically rejected for every estimable outcome.** Two-way fixed effects is the maintained specification.
 - Where it can be fit, RE produces *broadly* similar point estimates on the headline shocks for most outcomes — the rejection is driven by precise tests on many lagged terms rather than headline-coefficient reversals. The one outcome with material FE-RE divergence (Medicaid per enrollee) underscores the importance of FE in this panel.
-- The headline state-level findings reported in `Analysis/state_analysis_summary.md` (Extreme Drought 2-year lag and Cold Shock 1-year lag effects on Medical Debt and Premiums) are *not* overturned by the RE specification — RE estimates on these terms have the same sign, and the Hausman rejection points to FE as the consistent estimator. This robustness check therefore strengthens, rather than weakens, the primary findings.
+- The headline state-level findings reported in `Analysis/state/synthesis.md` (Extreme Drought 2-year lag and Cold Shock 1-year lag effects on Medical Debt and Premiums) are *not* overturned by the RE specification — RE estimates on these terms have the same sign, and the Hausman rejection points to FE as the consistent estimator. This robustness check therefore strengthens, rather than weakens, the primary findings.
 
 ## 7. Caveats
 
-- The RE specifications use a slimmer climate block than the primary FE specs (no `is_severe_drought`, no `is_extreme_drought_peak`). The trim is for numerical stability of the RE GLS step; the FE estimates reported in this file therefore differ slightly from the headline FE coefficients in `Analysis/regression_results_summary.csv`. Treat the RE comparison as a test of *specification family*, not a coefficient replication of the primary table.
+- The RE specifications use a slimmer climate block than the primary FE specs (no `is_severe_drought`, no `is_extreme_drought_peak`). The trim is for numerical stability of the RE GLS step; the FE estimates reported in this file therefore differ slightly from the headline FE coefficients in `Analysis/state/regression_results_summary.csv`. Treat the RE comparison as a test of *specification family*, not a coefficient replication of the primary table.
 - Standard errors here are conventional (not clustered). Cluster-robust RE inference would change p-values but not the Hausman statistic, which uses the same coefficient covariance structure.
 - The two state outcomes that failed to fit RE are not in scope for this robustness layer; their FE results remain authoritative.

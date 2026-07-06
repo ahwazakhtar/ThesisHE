@@ -21,8 +21,8 @@
 #   Data/county_level_master.csv         (county-level panel)
 #
 # Outputs:
-#   Analysis/random_effects_results.csv  (long: outcome x term x FE/RE estimates)
-#   Analysis/random_effects_hausman.csv  (one row per outcome with test stat + p)
+#   Analysis/robustness/random_effects_results.csv  (long: outcome x term x FE/RE estimates)
+#   Analysis/robustness/random_effects_hausman.csv  (one row per outcome with test stat + p)
 
 suppressPackageStartupMessages({
   library(dplyr)
@@ -136,7 +136,7 @@ state_df <- read_csv("Data/analysis_ready_dataset.csv", show_col_types = FALSE, 
 ## `is_severe_drought` and `is_extreme_drought_peak` for robustness, but
 ## those collinearities make the RE GLS step numerically singular on
 ## thin-panel outcomes. The five shocks below are the ones cited as the
-## headline findings in `Analysis/state_analysis_summary.md`.
+## headline findings in `Analysis/state/synthesis.md`.
 state_climate_vars <- c(
   "is_extreme_drought", "is_extreme_drought_lag1", "is_extreme_drought_lag2",
   "is_heat_shock", "is_heat_shock_lag1", "is_heat_shock_lag2",
@@ -287,14 +287,14 @@ combined <- bind_rows(state_long, county_long) %>%
          RE_Estimate, RE_StdError, RE_PValue, FE_minus_RE,
          Hausman_ChiSq, Hausman_DF, Hausman_PValue)
 
-write_csv(combined, "Analysis/random_effects_results.csv")
-cat("\nWrote Analysis/random_effects_results.csv (",
+write_csv(combined, "Analysis/robustness/random_effects_results.csv")
+cat("\nWrote Analysis/robustness/random_effects_results.csv (",
     nrow(combined), "rows)\n", sep = "")
 
 hausman_combined <- do.call(rbind, c(state_hausman, county_hausman))
 rownames(hausman_combined) <- NULL
-write_csv(hausman_combined, "Analysis/random_effects_hausman.csv")
-cat("Wrote Analysis/random_effects_hausman.csv (",
+write_csv(hausman_combined, "Analysis/robustness/random_effects_hausman.csv")
+cat("Wrote Analysis/robustness/random_effects_hausman.csv (",
     nrow(hausman_combined), "rows)\n", sep = "")
 
 cat("\n=== Hausman summary ===\n")

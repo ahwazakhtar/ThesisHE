@@ -72,7 +72,7 @@ test_that("strain_verdict is outcome-aware", {
 
 # ---------------------------------------------------------------------------
 test_that("heterogeneity artifact is well-formed when present", {
-  f <- "Analysis/hospital_heterogeneity_coefs.csv"
+  f <- "Analysis/hospital/hospital_heterogeneity_coefs.csv"
   if (!file.exists(f)) skip("run run_hospital_heterogeneity.R first")
   co <- read.csv(f, stringsAsFactors = FALSE)
   expect_true(all(c("moderator", "level", "estimate", "shock", "outcome", "verdict") %in% names(co)))

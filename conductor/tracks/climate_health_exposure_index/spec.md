@@ -26,7 +26,7 @@ CDC/ATSDR SVI county CSVs, keyless: `https://svi.cdc.gov/Documents/Data/<YYYY>/c
 - New `Code/download_svi.R`, `Code/process_svi.R` → `Data/intermediate_svi.rds`.
 - New `Code/exposure_index.R` (sourceable helpers: person-years exposure, CHEI construction) + `Code/run_exposure_index.R` (interaction + index + stratified models).
 - New `Code/tests/test_exposure_index.R`.
-- New synthesis `Analysis/exposure_index_synthesis.md`; cross-references into `Analysis/state_analysis_summary.md`.
+- New synthesis `Analysis/exposure_index/synthesis.md`; cross-references into `Analysis/state/synthesis.md`.
 
 ## Acceptance Criteria
 - SVI county panel built and joined; vintage→year mapping documented; FIPS-join coverage reported.

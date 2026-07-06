@@ -55,7 +55,7 @@ test_that("output has one row per horizon plus a cumulative summary", {
 
 # Integration: the real coefficients file is well-formed if it has been produced.
 test_that("incidence coefficient artifact is well-formed when present", {
-  f <- "Analysis/hospital_incidence_coefs.csv"
+  f <- "Analysis/hospital/hospital_incidence_coefs.csv"
   if (!file.exists(f)) skip("run run_hospital_incidence.R first")
   co <- read.csv(f, stringsAsFactors = FALSE)
   expect_true(all(c("shock", "outcome", "term", "estimate", "p.value") %in% names(co)))

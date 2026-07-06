@@ -2,17 +2,17 @@
 #
 # Counts shock-event occurrences per county over 2011-2023 to identify
 # never-exposed counties for each shock indicator. Output supports the
-# DiD feasibility memo (Analysis/did_feasibility_memo.md) and the
+# DiD feasibility memo (Analysis/did/did_feasibility_memo.md) and the
 # downstream Phase 3a/3b natural-experiment and Callaway-Sant'Anna designs.
 #
 # Inputs:
 #   Data/county_level_master.csv
 #
 # Outputs:
-#   Analysis/never_exposed_inventory.csv      (long: one row per county x shock)
-#   Analysis/never_exposed_summary.csv        (per-shock totals: ever/never)
-#   Analysis/never_exposed_by_state.csv       (per-shock x state counts)
-#   Analysis/never_exposed_event_year.csv     (per-shock x year: new-onset counts)
+#   Analysis/persistent_exposure/never_exposed_inventory.csv      (long: one row per county x shock)
+#   Analysis/persistent_exposure/never_exposed_summary.csv        (per-shock totals: ever/never)
+#   Analysis/persistent_exposure/never_exposed_by_state.csv       (per-shock x state counts)
+#   Analysis/persistent_exposure/never_exposed_event_year.csv     (per-shock x year: new-onset counts)
 #
 # Shock indicators:
 #   Is_Extreme_Drought  (PDSI <= -4; from process_county_climate.R)
@@ -67,7 +67,7 @@ inventory_long <- df %>%
          never_exposed    = as.integer(n_events == 0 & n_years_obs > 0))
 
 dir.create("Analysis", showWarnings = FALSE)
-write_csv(inventory_long, "Analysis/never_exposed_inventory.csv")
+write_csv(inventory_long, "Analysis/persistent_exposure/never_exposed_inventory.csv")
 
 # 2. Per-shock totals --------------------------------------------------------
 summary_per_shock <- inventory_long %>%
@@ -81,7 +81,7 @@ summary_per_shock <- inventory_long %>%
             max_events         = max(n_events, na.rm = TRUE),
             .groups = "drop")
 
-write_csv(summary_per_shock, "Analysis/never_exposed_summary.csv")
+write_csv(summary_per_shock, "Analysis/persistent_exposure/never_exposed_summary.csv")
 
 cat("\n=== Per-shock summary ===\n")
 print(as.data.frame(summary_per_shock))
@@ -96,7 +96,7 @@ by_state <- inventory_long %>%
             .groups = "drop") %>%
   arrange(shock, State)
 
-write_csv(by_state, "Analysis/never_exposed_by_state.csv")
+write_csv(by_state, "Analysis/persistent_exposure/never_exposed_by_state.csv")
 
 # 4. Event-year onset density ----------------------------------------------
 # A "new onset" is a county-year where the shock transitions 0 -> 1
@@ -122,7 +122,7 @@ onsets_by_year <- onset_table %>%
             .groups = "drop") %>%
   arrange(shock, Year)
 
-write_csv(onsets_by_year, "Analysis/never_exposed_event_year.csv")
+write_csv(onsets_by_year, "Analysis/persistent_exposure/never_exposed_event_year.csv")
 
 # 5. Top candidate event years per shock (for memo) -------------------------
 top_event_years <- onsets_by_year %>%

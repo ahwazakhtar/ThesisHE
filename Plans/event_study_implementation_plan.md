@@ -69,8 +69,8 @@ For each (shock, outcome, h) where h ∈ {−2, −1, 0, +1, +2, +3}:
   - Save: `Analysis/plots/es_comparison_{shock}_{outcome}.png`
 
 ### Step 6: Export
-- `Analysis/event_study_coefs.csv` — all coefficients from both approaches
-- `Analysis/event_study_results.txt` — full Approach A model summaries (sink'd)
+- `Analysis/event_study/event_study_coefs.csv` — all coefficients from both approaches
+- `Analysis/event_study/event_study_results.txt` — full Approach A model summaries (sink'd)
 - Sample diagnostics per model: N, counties, states, year range
 
 ### Step 7: Tests
@@ -102,6 +102,6 @@ For each (shock, outcome, h) where h ∈ {−2, −1, 0, +1, +2, +3}:
 
 1. Run `Rscript Code/tests/test_run_event_study.R` — all tests pass
 2. Run `Rscript Code/run_event_study.R` — completes without error
-3. Check `Analysis/event_study_coefs.csv` — has rows for all 3 shocks × 4 outcomes × 6 horizons × 2 approaches
+3. Check `Analysis/event_study/event_study_coefs.csv` — has rows for all 3 shocks × 4 outcomes × 6 horizons × 2 approaches
 4. Check `Analysis/plots/` — es_*, lp_*, es_comparison_* PNGs exist
 5. Visual check: pre-trend coefficients (h=−2, −1) should be near zero / insignificant; post-shock coefficients should show pattern consistent with existing distributed lag results

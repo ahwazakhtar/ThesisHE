@@ -155,9 +155,9 @@ for AQI (where level effects were uniformly insignificant in Phase 2).
 
 | File | Contents |
 |------|----------|
-| `Analysis/delta_coefs.csv` | 896-row tidy coefficient table |
-| `Analysis/delta_results.txt` | Full model summaries |
-| `Analysis/delta_vif_diagnostics.txt` | VIF for delta + lagged-level blocks |
+| `Analysis/delta/delta_coefs.csv` | 896-row tidy coefficient table |
+| `Analysis/delta/delta_results.txt` | Full model summaries |
+| `Analysis/delta/delta_vif_diagnostics.txt` | VIF for delta + lagged-level blocks |
 | `Analysis/plots/delta/` | LP dynamic profile plots, contemporaneous FE plots |
 | `Analysis/plots/delta_robustness/` | Asymmetry plots, onset/exit plots |
 | `Analysis/plots/delta_exit_dynamics/` | Phase 2: post-exit LP and Shock_{t-1}*NoShock_{t} interaction plots |
@@ -198,7 +198,7 @@ a cleaner estimate of the post-exit response holding the t-1 and t shock statuse
 `Shock_{t-1}` uses the underlying continuous-or-binary indicator
 (`Is_Extreme_Drought`, `High_CDD`, `High_HDD`); `NoShock_{t}` is `1 - Shock_{t}`.
 
-Total new coefficients added to `Analysis/delta_coefs.csv`: **768** rows under approaches
+Total new coefficients added to `Analysis/delta/delta_coefs.csv`: **768** rows under approaches
 `Delta_Exit_LP` (168), `Delta_Exit_LP_RA_Cluster` (24), `Delta_Exit_Interaction` (504),
 `Delta_Exit_Interaction_RA_Cluster` (72).
 
@@ -286,8 +286,8 @@ mechanically reverse on exit — the dynamic profile differs by shock type and o
 ## Supply-Side Persistence — hospital finances scar under drought
 
 Added 2026-06-16. Track: `hospital_supply_side_20260615`. Full write-up:
-`Analysis/hospital_supply_side_synthesis.md`. Source:
-`Code/run_hospital_persistence.R` (`Analysis/hospital_persistence_coefs.csv`),
+`Analysis/hospital/synthesis.md`. Source:
+`Code/run_hospital_persistence.R` (`Analysis/hospital/hospital_persistence_coefs.csv`),
 hospital (CCN) × year panel, hospital + year FE, state-clustered. Reuses the same
 onset/exit symmetry test (`transition_symmetry.R`) and cumulative-dose machinery
 (`cumulative_dose.R`) used here on the county side.
@@ -332,7 +332,7 @@ Phase 2 estimated the Exit indicator in isolation. Phase 1 closes the symmetry q
 lead(Y, h) ~ Onset + Persist + Exit + controls | fips_code + Year,   h = 0..3
 ```
 
-All three transitions are measured against the **never-transitioned (0→0) reference**, so their coefficients are directly comparable (plotted in `Analysis/plots/delta_transition_compare/`, tabulated in `Analysis/delta_transition_summary.csv`, 252 rows). The formal symmetry test **H₀: β_Onset + β_Exit = 0** is computed from the joint clustered covariance (`Code/transition_symmetry.R`) and exported to `Analysis/delta_symmetry_test.csv` (168 tests; **28, or 16.7%, reject symmetry at p<0.05**).
+All three transitions are measured against the **never-transitioned (0→0) reference**, so their coefficients are directly comparable (plotted in `Analysis/plots/delta_transition_compare/`, tabulated in `Analysis/delta/delta_transition_summary.csv`, 252 rows). The formal symmetry test **H₀: β_Onset + β_Exit = 0** is computed from the joint clustered covariance (`Code/transition_symmetry.R`) and exported to `Analysis/delta/delta_symmetry_test.csv` (168 tests; **28, or 16.7%, reject symmetry at p<0.05**).
 
 ### Design
 
@@ -376,7 +376,7 @@ For **83% of the 168 tests symmetry is not rejected** — for most shock × outc
 
 ## Cumulative-Dose Response (Persistence Extensions — Phase 3)
 
-The transition decomposition above treats each shock year as a discrete event. Phase 3 asks a *stock* question: does the **10th** cumulative year of a shock cost more than the **1st**? We count, per county-year, the running number of shock-positive years to date (`Cum_*_Years`, monotonic non-decreasing — exposure accumulates and never resets; `Code/cumulative_dose.R`) and fit linear, quadratic, and binned (1–3 / 4–6 / 7–9 / 10+ vs 0) forms with county + year FE (`Code/run_cumulative_dose.R`). Coefficients in `Analysis/cumulative_dose_coefs.csv` (252 rows); marginal effects and the 10+-vs-1–3 contrast in `Analysis/cumulative_dose_marginal.csv` (180 rows); plots in `Analysis/plots/cumulative_dose/`.
+The transition decomposition above treats each shock year as a discrete event. Phase 3 asks a *stock* question: does the **10th** cumulative year of a shock cost more than the **1st**? We count, per county-year, the running number of shock-positive years to date (`Cum_*_Years`, monotonic non-decreasing — exposure accumulates and never resets; `Code/cumulative_dose.R`) and fit linear, quadratic, and binned (1–3 / 4–6 / 7–9 / 10+ vs 0) forms with county + year FE (`Code/run_cumulative_dose.R`). Coefficients in `Analysis/cumulative_dose/cumulative_dose_coefs.csv` (252 rows); marginal effects and the 10+-vs-1–3 contrast in `Analysis/cumulative_dose/cumulative_dose_marginal.csv` (180 rows); plots in `Analysis/plots/cumulative_dose/`.
 
 Support varies sharply by shock: counties reaching 10+ cumulative years number **661 for CDD, 432 for HDD, but only 1 for extreme drought** — so the high-dose drought estimates are driven by a single county and are not interpretable (reported for completeness, flagged below).
 
@@ -415,7 +415,7 @@ The persistence mechanism is **shock-specific**: cold damage *accumulates* (each
 ## Persistence Extensions — cross-references
 
 The Phase 1 transition decomposition and Phase 3 cumulative-dose sections above are part of the `persistence_extensions_20260521` track. Companion analyses:
-- **Continuously-exposed cohorts (Phase 2):** `Analysis/persistent_exposure_synthesis.md` — Always-vs-Never gaps; chronic-heat debt gap is the largest but a standing *level*, not a widening trajectory (complements the cumulative-dose finding that heat saturates).
-- **Demographic mediators (Phase 4):** `Analysis/state_analysis_summary.md` §7 — the shock effects survive demographic adjustment (no population-turnover confound).
-- **Threshold sensitivity (Phase 5):** `Analysis/state_analysis_summary.md` §8 — the `is_cold_shock` headline survives p90; `High_CDD`/`High_HDD` degree-day flags are cutoff-fragile.
-- **Symmetry test machinery:** `Code/transition_symmetry.R`; results in `Analysis/delta_symmetry_test.csv`.
+- **Continuously-exposed cohorts (Phase 2):** `Analysis/persistent_exposure/synthesis.md` — Always-vs-Never gaps; chronic-heat debt gap is the largest but a standing *level*, not a widening trajectory (complements the cumulative-dose finding that heat saturates).
+- **Demographic mediators (Phase 4):** `Analysis/state/synthesis.md` §7 — the shock effects survive demographic adjustment (no population-turnover confound).
+- **Threshold sensitivity (Phase 5):** `Analysis/state/synthesis.md` §8 — the `is_cold_shock` headline survives p90; `High_CDD`/`High_HDD` degree-day flags are cutoff-fragile.
+- **Symmetry test machinery:** `Code/transition_symmetry.R`; results in `Analysis/delta/delta_symmetry_test.csv`.

@@ -14,7 +14,7 @@
 #   Analysis/plots/pathways/p2_shock_outcome_correlations.png
 #   Analysis/plots/pathways/p3_delta_shock_vs_delta_outcome.png   (panel per outcome)
 #   Analysis/plots/pathways/p4_debt_share_by_income_quartile.png
-#   Analysis/pathway_descriptives_summary.md
+#   Analysis/pathways/synthesis.md
 
 suppressPackageStartupMessages({
   library(dplyr)
@@ -280,11 +280,11 @@ summary_lines <- c(
   "| AQI -> respiratory/cardiac | p1 (AQI regional concentration; wildfire spike 2023) |",
   ""
 )
-writeLines(summary_lines, "Analysis/pathway_descriptives_summary.md")
+writeLines(summary_lines, "Analysis/pathways/synthesis.md")
 
 cat("\nDone. Outputs:\n",
     "  Analysis/plots/pathways/p1_shock_prevalence_by_region.png\n",
     "  Analysis/plots/pathways/p2_shock_outcome_correlations.png\n",
     "  Analysis/plots/pathways/p3_delta_shock_vs_delta_outcome.png\n",
     "  Analysis/plots/pathways/p4_debt_share_by_income_quartile.png\n",
-    "  Analysis/pathway_descriptives_summary.md\n", sep = "")
+    "  Analysis/pathways/synthesis.md\n", sep = "")

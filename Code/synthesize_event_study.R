@@ -1,14 +1,14 @@
 # Synthesize Event Study Coefficients
 # Reads event_study_coefs.csv and produces:
-#   1. Analysis/event_study_synthesis.md   — narrative summary with key findings
-#   2. Analysis/event_study_tables.csv     — structured summary tables for thesis
+#   1. Analysis/event_study/synthesis.md   — narrative summary with key findings
+#   2. Analysis/event_study/event_study_tables.csv     — structured summary tables for thesis
 #   3. Analysis/plots/synthesis_*.png      — heatmaps and comparison charts
 
 library(dplyr)
 library(tidyr)
 library(ggplot2)
 
-coefs <- read.csv("Analysis/event_study_coefs.csv", stringsAsFactors = FALSE)
+coefs <- read.csv("Analysis/event_study/event_study_coefs.csv", stringsAsFactors = FALSE)
 plot_dir <- "Analysis/plots/synthesis"
 dir.create(plot_dir, showWarnings = FALSE, recursive = TRUE)
 
@@ -340,8 +340,8 @@ main_table <- coefs %>%
   ) %>%
   select(shock, outcome, approach, estimate_fmt, se_fmt, N)
 
-write.csv(main_table, "Analysis/event_study_tables.csv", row.names = FALSE)
-cat("Saved: Analysis/event_study_tables.csv\n")
+write.csv(main_table, "Analysis/event_study/event_study_tables.csv", row.names = FALSE)
+cat("Saved: Analysis/event_study/event_study_tables.csv\n")
 
 # Full dynamic table (all horizons, primary specs)
 full_table <- coefs %>%
@@ -354,14 +354,14 @@ full_table <- coefs %>%
   ) %>%
   select(shock, outcome, horizon, approach, estimate, std.error, p.value, sig, N)
 
-write.csv(full_table, "Analysis/event_study_full_results.csv", row.names = FALSE)
-cat("Saved: Analysis/event_study_full_results.csv\n")
+write.csv(full_table, "Analysis/event_study/event_study_full_results.csv", row.names = FALSE)
+cat("Saved: Analysis/event_study/event_study_full_results.csv\n")
 
 # ============================================================================
 # 13. GENERATE NARRATIVE SUMMARY
 # ============================================================================
 
-sink("Analysis/event_study_synthesis.md")
+sink("Analysis/event_study/synthesis.md")
 
 cat("# Dynamic Panel Impulse-Response: Synthesis of Results\n\n")
 cat("Generated:", format(Sys.time(), "%Y-%m-%d %H:%M"), "\n\n")
@@ -472,10 +472,10 @@ for (i in seq_len(nrow(compound_h0))) {
 cat("\n## Artifacts\n\n")
 cat("| File | Description |\n")
 cat("|------|-------------|\n")
-cat("| `Analysis/event_study_coefs.csv` | All 852 coefficient rows (raw) |\n")
-cat("| `Analysis/event_study_tables.csv` | Formatted h=0 results table |\n")
-cat("| `Analysis/event_study_full_results.csv` | All horizons, primary specs |\n")
-cat("| `Analysis/event_study_results.txt` | DL model summaries (text) |\n")
+cat("| `Analysis/event_study/event_study_coefs.csv` | All 852 coefficient rows (raw) |\n")
+cat("| `Analysis/event_study/event_study_tables.csv` | Formatted h=0 results table |\n")
+cat("| `Analysis/event_study/event_study_full_results.csv` | All horizons, primary specs |\n")
+cat("| `Analysis/event_study/event_study_results.txt` | DL model summaries (text) |\n")
 cat("| `Analysis/plots/synthesis_significance_heatmap.png` | h=0 significance heatmap |\n")
 cat("| `Analysis/plots/synthesis_dynamic_profiles.png` | LP impulse-response panel |\n")
 cat("| `Analysis/plots/synthesis_robustness_panel.png` | DL vs LP vs LP+History (Medical Debt Share, Silver Premium) |\n")
@@ -483,6 +483,6 @@ cat("| `Analysis/plots/synthesis_robustness_panel_extra.png` | DL vs LP vs LP+Hi
 cat("| `Analysis/plots/lp_Shock_Count_*.png` | Dose-response multi-dose plots |\n")
 
 sink()
-cat("\nSaved: Analysis/event_study_synthesis.md\n")
+cat("\nSaved: Analysis/event_study/synthesis.md\n")
 
 cat("\n=== Synthesis Script Complete ===\n")

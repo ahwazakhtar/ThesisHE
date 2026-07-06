@@ -35,7 +35,7 @@ test_that("the three transition states are mutually exclusive", {
 })
 
 test_that("persistence artifact is well-formed and flags a verdict when present", {
-  f <- "Analysis/hospital_persistence_coefs.csv"
+  f <- "Analysis/hospital/hospital_persistence_coefs.csv"
   if (!file.exists(f)) skip("run run_hospital_persistence.R first")
   co <- read.csv(f, stringsAsFactors = FALSE)
   expect_true(all(c("analysis", "shock", "outcome", "asymmetry", "p.value") %in% names(co)))

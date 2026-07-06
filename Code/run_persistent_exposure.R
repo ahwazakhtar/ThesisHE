@@ -14,10 +14,10 @@
 #   Always >= 10/13 ; Frequently 5-9/13 ; Rarely 1-4/13 ; Never 0/13.
 #
 # Outputs:
-#   Analysis/persistent_exposure_inventory.csv        (county x shock + cohort)
-#   Analysis/persistent_exposure_cohort_summary.csv   (cohort sizes, geography, means)
-#   Analysis/persistent_exposure_contrast.csv         (static cohort-vs-Never gaps)
-#   Analysis/persistent_exposure_dynamic.csv          (Always-vs-Never by year)
+#   Analysis/persistent_exposure/persistent_exposure_inventory.csv        (county x shock + cohort)
+#   Analysis/persistent_exposure/persistent_exposure_cohort_summary.csv   (cohort sizes, geography, means)
+#   Analysis/persistent_exposure/persistent_exposure_contrast.csv         (static cohort-vs-Never gaps)
+#   Analysis/persistent_exposure/persistent_exposure_dynamic.csv          (Always-vs-Never by year)
 #   Analysis/plots/persistent_exposure/*.png
 # ---------------------------------------------------------------------------
 
@@ -57,7 +57,7 @@ inventory <- df %>%
   mutate(exposure_rate = ifelse(n_years_obs > 0, n_events / n_years_obs, NA_real_),
          cohort = as.character(assign_exposure_cohort(n_events)))
 
-write_csv(inventory, "Analysis/persistent_exposure_inventory.csv")
+write_csv(inventory, "Analysis/persistent_exposure/persistent_exposure_inventory.csv")
 
 # County-level mean outcomes over the panel (for cohort descriptives)
 county_means <- df %>%
@@ -77,7 +77,7 @@ cohort_summary <- inventory %>%
   mutate(cohort = factor(cohort, levels = c("Never", "Rarely", "Frequently", "Always"))) %>%
   arrange(shock, cohort)
 
-write_csv(cohort_summary, "Analysis/persistent_exposure_cohort_summary.csv")
+write_csv(cohort_summary, "Analysis/persistent_exposure/persistent_exposure_cohort_summary.csv")
 
 cat("\n=== Cohort sizes per shock ===\n")
 print(as.data.frame(cohort_summary %>% select(shock, cohort, n_counties)))
@@ -153,11 +153,11 @@ contrast_df <- if (length(contrast_rows) > 0) bind_rows(contrast_rows) else data
 dyn_df      <- if (length(dyn_rows) > 0) bind_rows(dyn_rows) else data.frame()
 
 if (nrow(contrast_df) > 0) {
-  write_csv(contrast_df, "Analysis/persistent_exposure_contrast.csv")
+  write_csv(contrast_df, "Analysis/persistent_exposure/persistent_exposure_contrast.csv")
   cat("\nStatic cohort contrasts saved (", nrow(contrast_df), " rows)\n", sep = "")
 }
 if (nrow(dyn_df) > 0) {
-  write_csv(dyn_df, "Analysis/persistent_exposure_dynamic.csv")
+  write_csv(dyn_df, "Analysis/persistent_exposure/persistent_exposure_dynamic.csv")
   cat("Dynamic Always-vs-Never trajectories saved (", nrow(dyn_df), " rows)\n", sep = "")
 }
 

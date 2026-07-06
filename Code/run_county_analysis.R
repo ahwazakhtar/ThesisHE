@@ -10,10 +10,10 @@ library(fixest) # Primary package for FE with clustering
 
 # 1. Setup ----------------------------------------------------------------
 input_path <- "Data/county_level_master.csv"
-output_file <- "Analysis/county_analysis_results.txt"
-output_csv <- "Analysis/county_regression_coefs.csv"
-sample_diag_csv <- "Analysis/county_sample_diagnostics.csv"
-vif_output_path <- "Analysis/county_vif_diagnostics.txt"
+output_file <- "Analysis/county/county_analysis_results.txt"
+output_csv <- "Analysis/county/county_regression_coefs.csv"
+sample_diag_csv <- "Analysis/county/county_sample_diagnostics.csv"
+vif_output_path <- "Analysis/county/county_vif_diagnostics.txt"
 
 cat("Loading Data...\n")
 df <- read.csv(input_path)
@@ -477,7 +477,7 @@ if (length(vif_log_lines) > 4) {
 # -------------------------------------------------------------------------
 # 9. Markdown Report — All Specs
 # -------------------------------------------------------------------------
-md_county_path <- "Analysis/county_regression_results.md"
+md_county_path <- "Analysis/county/county_regression_results.md"
 
 model_to_md_block <- function(model, spec_label, outcome, cluster_level, weighted_label) {
   if (is.null(model)) return(paste0("**", spec_label, ":** *Not estimated.*\n\n"))

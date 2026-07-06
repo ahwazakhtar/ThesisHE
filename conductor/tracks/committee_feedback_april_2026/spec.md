@@ -15,7 +15,7 @@ This track implements the five-item feedback set delivered by the thesis committ
 - New script: `Code/download_prism_humidity.R` and `Code/process_state_humidity.R`.
 - New script: `Code/run_pathway_descriptives.R`.
 - Extensions to `Code/run_delta_analysis.R` (post-exit LP horizons).
-- New RE robustness output: `Analysis/random_effects_robustness.md` and supporting code in either an extension to `run_analysis.R` / `run_county_analysis.R` or a new `Code/run_re_robustness.R`.
+- New RE robustness output: `Analysis/robustness/synthesis.md` and supporting code in either an extension to `run_analysis.R` / `run_county_analysis.R` or a new `Code/run_re_robustness.R`.
 - Updates to `Code/create_state_master.R`, `Code/analysis_pre_processing.R`, and re-run of `Code/run_analysis.R` with humidity included.
 - New thesis text: `Text/propagation_pathways.md`.
 

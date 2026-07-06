@@ -1,0 +1,43 @@
+# Analysis Index
+
+One folder per analysis family. Each folder holds the family's outputs; where a narrative
+exists it is named **`synthesis.md`** and is the file to read first. Machine outputs
+(`*_coefs.csv`, `*_results.txt` sink dumps, inventories) sit beside it; run logs go in
+`build_logs/`. Figures live centrally in `plots/<family>/`.
+
+**Convention: never write a new output to the `Analysis/` root.** New scripts write to
+`Analysis/<family>/` (create the folder if the family is new) and add a row here.
+This index is refreshed at session end.
+
+| Folder | What it answers | Headline | Read first |
+|---|---|---|---|
+| `state/` | State-level FE models: climate shocks → premiums, debt, macro outcomes | Drought/heat effects on premiums & debt at state level; anchor for cross-level comparison | `synthesis.md` |
+| `county/` | County-level FE models (state-clustered), incl. VIF & sample diagnostics | Headline county results; drought block pruned to PDSI-only (VIF) | `synthesis.md` |
+| `descriptive/` | Descriptive stats, missingness, period comparisons (+ LaTeX tables) | Panel coverage & summary tables for the write-ups | `synthesis.md` |
+| `event_study/` | Dynamic impulse-response event studies, 5 shocks + compounds | **Drought debt scar at h=2**; shock-specific dynamics | `synthesis.md` |
+| `delta/` | Transition (entry/exit) symmetry of shock effects | Entry/exit asymmetries by shock and outcome | `synthesis.md` |
+| `cumulative_dose/` | Dose–response in cumulative shock-years | **Cold employment effects compound with cumulative exposure** | `cumulative_dose_marginal.csv` |
+| `persistent_exposure/` | Persistently-exposed vs never-exposed cohort contrasts | Persistence of harm in repeatedly-shocked counties | `synthesis.md` |
+| `exposure_index/` | CHEI exposure index × SVI interactions (EJ layer) | **Climate harm amplified in high-SVI counties** (income/employment/premiums; debt is measurement-fragile) | `synthesis.md` |
+| `threshold_sensitivity/` | Sensitivity of shock-threshold definitions | Headline results robust to threshold choice | `threshold_sensitivity_coefs.csv` |
+| `demographic_mediators/` | Do demographics confound/mediate the shock effects? | **No** — headline findings survive demographic adjustment | `demographic_mediator_decomposition.csv` |
+| `robustness/` | FE vs RE specification (Hausman) | FE required; RE rejected where unit effects correlate with shocks | `synthesis.md` |
+| `hospital/` | Hospital-year supply side: incidence, persistence, provider heterogeneity | Provider-finance responses to shocks by ownership/safety-net status | `synthesis.md` |
+| `did/` | 2012 drought-cohort DiD + frontier robustness (CS, DRDID, HonestDiD, WCB/RI) | **Income effect robust** (−$1,311, p_wcb 0.036); employment fragile; effect is event-specific ITT | `robustness/did_robustness_summary.md` |
+| `mechanism/` | Which channel carries the climate→economy effect? | **Agriculture is one channel, not the channel**; lead with Medicare morbidity + broad labor exposure | `mechanism_verdict.md` |
+| `mediation/` | Premium pass-through and premium-mediation of debt effects | **No coherent pass-through**; 92–99% of shock→debt effect survives premium adjustment | `premium_mediation_summary.md` |
+| `pathways/` | Descriptive pathway decompositions (early exploratory) | Motivating descriptives for the mechanism work | `synthesis.md` |
+| `memos/` | Cross-cutting reviews & memos (dated Feb–May 2026; some superseded by later tracks) | Econometric review, feasibility memos, interpretation guides | `econometric_review.md` |
+| `plots/` | All figures, one subfolder per family | — | — |
+| `_archive/` | Debris kept for provenance (editor tmp, LaTeX aux/log) | — | — |
+
+## Notes
+
+- Several `synthesis.md` files are **script-generated** and will be overwritten on re-run:
+  `event_study/` (by `synthesize_event_study.R`), `descriptive/` (by `run_descriptive_stats.R`).
+  Hand-edits belong in `Text/`, not in generated files.
+- `state/synthesis.md` is appended to by `run_re_robustness.R` (RE robustness section).
+- Historical documents (`conductor/tracks/*/plan.md`, `changelog.md`) still cite pre-July-2026
+  root paths (e.g. `Analysis/regression_results_summary.csv`); those records were left
+  untouched deliberately. The mapping is: old root file → `Analysis/<family>/<same name>`,
+  with each family's primary narrative renamed to `synthesis.md`.

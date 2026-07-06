@@ -5,8 +5,8 @@
 library(fixest)
 
 input_path  <- "Data/analysis_ready_dataset.csv"
-output_path <- "Analysis/regression_results_summary.csv"
-vif_output_path <- "Analysis/vif_diagnostics.txt"
+output_path <- "Analysis/state/regression_results_summary.csv"
+vif_output_path <- "Analysis/state/vif_diagnostics.txt"
 
 # Create Analysis directory if not exists
 dir.create("Analysis", showWarnings = FALSE)
@@ -137,7 +137,7 @@ if (length(results_list) > 0) {
 }
 
 # 6. Markdown Report -------------------------------------------------------
-md_output_path <- "Analysis/state_regression_results.md"
+md_output_path <- "Analysis/state/state_regression_results.md"
 
 model_to_md <- function(model, spec_name, outcome, cluster = "State", note = "") {
   if (is.null(model)) return(paste0("*Model not estimated.*\n\n"))
@@ -204,7 +204,7 @@ cat(paste0("\nMarkdown report saved to: ", md_output_path, "\n"))
 #   Extreme Drought, 2-year lag  (is_extreme_drought_lag2)
 #   Cold Shock, 1-year lag       (is_cold_shock_lag1)
 # The full-sample primary models above remain authoritative; this block is the
-# robustness check, written to Analysis/humidity_sensitivity.csv.
+# robustness check, written to Analysis/state/humidity_sensitivity.csv.
 hum_terms      <- c("tdmean_F", "tdmean_F_lag1", "tdmean_F_lag2")
 headline_terms <- c("is_extreme_drought_lag2", "is_cold_shock_lag1")
 
@@ -249,8 +249,8 @@ if (all(hum_terms %in% names(df))) {
 
 if (length(humidity_rows) > 0) {
   hum_df <- do.call(rbind, humidity_rows); rownames(hum_df) <- NULL
-  write.csv(hum_df, "Analysis/humidity_sensitivity.csv", row.names = FALSE)
-  cat("Humidity sensitivity saved to: Analysis/humidity_sensitivity.csv\n")
+  write.csv(hum_df, "Analysis/state/humidity_sensitivity.csv", row.names = FALSE)
+  cat("Humidity sensitivity saved to: Analysis/state/humidity_sensitivity.csv\n")
 } else {
   cat("Humidity sensitivity skipped (tdmean_F lags unavailable).\n")
 }

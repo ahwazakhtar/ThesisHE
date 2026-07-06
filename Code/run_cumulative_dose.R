@@ -14,8 +14,8 @@
 #   - Binned     : 1-3 / 4-6 / 7-9 / 10+   (reference = 0 cumulative years)
 #
 # Outputs:
-#   Analysis/cumulative_dose_coefs.csv      (all forms, tidy)
-#   Analysis/cumulative_dose_marginal.csv   (quadratic ME at x=1,5,10; 10+ vs 1-3)
+#   Analysis/cumulative_dose/cumulative_dose_coefs.csv      (all forms, tidy)
+#   Analysis/cumulative_dose/cumulative_dose_marginal.csv   (quadratic ME at x=1,5,10; 10+ vs 1-3)
 #   Analysis/plots/cumulative_dose/*.png
 # ---------------------------------------------------------------------------
 
@@ -144,8 +144,8 @@ marg  <- bind_rows(Filter(Negate(is.null), marg_rows))
 if (nrow(marg) > 0) marg <- marg[, c("shock", "outcome", "weighting", "quantity",
                                      "estimate", "std.error", "z.value", "p.value")]
 
-write_csv(coefs, "Analysis/cumulative_dose_coefs.csv")
-write_csv(marg,  "Analysis/cumulative_dose_marginal.csv")
+write_csv(coefs, "Analysis/cumulative_dose/cumulative_dose_coefs.csv")
+write_csv(marg,  "Analysis/cumulative_dose/cumulative_dose_marginal.csv")
 cat(sprintf("\nSaved %d coef rows, %d marginal rows.\n", nrow(coefs), nrow(marg)))
 
 cat("\n=== HDD: is year-10 marginal cost different from year-1? (Unweighted) ===\n")
