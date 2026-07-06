@@ -2,6 +2,71 @@
 
 ---
 
+## 2026-07-06 (Session 10)
+
+Infrastructure/organization session: no estimation touched. Reorganized **`Analysis/`**
+(79 loose root files → 17 family folders + `INDEX.md`) and **`Text/`** (61 loose files →
+7 document families + `INDEX.md`; repo-root `Poster/` folded in as `Text/poster/`),
+restructured **CLAUDE.md** (488 → ~130 lines) into a topic **knowledge base**
+(`conductor/knowledge/`), rewrote `conductor/workflow.md` for research (was a web-app
+template), added a **SessionStart hook** and this **session-end skill**, and changed the
+permission model (autonomous edits; approval-gated deletions). Four commits:
+`f6aff09`, `0322b76`, `5b05f3d`, `a5f8db0`; plus this session-log commit.
+
+### `Analysis/` (reorganized, `f6aff09`)
+- 79 root files filed by **generating-script provenance** into family folders (`state/`,
+  `county/`, `event_study/`, `delta/`, `cumulative_dose/`, `persistent_exposure/`,
+  `exposure_index/`, `threshold_sensitivity/`, `demographic_mediators/`, `robustness/`,
+  `hospital/`, `descriptive/`, `pathways/`, `did/`, `memos/`, `_archive/`). Primary
+  narratives renamed to `synthesis.md` (uniform, glob-able). All **152 literal path
+  strings across 55 R scripts** (+ tests, `run_pipeline.R` output contracts, living docs)
+  rewritten; verified zero stale references and every path resolves. Historical
+  `plan.md`/`changelog.md` left citing old paths by design. New `Analysis/INDEX.md` maps
+  family → headline → read-first file.
+
+### `CLAUDE.md` + `conductor/knowledge/` (restructured, `0322b76`)
+- All session-numbered lessons redistributed by topic into `data-pipeline.md`,
+  `econometrics.md`, `environment.md`, `writing-and-latex.md` — **merge-in-place from now
+  on, no more append-only session lists**. Stale fact corrected while migrating: county
+  master is **82 cols × 119,300 rows, 1990–2026** (verified; the old "53 cols × 41,376
+  rows, 2011–2023" described the pre-baseline-extension window). CLAUDE.md is now a lean
+  core: snapshot, knowledge-routing table, cross-cutting silent-corruption rules.
+- `conductor/workflow.md` rewritten for econometric research: keeps task lifecycle,
+  git notes, and the phase verification gate; adds **expectation-first estimation**
+  (write down expected sign/magnitude before the run), build-log/provenance gates, and
+  coefficient-stability checks. `GEMINI.md` reduced to a pointer at CLAUDE.md.
+
+### `.claude/` (hooks + skill + permissions)
+- **Bug: both hooks were silently dead** — `python3` resolves to the Microsoft Store stub
+  on this machine (last edit-log entry Jul 4). Fixed to `python`; both self-tested.
+- New `session_start.py` (SessionStart): injects active tracks + next open task per track
+  + git state; on first test it surfaced the freshly registered `policy_microsim_20260706`
+  track and showed 5 of 7 active tracks blocked on user verification gates.
+- New `session-end` skill owns the wrap-up protocol (this entry is its first execution);
+  extended same-day with a **housekeeping sweep** and a **`git push origin main`** step
+  (the repo was 37 commits ahead — backlog pushed). `detect_wrapup.py` keyword-matched a
+  *question about* the protocol ("will the session end protocol…") — injected instruction
+  made conditional so false positives are harmless.
+- **Permission model** (`settings.local.json`, untracked): `Edit`/`Write` allowlisted
+  (autonomous code edits per user request); `ask` rules gate all deletion commands
+  (`rm`, `Remove-Item`, `git rm`, `git clean`, …). Memory updated with the carve-out.
+
+### `Text/` + `Poster/` (reorganized, `5b05f3d`)
+- 61 root files → `drafts/`, `technical_note/`, `correspondence/`, `presentations/`,
+  `submissions/`, `reference/`, `_archive/`; `Poster/` moved wholesale to `Text/poster/`
+  (relative figure paths intact; `generate_poster_plots.R` self-references updated).
+  `Text/INDEX.md` records per-document status (nber response supersedes plain; second-
+  reviewer thread direction). References updated in 26 files incl. the NBER skill
+  (exemplar now `Text/reference/w33491.pdf`).
+- **Note:** this commit deliberately landed the previously "left uncommitted" in-flight
+  edits — technical-note `.tex`/`.html` §2.5.4–§2.5.5 additions and
+  `reviewer_response_mechanisms_email.md` — which rode along with the renames; the old
+  technical-note PDF deletion resolved as a rename to
+  `short_technical_note_empirical_framework.pdf`.
+- Gotcha: the repo `.gitignore` is a whitelist (`*` + `!*.md` etc.) — the relocated
+  `.docx` staged as a *deletion* until force-added (`git add -f`), since `.docx` isn't
+  whitelisted. Recorded in `conductor/knowledge/environment.md`.
+
 ## 2026-07-02 (Session 9)
 
 Writing-only session: built a reusable **NBER economist writing-style skill** and used it to

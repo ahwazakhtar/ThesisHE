@@ -24,6 +24,18 @@ Read this before running R scripts, installing packages, or touching `.claude/` 
   `Data/Geo/cb_2018_us_{state,county}_20m` (auto-downloaded). County zonal extraction
   ≈ 90s/year.
 
+## Git & search gotchas
+
+- **The repo `.gitignore` is a whitelist** (`*` ignored, then `!*/`, `!*.md`, `!*.r`,
+  `!*.pdf`, `!*.tex`, `!*.html`, plus `.claude` entries). Consequences: (a) new file
+  types (`.docx`, `.csv`, `.png`, `.txt`, `.log`) are silently untracked; (b) moving a
+  tracked file of a non-whitelisted type stages as a **deletion** — the new path needs
+  `git add -f` to stay tracked (bit us with a relocated `.docx`, Jul 2026).
+- **Don't trust a suspiciously empty directory search.** A ripgrep over `Code/` once
+  returned zero hits for a string present in dozens of `.R` files; re-running with an
+  explicit `glob: *.R` found all 152. Before concluding "no references exist," re-run
+  the search with an explicit glob/type filter.
+
 ## Claude Code configuration
 
 - **Hooks must invoke `python`, not `python3`** — `python3` resolves to the Microsoft

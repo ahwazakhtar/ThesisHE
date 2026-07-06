@@ -111,4 +111,6 @@ Conventions:
 - R 4.2.2 for everything except `Code/did_robustness/` (R 4.5.3) — details in
   `conductor/knowledge/environment.md`.
 - Hooks invoke `python` (not `python3` — MS Store stub trap).
+- **File deletions require the user's approval** (enforced via `permissions.ask`); prefer
+  moving debris to an `_archive/` folder. Edits/writes are pre-approved.
 - All planning documents go in `Plans/`.
