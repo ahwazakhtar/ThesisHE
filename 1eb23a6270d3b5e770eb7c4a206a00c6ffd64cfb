@@ -1,0 +1,6 @@
+VERIFICATION REPORT — audit_response Phase 3 (latent hardship).
+Tests: Rscript Code/tests/test_latent_hardship.R — 17/17 pass, re-run independently.
+Manual steps proposed: latent_hardship_summary.md (6-cell primary table, honest-null
+verdict vs the pre-registered >=2/3 bar), pre-spec ordering check (spec note 07cc834
+predates implementation 8b20df0), RUCC-proxy binding flagged.
+User confirmation: author ran the verification gates and confirmed 2026-07-13.
