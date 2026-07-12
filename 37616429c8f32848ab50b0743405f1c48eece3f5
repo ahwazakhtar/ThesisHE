@@ -1,0 +1,9 @@
+Task: audit_response_20260712 1.4 (post-dedup refresh) + re-audit response (orchestrator).
+Why: 2.2's dedup legitimately moved the RA premium panel, so the bounds script's
+reproduction gate hard-stopped — the fix was upstream regeneration (mediation re-run),
+then updating the script's hard-coded anchors with a dated pre/post note, never editing
+outputs by hand. The re-audit (committed d947b0f) validated the response and its priority
+order matches the plan; its two phrasing risks (morbidity-mediation implication; blanket
+unpriced-margin claim) are fixed in the abstracts, and its two essay-stage warnings
+(density/readability; estimator-dependence prominence) are lodged where essay drafting
+will see them. Note: 92-99% mediation fractions unchanged post-dedup (0.987/0.922).
