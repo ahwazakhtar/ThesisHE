@@ -12,6 +12,12 @@ item. Update *both* `plan.md` files when those complete.
 T1.2 (data integrity) land *before/inside* essay writing (T1.4); T1.3 (policy section) can run
 in parallel with essay drafting. Tier 2 is gated on Tier-1 drafts existing.
 
+**Coordination note (2026-07-12):** `audit_response_20260712` (from
+`Plans/project_audit_research_questions_20260712.md`) now owns the claim-architecture layer:
+master evidence table, full-scope abstract rewrite, and the Essay-3 framing memo update. Its
+evidence table is the claim source of truth for 2.4/2.5; its task 1.4 (table refresh) is
+blocked on 2.2 here; T1.3 component (a) is amended (dated note in `spec.md`).
+
 **Environment reminder:** T0.1–T0.2 and T2.2 run on **R 4.5.3**
 (`C:/Program Files/R/R-4.5.3/bin/Rscript.exe`); everything else on **R 4.2.2**. See `spec.md`.
 
@@ -124,20 +130,30 @@ in parallel with essay drafting. Tier 2 is gated on Tier-1 drafts existing.
       band.
     - **Also:** mark the `county_analysis_refinement_20260216` deferred one-row task `[x]`.
 - [ ] **2.3 Sufficient-statistics policy section (T1.3).** New
-  `Code/run_policy_sufficient_stats.R` (R 4.2.2):
-    - (a) **Unpriced margin:** premium lag responses × exposed enrollment → aggregate mispricing $.
-    - (b) **Aggregate scars:** cold-compounding job losses × dose-bin county counts; drought
-      debt scar × exposed population → national annual burden with honest error bands.
+  `Code/run_policy_sufficient_stats.R` (R 4.2.2). *(Amended 2026-07-12 — see spec note: T1.1
+  found no coherent pass-through, so premium coefficients are NOT stable sufficient statistics.)*
+    - (a) **Unpriced margin (re-based):** Medicare morbidity cost response × exposed
+      beneficiaries → the measured cost that fails to appear in premiums, bounded by the
+      `audit_response_20260712` 2.1 MDE/equivalence result. Do NOT aggregate premium lag
+      coefficients into mispricing dollars.
+    - (b) **Aggregate scars — scenario bands, not one national total:** 2012-style-event band,
+      typical recurring-shock band, direct-Medicare band; cold-compounding job losses ×
+      dose-bin county counts; drought debt scar × exposed population; honest error bands.
+      A national causal welfare total is not claimed off an event-specific coefficient.
     - (c) **Targeting:** top-decile counties' share of total harm (SVI + energy-burden weighted).
     - **Outputs:** `Analysis/policy/sufficient_stats.csv`; `Text/policy_section.md` (NBER style).
     - **Test:** `testthat` — aggregation sums reconcile to per-unit estimates; error bands
       propagate the coefficient SEs.
-- [ ] **2.4 Essay 1 full draft (T1.4).** Assemble the job-market paper from existing parts
+- [ ] **2.4 Essay 1 full draft (T1.4).** **Gated on `audit_response_20260712` 1.1–1.2** (the
+  master evidence table `Plans/master_evidence_table.md` is the claim source of truth; the
+  abstracts must already be reconciled). Assemble the job-market paper from existing parts
   (`Text/drafts/thesis_paper_abstracts.md`, `technical_note_empirical_framework`, `mechanisms_section.md`,
   reviewer responses, decks) using the `nber-economist-writing-style` skill. Lead with income,
   caveat employment, frame debt as measurement, lead mechanisms with morbidity + labor exposure.
   **Output:** `Text/essay1_incidence_draft.md` (or `.tex`).
-- [ ] **2.5 Essays 2 & 3 full drafts (T1.5).** Reuse Essay 1's data/methods sections.
+- [ ] **2.5 Essays 2 & 3 full drafts (T1.5).** Reuse Essay 1's data/methods sections. Essay 3
+  additionally **gated on the `audit_response_20260712` 1.3 framing decision** (inequality vs
+  institutional incidence — user gate; determines the essay's spine, not just its title).
   **Outputs:** `Text/essay2_persistence_draft.md`, `Text/essay3_inequality_draft.md`.
 - [ ] **Phase 2 checkpoint** — verification gate + git note.
 

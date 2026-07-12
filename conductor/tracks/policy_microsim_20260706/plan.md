@@ -9,6 +9,13 @@ memo's own bounded deliverable and proceeds regardless of the committee's answer
 (committee decision) sits between Phases 1 and 2. Phases 2→3→4 are strictly sequential
 (data gate → elasticities → engine). Phase 5 is optional (**Gate B**). Phase 6 closes out.
 
+**Audit note (2026-07-12):** `Plans/project_audit_research_questions_20260712.md` rates the
+full microsimulation low/negative alpha *before Tier-1 essay drafts exist* — consistent with
+Gate A, which stands unchanged. Phase 1 substantively overlaps `thesis_completion_20260704`
+T1.3 **as amended 2026-07-12** (no aggregation of premium coefficients; scenario bands) — if
+Phase 1 runs, it runs under that amendment. Two Phase-0 items are superseded/absorbed by
+`audit_response_20260712` (marked below); the rest of Phase 0 remains live here.
+
 ---
 
 ## Phase 0: Hygiene — reconcile documents with the evidence (days)
@@ -16,11 +23,10 @@ memo's own bounded deliverable and proceeds regardless of the committee's answer
 Items surfaced by the Session-10 retrospectives; all are prerequisites for building on top of
 the current results.
 
-- [ ] **Task: Reconcile abstracts with the log re-estimation.** `Text/thesis_paper_abstracts.md`
-      still headlines the −2,011 "cold effect strengthens in least-agricultural counties"
-      figure that dies in logs (commit `5c615dd`). Rewrite the Essay 1 abstract claim to the
-      surviving version (cold→employment *survives* in low-ag counties; magnitude claims in
-      logs/per-1,000-workers).
+- [ ] **Task: Reconcile abstracts with the log re-estimation.** *(SUPERSEDED 2026-07-12 →
+      `audit_response_20260712` task 1.2, which widens the scope to all four stale claims —
+      −2,011, premium repricing story, energy-burden income language, employment prominence.
+      Do not do here; mark `[x]` with a pointer when 1.2 lands.)*
 - [ ] **Task: Commit the untracked analysis directories.** `Analysis/did/robustness/` and
       `Analysis/mediation/` hold populated results referenced by synthesis docs but are not in
       git. Stage and commit them (respecting any large-file exclusions).
@@ -28,10 +34,10 @@ the current results.
       header still reads "written, not yet run" though results are populated in
       `Analysis/did/robustness/did_robustness_summary.md` (PCPI p=0.036; employment p=0.003).
       Headers are the provenance system — update it.
-- [ ] **Task: Verify the winsorization gap.** The negative `Hosp_Charity_Total` row (−$408M)
-      is flagged in CLAUDE.md/descriptive reports, but no winsorize call was found in `Code/`.
-      Grep the hospital pipeline; if truly absent, add winsorization where hospital-finance
-      levels regressions consume the variable (or document why it is filtered upstream).
+- [ ] **Task: Verify the winsorization gap.** *(ABSORBED 2026-07-12 →
+      `audit_response_20260712` task 2.4 — this track is paused behind Gate A and the item
+      would orphan; the audit (§8) independently flags it as a defense vulnerability. Mark
+      `[x]` with a pointer when 2.4 lands.)*
 - [ ] **Task: Fill the writing TKs.** Two `[TK]` baseline denominators in
       `Text/reviewer_response_mechanisms_nber.md` and two incomplete references
       (Audi et al. 2024–25; Doremus et al. 2022).

@@ -25,7 +25,10 @@ are the source of truth; this is orientation only:
   **amplified in high-SVI counties** (real-economy outcomes); **no coherent premium
   pass-through**; mechanisms led by Medicare morbidity + broad labor exposure.
 - Active: `thesis_completion_20260704` (umbrella — essay drafts are the critical path),
-  `mechanisms_revision_20260704`. Open user gates: Conductor verification checklists.
+  `mechanisms_revision_20260704`, `audit_response_20260712` (claim architecture — evidence
+  table + abstract reconciliation gate the essay drafts; premium-null bounding; DiD
+  falsification). Open user gates: Conductor verification checklists; Essay-3 framing
+  decision (audit_response 1.3).
 
 ---
 

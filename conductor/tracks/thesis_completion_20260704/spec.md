@@ -67,6 +67,15 @@ machinery.
   enrollment → aggregate mispricing in dollars); (b) aggregate the scars (dose-bin job losses
   and drought debt scar × exposed population → national annual burden with honest error
   bands); (c) one targeting statement (top-decile counties' share of total harm).
+  - **Amendment 2026-07-12 (audit response; methods change per workflow §4):** T1.1's verdict
+    (no coherent pass-through; premium coefficients sign-unstable across levels) invalidates
+    component (a) as written — aggregating unstable premium coefficients into mispricing
+    dollars is exactly what `Plans/project_audit_research_questions_20260712.md` lists as
+    negative alpha. Re-base (a) on the **Medicare morbidity cost response** (the measured cost
+    that fails to appear in premiums), bounded by the MDE/equivalence result from
+    `audit_response_20260712` task 2.1. Component (b) reports **scenario bands** (2012-style
+    event / typical recurring shock / direct Medicare / high-vulnerability concentration), not
+    a single national causal total, because the strongest coefficient is event-specific.
 - **T1.4 Essay 1 full draft** (job-market paper), assembled from existing parts (abstracts,
   technical note, mechanisms section, decks) in NBER style. Writing discipline: lead with
   income (robust), caveat employment (fragile), frame medical debt as measurement, lead

@@ -140,3 +140,7 @@ project's R 4.2.2). Required packages are already installed in the 4.5.3 library
   `install.packages('fwildclusterboot', repos='https://s3alfisc.r-universe.dev')`.
 - **Two-R-version workflow.** This track is the only thing on R 4.5.3; everything else stays
   on 4.2.2. Keep that boundary explicit in every script header.
+- **Falsification extensions live elsewhere (2026-07-12).** Leave-one-treated-state-out and
+  placebo-onset falsification for the 2012 2×2 are owned by `audit_response_20260712`
+  Phase 2 (`Code/did_robustness/07_falsification_suite.R`, R 4.5.3). This track stays
+  closed; the T2.2 de Chaisemartin deferral is unchanged (`06_` remains reserved for it).
