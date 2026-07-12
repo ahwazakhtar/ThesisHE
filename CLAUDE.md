@@ -25,10 +25,10 @@ are the source of truth; this is orientation only:
   **amplified in high-SVI counties** (real-economy outcomes); **no coherent premium
   pass-through**; mechanisms led by Medicare morbidity + broad labor exposure.
 - Active: `thesis_completion_20260704` (umbrella — essay drafts are the critical path),
-  `mechanisms_revision_20260704`, `audit_response_20260712` (claim architecture — evidence
-  table + abstract reconciliation gate the essay drafts; premium-null bounding; DiD
-  falsification). Open user gates: Conductor verification checklists; Essay-3 framing
-  decision (audit_response 1.3).
+  `audit_response_20260712` (claim architecture done + verified; Phase 4 parked, Phase 5
+  close-out pending). County master certified one-row-per-county-year (2026-07-13). All
+  batched verification gates closed 2026-07-13. Open user gates: Essay-3 framing decision +
+  committee memo send (audit_response 1.3).
 
 ---
 

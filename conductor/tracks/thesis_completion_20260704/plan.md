@@ -83,8 +83,12 @@ blocked on 2.2 here; T1.3 component (a) is amended (dated note in `spec.md`).
     - [ ] Complete the two references (Audi et al. 2024–25 — FEMA hurricane risk × hospital
       financial ratio; Doremus et al. 2022 — energy-burden/affordability adaptation). Need the
       author's exact citations; not guessed.
-    - [ ] Work through the open Conductor verification gates (human sign-off checklists — the
-      author must run these; they cannot be closed autonomously).
+    - [x] Work through the open Conductor verification gates (human sign-off checklists).
+      *(Author ran and confirmed all outstanding gates 2026-07-13; closed in batch —
+      checkpoints `dbdcdf2`/`c1afd75`/`1eb23a6` (audit_response Phases 1–3), `14c7bcb`
+      (mechanisms_revision Phases 1–3), `001698f` (six completed tracks). Still open by
+      design: audit_response final gate (Phase 5 pending), policy_microsim gate (behind
+      Gate A).)*
 - [ ] **Phase 1 checkpoint** — verification gate + git note.
 
 ## Phase 2: Tier 1 — write, and add stakes (~2–3 months)

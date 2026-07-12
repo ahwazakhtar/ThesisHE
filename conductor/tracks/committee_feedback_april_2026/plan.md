@@ -79,7 +79,7 @@ Sequencing: Phase 0 is the gate. Phases 1 and 4 can run in parallel with Phase 2
 
 ## Phase 6: Conductor verification & write-up
 
-- [ ] **Task: Conductor - User Manual Verification 'Committee Feedback April 2026' (Protocol in workflow.md)**
+- [x] **Task: Conductor - User Manual Verification 'Committee Feedback April 2026' (Protocol in workflow.md)** [checkpoint: 001698f] *(author sign-off 2026-07-13; track complete — Phase-4 humidity parked by design.)*
 - [x] **Task: Update upstream synthesis documents**
     - [x] `Analysis/state_analysis_summary.md`: added §6 ("Committee Feedback April 2026 — Robustness Layer") covering RE robustness, DiD cross-reference, propagation evidence, humidity caveat (Phase 4 parked), and a summary table of what changed.
     - [x] `Analysis/event_study_synthesis.md`: added Key Finding 7 (Post-Exit Dynamics) and Key Finding 8 (DiD with Never-Exposed) plus the LP-vs-DiD reconciliation table and a Cross-Reference Index.

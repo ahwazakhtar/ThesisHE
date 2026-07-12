@@ -69,7 +69,8 @@ plan links and never duplicates — the binding map is in `spec.md` → "Overlap
   the benchmark; verdicts unchanged); Row 27 integrity caveat resolved; memo bound updated;
   data-pipeline.md integrity bullet rewritten; re-audit items 6/7 phrasing fixes applied to
   the abstracts; items 5/8 lodged as essay-draft guidance in thesis_completion 2.4/2.5.)
-- [ ] **Phase 1 checkpoint** — verification gate + git note.
+- [x] **Phase 1 checkpoint** — verification gate + git note. [checkpoint: dbdcdf2] *(author
+  sign-off 2026-07-13; the 1.3 Essay-3 decision remains an external committee dependency.)*
 
 ## Phase 2: Bounding & falsification (existing machinery only)
 
@@ -108,7 +109,8 @@ plan links and never duplicates — the binding map is in `spec.md` → "Overlap
 - [x] **2.5 Fold verdicts in.** (`285ad66` — technical note .tex/.html falsification + winsorization
   notes; evidence-table Rows 1/2/8/23 verdicts; Essay-3 abstract staleness; hospital synthesis
   addendum; propagation_pathways drift banner; INDEX rows. Done by orchestrator.)
-- [ ] **Phase 2 checkpoint** — verification gate + git note.
+- [x] **Phase 2 checkpoint** — verification gate + git note. [checkpoint: c1afd75] *(author
+  sign-off 2026-07-13.)*
 
 ## Phase 3: Observed vs latent hardship (the one new regression family)
 
@@ -129,7 +131,8 @@ plan links and never duplicates — the binding map is in `spec.md` → "Overlap
 - [x] **3.3 Write-up.** (`4bda650` — honest null propagated: evidence-table Row 24 narrowed
   to the coverage/credit-visibility gradient; Essay-3 abstract + committee memo Option B
   updated; INDEX row. Summary doc: `Analysis/latent_hardship/latent_hardship_summary.md`.)
-- [ ] **Phase 3 checkpoint** — verification gate + git note.
+- [x] **Phase 3 checkpoint** — verification gate + git note. [checkpoint: 1eb23a6] *(author
+  sign-off 2026-07-13.)*
 
 ## Phase 4: PARKED — do not start before thesis_completion 2.4–2.5 drafts exist
 

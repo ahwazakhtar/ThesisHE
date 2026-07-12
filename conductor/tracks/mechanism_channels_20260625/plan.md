@@ -115,7 +115,10 @@ hospitals; agriculture as narrower event-specific contributor.
 
 - [x] **Task: Tests** 1047ec4 `Code/tests/test_mechanism_estimation.R` (5 pass): synthetic-panel interaction/subsample sign recovery, tercile split correctness, ag/medicare CSV schema integrity, Medicare 2014–2023 window. (`test_mechanism_data.R` covers the Phase-1 builds — 6 pass.)
 - [x] **Task: Conductor close-out** 1047ec4 — changelog / GEMINI / CLAUDE / tracks.md updated; conductor commit (Session 8, 2026-07-01).
-- [ ] **User Manual Verification gate.**
+- [x] **User Manual Verification gate.** [checkpoint: 001698f] *(author sign-off 2026-07-13;
+  only the optional committee-deck slide remains. Post-gate note: `run_mechanism_provider.R:57`
+  consumes the unwinsorized hospital panel — adopt the `hospital_winsorize.R` pass on next
+  touch, per `audit_response_20260712` 2.4.)*
 
 ---
 

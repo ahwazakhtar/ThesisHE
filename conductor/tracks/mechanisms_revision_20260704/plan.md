@@ -92,8 +92,8 @@ Phase 1 is the critical path and must land before Phase 2/3 numbers.
   cohort has no testable pre-period (leads come from 2013/2021/2022 cohorts). Figure shows both
   real-economy outcomes rising *post*-onset in the pooled average (the disclosed "2012 doesn't
   generalize" result) with the mild positive employment pre-trend visible. `187f84b`
-- [ ] **Phase 1 checkpoint** — verification gate + git note. *(All three Phase-1 tasks complete;
-  awaiting user sign-off. Then Phase 2.)*
+- [x] **Phase 1 checkpoint** — verification gate + git note. [checkpoint: 14c7bcb] *(author
+  sign-off 2026-07-13.)*
 
 ## Phase 2: New evidence (Week 2 — three parallel lanes)
 
@@ -124,8 +124,8 @@ Phase 1 is the critical path and must land before Phase 2/3 numbers.
   `polars`) **confirms heat→Medicare**: +$53 (h=1), +$80 (h=2, sig), close to the DL estimates. §6.1
   robustness paragraph added (Goodman-Bacon/BJS dispositioned as staggered-only). cold→debt dCDH hit a
   polars quirk (non-blocking). `7c1e8f6`
-- [ ] **Phase 2 checkpoint** — verification gate + git note. *(All four Phase-2 lanes complete;
-  awaiting user sign-off. Then Phase 3 assembly.)*
+- [x] **Phase 2 checkpoint** — verification gate + git note. [checkpoint: 14c7bcb] *(author
+  sign-off 2026-07-13.)*
 
 ## Phase 3: Assembly (Week 3)
 
@@ -150,8 +150,9 @@ Phase 1 is the critical path and must land before Phase 2/3 numbers.
   §6.6). Consistency verified (no stale level numbers / "primarily" language). Formal
   `Text/correspondence/response_to_second_reviewer.md` drafted (all 9 points). NBER-response bottom line softened.
   *(mechanism_verdict.md update optional — the response doc supersedes it.)* `b7550e7`
-- [ ] **Phase 3 checkpoint** — verification gate + git note. *(All Phase-3 tasks complete; awaiting
-  user sign-off. Track substantively done — see status.)*
+- [x] **Phase 3 checkpoint** — verification gate + git note. [checkpoint: 14c7bcb] *(author
+  sign-off 2026-07-13. Track complete; the −2,011 correction is propagated to all
+  public-facing prose via `audit_response_20260712`.)*
 
 ---
 

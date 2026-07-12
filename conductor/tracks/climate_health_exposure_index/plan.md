@@ -48,4 +48,4 @@ Sequencing: Phase 1 (SVI acquisition) is the data gate. Phase 2 builds the expos
 
 - [x] **Task: Synthesis write-up** [d842fbc]
     - [x] New `Analysis/exposure_index_synthesis.md` (EJ-amplification verdict + medical-debt caveat, composite CHEI, robustness, Lancet trend); cross-referenced as §9 in `Analysis/state_analysis_summary.md`.
-- [ ] **Task: Conductor — User Manual Verification 'Climate–Health Exposure Index' (Protocol in workflow.md)**
+- [x] **Task: Conductor — User Manual Verification 'Climate–Health Exposure Index' (Protocol in workflow.md)** [checkpoint: 001698f] *(author sign-off 2026-07-13; track complete.)*

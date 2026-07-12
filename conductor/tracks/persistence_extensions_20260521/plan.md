@@ -77,7 +77,7 @@ Sequencing: Phase 0 is the framing gate. Phase 1 builds on the existing Exit-LP 
 
 ## Phase 6: Conductor verification & write-up
 
-- [ ] **Task: Conductor --- User Manual Verification 'Persistence Extensions' (Protocol in workflow.md)**
+- [x] **Task: Conductor --- User Manual Verification 'Persistence Extensions' (Protocol in workflow.md)** [checkpoint: 001698f] *(author sign-off 2026-07-13; track complete.)*
 - [x] **Task: Propagate findings into upstream synthesis** [3200136]
     - [x] `Analysis/state_analysis_summary.md`: humidity caveat untouched; §8 threshold-sensitivity verdict; §7 demographic-mediator decomposition; §8.1 references Onset/Persist/Exit symmetry; §8.2 Persistence artifact index.
     - [x] `Analysis/event_study_synthesis.md`: added "Persistence Extensions" section summarizing the three-way transition decomposition, cumulative-dose, and continuously-exposed cohorts (with pointers to detail docs).

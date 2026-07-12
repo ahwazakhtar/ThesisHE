@@ -25,4 +25,4 @@ Track spec: `./spec.md`. Mirrors three single-level analyses to the other level 
 
 ## Phase 4: Conductor verification
 
-- [ ] **Task: Conductor — User Manual Verification 'Cross-Level Symmetry' (Protocol in workflow.md)**
+- [x] **Task: Conductor — User Manual Verification 'Cross-Level Symmetry' (Protocol in workflow.md)** [checkpoint: 001698f] *(author sign-off 2026-07-13; track complete.)*

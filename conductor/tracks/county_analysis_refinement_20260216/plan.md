@@ -68,7 +68,7 @@
     - [x] Generate synthesis tables (`event_study_tables.csv`, `event_study_full_results.csv`) and narrative summary (`event_study_synthesis.md`).
     - [x] Synthesis plots: significance heatmap, dynamic profile panel, cross-method robustness panel.
     - [x] Coefficient synthesis: contemporaneous effects, dynamic profiles, pre-trend checks, DL/LP consistency, shock-history robustness, compound decomposition, population weighting sensitivity.
-- [ ] **Task: Conductor - User Manual Verification 'Event Study & Econometric Modeling' (Protocol in workflow.md)**
+- [x] **Task: Conductor - User Manual Verification 'Event Study & Econometric Modeling' (Protocol in workflow.md)** [checkpoint: 001698f] *(author sign-off 2026-07-13.)*
 
 ## Phase 3: Year-over-Year Weather Swing Analysis
 
@@ -91,7 +91,7 @@ Motivation: explore a new source of variation — the *change* in climate exposu
     - [x] Asymmetry plots (Pos vs Neg) and onset/exit plots in `Analysis/plots/delta_robustness/`.
     - [x] Narrative synthesis with 6 key findings in `Analysis/delta_analysis_synthesis.md`.
 
-- [ ] **Task: Conductor - User Manual Verification 'Weather Swing Analysis' (Protocol in workflow.md)**
+- [x] **Task: Conductor - User Manual Verification 'Weather Swing Analysis' (Protocol in workflow.md)** [checkpoint: 001698f] *(author sign-off 2026-07-13.)*
 
 ## Optional End-Step Robustness (Defer Until Final Pass)
 

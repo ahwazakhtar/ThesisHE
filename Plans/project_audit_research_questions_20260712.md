@@ -3,7 +3,7 @@
 **Date:** July 12, 2026  
 **Scope:** Strategic, read-only audit focused on the questions supported by the data, the coherence of the dissertation direction, identification limits, and the remaining opportunities for high-value analysis. This is not primarily a code-quality audit.
 
-## Re-audit status — July 12, 2026
+## Re-audit status — repository state through July 13, 2026
 
 This document was checked again after the repository implemented a substantial response through `conductor/tracks/audit_response_20260712/`. The original diagnosis remains directionally valid, but several items below are now historical rather than open. Two original statements also require factual qualification.
 
@@ -23,26 +23,31 @@ This document was checked again after the repository implemented a substantial r
 - Hospital-accounting winsorization was implemented as a sensitivity run. Heat × safety-net uncompensated care survives; the hospital cumulative-dose margin finding does not and has been demoted; the drought dollar estimate falls materially in magnitude.
 - Premium-null MDE/equivalence bounds were added. The evidence supports a strong bound for drought, but only softer bounded-response language for heat and cold.
 - The pre-specified latent-hardship extension returned an **honest narrow/null result**: all primary cells attenuate in the predicted direction, but only drought × uninsurance survives multiplicity correction. This supports a coverage/credit-visibility gradient, not a general rurality or hospital-access mechanism.
+- The upstream county master was subsequently deduplicated and certified unique on county × year. The 2012 DiD estimates are identical; headline debt cells move less than 0.08 SE; the ACA pass-through interpretation survives. The correction materially changes some non-headline population-weighted distributed-lag coefficients, confirming that the integrity concern was real rather than cosmetic.
 
 ### What remains open after the re-audit
 
-1. **County-year uniqueness is still unresolved upstream.** The master panel still contains rating-area split duplicates, and newer analyses continue to apply downstream first-row/dedup stopgaps. This remains the highest-priority technical issue. All affected evidence-table rows remain provisional until the upstream fix, full reruns, and before/after coefficient comparison are complete.
-2. **The Essay 3 framing decision remains a user/committee gate.** The repository now presents both “Inequality” and “Institutional and distributional incidence,” but no final decision is recorded.
-3. **No complete essay manuscripts exist yet.** The improved abstracts and evidence table reduce claim risk, but writing remains the binding constraint.
-4. **Burden concentration and the bounded sufficient-statistics policy section remain unbuilt.** These are still the highest-value synthesis tasks after deduplication and drafting begin.
+1. **The Essay 3 framing decision remains a user/committee gate.** The repository now presents both “Inequality” and “Institutional and distributional incidence,” but no final decision is recorded.
+2. **No complete essay manuscripts exist yet.** The improved abstracts and evidence table reduce claim risk, but writing remains the binding constraint.
+3. **Burden concentration and the bounded sufficient-statistics policy section remain unbuilt.** These are still the highest-value synthesis tasks now that deduplication is complete.
+4. **Some non-headline downstream outputs remain stale.** Roughly 25 scripts that read the raw master will pick up the deduplication only when rerun. The evidence table certifies headline claims, but exploratory population-weighted distributed-lag estimates should not be cited until their generating scripts are refreshed. The premium mediation script should also construct its rating-area panel from `Data/premiums_county.csv`, not from the deduplicated county master.
 5. **The live abstracts remain too dense for final submission.** They are now much more accurate, but several sentences carry identification, population, estimate, robustness, mechanism, and caveat simultaneously. Accuracy has improved faster than readability.
-6. **Essay 1 still risks linking unrelated evidence as one channel.** The phrase placing Medicare morbidity “beneath the income result” can imply that heat-related utilization among Medicare beneficiaries explains the 2012 drought income loss. The datasets demonstrate parallel non-agricultural channels, not that specific mediation path. Prefer “provides separate direct evidence of a morbidity channel.”
-7. **The ACA institutional-null language should remain hazard-specific.** Drought pass-through can be tightly bounded; heat and cold cannot be declared economically equivalent to zero with the same confidence. “No coherent pass-through across hazards and geographic levels” is supported; a blanket claim that regulated pricing leaves all climate costs unpriced is stronger than the bounds warrant.
+6. **Essay 1 must continue treating Medicare morbidity as parallel evidence, not mediation.** The latest repository notes have corrected the most problematic phrasing, but the full manuscript must not imply that heat-related utilization among Medicare beneficiaries explains the 2012 drought income loss.
+7. **The ACA institutional-null language must remain hazard-specific.** Drought pass-through is tightly bounded; heat and cold cannot be declared economically equivalent to zero with the same confidence. “No coherent pass-through across hazards and geographic levels” is supported; a blanket claim that regulated pricing leaves all climate costs unpriced is stronger than the bounds warrant.
 8. **The persistence essay remains vulnerable to scale and estimator dependence.** Cold compounding rests on an unweighted binned contrast and long-run staggered estimates, while the smooth quadratic dose term is flat. This is disclosed in the revised abstract, but it should also be central in the eventual paper’s headline table and conclusion.
 
 ### Updated priority order
 
-1. Complete the upstream county-year deduplication and rerun every affected headline analysis.
-2. Refresh `Plans/master_evidence_table.md` from the post-dedup outputs.
-3. Record the Essay 3 framing decision.
-4. Draft Essay 1 before starting another empirical extension.
-5. Build the bounded burden/concentration section using scenario bands, not one national causal total.
-6. Draft Essays 2 and 3; keep adaptation/intensity extensions parked until drafts exist.
+1. Record the Essay 3 framing decision and committee approval of the dissertation architecture.
+2. Draft Essay 1 before starting another empirical extension.
+3. Refresh remaining raw-master consumers needed for manuscript tables and repoint the rating-area mediation input to its source panel.
+4. Build the bounded burden/concentration section using scenario bands, not one national causal total.
+5. Draft Essays 2 and 3; keep adaptation/intensity extensions parked until drafts exist.
+6. Complete the open human verification/checkpoint gates as manuscript tables freeze.
+
+### Updated pass-muster verdict
+
+With the county-year integrity issue resolved and the headline evidence table refreshed, the project now **clearly meets the empirical and technical standard of an applied economics dissertation**. The probability of an adverse dissertation judgment now turns mainly on presentation and architecture: whether the committee accepts the three-essay reorganization, whether each essay has a distinct economic question and estimand, and whether complete manuscripts discipline the claims. It is not yet defense-ready because those manuscripts and the Essay 3 decision remain open, but additional large-scale econometric searching is not needed to establish dissertation-level substance.
 
 The remainder of this document records the original audit. Statements superseded by this re-audit section should be read as findings about the pre-response repository state.
 
