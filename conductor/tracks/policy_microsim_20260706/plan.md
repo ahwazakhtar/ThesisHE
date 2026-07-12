@@ -23,10 +23,11 @@ Phase 1 runs, it runs under that amendment. Two Phase-0 items are superseded/abs
 Items surfaced by the Session-10 retrospectives; all are prerequisites for building on top of
 the current results.
 
-- [ ] **Task: Reconcile abstracts with the log re-estimation.** *(SUPERSEDED 2026-07-12 →
-      `audit_response_20260712` task 1.2, which widens the scope to all four stale claims —
-      −2,011, premium repricing story, energy-burden income language, employment prominence.
-      Do not do here; mark `[x]` with a pointer when 1.2 lands.)*
+- [x] **Task: Reconcile abstracts with the log re-estimation.** *(SUPERSEDED 2026-07-12 →
+      `audit_response_20260712` task 1.2, completed `d3d04f2` with widened scope: all four
+      abstracts rebuilt against `Plans/master_evidence_table.md` — −2,011 removed, premium
+      story replaced by the institutional null, energy-burden scoped to employment,
+      employment fragility explicit; conference-abstract ERRATA note added.)*
 - [ ] **Task: Commit the untracked analysis directories.** `Analysis/did/robustness/` and
       `Analysis/mediation/` hold populated results referenced by synthesis docs but are not in
       git. Stage and commit them (respecting any large-file exclusions).
@@ -34,10 +35,11 @@ the current results.
       header still reads "written, not yet run" though results are populated in
       `Analysis/did/robustness/did_robustness_summary.md` (PCPI p=0.036; employment p=0.003).
       Headers are the provenance system — update it.
-- [ ] **Task: Verify the winsorization gap.** *(ABSORBED 2026-07-12 →
-      `audit_response_20260712` task 2.4 — this track is paused behind Gate A and the item
-      would orphan; the audit (§8) independently flags it as a defense vulnerability. Mark
-      `[x]` with a pointer when 2.4 lands.)*
+- [x] **Task: Verify the winsorization gap.** *(ABSORBED 2026-07-12 →
+      `audit_response_20260712` task 2.4, completed `4576268`: winsorization was absent from
+      the hospital analysis scripts; env-gated 1%/99% within-year pass added; heat×safety-net
+      robust, cumulative-dose margin result fails, drought $ magnitude −38%. See
+      `Analysis/hospital/winsorization_verification.md`.)*
 - [ ] **Task: Fill the writing TKs.** Two `[TK]` baseline denominators in
       `Text/reviewer_response_mechanisms_nber.md` and two incomplete references
       (Audi et al. 2024–25; Doremus et al. 2022).
