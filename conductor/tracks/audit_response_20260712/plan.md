@@ -15,9 +15,9 @@ plan links and never duplicates — the binding map is in `spec.md` → "Overlap
 
 ## Phase 0: Standup & overlap reconciliation
 
-- [ ] **0.1 Stand up the track.** Write `spec.md` + `plan.md`; register in
-  `conductor/tracks.md`; add the track to the CLAUDE.md snapshot Active line. Commit.
-- [ ] **0.2 Cross-track annotations (the "care" in overlap handling).**
+- [x] **0.1 Stand up the track.** Write `spec.md` + `plan.md`; register in
+  `conductor/tracks.md`; add the track to the CLAUDE.md snapshot Active line. Commit. `dea6b2a`
+- [x] **0.2 Cross-track annotations (the "care" in overlap handling).** `dea6b2a`
     - `thesis_completion_20260704/spec.md`: dated 2026-07-12 amendment under T1.3
       (component (a) re-based off Medicare morbidity, scenario bands for (b)).
     - `thesis_completion_20260704/plan.md`: header coordination note; 2.3 amended; 2.4/2.5
