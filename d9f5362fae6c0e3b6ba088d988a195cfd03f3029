@@ -1,0 +1,9 @@
+Task: audit_response_20260712 2.1 (premium-null MDE/equivalence bounds).
+Why: a null can only headline if bounded (spec O4). The recorded expectation held
+partially (1/6 cells by MDE, 2/6 by delta*) — not a bug: SEs are small vs the $363 base
+but the morbidity benchmark band (2.5-3.9% of base) is narrower still, and heat/cold SEs
+clear it. Key subtlety for downstream prose: heat is the one hazard with a directly
+measured morbidity cost, and it is a SOFT cell — so 'we can rule out morbidity-scale
+pass-through' may only be said for drought. Evidence-table Row 8 update deferred to 2.5
+fold-in; wave-2 rewrite got the verdict directly.
+Files: Code/run_passthrough_bounds.R, tests, Analysis/mediation/passthrough_bounds_summary.md
