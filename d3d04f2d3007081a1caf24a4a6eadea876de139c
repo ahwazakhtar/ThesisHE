@@ -1,0 +1,11 @@
+Task: audit_response_20260712 1.2 (abstract reconciliation, spec O2).
+Why: the abstracts were the last public-facing surface carrying claims the analysis had
+retired (open conflict since 5c615dd). Rewrite is bound by the evidence table's permitted-
+language column; the fresh 2.1 hazard-split bound was applied conservatively (no 'rules out
+morbidity-scale pass-through' except drought). Author attention flagged: (i) Essay 1
+drought->debt sentence is honest but clunky — consider leaning on the Essay-2 scar in the
+full draft; (ii) the tight drought-specific bound (1.7% of premium) is buried by the
+conservative 7-8% envelope — surface it in the essay body; (iii) errata decision (notify
+conference vs correct in slides/paper) is the author's.
+One known staleness queued for 2.5: Essay 3 'pending verification' of hospital levels —
+2.4 landed after this rewrite; heat x safety-net survived winsorization (p=.013).
