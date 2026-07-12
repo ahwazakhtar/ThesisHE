@@ -1,0 +1,10 @@
+Task: audit_response_20260712 2.2+2.3 (falsification suite, spec O5).
+Why: treated counties are geographically concentrated (17 states; NE holds 17 treated
+counties, GA 45) — leave-one-state-out is the committee's most likely attack. Verdict:
+the 2012 income result is not driven by any single state; the only fragility surfaced
+is analytic-p (CO/NE drops -> p 0.075/0.057), which the wild-bootstrap inference layer
+already handles — point estimates never leave the WCB CI. Placebo-onset distribution
+puts the real estimate at the 0.9th percentile (two-sided). Fold into evidence-table
+Row 1 + technical note 2.5.6 at task 2.5.
+Files: Code/did_robustness/07_falsification_suite.R, Code/tests/test_falsification_suite.R,
+Analysis/did/robustness/falsification_{loo_state,placebo_onsets}.csv + summary + log
