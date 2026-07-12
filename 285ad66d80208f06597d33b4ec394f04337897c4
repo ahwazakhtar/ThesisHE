@@ -1,0 +1,8 @@
+Task: audit_response_20260712 2.5 (fold-in — done by orchestrator, verification-critical).
+Why: Phase-2 results change permitted language in three directions at once (falsification
+strengthens Row 1; the MDE bound is weaker than expected for heat/cold so Row 8's language
+got MORE conservative; winsorization kills a hospital persistence claim). Folding these in
+one pass keeps the evidence table, technical note, abstracts, and synthesis docs mutually
+consistent. hospital_supply_side_20260615 owners: synthesis addendum flags the demoted
+cumulative-dose margin result; mechanism_channels owners: run_mechanism_provider.R:57
+still consumes the unwinsorized panel (flagged, out of audit scope).
