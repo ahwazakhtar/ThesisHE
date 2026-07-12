@@ -95,9 +95,13 @@ shows its *largest* measured response where people are least vulnerable and best
 opposite of where hardship should concentrate — may be the project's most original contribution,
 more so than any single climate coefficient. *Cost:* it asks the premium null and the
 debt-measurement results, currently framed as secondary ledgers and caveats, to carry an essay's
-spine; and it makes the planned observed-vs-latent-hardship analysis (does the measured debt
-response shrink where coverage and credit visibility are weakest?) load-bearing rather than
-optional — and that analysis is specified but not yet estimated.
+spine. The pre-registered observed-vs-latent-hardship analysis (does the measured debt response
+shrink where coverage and credit visibility are weakest?) has now been estimated, and the honest
+answer is mixed: every cell moves in the predicted direction, but under the pre-registered
+significance bar only the drought × uninsurance gradient is robust — rurality and
+hospital-access moderators are underpowered. Option B's spine would therefore rest on the
+premium institutional null and the established uninsurance/scale-flip evidence, not on a broad
+new access gradient.
 
 **The audit recommends Option B.** I record that as a recommendation, not a decision: the choice is
 the committee's and mine to make together, not the audit's.

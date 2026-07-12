@@ -29,6 +29,7 @@ This index is refreshed at session end.
 | `mediation/` | Premium pass-through and premium-mediation of debt effects | **No coherent pass-through**; 92–99% of shock→debt effect survives premium adjustment | `premium_mediation_summary.md` |
 | `mediation/` (bounds) | MDE/TOST equivalence bounds on the premium null (audit_response 2.1) | **Hazard-split**: drought rules out >43–68% of full morbidity-cost pass-through; heat/cold bounded ≈5–8% of mean premium, not tightly | `passthrough_bounds_summary.md` |
 | `hospital/` (winsorization) | Winsorization verification of hospital accounting levels (audit_response 2.4) | Heat×safety-net **robust** (p=.013); cumulative-dose margin **fails** (demoted); drought $ incidence −$3.88M winsorized | `winsorization_verification.md` |
+| `latent_hardship/` | Pre-registered observed-vs-latent hardship gradients (audit_response 3.1–3.2) | **Honest null** vs the ≥2/3 bar: all cells attenuate as predicted but only drought×uninsurance robust (q=.012); claim coverage/credit-visibility only | `latent_hardship_summary.md` |
 | `pathways/` | Descriptive pathway decompositions (early exploratory) | Motivating descriptives for the mechanism work | `synthesis.md` |
 | `memos/` | Cross-cutting reviews & memos (dated Feb–May 2026; some superseded by later tracks) | Econometric review, feasibility memos, interpretation guides | `econometric_review.md` |
 | `plots/` | All figures, one subfolder per family | — | — |
