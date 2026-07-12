@@ -55,9 +55,13 @@ plan links and never duplicates — the binding map is in `spec.md` → "Overlap
   prominence next to the robust income result; keep drought income + Medicare morbidity as
   leads. `Text/submissions/conference_abstract.*`: **errata note + user decision only** —
   never silently rewrite a submitted document.
-- [~] **1.3 Essay-3 framing decision + memo update (USER GATE).** *(Memo updated `e924861` —
-  both framings boxed, audit recommendation labeled, retracted claims reconciled. REMAINING:
-  author reviews/sends memo; decision recorded here + thesis_completion. Gate OPEN.)* Update
+- [x] **1.3 Essay-3 framing decision + memo update (USER GATE — RESOLVED 2026-07-13).**
+  *(Memo updated `e924861`. Decisions recorded: (1) the committee approved the three-essay
+  structure — the structural Ch.3 is not required; (2) Essay-3 framing settled by the
+  author's `Plans/dissertation_writing_and_framing_plan_20260712.md` §8 — a HYBRID of the
+  two boxed options: "distribution and observability as the two halves of one economic
+  question," consistent with the latent-hardship honest-null constraints. Sending the memo
+  is now optional; thesis_completion 2.5's Essay-3 gate is lifted.)* Update
   `Text/correspondence/committee_memo_ch3_structure.md` (drafted, unsent) to present both
   framings: "Unequal Weather (inequality)" vs "Institutional & distributional incidence."
   Author decides (audit question 5) and sends; record the decision here and in

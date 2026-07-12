@@ -27,8 +27,10 @@ are the source of truth; this is orientation only:
 - Active: `thesis_completion_20260704` (umbrella — essay drafts are the critical path),
   `audit_response_20260712` (claim architecture done + verified; Phase 4 parked, Phase 5
   close-out pending). County master certified one-row-per-county-year (2026-07-13). All
-  batched verification gates closed 2026-07-13. Open user gates: Essay-3 framing decision +
-  committee memo send (audit_response 1.3).
+  verification gates closed and **the committee approved the three-essay structure**
+  (2026-07-13); Essay-3 framing = hybrid distribution+observability per
+  `Plans/dissertation_writing_and_framing_plan_20260712.md`. No open user gates — essay
+  drafting (thesis_completion 2.4) is the critical path.
 
 ---
 

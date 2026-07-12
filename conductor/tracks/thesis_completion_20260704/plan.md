@@ -67,8 +67,11 @@ blocked on 2.2 here; T1.3 component (a) is amended (dated note in `spec.md`).
   `Text/correspondence/committee_memo_ch3_structure.md`: boxed decision question (does the three-essay structure
   replace the structural Ch.3?), the proposal→now evolution, the sufficient-statistics section
   offered as the bounded policy substitute, plus disclosures (hazard demotion; unestimated
-  premium→debt mediation). **Drafted; author must send. The DECISION itself remains an open
-  user-gate — T1.3 is the hedge regardless of the answer.** `2a2e826`
+  premium→debt mediation). `2a2e826` **RESOLVED 2026-07-13: the committee approved the
+  three-essay structure; the structural Ch.3 is not required.** T1.3 (sufficient-statistics
+  policy section) proceeds as the policy content per the author's writing plan §9
+  (`Plans/dissertation_writing_and_framing_plan_20260712.md`); memo question 2 (Essay-3
+  framing) is settled by that plan's §8 hybrid framing — sending the memo is now optional.
 - [~] **1.5 Housekeeping (T0.5).**
     - [x] Deleted 25 stray `*.tmp.*` editor swap artifacts across `Code/`, `Text/`, `conductor/`
       (all untracked; verified clean).
@@ -164,9 +167,9 @@ blocked on 2.2 here; T1.3 component (a) is amended (dated note in `spec.md`).
   mediating the 2012 income result; (iii) keep the ACA null hazard-specific (drought tightly
   bounded at >50–79% of the morbidity benchmark; heat/cold only loosely).
   **Output:** `Text/essay1_incidence_draft.md` (or `.tex`).
-- [ ] **2.5 Essays 2 & 3 full drafts (T1.5).** Reuse Essay 1's data/methods sections. Essay 3
-  additionally **gated on the `audit_response_20260712` 1.3 framing decision** (inequality vs
-  institutional incidence — user gate; determines the essay's spine, not just its title).
+- [ ] **2.5 Essays 2 & 3 full drafts (T1.5).** Reuse Essay 1's data/methods sections. Essay 3's
+  framing gate is **lifted (2026-07-13)**: hybrid "distribution + observability" spine per
+  `Plans/dissertation_writing_and_framing_plan_20260712.md` §8 (audit_response 1.3).
   **Re-audit guidance (Jul 12) for Essay 2:** the cold-compounding estimator dependence
   (binned contrast + CS DiD vs the flat smooth quadratic) must be central in the headline
   table and conclusion, not only disclosed in the abstract.

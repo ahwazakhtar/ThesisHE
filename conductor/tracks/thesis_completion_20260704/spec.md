@@ -25,7 +25,9 @@ machinery.
 - **Essay 1 (Incidence) is the job-market paper** — it carries the natural experiment, the
   frontier robustness, and the reviewer-tested mechanisms narrative.
 - **The Incidence / Persistence / Inequality structure replaces the proposed structural
-  Chapter 3** — pending explicit committee sign-off (Task 1.4 forces that conversation).
+  Chapter 3** — **CONFIRMED 2026-07-13: the committee approved the three-essay structure**
+  (recorded at task 1.4; drafting proceeds per
+  `Plans/dissertation_writing_and_framing_plan_20260712.md`).
 
 ## Objectives (tiered exactly as the roadmap)
 

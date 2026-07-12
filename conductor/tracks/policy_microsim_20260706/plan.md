@@ -11,7 +11,13 @@ memo's own bounded deliverable and proceeds regardless of the committee's answer
 
 **Audit note (2026-07-12):** `Plans/project_audit_research_questions_20260712.md` rates the
 full microsimulation low/negative alpha *before Tier-1 essay drafts exist* — consistent with
-Gate A, which stands unchanged. Phase 1 substantively overlaps `thesis_completion_20260704`
+Gate A, which stands unchanged.
+
+**GATE A RESOLVED (2026-07-13):** the committee approved the three-essay structure and no
+longer requires the structural chapter. Phases 2–5 are **not needed for completion** and stay
+parked; the bounded policy content is delivered by `thesis_completion_20260704` 2.3 (as
+amended) per the author's writing plan §9. Revive only on an explicit committee/job-market
+request. Phase 1 substantively overlaps `thesis_completion_20260704`
 T1.3 **as amended 2026-07-12** (no aggregation of premium coefficients; scenario bands) — if
 Phase 1 runs, it runs under that amendment. Two Phase-0 items are superseded/absorbed by
 `audit_response_20260712` (marked below); the rest of Phase 0 remains live here.
