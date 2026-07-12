@@ -31,7 +31,7 @@ plan links and never duplicates — the binding map is in `spec.md` → "Overlap
 
 ## Phase 1: Claim architecture (audit priorities 2–5)
 
-- [ ] **1.1 Master evidence table** → `Plans/master_evidence_table.md`. One row per
+- [~] **1.1 Master evidence table** → `Plans/master_evidence_table.md`. One row per
   abstract-level claim; columns: claim, tier (headline / confirmatory / mechanism-supporting
   / exploratory), estimand, population/sample, years, unit, identifying variation, inference
   (analytic + WCB/RI where run), robustness status, **permitted language**, source
@@ -68,7 +68,7 @@ plan links and never duplicates — the binding map is in `spec.md` → "Overlap
 
 ## Phase 2: Bounding & falsification (existing machinery only)
 
-- [ ] **2.1 MDE / equivalence bounds on premium pass-through** (R 4.2.2,
+- [~] **2.1 MDE / equivalence bounds on premium pass-through** (R 4.2.2,
   `Code/run_passthrough_bounds.R`, reusing `run_premium_mediation.R` data prep). On the
   PRIMARY rating-area×year spec (RA + State^Year FE, pop-wtd, state-clustered): 80%-power
   MDE from the estimated SEs + TOST equivalence bounds, benchmarked against the premium
@@ -79,14 +79,14 @@ plan links and never duplicates — the binding map is in `spec.md` → "Overlap
   benchmark, licensing "we can rule out pass-through larger than X%"; if not, the softer
   bounded-response language applies (spec O4 contingency). **Test:** `testthat` — MDE
   arithmetic on synthetic SEs; TOST identity; benchmark mapping units.
-- [ ] **2.2 Leave-one-treated-state-out, 2012 drought** (R 4.5.3,
+- [~] **2.2 Leave-one-treated-state-out, 2012 drought** (R 4.5.3,
   `Code/did_robustness/07_falsification_suite.R` part A; `06_` reserved for T2.2
   de Chaisemartin). Drop each of the 17 treated states in turn; re-estimate the 2×2 ATT for
   PCPI_Real (primary) and Civilian_Employed (secondary); report the ATT envelope + any
   significance flips. **Expectation:** no single state moves income outside the WCB CI
   [−2,911, −138]; treated counties are geographically concentrated, so one or two large
   states (plausibly the Corn Belt core) will dominate magnitude — report honestly either way.
-- [ ] **2.3 Placebo onset years** (same script, part B). Pseudo-onset years among
+- [~] **2.3 Placebo onset years** (same script, part B). Pseudo-onset years among
   never-exposed controls, cohort size matched to the 139-county 2012 cohort; exact design
   pre-specified in the script header *before* running. **Expectation:** placebo ATT
   distribution centered on 0 with the real 2012 estimate in the tail (complements the
@@ -94,7 +94,7 @@ plan links and never duplicates — the binding map is in `spec.md` → "Overlap
   is already covered by the flat 1990–2011 BEA pre-trend — evidence-table row, not a rerun).
   **Test:** extend `Code/tests/test_did_robustness.R` style — placebo assignment respects
   never-exposed status; LOO reruns reproduce the full-sample ATT when no state is dropped.
-- [ ] **2.4 Verify hospital winsorization/filtering** (absorbed from `policy_microsim`
+- [~] **2.4 Verify hospital winsorization/filtering** (absorbed from `policy_microsim`
   Phase 0; audit §8). Grep the hospital pipeline for winsorize/trim on `Hosp_*` levels (the
   −$408M charity-care reversal is the known offender); if absent, add it where levels
   regressions consume the variables or document the upstream filter; note survivorship and
@@ -106,7 +106,7 @@ plan links and never duplicates — the binding map is in `spec.md` → "Overlap
 
 ## Phase 3: Observed vs latent hardship (the one new regression family)
 
-- [ ] **3.1 Pre-specification (dated spec.md note BEFORE any code).** Question: does the
+- [~] **3.1 Pre-specification (dated spec.md note BEFORE any code).** Question: does the
   measured shock→medical-debt response shrink where hardship is least observable?
   Moderators (primary): SAHIE uninsurance (interaction already exists —
   `mechanisms_revision_20260704`), rurality (RUCC), hospital density / safety-net presence

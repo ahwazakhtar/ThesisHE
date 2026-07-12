@@ -119,6 +119,42 @@ alpha") are **parked in Phase 4**, gated on Tier-1 essay drafts existing.
   with sharpened q-values; write-up converts the debt-measurement caveat into a positive
   finding (or reports the honest null); INDEX row added.
 
+## Phase-3 pre-specification (task 3.1 — dated 2026-07-12, written BEFORE any Phase-3 code)
+
+**Question.** Does the measured shock→medical-debt response *shrink* where hardship is least
+observable to financial institutions? (If yes, credit-bureau debt understates harm where
+access/visibility is weakest — the audit's "latent hardship" contribution.)
+
+**Frozen design (no deviations without a dated amendment here):**
+
+- **Data:** county master. If run before `thesis_completion` 2.2 lands, apply the
+  `run_premium_mediation.R` dedup stopgap and label outputs "pre-dedup"; refresh after 2.2.
+- **Outcomes:** PRIMARY `Medical_Debt_Share`; SECONDARY `Medical_Debt_Median_2023`.
+- **Shock cells (only these two — the established debt-relevant cells):** cold (High_HDD)
+  at lag 1; extreme drought at lag 2. No other hazard×lag cells.
+- **Moderators, z-scored at baseline (pre-treatment, time-invariant) to avoid bad controls —**
+  PRIMARY (3): SAHIE uninsured rate (baseline-window mean), rurality (RUCC), hospital
+  access (county hospital presence/density or safety-net share from the NASHP panel —
+  implementer binds the exact variable and documents the choice in the script header).
+  SECONDARY (2): baseline median household income; SVI.
+- **Specification:** the project's established county debt spec (`run_county_analysis.R`
+  conventions: `fixest::feols`, county + year FE, state-clustered SEs) + shock×moderator
+  interaction. Population weighting per the established debt spec; report unweighted as
+  robustness only.
+- **Expected signs (recorded now):** where uninsurance/rurality is higher and hospital
+  access lower, the measured debt response attenuates toward zero — interaction opposite in
+  sign to the shock main effect. The existing SAHIE interaction
+  (`mechanisms_revision_20260704`) already shows this for uninsurance.
+- **Multiplicity:** primary family = 2 shocks × 3 primary moderators × 1 primary outcome =
+  6 cells; sharpened q-values over the full 20-cell grid (2×5×2) via the
+  `run_mechanism_multipletesting.R` machinery.
+- **Decision rule (binding for permitted language):** "positive contribution" framing only
+  if ≥2 of 3 primary moderators show attenuation at q<0.10 with consistent signs for at
+  least one shock cell; otherwise report the honest null and debt stays a caveat. Claim
+  tier is capped at **mechanism-supporting** regardless.
+- **Anything further** (more moderators, lags, hazards, nonlinearities) goes to Phase 4
+  parking, not into this analysis.
+
 ## Open questions for the author (audit questions 2–5; question 1 is answered — memo unsent)
 
 1. Defense deadline, and is Essay 1 the job-market paper? (thesis_completion assumes
