@@ -1,0 +1,13 @@
+Task: audit_response_20260712 Phase 0 (0.1 standup + 0.2 cross-track annotations).
+
+Why: the Jul-12 external audit was fact-checked in-session (4/4 load-bearing claims verified,
+one overstatement corrected: pooled e=0 income −$1,050 p=0.002 is significant even though the
+long-run pooled average is null; HonestDiD attaches to the pooled event study only, not the
+2012 2x2). Turning it into a track prevents the audit's fixes from drifting the way the
+5c615dd log re-estimation did (killed a claim 8 days ago that the abstracts still headline).
+
+Files: new conductor/tracks/audit_response_20260712/{spec,plan}.md; annotations in
+tracks.md, thesis_completion (plan+spec: T1.3 amendment, 2.4/2.5 gates), policy_microsim
+(2 Phase-0 items superseded/absorbed), did_frontier (forward pointer), CLAUDE.md snapshot.
+
+Overlap rule encoded in spec.md 'Overlap map': link, never duplicate.
