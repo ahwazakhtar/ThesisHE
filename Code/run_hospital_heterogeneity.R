@@ -25,11 +25,13 @@ suppressPackageStartupMessages({
   library(fixest)
   library(ggplot2)
 })
-source("Code/cumulative_dose.R")  # lincom()
+source("Code/cumulative_dose.R")       # lincom()
+source("Code/hospital_winsorize.R")    # winsorize_within_year(), HOSP_WINSORIZE gate (task 2.4)
 
+.sfx <- hosp_winsor_suffix()           # "_winsorized" iff HOSP_WINSORIZE=1, else ""
 PANEL_RDS <- "Data/intermediate_hospital_panel.rds"
-OUT_COEFS <- "Analysis/hospital/hospital_heterogeneity_coefs.csv"
-OUT_RES   <- "Analysis/hospital/hospital_heterogeneity_results.txt"
+OUT_COEFS <- sprintf("Analysis/hospital/hospital_heterogeneity_coefs%s.csv", .sfx)
+OUT_RES   <- sprintf("Analysis/hospital/hospital_heterogeneity_results%s.txt", .sfx)
 PLOT_DIR  <- "Analysis/plots/hospital"
 
 SHOCKS   <- c("Is_Extreme_Drought", "High_CDD", "High_HDD")
@@ -120,6 +122,13 @@ if (sys.nframe() == 0L) {
   binary_mods <- c("SafetyNet", "MedicaidExpansion", "HighConcentration")
   binary_mods <- binary_mods[binary_mods %in% names(df)]
 
+  # Task 2.4 (audit Sec.8): winsorize LHS within year at 1/99 when HOSP_WINSORIZE=1.
+  # Only the outcome columns are touched; HHI / SafetyNet / shocks are untouched.
+  if (hosp_winsor_active()) {
+    cat("HOSP_WINSORIZE=1 -> winsorizing outcomes within year at 1st/99th pct.\n")
+    df <- winsorize_within_year(df, outcomes, p = 0.01)
+  }
+
   rows <- list(); inter_rows <- list()
   sink(OUT_RES)
   cat("=== Hospital Heterogeneity: Shock x Moderator (hospital + year FE) ===\n")
@@ -190,8 +199,9 @@ if (sys.nframe() == 0L) {
   cat("Saved coefficients to:", OUT_COEFS, "(", nrow(coefs), "rows )\n")
 
   # --- Plots: marginal shock effect by moderator level --------------------
+  # Skipped in winsorized mode so raw PNGs under PLOT_DIR are never overwritten.
   cat("Generating heterogeneity plots...\n")
-  for (M in unique(coefs$moderator)) {
+  if (!hosp_winsor_active()) for (M in unique(coefs$moderator)) {
     for (o in outcomes) {
       sub <- coefs %>% filter(moderator == M, outcome == o)
       if (nrow(sub) == 0) next

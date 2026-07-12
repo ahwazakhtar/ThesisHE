@@ -21,10 +21,12 @@ suppressPackageStartupMessages({
 })
 source("Code/transition_symmetry.R")  # transition_symmetry_test()
 source("Code/cumulative_dose.R")      # add_cumulative_shock_years(), lincom()
+source("Code/hospital_winsorize.R")   # winsorize_within_year(), HOSP_WINSORIZE gate (task 2.4)
 
+.sfx <- hosp_winsor_suffix()          # "_winsorized" iff HOSP_WINSORIZE=1, else ""
 PANEL_RDS   <- "Data/intermediate_hospital_panel.rds"
-OUT_COEFS   <- "Analysis/hospital/hospital_persistence_coefs.csv"
-OUT_RESULTS <- "Analysis/hospital/hospital_persistence_results.txt"
+OUT_COEFS   <- sprintf("Analysis/hospital/hospital_persistence_coefs%s.csv", .sfx)
+OUT_RESULTS <- sprintf("Analysis/hospital/hospital_persistence_results%s.txt", .sfx)
 
 OUTCOMES <- c("Hosp_UncompCare_PctNPR", "Hosp_OperatingMargin")
 SHOCKS   <- c("Is_Extreme_Drought", "High_CDD", "High_HDD")
@@ -57,6 +59,14 @@ if (sys.nframe() == 0L) {
 
   shocks   <- SHOCKS[SHOCKS %in% names(df)]
   outcomes <- OUTCOMES[OUTCOMES %in% names(df)]
+
+  # Task 2.4 (audit Sec.8): winsorize LHS within year at 1/99 when HOSP_WINSORIZE=1.
+  # Applied to the base outcomes BEFORE forward-leads are built, so both the
+  # symmetry leads and the cumulative-dose regressions use winsorized outcomes.
+  if (hosp_winsor_active()) {
+    cat("HOSP_WINSORIZE=1 -> winsorizing outcomes within year at 1st/99th pct.\n")
+    df <- winsorize_within_year(df, outcomes, p = 0.01)
+  }
 
   # Outcome leads for horizon h
   for (o in outcomes) {

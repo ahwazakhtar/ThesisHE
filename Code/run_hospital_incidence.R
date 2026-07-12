@@ -19,11 +19,13 @@ suppressPackageStartupMessages({
   library(fixest)
   library(ggplot2)
 })
-source("Code/cumulative_dose.R")  # lincom()
+source("Code/cumulative_dose.R")       # lincom()
+source("Code/hospital_winsorize.R")    # winsorize_within_year(), HOSP_WINSORIZE gate (task 2.4)
 
+.sfx <- hosp_winsor_suffix()           # "_winsorized" iff HOSP_WINSORIZE=1, else ""
 PANEL_RDS    <- "Data/intermediate_hospital_panel.rds"
-OUT_COEFS    <- "Analysis/hospital/hospital_incidence_coefs.csv"
-OUT_RESULTS  <- "Analysis/hospital/hospital_incidence_results.txt"
+OUT_COEFS    <- sprintf("Analysis/hospital/hospital_incidence_coefs%s.csv", .sfx)
+OUT_RESULTS  <- sprintf("Analysis/hospital/hospital_incidence_results%s.txt", .sfx)
 PLOT_DIR     <- "Analysis/plots/hospital"
 
 SHOCKS   <- c("Is_Extreme_Drought", "High_CDD", "High_HDD", "High_AQI_Max")
@@ -90,6 +92,12 @@ if (sys.nframe() == 0L) {
   cat("Shocks:", paste(shocks, collapse = ", "), "\n")
   cat("Outcomes:", paste(outcomes, collapse = ", "), "\n")
 
+  # Task 2.4 (audit Sec.8): winsorize LHS within year at 1/99 when HOSP_WINSORIZE=1.
+  if (hosp_winsor_active()) {
+    cat("HOSP_WINSORIZE=1 -> winsorizing outcomes within year at 1st/99th pct.\n")
+    df <- winsorize_within_year(df, outcomes, p = 0.01)
+  }
+
   all_rows <- list()
   sink(OUT_RESULTS)
   cat("=== Hospital Incidence: distributed-lag IRF (hospital + year FE) ===\n\n")
@@ -109,10 +117,11 @@ if (sys.nframe() == 0L) {
   write.csv(coefs, OUT_COEFS, row.names = FALSE)
   cat("Saved coefficients to:", OUT_COEFS, "(", nrow(coefs), "rows )\n")
 
-  # IRF plots (per-horizon, excluding the cumulative summary row)
+  # IRF plots (per-horizon, excluding the cumulative summary row).
+  # Skipped in winsorized mode so raw PNGs under PLOT_DIR are never overwritten.
   cat("Generating plots...\n")
   irf <- coefs %>% filter(horizon < 90)
-  for (s in shocks) {
+  if (!hosp_winsor_active()) for (s in shocks) {
     for (o in outcomes) {
       sub <- irf %>% filter(shock == s, outcome == o)
       if (nrow(sub) == 0) next
