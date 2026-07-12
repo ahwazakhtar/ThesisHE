@@ -3,6 +3,14 @@
 **Date:** 2026-05-21
 **Purpose:** Background section supporting the empirical claims in the state and county analyses. Each pathway below names the proposed causal mechanism, cites peer-reviewed evidence supporting the direction and timing, and links to the empirical channel through which the effect is identified in our panel.
 
+> **⚠ Claim-architecture notice (2026-07-12).** This document predates the July 2026 claim
+> reconciliation and carries superseded statements: the "2012 **Midwest** drought" label
+> (treated cohort is Georgia/Mountain West/Plains), the shock→**premium** headline (the
+> completed mediation finds no coherent ACA pass-through), and the −2,053 employment ATT
+> cited without its fragility caveats. The peer-reviewed pathway citations remain valid as
+> literature mapping, but before quoting any *empirical* claim from this file, check it
+> against the binding `Plans/master_evidence_table.md`.
+
 The committee asked that the propagation pathways underlying the headline findings — Extreme Drought (2-year lag) and Cold Shocks (1-year lag) raising Medical Debt and Insurance Premiums — be backed by evidence rather than asserted. This document addresses that request. Descriptive evidence from our own panel is reported separately in `Analysis/plots/pathways/` and summarized in `Analysis/pathways/synthesis.md`.
 
 ---

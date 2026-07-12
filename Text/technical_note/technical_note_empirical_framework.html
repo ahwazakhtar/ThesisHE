@@ -868,6 +868,22 @@
   </div>
 
   <div class="note">
+    <strong>Falsification suite (added 12 Jul 2026).</strong> Two exercises complete the
+    design's defense. <em>Leave-one-treated-state-out:</em> re-estimating the $2\times2$
+    seventeen times, dropping each treated state in turn, the income ATT ranges over
+    $[-\$1{,}687, -\$914]$ and never exits the wild-bootstrap CI — no single state drives the
+    result (Nebraska pulls it furthest toward zero, Georgia furthest away). Dropping Colorado
+    or Nebraska lifts the <em>analytic</em> $p$ to 0.075/0.057 — the few-treated-cluster
+    sensitivity the wild-bootstrap layer already prices in; the bootstrap verdict is unchanged.
+    <em>Placebo onsets:</em> 1,000 pseudo-cohorts of 139 never-exposed counties, each assigned
+    a fake onset year drawn uniformly from 2013–2019 and run through the identical estimator,
+    give a placebo distribution centered on zero (mean $-\$20$, s.d. 493); the true 2012
+    estimate sits in its extreme tail (two-sided placebo $p=0.009$). The reverse-causation
+    variant ("future shocks predict past outcomes") is already covered by the flat 1990–2011
+    pre-trend. Implementation: <code>Code/did_robustness/07_falsification_suite.R</code>.
+  </div>
+
+  <div class="note">
     <strong>Two caveats carried throughout.</strong> (i) <em>Estimand.</em> Treatment is
     recurring: the 2012 cohort is actually in extreme drought only ~13% of its post-2012
     county-years, so $\hat{\tau}$ is an <em>intent-to-treat</em> "effect of first drought onset,"
@@ -1638,7 +1654,11 @@
     safety-net hospitals (the supply-side analogue of high-SVI county amplification on the
     demand side). However, interactions are shock- and outcome-specific: not all
     shock-moderator combinations point in the "vulnerability amplifies" direction, and
-    results are reported transparently.
+    results are reported transparently. The uncompensated-care interactions are robust to
+    winsorizing the hospital accounting levels at within-year 1st/99th percentiles (heat ×
+    safety-net $p=0.021\to0.013$); the hospital <em>cumulative-dose margin</em> results are
+    not ($p=0.010\to0.080$) and are demoted accordingly
+    (<code>Analysis/hospital/winsorization_verification.md</code>, added 12 Jul 2026).
   </p>
 
   <hr class="section-sep">

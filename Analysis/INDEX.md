@@ -24,8 +24,11 @@ This index is refreshed at session end.
 | `robustness/` | FE vs RE specification (Hausman) | FE required; RE rejected where unit effects correlate with shocks | `synthesis.md` |
 | `hospital/` | Hospital-year supply side: incidence, persistence, provider heterogeneity | Provider-finance responses to shocks by ownership/safety-net status | `synthesis.md` |
 | `did/` | 2012 drought-cohort DiD + frontier robustness (CS, DRDID, HonestDiD, WCB/RI) | **Income effect robust** (−$1,311, p_wcb 0.036); employment fragile; effect is event-specific ITT | `robustness/did_robustness_summary.md` |
+| `did/robustness/` (falsification) | LOO-treated-state + placebo-onset falsification for the 2012 2×2 (audit_response 2.2–2.3) | **Passed**: no single state drives income (envelope [−1,687, −914], no WCB-CI exits); placebo p=0.009 | `robustness/falsification_summary.md` |
 | `mechanism/` | Which channel carries the climate→economy effect? | **Agriculture is one channel, not the channel**; lead with Medicare morbidity + broad labor exposure | `mechanism_verdict.md` |
 | `mediation/` | Premium pass-through and premium-mediation of debt effects | **No coherent pass-through**; 92–99% of shock→debt effect survives premium adjustment | `premium_mediation_summary.md` |
+| `mediation/` (bounds) | MDE/TOST equivalence bounds on the premium null (audit_response 2.1) | **Hazard-split**: drought rules out >43–68% of full morbidity-cost pass-through; heat/cold bounded ≈5–8% of mean premium, not tightly | `passthrough_bounds_summary.md` |
+| `hospital/` (winsorization) | Winsorization verification of hospital accounting levels (audit_response 2.4) | Heat×safety-net **robust** (p=.013); cumulative-dose margin **fails** (demoted); drought $ incidence −$3.88M winsorized | `winsorization_verification.md` |
 | `pathways/` | Descriptive pathway decompositions (early exploratory) | Motivating descriptives for the mechanism work | `synthesis.md` |
 | `memos/` | Cross-cutting reviews & memos (dated Feb–May 2026; some superseded by later tracks) | Econometric review, feasibility memos, interpretation guides | `econometric_review.md` |
 | `plots/` | All figures, one subfolder per family | — | — |

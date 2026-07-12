@@ -193,6 +193,21 @@ after (Fig.\ in \texttt{Analysis/did/robustness/bea\_pretrends\_1990\_2011.png})
 linear pre-trend is the corroborating defense the single-pre-period design previously lacked.
 Implementation: \texttt{did\_robustness/05\_bea\_pretrends\_1990\_2011.R}.
 
+Two falsification exercises complete the design's defense. First, because treatment is
+geographically concentrated, we re-estimate the $2\times2$ seventeen times, dropping each
+treated state in turn: the income ATT ranges over $[-\$1{,}687,\,-\$914]$ and never exits
+the wild-bootstrap CI, so no single state drives the result (Nebraska pulls the estimate
+furthest toward zero, Georgia furthest away). Dropping Colorado or Nebraska lifts the
+\emph{analytic} $p$ to $0.075$/$0.057$---the few-treated-cluster sensitivity the bootstrap
+layer above already prices in; the bootstrap verdict is unchanged. Second, a placebo-onset
+test assigns 1{,}000 pseudo-cohorts of 139 never-exposed counties a fake onset year drawn
+uniformly from 2013--2019 and re-runs the identical estimator: the placebo ATT distribution
+centers on zero (mean $-\$20$, s.d.\ $493$) and the true 2012 estimate sits in its extreme
+tail (two-sided placebo $p=0.009$), complementing the randomization inference above. The
+reverse-causation variant (``future shocks predict past outcomes'') is already covered by
+the flat 1990--2011 pre-trend and is not re-run.
+Implementation: \texttt{did\_robustness/07\_falsification\_suite.R}.
+
 %================================================================
 \section{Paper 2 --- Persistence: scarring, reversibility, dose}
 %================================================================
@@ -307,7 +322,11 @@ Drought $\times$ Medicaid expansion & Uncomp.\ care \%NPR & higher in expansion 
 Headline: heat-driven uncompensated care concentrates in safety-net hospitals---the
 supply-side analogue of high-SVI county amplification on the demand side. Interactions
 are shock- and outcome-specific and not all point the ``vulnerability amplifies'' way;
-all are reported transparently.
+all are reported transparently. The uncompensated-care interactions are robust to
+winsorizing the hospital accounting levels at within-year 1st/99th percentiles (heat
+$\times$ safety-net $p=0.021\to0.013$); the hospital \emph{cumulative-dose margin}
+results are not ($p=0.010\to0.080$) and are demoted accordingly
+(\texttt{Analysis/hospital/winsorization\_verification.md}).
 \end{table}
 
 %================================================================

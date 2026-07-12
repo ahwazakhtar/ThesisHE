@@ -2,6 +2,19 @@
 
 Track: `hospital_supply_side_20260615`. Added 2026-06-16.
 
+> **⚠ Winsorization addendum (2026-07-12, `audit_response_20260712` task 2.4, commit
+> `4576268`).** The hospital accounting levels below were estimated **unwinsorized**
+> (the −$408M charity-care reversal and 3,146 negative charity county-years enter raw).
+> Re-estimation under within-year 1%/99% winsorization
+> (`Analysis/hospital/winsorization_verification.md`, outputs `*_winsorized.*`):
+> **(i) heat × safety-net uncompensated care is ROBUST** (p=0.021→0.013);
+> **(ii) the cumulative-dose margin result (§B below) FAILS** (dose@5yr p=0.010→0.080;
+> 10+ vs 1–3 p=0.033→0.131) — the survivorship reading is not robust to accounting
+> outliers; **do not cite it**; **(iii) drought dollar incidence is −$3.88M winsorized**
+> (still p<0.001) — cite the winsorized magnitude, not −$6.21M. Drought scarring
+> (symmetry) and Medicaid-expansion interactions survive. Binding claim language:
+> `Plans/master_evidence_table.md` Row 23.
+
 This document restores the proposal's **supply-side (Chapter 2)** by carrying
 hospital finances through the same three-paper lens — Incidence, Persistence,
 Inequality — that the demand side uses, but at the **hospital (CCN) × year**
