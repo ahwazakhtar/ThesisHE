@@ -1,0 +1,12 @@
+Task: thesis_completion_20260704 2.2 (data-integrity fix, T1.2); closes the
+county_analysis_refinement_20260216 deferred one-row item; unblocks audit_response 1.4.
+Why: the last data-integrity item before thesis tables can freeze — audit §9's top
+priority, re-audit's priority 1. Committee-defense documentation lives in the script's
+DEFENSE DOCUMENTATION header + Analysis/county_dedup_integrity.md (cause, rule, rejected
+alternatives with feasibility evidence, constancy proof, dispersion stats, before/after
+with |Delta|<0.1 SE criterion, rule-invariance).
+Downstream: run_premium_mediation.R + run_latent_hardship.R stopgaps now no-ops (left in
+place as harmless redundancy). Follow-up flagged (owner: mediation script): re-point its
+RA panel at Data/premiums_county.csv rather than master per-RA rows. ~25 raw-reading
+consumers pick up the dedup on next run; prioritize any citing pop-weighted county
+coefficients before final tables.
