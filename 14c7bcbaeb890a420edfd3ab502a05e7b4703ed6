@@ -1,0 +1,7 @@
+VERIFICATION REPORT — mechanisms_revision_20260704 Phases 1-3 (batched author sign-off).
+All Phase 1-3 tasks were complete and committed Jul 4-6 2026 (log re-estimation ddfc448;
+horse-race 288620e; SAHIE bridge 1cba0a4; response document drafted); only the three
+user-verification checkpoints remained open. User confirmation: author ran the
+verification gates and confirmed 2026-07-13. Note: this track's headline correction
+(-2,011 dies in logs) has since been propagated to all public-facing prose via
+audit_response_20260712 (evidence table Row 11a; abstracts d3d04f2).
