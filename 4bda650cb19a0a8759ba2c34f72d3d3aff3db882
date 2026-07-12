@@ -1,0 +1,5 @@
+Task: audit_response_20260712 3.3 (write-up/fold-in — orchestrator).
+Why: the honest null narrows what Essay 3 Option B can claim, and the author is about to
+make that decision via the memo — the memo had to carry the estimated result, not the hope.
+The write-up itself is Analysis/latent_hardship/latent_hardship_summary.md (committed at
+3.2); this commit propagates its permitted language to every downstream surface.
