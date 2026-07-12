@@ -1,0 +1,10 @@
+Task: audit_response_20260712 2.4 (hospital winsorization verify, spec O8/audit §8).
+Why: hospital levels results were open to a one-question defense attack. Now answered:
+the primary heat x safety-net result strengthens under winsorization; the hospital
+cumulative-dose margin claim does NOT survive and must be demoted wherever cited
+(hospital_supply_side_20260615 owners should review — their synthesis.md caveat is
+queued for task 2.5); drought hospital dollar incidence should be reported at the
+winsorized -$3.88M. Out-of-scope residual flagged: run_mechanism_provider.R:57
+(mechanism_channels track) consumes the same raw panel unwinsorized.
+Design: additive env-gated helper, default byte-identical, winsorized outputs written
+alongside originals (never overwritten).
