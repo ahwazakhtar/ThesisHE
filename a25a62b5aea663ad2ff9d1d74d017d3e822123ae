@@ -1,0 +1,8 @@
+Task: audit_response_20260712 1.1 (master evidence table).
+Why: the claim architecture is the audit's priority 4 and the gate for essay drafting —
+prevents a repeat of the 5c615dd drift (claims dying in Analysis/ while abstracts keep them).
+Verified by orchestrator against did_robustness_summary.md, premium_mediation_summary.md,
+did_results.md, mechanisms_revision plan (all numbers match). Known minor: Row 4 permitted
+language says ~1.1pp; traced values are 1.35pp (state) / 1.2pp (county) — rewrite must cite
+a traced value. Headline set locked: 2012 income; Medicare morbidity; cold compounding;
+premium institutional null (pending MDE); SVI amplification.
