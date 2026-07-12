@@ -1,6 +1,6 @@
 # Premium Pass-through and Debt Mediation — Summary
 
-_Generated 2026-07-04. Premiums are MONTHLY real dollars (mean benchmark ~$375),
+_Generated 2026-07-12. Premiums are MONTHLY real dollars (mean benchmark ~$375),
 2014-2025. Pass-through uses LAGGED shocks (rate-filing timing; t-2 primary) as pop-
 weighted SHARES, so a level coefficient is $ per fully-exposed unit. STATE clustering
 is primary; rating-area clustering understates SEs here and is not used to select_
@@ -10,14 +10,14 @@ _significance. Split counties deduped to one row/county-year (stopgap for T1.2).
 
 ### PRIMARY — within-state local margin (rating-area x year, RA + State^Year FE)
 _The only margin a local shock could legally enter (the geographic rating factor)._
-|premium               |hazard  | estimate|   se| p_state|  ci_lo| ci_hi|
-|:---------------------|:-------|--------:|----:|-------:|------:|-----:|
-|Benchmark_Silver_Real |Drought |     2.48| 2.33|  0.2940|  -2.10|  7.05|
-|Benchmark_Silver_Real |Heat    |   -10.50| 8.61|  0.2300| -27.40|  6.41|
-|Benchmark_Silver_Real |Cold    |    12.60| 5.75|  0.0337|   1.30| 23.80|
-|Lowest_Bronze_Real    |Drought |     5.89| 2.49|  0.0219|   1.02| 10.80|
-|Lowest_Bronze_Real    |Heat    |    -3.69| 6.01|  0.5420| -15.50|  8.09|
-|Lowest_Bronze_Real    |Cold    |     8.92| 3.51|  0.0142|   2.05| 15.80|
+|premium               |hazard  | estimate|   se| p_state|   ci_lo| ci_hi|
+|:---------------------|:-------|--------:|----:|-------:|-------:|-----:|
+|Benchmark_Silver_Real |Drought |     3.17| 2.57|  0.2240|  -1.880|  8.21|
+|Benchmark_Silver_Real |Heat    |   -10.40| 8.63|  0.2340| -27.300|  6.50|
+|Benchmark_Silver_Real |Cold    |    13.10| 5.85|  0.0301|   1.610| 24.50|
+|Lowest_Bronze_Real    |Drought |     5.24| 2.73|  0.0605|  -0.103| 10.60|
+|Lowest_Bronze_Real    |Heat    |    -3.74| 6.01|  0.5370| -15.500|  8.05|
+|Lowest_Bronze_Real    |Cold    |     9.05| 3.67|  0.0173|   1.860| 16.20|
 
 ### SECONDARY — between-state statewide-pool margin (state x year, State + Year FE)
 _The index rate MAY legally price statewide experience. Read via sign/magnitude

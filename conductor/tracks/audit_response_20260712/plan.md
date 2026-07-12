@@ -63,11 +63,12 @@ plan links and never duplicates — the binding map is in `spec.md` → "Overlap
   Author decides (audit question 5) and sends; record the decision here and in
   `thesis_completion_20260704`. **Blocking for Essay-3 drafting (thesis_completion 2.5),
   not for Essay 1/2.**
-- [ ] **1.4 Post-dedup evidence-table refresh.** **Blocked on `thesis_completion_20260704`
-  2.2** (upstream one-row-per-county-year). When `Analysis/county_dedup_integrity.md`
-  exists, refresh every table row whose estimate reran; only then may final thesis tables
-  freeze. Do not close this track's Phase 1 checkpoint gate for the table's *final* status
-  before 2.2 lands (interim status "pre-dedup" is acceptable for drafting).
+- [x] **1.4 Post-dedup evidence-table refresh.** (2.2 landed `fca5643`; refresh done — table
+  header → POST-DEDUP with headline rows freezable; Row 8 refreshed from the officially
+  re-run mediation + bounds scripts (drought β 3.17/SE 2.57, δ*=$7.40, rules out >50–79% of
+  the benchmark; verdicts unchanged); Row 27 integrity caveat resolved; memo bound updated;
+  data-pipeline.md integrity bullet rewritten; re-audit items 6/7 phrasing fixes applied to
+  the abstracts; items 5/8 lodged as essay-draft guidance in thesis_completion 2.4/2.5.)
 - [ ] **Phase 1 checkpoint** — verification gate + git note.
 
 ## Phase 2: Bounding & falsification (existing machinery only)

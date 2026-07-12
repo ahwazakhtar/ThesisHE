@@ -121,7 +121,11 @@ blocked on 2.2 here; T1.3 component (a) is amended (dated note in `spec.md`).
     - Outputs: `Analysis/mediation/{premium_passthrough,debt_mediation}.csv` (4 specs) +
       `premium_mediation_summary.md`; rewritten NBER write-up `Text/drafts/premium_mediation_writeup.md`.
       Tests (identity + lag alignment + same-sample + generalized `group` param) pass. `4de9e39`+fix
-- [ ] **2.2 Data-integrity fix (T1.2).** Enforce one-row-per-county-year in
+- [x] **2.2 Data-integrity fix (T1.2).** (`fca5643` — 484 groups/568 rows collapsed; unweighted-mean
+  RA rule with committee-defense docs in the script header + `Analysis/county_dedup_integrity.md`;
+  2012 DiD identical, debt cells <0.08 SE, pass-through verdict holds; build now asserts
+  uniqueness; pre-dedup backup archived. Follow-up flagged: re-point the mediation RA panel at
+  `premiums_county.csv`; ~25 raw-reading consumers pick up the dedup on next run.) Enforce one-row-per-county-year in
   `Code/create_county_master.R` upstream (resolve the ~3% multi-rating-area duplicates once,
   with a documented rule); add a build-time assertion (`stopifnot` uniqueness on fips×year).
     - Re-run `run_county_analysis.R` + the DiD/RE scripts; confirm coefficients are materially
@@ -150,10 +154,18 @@ blocked on 2.2 here; T1.3 component (a) is amended (dated note in `spec.md`).
   (`Text/drafts/thesis_paper_abstracts.md`, `technical_note_empirical_framework`, `mechanisms_section.md`,
   reviewer responses, decks) using the `nber-economist-writing-style` skill. Lead with income,
   caveat employment, frame debt as measurement, lead mechanisms with morbidity + labor exposure.
+  **Re-audit guidance (Jul 12):** (i) the abstracts are accurate but dense — in the full draft,
+  unpack sentences that carry identification + population + estimate + robustness + caveat all
+  at once; (ii) present Medicare morbidity as *parallel direct evidence* of a channel, never as
+  mediating the 2012 income result; (iii) keep the ACA null hazard-specific (drought tightly
+  bounded at >50–79% of the morbidity benchmark; heat/cold only loosely).
   **Output:** `Text/essay1_incidence_draft.md` (or `.tex`).
 - [ ] **2.5 Essays 2 & 3 full drafts (T1.5).** Reuse Essay 1's data/methods sections. Essay 3
   additionally **gated on the `audit_response_20260712` 1.3 framing decision** (inequality vs
   institutional incidence — user gate; determines the essay's spine, not just its title).
+  **Re-audit guidance (Jul 12) for Essay 2:** the cold-compounding estimator dependence
+  (binned contrast + CS DiD vs the flat smooth quadratic) must be central in the headline
+  table and conclusion, not only disclosed in the abstract.
   **Outputs:** `Text/essay2_persistence_draft.md`, `Text/essay3_inequality_draft.md`.
 - [ ] **Phase 2 checkpoint** — verification gate + git note.
 

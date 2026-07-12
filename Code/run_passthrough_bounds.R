@@ -295,11 +295,16 @@ if (sys.nframe() == 0L) {
   # -----------------------------------------------------------------------
   cat("\n--- Cross-check: re-estimates vs the tracked mediation outputs ---\n")
 
-  # (a) 3-sig-fig anchor from premium_mediation_summary.md (PRIMARY silver, L2)
+  # (a) 3-sig-fig anchor from premium_mediation_summary.md (PRIMARY silver, L2).
+  # Anchors updated 2026-07-13 to the POST-DEDUP mediation outputs: the county master
+  # now enforces one-row-per-county-year (create_county_master.R, commit fca5643), which
+  # slightly shifts the RA panel for split counties. Pre-dedup anchors were
+  # Drought 2.48/2.33, Heat -10.50/8.61, Cold 12.60/5.75; verdicts unchanged
+  # (see Analysis/county_dedup_integrity.md for the before/after).
   summary_anchor <- data.frame(
     hazard   = c("Drought", "Heat",   "Cold"),
-    est_ref  = c(2.48,      -10.50,   12.60),
-    se_ref   = c(2.33,       8.61,     5.75),
+    est_ref  = c(3.17,      -10.40,   13.10),
+    se_ref   = c(2.57,       8.63,     5.85),
     stringsAsFactors = FALSE)
   anchor_ok <- TRUE
   for (i in seq_len(nrow(summary_anchor))) {

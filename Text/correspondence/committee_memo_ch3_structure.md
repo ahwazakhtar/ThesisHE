@@ -119,7 +119,7 @@ already estimated. Concretely:
    premium lag-responses to multiply into a mispricing figure, and I will not manufacture one.
    Instead I bound what goes unpriced against a benchmark: Medicare directly records a morbidity cost
    of roughly $112–$177 per beneficiary, while the individual market shows no local pass-through of
-   it. The null is now partial rather than absolute: for drought, pass-through above 43–68% of that
+   it. The null is now partial rather than absolute: for drought, pass-through above 50–79% of that
    full morbidity-cost benchmark can be ruled out, while for heat and cold the response is bounded at
    roughly 5–8% of the mean premium, though not tightly.
 2. **Scale the persistence results into scenario bands, not a single national total:** the

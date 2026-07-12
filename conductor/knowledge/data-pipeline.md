@@ -36,14 +36,21 @@ non-migrant = origin==dest; CMS: resolve current CSV via `data.cms.gov/data.json
 
 ## Master panels
 
-- `Data/county_level_master.csv`: **82 columns, 119,300 rows, 3,155 counties, 1990–2026**
-  (verified Jul 2026; rows before 2011 exist for baseline anchoring/pre-trends — the outcome
-  analysis window is 2011–2023, premiums extend to 2025/26). If dims matter, re-verify with
-  `nrow()` — the durable fix is a build-time manifest emitted by `create_county_master.R`
-  (not yet implemented).
-- Known integrity issue: ~3% county-years duplicated across rating-area splits; upstream
-  one-row-per-county-year enforcement is thesis_completion task 2.2 (a dedupe stopgap lives
-  in `run_premium_mediation.R`).
+- `Data/county_level_master.csv`: **82 columns, 118,732 rows, 3,232 counties, 1990–2026**
+  (verified 2026-07-13 post-dedup; rows before 2011 exist for baseline anchoring/pre-trends —
+  the outcome analysis window is 2011–2023, premiums extend to 2025/26). If dims matter,
+  re-verify with `nrow()` — the durable fix is a build-time manifest emitted by
+  `create_county_master.R` (not yet implemented; the build DOES now assert uniqueness and a
+  row-count band).
+- Integrity: **county master certified unique on (fips_code, Year)** as of 2026-07-13
+  (`fca5643`): the multi-rating-area premium join is collapsed in `create_county_master.R`
+  (unweighted mean across a county's rating areas for the 4 premium columns; `first()` for
+  the constancy-asserted rest) and the build hard-stops on any duplicate or constancy
+  violation. Pre-dedup backup: `Data/_archive/county_level_master_prededup_20260713.csv`;
+  defense documentation: `Analysis/county_dedup_integrity.md`. The old downstream dedupe
+  stopgaps (`run_premium_mediation.R`, `run_latent_hardship.R`) are now no-ops, left as
+  redundancy. ~25 raw-reading consumers pick up the dedup on their next run — regenerate
+  before citing pop-weighted county distributed-lag coefficients from stale outputs.
 - `Data/state_level_analysis_master.csv`: consolidated state panel.
 
 ## Pipeline dependency rules
