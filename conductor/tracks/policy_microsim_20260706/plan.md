@@ -52,6 +52,11 @@ the current results.
 
 ## Phase 1: Sufficient-statistics policy section (the committee memo's deliverable, ~2 weeks)
 
+> **DELIVERED 2026-07-13 via `thesis_completion_20260704` task 2.3** (`4cffca7` + write-up),
+> under the amended T1.3 spec: scenario bands + drought unpriced floor + concentration +
+> RMA benchmark, `Analysis/policy/` + `Text/drafts/policy_section.md`. The tasks below are
+> retained for provenance; do not re-execute.
+
 All estimation reuses hardened coefficients — no new identification. Outputs to
 `Analysis/microsim/`; write-up NBER-styled.
 

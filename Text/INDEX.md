@@ -6,7 +6,7 @@ One folder per document family. **New files go into the matching folder, never t
 
 | Folder | Contents | Notes |
 |---|---|---|
-| `drafts/` | Thesis-bound prose: three-essay abstracts, mechanisms §6, premium-mediation write-up, pathway notes | `thesis_paper_abstracts.md` is the current abstracts doc (`_structured.md` is the Jun 15 variant). The three essay drafts (thesis_completion tasks 2.4–2.5) will live here. |
+| `drafts/` | Thesis-bound prose: three-essay abstracts, mechanisms §6, premium-mediation write-up, pathway notes, policy synthesis | `thesis_paper_abstracts.md` is the current abstracts doc (`_structured.md` is the Jun 15 variant). `policy_section.md` (2026-07-13) is the sufficient-statistics policy synthesis for the general conclusion (thesis_completion 2.3). The three essay drafts (tasks 2.4–2.5) will live here. |
 | `technical_note/` | The empirical-framework note: `.tex`/`.html` sources + rendered PDFs (Long, short) + LaTeX artifacts | The `.tex`/`.html` are the sources of truth; PDFs are dated exports. |
 | `correspondence/` | Feedback received + responses sent (external reader, second reviewer, committee) | `reviewer_response_mechanisms_nber.md` **supersedes** the plain `reviewer_response_mechanisms.md`; `_email.md` is the short form. Second-reviewer thread: `second_reviewer_feedback_mechanisms.md` (received) → `response_to_second_reviewer.md` (reply). `committee_memo_ch3_structure.md` is drafted, awaiting the author to send. |
 | `presentations/` | Dated committee + seminar Beamer decks (`.tex` + rendered PDFs) and the speaker script | Append-only archive; latest committee deck is `committee_presentation_20260615*`. Deck `.tex`/`.pdf` are gitignored by long-standing convention. |

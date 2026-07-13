@@ -145,7 +145,12 @@ blocked on 2.2 here; T1.3 component (a) is amended (dated note in `spec.md`).
   directionally consistent with the documented swing effect); expectation held; incidence
   14.9%, year-clustered (2018 42%). Evidence-table Row 29; reviewer paragraph in
   `Analysis/wet_shock/wet_shock_summary.md`. 11/11 tests (verified independently).
-- [ ] **2.3 Sufficient-statistics policy section (T1.3).** New
+- [x] **2.3 Sufficient-statistics policy section (T1.3).** (Code `4cffca7`: 5 scenario bands,
+  drought unpriced floor 21–50% / $23–88 per member-yr, cold-band concentration 2.4×, RMA
+  ratio 3.7×; 9/9 tests, anchor-locked. Write-up: `Text/drafts/policy_section.md`, 4,315
+  words, NBER-styled, permitted-language-bound; moved from Text/ root per house rule.
+  Author items: confirm the heat-benchmark framing of the drought bound; Figure P1 (Lorenz)
+  still to generate from `concentration_curve.csv`; exhibit labels placeholder.) New
   `Code/run_policy_sufficient_stats.R` (R 4.2.2). *(Amended 2026-07-12 — see spec note: T1.1
   found no coherent pass-through, so premium coefficients are NOT stable sufficient statistics.)*
     - (a) **Unpriced margin (re-based):** Medicare morbidity cost response × exposed
