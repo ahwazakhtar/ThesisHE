@@ -1,0 +1,8 @@
+Task: thesis_completion_20260704 T1.6/2.2b (reviewer-demanded wet-shock bin).
+Why: a reviewer asked whether precipitation shocks are accounted for. They were (Z_Precip
+levels in every county FE model; Delta_Z_Precip swings with a persistent income effect;
+PDSI as the deficit extreme) — the one gap was a discrete wet-extreme bin, added here under
+the committee-demand exception with full pre-registration discipline. The null is the
+useful answer: the wet tail adds no level channel beyond the swing/deficit margins already
+modeled, which closes the reviewer question AND evidences that the frozen hazard family is
+complete. Reviewer-response paragraph ready in wet_shock_summary.md.
