@@ -36,7 +36,7 @@ is binding — link, never duplicate.
   timestamp/R-version stamp).
 - [x] **1.2 Runner regression test.** (`96f26e4` — fixture + self-test both assertions pass;
   re-verified independently by orchestrator.)
-- [ ] **Phase 1 checkpoint** — verification gate + git note.
+- [x] **Phase 1 checkpoint** — verification gate + git note. [checkpoint: 81c841e] *(author sign-off 2026-07-13.)*
 
 ## Phase 2: Analysis-source corrections (audit A3 + A4 code side)
 
@@ -59,7 +59,7 @@ is binding — link, never duplicate.
   to the frontier layer); drop or clearly relabel its p-value column in
   `did_cs_event_time.csv` on next regeneration; banner in `Analysis/did/did_results.md`
   (done at 0.2 if not before). **Test:** none (labeling); verified by grep.
-- [ ] **Phase 2 checkpoint** — verification gate + git note.
+- [x] **Phase 2 checkpoint** — verification gate + git note. [checkpoint: 81c841e] *(author sign-off 2026-07-13.)*
 
 ## Phase 3: Bad-control sensitivity (audit A5)
 
@@ -79,7 +79,7 @@ is binding — link, never duplicate.
   relabeled mediation/sensitivity); B6 dose-as-exposure-history framing and B5 clustering
   primacy (state primary, RA sensitivity, never select significance on RA SEs) written into
   the table's permitted language.
-- [ ] **Phase 3 checkpoint** — verification gate + git note.
+- [x] **Phase 3 checkpoint** — verification gate + git note. [checkpoint: 81c841e] *(author sign-off 2026-07-13.)*
 
 ## Phase 4: Post-dedup exhibit freshness + hygiene (audit A6, B1, B4)
 
@@ -100,7 +100,7 @@ is binding — link, never duplicate.
   synthesis manual-CS + Midwest.) `pad_fips()` in `pipeline_utils.R`;
   repo test scanning built intermediates for 5-char county FIPS; build-log helper used by
   scripts this track touched.
-- [ ] **Phase 4 checkpoint** — verification gate + git note.
+- [x] **Phase 4 checkpoint** — verification gate + git note. [checkpoint: 81c841e] *(author sign-off 2026-07-13.)*
 
 ## Phase 5: Final clean-room reproduction (audit §6 Phase 5 / §7 gate)
 
@@ -113,8 +113,9 @@ is binding — link, never duplicate.
 - [x] **5.2 Final evidence-table refresh** (table → FROZEN-READY; certified magnitudes
   locked into table/abstracts/errata/registry) + §7 checklist ticked in `spec.md` with
   evidence; econometrics.md lessons merged; INDEX rows added.
-- [ ] **Conductor — User Manual Verification 'Code-Quality Remediation' (Protocol in
-  workflow.md).**
+- [x] **Conductor — User Manual Verification 'Code-Quality Remediation' (Protocol in
+  workflow.md).** [checkpoint: 81c841e] *(author sign-off 2026-07-13; §7 gate ALL MET —
+  track complete.)*
 
 ---
 
