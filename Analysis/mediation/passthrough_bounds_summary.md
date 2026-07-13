@@ -1,6 +1,6 @@
 # Premium Pass-through — MDE & Equivalence (TOST) Bounds
 
-_Generated 2026-07-12 (audit_response_20260712, task 2.1 / spec O4). Primary spec: rating-area x year,
+_Generated 2026-07-13 (audit_response_20260712, task 2.1 / spec O4). Primary spec: rating-area x year,
 RA + State^Year FE, population-weighted, state-clustered — IDENTICAL to the premium-mediation primary
 spec. Outcome: `Benchmark_Silver_Real` (benchmark premium; pop-weighted sample mean **$366/mo**,
 the object the morbidity benchmark maps to). Coefficients are $/fully-exposed-unit on pop-weighted
@@ -37,12 +37,12 @@ PMPM**. This is the band each bound is measured against.
 
 |hazard  |lag | beta ($/mo)|    SE|90% CI          | MDE ($/mo)| delta* ($/mo)|delta* (% mean) |delta* x band |verdict |
 |:-------|:---|-----------:|-----:|:---------------|----------:|-------------:|:---------------|:-------------|:-------|
-|Drought |L2  |        3.17|  2.57|[-1.07, 7.40]   |        7.2|          7.40|2.02%           |0.50-0.79     |STRONG  |
-|Drought |L1  |        0.74|  4.81|[-7.17, 8.65]   |       13.5|          8.65|2.36%           |0.59-0.93     |STRONG  |
-|Heat    |L2  |      -10.40|  8.63|[-24.59, 3.79]  |       24.2|         24.60|6.72%           |1.67-2.63     |SOFTER  |
-|Heat    |L1  |      -11.40| 10.90|[-29.37, 6.54]  |       30.6|         29.40|8.03%           |1.99-3.15     |SOFTER  |
-|Cold    |L2  |       13.10|  5.85|[3.45, 22.70]   |       16.4|         22.70|6.2%            |1.54-2.43     |SOFTER  |
-|Cold    |L1  |       -8.66|  5.01|[-16.91, -0.42] |       14.0|         16.90|4.62%           |1.15-1.81     |SOFTER  |
+|Drought |L2  |       3.130|  2.60|[-1.15, 7.40]   |       7.28|          7.40|2.02%           |0.50-0.79     |STRONG  |
+|Drought |L1  |       0.699|  4.84|[-7.26, 8.66]   |      13.50|          8.66|2.36%           |0.59-0.93     |STRONG  |
+|Heat    |L2  |     -10.400|  8.63|[-24.59, 3.79]  |      24.20|         24.60|6.72%           |1.67-2.63     |SOFTER  |
+|Heat    |L1  |     -11.400| 10.90|[-29.37, 6.55]  |      30.60|         29.40|8.02%           |1.99-3.15     |SOFTER  |
+|Cold    |L2  |      12.600|  5.75|[3.11, 22.03]   |      16.10|         22.00|6.02%           |1.49-2.36     |SOFTER  |
+|Cold    |L1  |      -8.550|  5.01|[-16.79, -0.32] |      14.00|         16.80|4.59%           |1.14-1.80     |SOFTER  |
 
 _`delta* x band` = delta\* as a multiple of the $14.75 (high) and $9.33 (low) benchmark; <1 on both means
 the equivalence bound is inside the full-pass-through band (strong)._
@@ -51,15 +51,28 @@ the equivalence bound is inside the full-pass-through band (strong)._
 
 **Drought, L2 (primary).** delta* = $7.40/mo (2.0% of the $366 mean; 79.3% of the $9.33 contemporaneous and 50.2% of the $14.75 following-year morbidity benchmark). The data RULE OUT a within-state benchmark-premium response as large as full morbidity-cost pass-through: we can rule out pass-through larger than ~50.2%-79.3% of the morbidity benchmark band.
 
-**Drought, L1 (secondary).** delta* = $8.65/mo (2.4% of the $366 mean; 92.7% of the $9.33 contemporaneous and 58.6% of the $14.75 following-year morbidity benchmark). The data RULE OUT a within-state benchmark-premium response as large as full morbidity-cost pass-through: we can rule out pass-through larger than ~58.6%-92.7% of the morbidity benchmark band.
+**Drought, L1 (secondary).** delta* = $8.66/mo (2.4% of the $366 mean; 92.7% of the $9.33 contemporaneous and 58.7% of the $14.75 following-year morbidity benchmark). The data RULE OUT a within-state benchmark-premium response as large as full morbidity-cost pass-through: we can rule out pass-through larger than ~58.7%-92.7% of the morbidity benchmark band.
 
 **Heat, L2 (primary).** delta* = $24.59/mo (6.7% of the $366 mean) EXCEEDS the $9.33-$14.75 benchmark band, so equivalence with full pass-through cannot be rejected for this cell. The honest claim is the softer one: a BOUNDED within-state response (delta* is 6.7% of the mean premium) plus cross-level sign instability (see the mediation summary) — not a tight institutional null.
 
 **Heat, L1 (secondary).** delta* = $29.37/mo (8.0% of the $366 mean) EXCEEDS the $9.33-$14.75 benchmark band, so equivalence with full pass-through cannot be rejected for this cell. The honest claim is the softer one: a BOUNDED within-state response (delta* is 8.0% of the mean premium) plus cross-level sign instability (see the mediation summary) — not a tight institutional null.
 
-**Cold, L2 (primary).** delta* = $22.70/mo (6.2% of the $366 mean) EXCEEDS the $9.33-$14.75 benchmark band, so equivalence with full pass-through cannot be rejected for this cell. The honest claim is the softer one: a BOUNDED within-state response (delta* is 6.2% of the mean premium) plus cross-level sign instability (see the mediation summary) — not a tight institutional null.
+**Cold, L2 (primary).** delta* = $22.03/mo (6.0% of the $366 mean) EXCEEDS the $9.33-$14.75 benchmark band, so equivalence with full pass-through cannot be rejected for this cell. The honest claim is the softer one: a BOUNDED within-state response (delta* is 6.0% of the mean premium) plus cross-level sign instability (see the mediation summary) — not a tight institutional null.
 
-**Cold, L1 (secondary).** delta* = $16.91/mo (4.6% of the $366 mean) EXCEEDS the $9.33-$14.75 benchmark band, so equivalence with full pass-through cannot be rejected for this cell. The honest claim is the softer one: a BOUNDED within-state response (delta* is 4.6% of the mean premium) plus cross-level sign instability (see the mediation summary) — not a tight institutional null.
+**Cold, L1 (secondary).** delta* = $16.79/mo (4.6% of the $366 mean) EXCEEDS the $9.33-$14.75 benchmark band, so equivalence with full pass-through cannot be rejected for this cell. The honest claim is the softer one: a BOUNDED within-state response (delta* is 4.6% of the mean premium) plus cross-level sign instability (see the mediation summary) — not a tight institutional null.
+
+## Allocation-rule sensitivity — equal-split (primary) vs full-pop (old implicit)
+
+The RA panel is rebuilt from source `Data/premiums_county.csv` (audit A3). A split county's population is EQUAL-SPLIT across its rating areas (primary). The **full-pop** rule instead assigns each split county's whole population to every rating area it touches (the pre-dedup implicit behavior; it reproduces the pre-dedup drought L2 beta ~2.48). Verdicts are **IDENTICAL** across the two rules (6/6 cells match) — the drought STRONG bound does not depend on the allocation choice.
+
+|hazard  |lag | delta* (equal)|verdict (equal) | delta* (full-pop)|verdict (full-pop) |
+|:-------|:---|--------------:|:---------------|-----------------:|:------------------|
+|Drought |L2  |           7.40|STRONG          |              6.32|STRONG             |
+|Drought |L1  |           8.66|STRONG          |              8.30|STRONG             |
+|Heat    |L2  |          24.60|SOFTER          |             24.60|SOFTER             |
+|Heat    |L1  |          29.40|SOFTER          |             29.40|SOFTER             |
+|Cold    |L2  |          22.00|SOFTER          |             22.00|SOFTER             |
+|Cold    |L1  |          16.80|SOFTER          |             16.70|SOFTER             |
 
 ## Bottom line
 
@@ -73,12 +86,12 @@ Expectation (logged before the run): within-state SEs are small, so the MDE shou
 
 |hazard  |lag | beta ($/mo)|   SE| MDE ($/mo)| delta* ($/mo)|delta* (% mean) |verdict |
 |:-------|:---|-----------:|----:|----------:|-------------:|:---------------|:-------|
-|Drought |L2  |        5.24| 2.73|       7.64|          9.73|3.24%           |MIXED   |
-|Drought |L1  |        4.31| 2.11|       5.91|          7.78|2.59%           |STRONG  |
+|Drought |L2  |        5.23| 2.74|       7.66|          9.74|3.24%           |MIXED   |
+|Drought |L1  |        4.29| 2.12|       5.92|          7.77|2.59%           |STRONG  |
 |Heat    |L2  |       -3.74| 6.01|      16.80|         13.60|4.53%           |MIXED   |
 |Heat    |L1  |       -7.45| 6.49|      18.20|         18.10|6.03%           |SOFTER  |
-|Cold    |L2  |        9.05| 3.67|      10.30|         15.10|5.02%           |SOFTER  |
-|Cold    |L1  |        1.37| 4.03|      11.30|          8.00|2.66%           |STRONG  |
+|Cold    |L2  |        8.85| 3.53|       9.88|         14.70|4.88%           |MIXED   |
+|Cold    |L1  |        1.48| 3.96|      11.10|          8.00|2.66%           |STRONG  |
 
 _Bronze is a 60%-actuarial-value plan (lower mean premium), so its %-of-mean and benchmark multiples are
 not directly comparable to the silver benchmark; shown only to confirm the qualitative pattern is not an

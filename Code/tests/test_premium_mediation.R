@@ -110,4 +110,79 @@ test_that("mediation_decompose fits base and with-mediator on the SAME sample", 
   expect_false(is.na(r$est_base))
 })
 
+# ---------------------------------------------------------------------------
+# RA-panel-from-source helpers (audit A3, code_quality_remediation T2.1):
+# deflate_premiums(), allocate_county_pop(), build_ra_panel(). These replace the
+# old "aggregate the deduped master by rating_area_id" construction, which after
+# the county-master dedup mis-collapsed split counties (county-mean premium +
+# whole population on one representative RA). Fixture: county B (01003) is SPLIT
+# across two rating areas (AL02, AL03) with DIFFERENT source premiums; AL02 also
+# contains county C (01005). Premium is constant within a rating area.
+# ---------------------------------------------------------------------------
+
+make_src <- function() data.frame(
+  fips_code          = c("01001", "01003", "01003", "01005"),
+  Year               = 2014L,
+  rating_area_id     = c("AL01",  "AL02",  "AL03",  "AL02"),
+  Benchmark_Silver   = c(200,     300,     360,     300),   # constant within an RA
+  Lowest_Bronze      = c(160,     240,     300,     240),
+  State              = "AL",
+  Is_Extreme_Drought = c(1,       0,       0,       0),
+  High_CDD           = c(0,       1,       1,       0),
+  High_HDD           = c(0,       0,       0,       1),
+  Population         = c(100,     300,     300,     200),
+  stringsAsFactors   = FALSE)
+make_cpi <- function() data.frame(Year = c(2014L, 2023L), CPI_Value = c(100, 150))
+
+test_that("deflate_premiums applies the base-2023 CPI factor (parity w/ create_county_master.R)", {
+  src <- make_src(); cpi <- make_cpi()
+  d <- deflate_premiums(src, cpi, base_year = 2023L)   # factor = 150/100 = 1.5
+  expect_equal(d$Benchmark_Silver_Real, src$Benchmark_Silver * 1.5)
+  expect_equal(d$Lowest_Bronze_Real,    src$Lowest_Bronze    * 1.5)
+  # a year absent from the CPI table -> NA real premium (dropped downstream)
+  src2 <- src; src2$Year <- 2099L
+  expect_true(all(is.na(deflate_premiums(src2, cpi)$Benchmark_Silver_Real)))
+})
+
+test_that("allocate_county_pop equal-split never double-counts a split county's population", {
+  src <- make_src()
+  a <- allocate_county_pop(src, "equal")
+  expect_equal(a$n_ra[a$fips_code == "01003"], c(2, 2))   # B touches 2 rating areas
+  # a county's population summed across its rating areas == county Population
+  agg <- aggregate(pop_alloc ~ fips_code, data = a, sum)
+  pop_by_fips <- tapply(src$Population, src$fips_code, `[`, 1)
+  for (f in agg$fips_code)
+    expect_equal(agg$pop_alloc[agg$fips_code == f], unname(pop_by_fips[f]))
+  # SENSITIVITY (full) rule = the old implicit behavior: full population in EVERY RA
+  expect_equal(allocate_county_pop(src, "full")$pop_alloc, src$Population)
+})
+
+test_that("build_ra_panel: one row per RA x Year; premium from SOURCE, not the master mean", {
+  src <- make_src(); cpi <- make_cpi()
+  ra <- build_ra_panel(allocate_county_pop(deflate_premiums(src, cpi), "equal"))
+  # RA panel row count == distinct (rating_area_id, Year) in the (filtered) source
+  expect_equal(nrow(ra), length(unique(paste(src$rating_area_id, src$Year))))
+  expect_equal(sort(ra$rating_area_id), c("AL01", "AL02", "AL03"))
+  # SPLIT county 01003: each RA carries its OWN source premium (deflated), NOT the
+  # master's cross-area mean (mean(300,360)=330 -> 495 real), which is the bug fixed.
+  master_mean_real <- mean(c(300, 360)) * 1.5
+  expect_equal(ra$Benchmark_Silver_Real[ra$rating_area_id == "AL02"], 300 * 1.5)
+  expect_equal(ra$Benchmark_Silver_Real[ra$rating_area_id == "AL03"], 360 * 1.5)
+  expect_false(isTRUE(all.equal(ra$Benchmark_Silver_Real[ra$rating_area_id == "AL03"],
+                                master_mean_real)))
+  # shock SHARES are pop-weighted county fractions within the RA (equal-split wts):
+  # AL02 = {01003 alloc 150 (CDD=1), 01005 alloc 200 (HDD=1)} -> sh_cdd = 150/350
+  expect_equal(ra$sh_cdd[ra$rating_area_id == "AL02"], 150 / 350)
+  expect_equal(ra$sh_hdd[ra$rating_area_id == "AL02"], 200 / 350)
+  expect_equal(ra$pop[ra$rating_area_id == "AL02"], 350)   # 150 + 200 (allocated)
+})
+
+test_that("build_ra_panel drops RA-years whose premiums are entirely NA (documented exclusion)", {
+  src <- make_src(); cpi <- make_cpi()
+  extra <- src[1, ]; extra$fips_code <- "01007"; extra$rating_area_id <- "AL09"
+  extra$Benchmark_Silver <- NA_real_; extra$Lowest_Bronze <- NA_real_
+  ra <- build_ra_panel(allocate_county_pop(deflate_premiums(rbind(src, extra), cpi), "equal"))
+  expect_false("AL09" %in% ra$rating_area_id)
+})
+
 cat("\nAll premium-mediation tests completed.\n")

@@ -64,11 +64,17 @@
 #   is bounded but not tight enough to exclude full pass-through).
 #
 # INPUTS
-#   Data/county_level_master.csv        (county master; ~484 dup county-years —
-#                                        deduped with run_premium_mediation.R's
-#                                        stopgap; RA panel built from raw rows)
-#   Code/run_premium_mediation.R        (SOURCED, read-only, for add_shock_lags();
-#                                        data-prep steps replicated below verbatim)
+#   Data/premiums_county.csv            (SOURCE county x Year x rating_area premium
+#                                        file, built by process_rating_area_map.R —
+#                                        the RA panel is now rebuilt from THIS, audit A3)
+#   Data/State_Policy_Data/us_cpi_annual.csv (CPI deflator, base 2023 — same as
+#                                        create_county_master.R)
+#   Data/county_level_master.csv        (deduped county master; source of county
+#                                        shocks + Population joined by fips x Year)
+#   Code/run_premium_mediation.R        (SOURCED, read-only, for add_shock_lags() +
+#                                        the RA-panel builders deflate_premiums() /
+#                                        allocate_county_pop() / build_ra_panel(), so
+#                                        the RA construction is IDENTICAL here)
 #   Analysis/mediation/premium_passthrough.csv   (tracked primary-spec estimates —
 #                                        used for the re-estimate cross-check)
 #   Analysis/mediation/premium_mediation_summary.md (the 3-sig-fig L2 anchor)
@@ -80,8 +86,12 @@
 #   Analysis/mediation/build_logs/run_passthrough_bounds.log (self-log via sink)
 #
 # DATA PROVENANCE / DECISION RATIONALE
+#   * RA panel REBUILT from source Data/premiums_county.csv (audit A3) via
+#     run_premium_mediation.R's sourced builders — NOT aggregated from the deduped
+#     master. PRIMARY county-population allocation is equal-split; a full-pop
+#     allocation is reported as an allocation-rule SENSITIVITY (verdict-invariant).
 #   * Spec is IDENTICAL to run_premium_mediation.R's primary: outcome
-#     Benchmark_Silver_Real (the benchmark premium the $375 mean & morbidity
+#     Benchmark_Silver_Real (the benchmark premium the ~$366 mean & morbidity
 #     benchmark refer to); FE = rating_area_id + State^Year; weights = ~pop;
 #     cluster = ~State; pop-weighted lagged shock SHARES as regressors so a
 #     coefficient is $/fully-exposed-unit. Lowest_Bronze_Real is carried as a
@@ -196,44 +206,47 @@ if (sys.nframe() == 0L) {
       " is a debugging trigger first (re-check re-estimates), a finding second.\n\n",
       sep = "")
 
-  # --- data prep: replicated VERBATIM from run_premium_mediation.R -------------
+  # --- data prep: RA panel REBUILT from source Data/premiums_county.csv (audit A3)
+  #     using run_premium_mediation.R's sourced builders, so the construction is
+  #     IDENTICAL to the mediation primary spec (see that script's header block
+  #     "RA PANEL SOURCE REBUILD"). deflate_premiums(), allocate_county_pop(),
+  #     build_ra_panel() and wmean() are all sourced above. ----------------------
   pad_fips <- function(x) formatC(as.integer(x), width = 5, flag = "0")
-  wmean <- function(x, w) { i <- !is.na(x) & !is.na(w)
-    if (!any(i)) NA_real_ else stats::weighted.mean(x[i], w[i]) }
 
   raw <- read_csv("Data/county_level_master.csv", show_col_types = FALSE, progress = FALSE)
   raw$fips_code <- pad_fips(raw$fips_code)
   # CO 2023 medical-debt reporting-rule exclusion (parity with mediation script;
-  # does not affect the premium outcomes but kept so the sample is identical).
+  # does not affect the premium outcomes but kept so the sample context is identical).
   excl <- toupper(trimws(raw$State)) == "CO" & as.integer(raw$Year) == 2023L
   raw$Medical_Debt_Share[excl] <- NA_real_
   raw <- raw %>% filter(Year >= 2011L, Year <= 2025L)
 
-  premium_primary   <- "Benchmark_Silver_Real"   # THE benchmark premium (mean ~$375)
+  premium_primary   <- "Benchmark_Silver_Real"   # THE benchmark premium (mean ~$366)
   premium_robust    <- "Lowest_Bronze_Real"      # carried as robustness only
 
-  # ~484 dup county-years: dedup stopgap (T1.2). Not strictly needed for the RA
-  # panel (built from raw, matching the mediation script) but computed/logged for
-  # provenance parity.
+  # Post-dedup the master is one-row-per-county-year (create_county_master.R,
+  # fca5643), so ndup should be 0; logged for provenance parity.
   ndup <- raw %>% count(fips_code, Year) %>% filter(n > 1) %>% nrow()
-  cat(sprintf("Duplicate county-year groups present (stopgap context): %d\n", ndup))
+  cat(sprintf("Duplicate county-year groups in master (should be 0 post-dedup): %d\n", ndup))
 
-  # --- aggregate raw county rows to the rating-area x year panel: pop-weighted
-  #     premium levels + pop-weighted shock SHARES (verbatim from build_level). ---
-  build_level <- function(dat, group) {
-    dat %>% filter(!is.na(Benchmark_Silver_Real) | !is.na(Lowest_Bronze_Real)) %>%
-      group_by(across(all_of(c(group, "Year")))) %>%
-      summarise(State = first(State),
-                Benchmark_Silver_Real = wmean(Benchmark_Silver_Real, Population),
-                Lowest_Bronze_Real    = wmean(Lowest_Bronze_Real, Population),
-                sh_dr  = wmean(Is_Extreme_Drought, Population),
-                sh_cdd = wmean(High_CDD, Population),
-                sh_hdd = wmean(High_HDD, Population),
-                pop = sum(Population, na.rm = TRUE), .groups = "drop")
-  }
-  ra_panel <- build_level(raw, "rating_area_id")
+  # --- RA x year panel from source. PRIMARY = equal-split county population;
+  #     a full-pop SENSITIVITY panel is built for the allocation-rule section. ----
+  prem_src <- read_csv("Data/premiums_county.csv", show_col_types = FALSE, progress = FALSE)
+  prem_src$fips_code <- pad_fips(prem_src$fips_code)
+  cpi_tab  <- read_csv("Data/State_Policy_Data/us_cpi_annual.csv",
+                       show_col_types = FALSE, progress = FALSE)
+  prem_src <- deflate_premiums(prem_src, cpi_tab)               # base-2023 real $ (sourced)
+  county_attrs <- raw %>%                                       # county-level objects
+    select(fips_code, Year, Population, Is_Extreme_Drought, High_CDD, High_HDD)
+  ra_src <- prem_src %>%
+    filter(Year >= 2011L, Year <= 2025L) %>%
+    left_join(county_attrs, by = c("fips_code", "Year"))
+  ra_panel      <- build_ra_panel(allocate_county_pop(ra_src, "equal"))  # PRIMARY (headline)
+  ra_panel_sens <- build_ra_panel(allocate_county_pop(ra_src, "full"))   # SENSITIVITY (robustness)
+
   lvl_cols <- c("sh_dr", "sh_cdd", "sh_hdd")
-  ra_panel <- add_shock_lags(ra_panel, lvl_cols, 2L, group = "rating_area_id")
+  ra_panel      <- add_shock_lags(ra_panel,      lvl_cols, 2L, group = "rating_area_id")
+  ra_panel_sens <- add_shock_lags(ra_panel_sens, lvl_cols, 2L, group = "rating_area_id")
   lvl_lags <- as.vector(t(outer(lvl_cols, c("_L1", "_L2"), paste0)))   # 6 terms
 
   # term -> (hazard, lag_role) map
@@ -246,19 +259,21 @@ if (sys.nframe() == 0L) {
   }
 
   # --- fit the PRIMARY spec for a given premium outcome, return coefs + SEs -----
-  fit_primary <- function(prem) {
+  #     `panel` defaults to the primary equal-split RA panel; pass ra_panel_sens
+  #     for the allocation-rule sensitivity.
+  fit_primary <- function(prem, panel = ra_panel) {
     f <- stats::as.formula(paste(prem, "~", paste(lvl_lags, collapse = "+"),
                                  "| rating_area_id + State^Year"))
-    m <- feols(f, data = ra_panel, weights = ~pop, cluster = ~State)
+    m <- feols(f, data = panel, weights = ~pop, cluster = ~State)
     ct <- coeftable(m)
     # sample-mean benchmark premium over the EXACT estimation sample (complete
     # cases on outcome + 6 lags + pop), pop-weighted.
     needed <- c(prem, lvl_lags, "pop")
-    est_rows <- stats::complete.cases(ra_panel[, needed, drop = FALSE])
-    mean_prem <- stats::weighted.mean(ra_panel[[prem]][est_rows],
-                                      ra_panel$pop[est_rows])
+    est_rows <- stats::complete.cases(panel[, needed, drop = FALSE])
+    mean_prem <- stats::weighted.mean(panel[[prem]][est_rows],
+                                      panel$pop[est_rows])
     list(model = m, ct = ct, N = nobs(m), mean_prem = mean_prem,
-         mean_prem_unwtd = mean(ra_panel[[prem]][est_rows], na.rm = TRUE))
+         mean_prem_unwtd = mean(panel[[prem]][est_rows], na.rm = TRUE))
   }
 
   cat("\n--- PRIMARY spec: rating-area x year (RA + State^Year FE, pop-wtd, state-clustered) ---\n")
@@ -296,15 +311,22 @@ if (sys.nframe() == 0L) {
   cat("\n--- Cross-check: re-estimates vs the tracked mediation outputs ---\n")
 
   # (a) 3-sig-fig anchor from premium_mediation_summary.md (PRIMARY silver, L2).
-  # Anchors updated 2026-07-13 to the POST-DEDUP mediation outputs: the county master
-  # now enforces one-row-per-county-year (create_county_master.R, commit fca5643), which
-  # slightly shifts the RA panel for split counties. Pre-dedup anchors were
-  # Drought 2.48/2.33, Heat -10.50/8.61, Cold 12.60/5.75; verdicts unchanged
-  # (see Analysis/county_dedup_integrity.md for the before/after).
+  # Anchor-update log (dated; most recent last):
+  #  * PRE-DEDUP baseline: Drought 2.48/2.33, Heat -10.50/8.61, Cold 12.60/5.75.
+  #  * 2026-07-13 (dedup): the county master went one-row-per-county-year
+  #    (create_county_master.R, commit fca5643), which slightly shifted the RA panel
+  #    for split counties -> Drought 3.17/2.57, Heat -10.40/8.63, Cold 13.10/5.85
+  #    (the RA panel was then still aggregated from the deduped master).
+  #  * 2026-07-13 (coding audit A3): RA panel REBUILT from source Data/premiums_county.csv
+  #    (run_premium_mediation.R T2.1) with equal-split county-population allocation, so the
+  #    RA structure is no longer coupled to the master collapse -> Drought 3.17->3.13,
+  #    Cold 13.10->12.60 (Heat unchanged at -10.40). All verdicts unchanged (drought L2
+  #    STRONG, delta* $7.40; heat/cold SOFTER); the full-pop sensitivity reproduces the
+  #    pre-dedup numbers and is verdict-invariant (see the allocation-rule section below).
   summary_anchor <- data.frame(
     hazard   = c("Drought", "Heat",   "Cold"),
-    est_ref  = c(3.17,      -10.40,   13.10),
-    se_ref   = c(2.57,       8.63,     5.85),
+    est_ref  = c(3.13,      -10.40,   12.60),
+    se_ref   = c(2.60,       8.63,     5.75),
     stringsAsFactors = FALSE)
   anchor_ok <- TRUE
   for (i in seq_len(nrow(summary_anchor))) {
@@ -378,6 +400,37 @@ if (sys.nframe() == 0L) {
               delta_x_bench_hi = signif(delta_mult_bench_hi, 3),
               verdict)
   print(show, row.names = FALSE)
+
+  # -----------------------------------------------------------------------
+  # ALLOCATION-RULE SENSITIVITY — recompute the primary-silver bounds under the
+  # FULL-population-in-every-RA allocation (the old implicit rule) and confirm
+  # every verdict is rule-invariant. Primary stays equal-split; this is reported
+  # ALONGSIDE, never as the headline. Does NOT touch passthrough_bounds.csv schema.
+  # -----------------------------------------------------------------------
+  cat("\n--- ALLOCATION-RULE SENSITIVITY: full-pop-in-every-RA (robustness only) ---\n")
+  fit_s <- fit_primary(premium_primary, ra_panel_sens)
+  cat(sprintf("full-pop panel: N=%d, pop-wtd sample mean = $%.2f/mo\n", fit_s$N, fit_s$mean_prem))
+  sens_rows <- list()
+  for (t in lvl_lags) {
+    meta <- term_meta(t)
+    beta <- if (t %in% rownames(fit_s$ct)) fit_s$ct[t, "Estimate"]   else NA_real_
+    se   <- if (t %in% rownames(fit_s$ct)) fit_s$ct[t, "Std. Error"] else NA_real_
+    pst  <- if (t %in% rownames(fit_s$ct)) fit_s$ct[t, 4]            else NA_real_
+    sens_rows[[length(sens_rows) + 1L]] <- compute_bounds_row(
+      spec = "RAxYr-SENS(full-pop)", premium = premium_primary, outcome_role = "sensitivity",
+      hazard = meta$hazard, lag = meta$lag, lag_role = meta$lag_role,
+      beta = beta, se = se, p_state = pst, N = fit_s$N, mean_premium = fit_s$mean_prem)
+  }
+  bounds_sens <- do.call(rbind, sens_rows)
+  bounds_sens <- bounds_sens[order(haz_ord[bounds_sens$hazard], bounds_sens$lag != "L2"), ]
+  prim_ord <- prim[order(haz_ord[prim$hazard], prim$lag != "L2"), ]
+  vmerge <- merge(prim_ord[, c("hazard", "lag", "verdict")],
+                  bounds_sens[, c("hazard", "lag", "verdict")],
+                  by = c("hazard", "lag"), suffixes = c("_equal", "_fullpop"))
+  verdict_invariant <- all(vmerge$verdict_equal == vmerge$verdict_fullpop)
+  cat(sprintf("  Allocation-rule verdict invariance: %s (%d/%d cells match)\n",
+              if (verdict_invariant) "HOLDS" else "*** BROKEN ***",
+              sum(vmerge$verdict_equal == vmerge$verdict_fullpop), nrow(vmerge)))
 
   # -----------------------------------------------------------------------
   # Summary markdown.
@@ -478,6 +531,26 @@ if (sys.nframe() == 0L) {
     "## Per-shock verdicts (no cherry-picking — every cell reported)",
     "",
     paste(vs, collapse = "\n\n"),
+    "",
+    "## Allocation-rule sensitivity — equal-split (primary) vs full-pop (old implicit)",
+    "",
+    sprintf(paste0("The RA panel is rebuilt from source `Data/premiums_county.csv` (audit A3). A split ",
+                   "county's population is EQUAL-SPLIT across its rating areas (primary). The **full-pop** ",
+                   "rule instead assigns each split county's whole population to every rating area it touches ",
+                   "(the pre-dedup implicit behavior; it reproduces the pre-dedup drought L2 beta ~2.48). ",
+                   "Verdicts are **%s** across the two rules (%d/%d cells match) — the drought STRONG bound ",
+                   "does not depend on the allocation choice."),
+            if (verdict_invariant) "IDENTICAL" else "NOT identical",
+            sum(vmerge$verdict_equal == vmerge$verdict_fullpop), nrow(vmerge)),
+    "",
+    knitr::kable(
+      merge(
+        prim_ord %>% transmute(hazard, lag,
+                    `delta* (equal)` = signif(delta_star, 3), `verdict (equal)` = verdict),
+        bounds_sens %>% transmute(hazard, lag,
+                    `delta* (full-pop)` = signif(delta_star, 3), `verdict (full-pop)` = verdict),
+        by = c("hazard", "lag")) %>% arrange(haz_ord[hazard], lag != "L2"),
+      format = "pipe"),
     "",
     "## Bottom line",
     "",

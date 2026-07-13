@@ -1,23 +1,39 @@
 # Premium Pass-through and Debt Mediation — Summary
 
-_Generated 2026-07-12. Premiums are MONTHLY real dollars (mean benchmark ~$375),
+_Generated 2026-07-13. Premiums are MONTHLY real dollars (mean benchmark ~$366),
 2014-2025. Pass-through uses LAGGED shocks (rate-filing timing; t-2 primary) as pop-
 weighted SHARES, so a level coefficient is $ per fully-exposed unit. STATE clustering
 is primary; rating-area clustering understates SEs here and is not used to select_
-_significance. Split counties deduped to one row/county-year (stopgap for T1.2)._
+_significance. The RA panel is rebuilt from source `Data/premiums_county.csv` (audit A3);
+county population is EQUAL-SPLIT across a county's rating areas (full-pop sensitivity below)._
 
 ## (i) PASS-THROUGH — estimated at the levels ACA rates are actually set
 
 ### PRIMARY — within-state local margin (rating-area x year, RA + State^Year FE)
-_The only margin a local shock could legally enter (the geographic rating factor)._
+_The only margin a local shock could legally enter (the geographic rating factor). RA panel
+rebuilt from source `Data/premiums_county.csv`; county population equal-split across a county's
+rating areas (audit A3)._
 |premium               |hazard  | estimate|   se| p_state|   ci_lo| ci_hi|
 |:---------------------|:-------|--------:|----:|-------:|-------:|-----:|
-|Benchmark_Silver_Real |Drought |     3.17| 2.57|  0.2240|  -1.880|  8.21|
-|Benchmark_Silver_Real |Heat    |   -10.40| 8.63|  0.2340| -27.300|  6.50|
-|Benchmark_Silver_Real |Cold    |    13.10| 5.85|  0.0301|   1.610| 24.50|
-|Lowest_Bronze_Real    |Drought |     5.24| 2.73|  0.0605|  -0.103| 10.60|
+|Benchmark_Silver_Real |Drought |     3.13| 2.60|  0.2350|  -1.970|  8.22|
+|Benchmark_Silver_Real |Heat    |   -10.40| 8.63|  0.2340| -27.300|  6.51|
+|Benchmark_Silver_Real |Cold    |    12.60| 5.75|  0.0338|   1.290| 23.80|
+|Lowest_Bronze_Real    |Drought |     5.23| 2.74|  0.0619|  -0.133| 10.60|
 |Lowest_Bronze_Real    |Heat    |    -3.74| 6.01|  0.5370| -15.500|  8.05|
-|Lowest_Bronze_Real    |Cold    |     9.05| 3.67|  0.0173|   1.860| 16.20|
+|Lowest_Bronze_Real    |Cold    |     8.85| 3.53|  0.0156|   1.930| 15.80|
+
+#### SENSITIVITY — full-population-in-every-RA allocation (the old implicit rule)
+_Robustness only, NEVER primary: assigns each split county's FULL population to every rating
+area it touches (reproduces the pre-dedup RA estimates, e.g. drought L2 beta ~2.48). The
+verdict is allocation-rule-invariant — see `passthrough_bounds_summary.md`._
+|premium               |hazard  | estimate|   se| p_state|  ci_lo| ci_hi|
+|:---------------------|:-------|--------:|----:|-------:|------:|-----:|
+|Benchmark_Silver_Real |Drought |     2.48| 2.33|  0.2940|  -2.10|  7.05|
+|Benchmark_Silver_Real |Heat    |   -10.50| 8.61|  0.2300| -27.40|  6.41|
+|Benchmark_Silver_Real |Cold    |    12.60| 5.75|  0.0337|   1.30| 23.80|
+|Lowest_Bronze_Real    |Drought |     5.89| 2.49|  0.0219|   1.02| 10.80|
+|Lowest_Bronze_Real    |Heat    |    -3.69| 6.01|  0.5420| -15.50|  8.09|
+|Lowest_Bronze_Real    |Cold    |     8.92| 3.51|  0.0142|   2.05| 15.80|
 
 ### SECONDARY — between-state statewide-pool margin (state x year, State + Year FE)
 _The index rate MAY legally price statewide experience. Read via sign/magnitude
@@ -45,7 +61,7 @@ Shown only to trace where the earlier spurious county coefficients came from._
 
 **Verdict — no COHERENT pass-through.** The tell is sign-instability across the level of
 analysis: the cold t-2 coefficient runs -$15.5 (county+Year) -> +$12.6 (RA x year) -> -$16.7
-(state x year), and heat runs +$19.5 -> -$10.5 -> +$93. Each apparent 'effect' is an artifact
+(state x year), and heat runs +$19.5 -> -$10.4 -> +$93. Each apparent 'effect' is an artifact
 of which variance (within- vs between-state) the FE leave standing, not a stable price
 response. Within states the estimates are small (a few % of the $375 mean) and not coherently
 signed; the one nominally significant term (cold, positive at the RA level) reverses between
