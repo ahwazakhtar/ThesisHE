@@ -1,0 +1,8 @@
+Task: code_quality_remediation_20260713 2.1 (audit A3, spec O3). Closes the follow-up
+flagged in the dedup git note (fca5643).
+Why: the premium chapter's primary spec must run on the institutions' actual object
+(county x RA), not a collapsed proxy coupled to the dedup rule. Key reassurance for the
+defense: the corrected equal-split panel lands within rounding of the master-aggregated
+values AND the full-pop sensitivity recovers pre-dedup exactly — the drought STRONG bound
+never depended on the allocation choice. Acceptance §7-3 demonstrated.
+Cosmetic residue flagged by agent (static '~$375' comments vs computed $366) left as-is.
