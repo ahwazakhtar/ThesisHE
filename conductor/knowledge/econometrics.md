@@ -95,3 +95,26 @@ correction, the 484 duplicate rows, the ≤2023 filter, a significance cherry-pi
 7. Any subsample effect: is the denominator the subsample mean, not the full-sample mean?
 8. Would the sign/magnitude survive the project's own adjacent results (e.g., a premium
    response mis-signed vs the Medicare morbidity result is suspect)?
+
+## Lessons from the Jul-13 code-quality remediation (audit-hardened; commits 034e156–2e22c11)
+
+- **Two implementations of "the same" estimator → the one with proper influence-function
+  covariance governs; quarantine the other, never average.** The manual CS event-time
+  aggregation (`run_did_analysis.R`, cohort-size weights, independence SEs) said drought
+  e=0 = −$1,050 "p=0.002"; the frontier `did::att_gt` DR estimator says −$324 (SE 276),
+  null. Cohort-time cells share never-treated controls — independence SEs are always too
+  small. Headline inference must cite `Analysis/did/robustness/dr_csdid_*` only.
+- **A null can headline only once bounded** (MDE 2.80×SE + TOST δ*=|β|+1.645×SE against a
+  substantive benchmark). The verdict may be hazard-split — state it per hazard; never
+  generalize a tight bound from one hazard to the family (drought STRONG, heat/cold soft).
+- **Bad-control sensitivity = same-sample triple** (no controls / lagged / contemporaneous,
+  identical N asserted). Distinguish control-fragility from SAMPLE-fragility: the county
+  debt cells lose significance because requiring controls to be *observed* changes the
+  sample, not because conditioning absorbs the pathway. Different caveat, different fix.
+- **Dose/exposure-history results are within-county descriptive contrasts**, not marginal
+  effects of exogenously assigned shock-years (B6); state clustering primary for premium
+  claims, RA clustering sensitivity-only — never select significance on RA SEs (B5).
+- **Trust only the truthful test runner** (`Code/tests/testthat.R`, clean process per file,
+  nonzero on failure, self-tested). The pre-fix runner was false-green (exit 0 with 36
+  errors). Reproduction is certified in `Analysis/reproduction_certificate.md` (masters
+  rebuild byte-identically; 32/32 suites; 13/13 headline rows match the evidence table).

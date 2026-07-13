@@ -25,14 +25,16 @@ are the source of truth; this is orientation only:
   **amplified in high-SVI counties** (real-economy outcomes); **no coherent premium
   pass-through**; mechanisms led by Medicare morbidity + broad labor exposure.
 - Active: `thesis_completion_20260704` (umbrella — essay drafts are the critical path),
-  `audit_response_20260712` (claim architecture done + verified; Phase 4 parked, Phase 5
-  close-out pending), `code_quality_remediation_20260713` (coding-audit response — gates
-  the manuscript FREEZE, not drafting; aggregate test runner is FALSE-GREEN until its
-  Phase 1 lands — trust only individual `Rscript Code/tests/test_*.R` runs). County master
-  certified one-row-per-county-year (2026-07-13). **The committee approved the three-essay
-  structure** (2026-07-13); Essay-3 framing = hybrid distribution+observability per
-  `Plans/dissertation_writing_and_framing_plan_20260712.md`. No open user gates — essay
-  drafting (thesis_completion 2.4) is the critical path.
+  `audit_response_20260712` (Phase 4 parked, Phase 5 close-out pending),
+  `code_quality_remediation_20260713` (all phases implemented; §7 defense gate MET —
+  awaiting final user sign-off). The aggregate test runner (`Code/tests/testthat.R`) is now
+  truthful (clean process per file, nonzero on failure). Empirical package is
+  **FROZEN-READY**: masters rebuild byte-identically, 32/32 suites pass, 13/13 headline
+  rows match `Plans/master_evidence_table.md` (`Analysis/reproduction_certificate.md`);
+  exhibits registered in `Plans/exhibit_registry.md`. **The committee approved the
+  three-essay structure** (2026-07-13); Essay-3 framing = hybrid distribution+observability
+  per `Plans/dissertation_writing_and_framing_plan_20260712.md`. Essay drafting
+  (thesis_completion 2.4) is the critical path.
 
 ---
 

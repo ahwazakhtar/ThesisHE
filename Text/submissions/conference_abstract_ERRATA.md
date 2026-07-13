@@ -79,8 +79,9 @@ None of the corrections reverse the abstract's thesis — they tighten it.
   quadratic dose term is flat, and the population-weighted binned contrast is much larger. The
   claim is estimator-dependent and should name the estimator.
 - **Suggested:** "cold employment losses compound (in an unweighted binned contrast the tenth
-  cumulative cold-year costs roughly 5,700 more jobs than the first, echoed by a
+  cumulative cold-year costs roughly 5,500 more jobs than the first, echoed by a
   Callaway–Sant'Anna employment gap widening to about 5,000 jobs a decade after onset)."
+  *(Magnitude updated 2026-07-13 to the certified post-dedup value, −5,522.)*
 
 ### 6. Cold-income amplification — flag the marginal interaction (Row 20)
 - **Submitted (¶4):** "… extreme heat costs jobs, cold's income loss is several times larger,

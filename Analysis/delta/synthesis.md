@@ -2,6 +2,16 @@
 
 Generated: 2026-04-02
 
+> **Post-dedup stamp (2026-07-13, code_quality_remediation Phase 5).** Re-run on the
+> certified county master (`Data/county_level_master.csv`, 118,732 × 82, one row per
+> `(fips_code, Year)`, 2026-07-13) — see `Analysis/delta/delta_symmetry_test.csv` (13:10).
+> The headline **drought debt-scar asymmetry** (Drought → `Medical_Debt_Share`,
+> onset + exit, h = 2, unweighted) is now **+0.01874 (p = 7.3e-4)** on the certified
+> master. The magnitudes throughout the body below are the **pre-dedup** values
+> (e.g. the "+0.0182 (p = 0.0015)" quoted in the Three-Way Transition section); they move
+> **< 0.1 SE** (Δ/SE ≈ +0.09) and the verdict is unchanged. **Binding claim language is
+> governed by `Plans/master_evidence_table.md` Row 16, not the pre-dedup prose here.**
+
 ## Overview
 
 This analysis estimates the health and economic costs of year-over-year *swings* in climate

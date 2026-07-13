@@ -73,15 +73,25 @@ path.
 
 ## Acceptance criteria — the audit's §7 minimum defense gate, verbatim
 
-1. Aggregate tests fail correctly when a test is intentionally broken.
-2. All critical tests pass in clean R processes.
-3. Rating-area premium results are rebuilt from source RA data.
-4. No headline uses the manual-CS independence standard errors.
-5. Transition and dose headlines have no-control/lagged-control sensitivity.
-6. All manuscript exhibits are post-dedup.
-7. Stale synthesis prose is removed or archived.
-8. Input/output manifest records hashes and R/package versions (exhibit registry).
-9. `Plans/master_evidence_table.md` refreshed one final time.
+**ALL MET (2026-07-13; evidence in `Analysis/reproduction_certificate.md` + commits):**
+
+1. ✅ Aggregate tests fail correctly when a test is intentionally broken (`96f26e4` — self-test
+   proves nonzero exit on the deliberate-failure fixture).
+2. ✅ All critical tests pass in clean R processes (32/32, exit 0; certificate table).
+3. ✅ Rating-area premium results rebuilt from source RA data (`aeae55b` — verdicts
+   invariant 6/6 across dedup + allocation rules).
+4. ✅ No headline uses the manual-CS independence SEs (`034e156` — quarantined; frontier
+   e=0 −$324 null governs; all citing surfaces corrected).
+5. ✅ Transition and dose headlines have control sensitivity (`ff7049e` — control-robust;
+   debt cells re-attributed to sample fragility).
+6. ✅ All manuscript exhibits post-dedup (`2e22c11` — every family <0.15 SE movement;
+   registry stamped 118,732×82/2026-07-13).
+7. ✅ Stale synthesis prose removed/archived (`980b1d7`, `2e22c11` — hospital §B,
+   latent-hardship label, AQI memo, mechanism verdict, event-study tail, Midwest labels).
+8. ✅ Input/output manifest (`Plans/exhibit_registry.md`, ~35 exhibits, master-stamped;
+   masters SHA-256 recorded in the certificate).
+9. ✅ `Plans/master_evidence_table.md` refreshed one final time (status FROZEN-READY;
+   certified magnitudes locked: asymmetry +0.01874, dose −5,522, SVI-income p≈0.06).
 
 ## Environment
 

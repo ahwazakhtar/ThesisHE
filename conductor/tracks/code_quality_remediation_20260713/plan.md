@@ -83,10 +83,13 @@ is binding — link, never duplicate.
 
 ## Phase 4: Post-dedup exhibit freshness + hygiene (audit A6, B1, B4)
 
-- [~] **4.1 Exhibit registry.** `Plans/exhibit_registry.md`: one row per manuscript-bound
+- [x] **4.1 Exhibit registry.** (`2e22c11` — ~35 exhibits, master-stamped.) `Plans/exhibit_registry.md`: one row per manuscript-bound
   exhibit (output file, generating script, R version, inputs, master-build stamp,
   post-dedup? y/n, essay/section). Seed from the writing plan §10 table/figure lists.
-- [~] **4.2 Re-run manuscript-bound families on the certified master** (delta, cumulative
+- [x] **4.2 Re-run manuscript-bound families on the certified master** (`2e22c11`; prose portion
+  `980b1d7` — all families post-dedup, every headline <0.15 SE; hospital panel proven exactly
+  dedup-invariant; event_study/mechanism_verdict stale claims resolved. Phase-5 residuals: delta
+  synthesis headline stamp; descriptive synthesis rename.) (delta, cumulative
   dose, exposure index, persistent exposure, mechanisms as needed); stamp outputs; archive
   stale versions; B1 stale-prose cleanup (hospital synthesis body below the banner;
   latent-hardship "pre-dedup" label → certified-invariant; AQI memo superseded-by note).
@@ -101,12 +104,15 @@ is binding — link, never duplicate.
 
 ## Phase 5: Final clean-room reproduction (audit §6 Phase 5 / §7 gate)
 
-- [ ] **5.1 Fresh-session reproduction:** rebuild both masters without downloads; run the
+- [x] **5.1 Fresh-session reproduction:** (masters byte-identical — SHA-256s recorded;
+  32/32 suites exit 0; 13/13 headline rows match; certificate written; residual synthesis
+  stamps applied.) rebuild both masters without downloads; run the
   exhibit registry's scripts; run the fixed aggregate test runner; compare every headline
   number against `Plans/master_evidence_table.md`; record the run in
   `Analysis/reproduction_certificate.md`.
-- [ ] **5.2 Final evidence-table refresh** + minimum-defense-gate checklist ticked in
-  `spec.md`; knowledge merge; registry close-out.
+- [x] **5.2 Final evidence-table refresh** (table → FROZEN-READY; certified magnitudes
+  locked into table/abstracts/errata/registry) + §7 checklist ticked in `spec.md` with
+  evidence; econometrics.md lessons merged; INDEX rows added.
 - [ ] **Conductor — User Manual Verification 'Code-Quality Remediation' (Protocol in
   workflow.md).**
 

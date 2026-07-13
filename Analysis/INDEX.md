@@ -31,6 +31,9 @@ This index is refreshed at session end.
 | `hospital/` (winsorization) | Winsorization verification of hospital accounting levels (audit_response 2.4) | Heat×safety-net **robust** (p=.013); cumulative-dose margin **fails** (demoted); drought $ incidence −$3.88M winsorized | `winsorization_verification.md` |
 | `latent_hardship/` | Pre-registered observed-vs-latent hardship gradients (audit_response 3.1–3.2) | **Honest null** vs the ≥2/3 bar: all cells attenuate as predicted but only drought×uninsurance robust (q=.012); claim coverage/credit-visibility only | `latent_hardship_summary.md` |
 | `county_dedup_integrity.md` | One-row-per-county-year certification + before/after (thesis_completion 2.2) | **Headlines preserved**: 2012 DiD identical, debt cells <0.08 SE; 64 exploratory pop-weighted cells corrected (double-counting bug) | `county_dedup_integrity.md` |
+| `control_sensitivity/` | Same-sample no-/lagged/contemporaneous control variants for headline cells (code_quality 3.1) | **Headlines control-robust**; county debt cells are SAMPLE-fragile (measurement caveat, not bad controls) | `control_sensitivity_summary.md` |
+| `test_reports/` | Machine-readable output of the truthful aggregate test runner | 32/32 suites pass in clean processes (runner exits nonzero on any failure) | `test_report.md` |
+| `reproduction_certificate.md` | Clean-room reproduction (code_quality 5.1) | **Masters rebuild byte-identically; 32/32 tests; 13/13 headline rows match the evidence table** | `reproduction_certificate.md` |
 | `pathways/` | Descriptive pathway decompositions (early exploratory) | Motivating descriptives for the mechanism work | `synthesis.md` |
 | `memos/` | Cross-cutting reviews & memos (dated Feb–May 2026; some superseded by later tracks) | Econometric review, feasibility memos, interpretation guides | `econometric_review.md` |
 | `plots/` | All figures, one subfolder per family | — | — |
