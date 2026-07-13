@@ -140,10 +140,11 @@ blocked on 2.2 here; T1.3 component (a) is amended (dated note in `spec.md`).
     - **Test:** `testthat` — master is unique on (fips_code, year); row count within expected
       band.
     - **Also:** mark the `county_analysis_refinement_20260216` deferred one-row task `[x]`.
-- [~] **2.2b Wet-shock bin (T1.6, reviewer-demanded; pre-spec frozen in spec.md 2026-07-13).**
-  `High_Precip = 1{Z_Precip > +1.5}` through the four headline outcomes at t/t−1/t−2,
-  no-control primary, BKY q over the 12 cells; tier capped at exploratory/appendix.
-  Outputs → `Analysis/wet_shock/`; reviewer-response paragraph.
+- [x] **2.2b Wet-shock bin (T1.6, reviewer-demanded; pre-spec frozen `d0a90a7` BEFORE code).**
+  **HONEST NULL: 0/12 cells at BKY q<0.10** (best: Med_HH_Income L1 −$220, p=.021, q=.254 —
+  directionally consistent with the documented swing effect); expectation held; incidence
+  14.9%, year-clustered (2018 42%). Evidence-table Row 29; reviewer paragraph in
+  `Analysis/wet_shock/wet_shock_summary.md`. 11/11 tests (verified independently).
 - [ ] **2.3 Sufficient-statistics policy section (T1.3).** New
   `Code/run_policy_sufficient_stats.R` (R 4.2.2). *(Amended 2026-07-12 — see spec note: T1.1
   found no coherent pass-through, so premium coefficients are NOT stable sufficient statistics.)*
