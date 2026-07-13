@@ -35,6 +35,7 @@ This index is refreshed at session end.
 | `test_reports/` | Machine-readable output of the truthful aggregate test runner | 32/32 suites pass in clean processes (runner exits nonzero on any failure) | `test_report.md` |
 | `reproduction_certificate.md` | Clean-room reproduction (code_quality 5.1) | **Masters rebuild byte-identically; 32/32 tests; 13/13 headline rows match the evidence table** | `reproduction_certificate.md` |
 | `wet_shock/` | Pre-registered wet-extreme precipitation bin (reviewer-requested; thesis_completion T1.6) | **Honest null**: 0/12 cells at q<0.10 — no level channel beyond the documented swing/deficit margins; appendix tier | `wet_shock_summary.md` |
+| `policy/` | Sufficient-statistics scenario bands, unpriced floor, concentration, RMA benchmark (thesis_completion T1.3) | **2012 event −$7.1B; drought unpriced floor 21–50%; cold band 2.4× top-decile; RMA ratio 3.7×**; bands never summed | `sufficient_stats_summary.md` |
 | `pathways/` | Descriptive pathway decompositions (early exploratory) | Motivating descriptives for the mechanism work | `synthesis.md` |
 | `memos/` | Cross-cutting reviews & memos (dated Feb–May 2026; some superseded by later tracks) | Econometric review, feasibility memos, interpretation guides | `econometric_review.md` |
 | `plots/` | All figures, one subfolder per family | — | — |

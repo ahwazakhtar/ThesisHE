@@ -109,6 +109,9 @@ Silent-corruption traps — these produce wrong results with no error:
   Joining without an abbreviation→name map zero-matches silently.
 - **Never hand-edit build outputs** (`Data/*master*.csv`, intermediates, `Analysis/`
   CSVs/results) — fix the generating script and re-run.
+- **"Tests pass" claims must cite the clean-process runner** (`Rscript Code/tests/testthat.R`,
+  rewritten 2026-07-13; exits nonzero on any failure). Its predecessor returned exit 0 with
+  dozens of errors — never trust a green aggregate run predating the fix.
 - **Medical debt is measurement-fragile** (credit-bureau artifact; aggregation-sensitive
   EJ direction). Lead claims with income/employment/premiums.
 

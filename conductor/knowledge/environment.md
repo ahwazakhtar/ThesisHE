@@ -19,6 +19,14 @@ Read this before running R scripts, installing packages, or touching `.claude/` 
 - Each process/estimation script **self-logs via `sink()`** to
   `Analysis/<family>/build_logs/<script>.log`.
 - Non-interactive always; tests are plain `Rscript Code/tests/test_*.R` (testthat).
+- **Aggregate suite:** `Rscript Code/tests/testthat.R` — rewritten 2026-07-13 to run every
+  test file in its own clean R process from the repo root and exit nonzero on ANY failure
+  (the old runner was false-green). Report lands in `Analysis/test_reports/`; the runner's
+  self-test (`test_runner_selftest.R` + `selftest_fixtures/`) is excluded from the default
+  sweep by design.
+- **Shared helpers in `Code/pipeline_utils.R`:** `pad_fips()` (the blessed FIPS zero-padder)
+  and `open_build_log(family, script)` (sink-based build log with provenance header; close
+  via `on.exit()`). New/touched scripts should use both.
 - Spatial work needs **only `terra`** (bundles GDAL/GEOS/PROJ; reads rasters and vector
   boundaries) — `sf`/`tigris` are NOT required. Census cartographic boundaries live in
   `Data/Geo/cb_2018_us_{state,county}_20m` (auto-downloaded). County zonal extraction

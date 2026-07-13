@@ -24,6 +24,16 @@ One folder per document family — `drafts/` (thesis-bound prose), `technical_no
   lead mechanisms with morbidity/utilization + labor exposure, with agriculture as the
   tested-and-bounded hypothesis and migration as a caveat.
 
+## Claim discipline (binding, Jul 2026)
+
+- **`Plans/master_evidence_table.md` governs every claim in every prose surface**
+  (abstracts, essays, memos, decks, submissions): the Permitted-language column is binding;
+  RETIRED rows must not reappear. Status FROZEN-READY (clean-room certified 2026-07-13).
+- `Plans/exhibit_registry.md` is the manuscript exhibit inventory (generating script +
+  master stamp per exhibit); new exhibits get a row.
+- Submitted documents (`Text/submissions/`) are never silently rewritten — corrections go
+  in an `*_ERRATA.md` beside them for the author to act on.
+
 ## NBER writing style
 
 - Use the **`nber-economist-writing-style` skill** for any thesis prose. Reverse-engineered

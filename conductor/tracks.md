@@ -18,13 +18,13 @@ This file tracks all major tracks for the project. Each track has its own detail
   *Link: [./tracks/hospital_supply_side_20260615/](./tracks/hospital_supply_side_20260615/)*
 - [~] **Track: DiD Frontier-Methods Robustness** (Phases 1–5 run & effectively closed Jul 2026 via `thesis_completion_20260704` T0.1–T0.2; income headline survives, employment fragile; only the optional de Chaisemartin estimator remains → T2.2)
   *Link: [./tracks/did_frontier_robustness_20260625/](./tracks/did_frontier_robustness_20260625/)*
-- [x] **Track: Mechanisms — Agricultural Channel & Beyond** (Phases 0–6 implemented Jul 2026; verification gate closed 2026-07-13, `001698f`; only an optional committee-deck slide remains)
+- [~] **Track: Mechanisms — Agricultural Channel & Beyond** (Phases 0–6 implemented Jul 2026; verification gate closed 2026-07-13, `001698f`; complete except one optional committee-deck slide — the only open plan item)
   *Link: [./tracks/mechanism_channels_20260625/](./tracks/mechanism_channels_20260625/)*
 - [~] **Track: Thesis Completion — Roadmap Execution** (umbrella; drives the final push per `Plans/roadmap_recommendations_20260704.md`. Started Jul 2026)
   *Link: [./tracks/thesis_completion_20260704/](./tracks/thesis_completion_20260704/)*
 - [x] **Track: Mechanisms Section — Second-Reviewer Revision** (revises `mechanism_channels_20260625` §6 per second-reviewer feedback; Phases 0–3 complete Jul 4–6 2026; all three verification gates closed 2026-07-13, `14c7bcb`)
   *Link: [./tracks/mechanisms_revision_20260704/](./tracks/mechanisms_revision_20260704/)*
-- [ ] **Track: Policy Frontier — Sufficient-Statistics Microsimulation** (**Gate A resolved 2026-07-13: committee approved the three-essay structure — Phases 2–5 not required for completion, parked indefinitely**; bounded policy content delivered by `thesis_completion_20260704` 2.3. Phase-0 abstract + winsorization items superseded → `audit_response_20260712`)
+- [~] **Track: Policy Frontier — Sufficient-Statistics Microsimulation** (**Gate A resolved 2026-07-13: committee approved the three-essay structure — Phases 2–5 not required for completion, parked indefinitely**; Phase 1 substance DELIVERED via `thesis_completion_20260704` 2.3; Phase-0 abstract + winsorization items superseded → `audit_response_20260712`)
   *Link: [./tracks/policy_microsim_20260706/](./tracks/policy_microsim_20260706/)*
 - [~] **Track: Audit Response — Claim Architecture, Bounding & Falsification** (operationalizes `Plans/project_audit_research_questions_20260712.md`. Phases 0–3 complete & author-verified; Essay-3 framing resolved 2026-07-13 (hybrid, per the writing plan); Phase 4 parked pending essay drafts; Phase 5 close-out at session end)
   *Link: [./tracks/audit_response_20260712/](./tracks/audit_response_20260712/)*
