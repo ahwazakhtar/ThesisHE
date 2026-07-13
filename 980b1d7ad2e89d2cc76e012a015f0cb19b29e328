@@ -1,0 +1,7 @@
+Tasks: code_quality_remediation_20260713 4.3 + 4.2(prose) (audit B1/B3/B4, spec O5/O6).
+Why: B4 prevents recurrence of the documented FIPS space-padding failure; B1 removes the
+search-surfaces-the-stale-paragraph risk the audit flagged. The latent-hardship dual edit
+(generated file + its generator) is the correct reconciliation of 'update the label' vs
+'never hand-edit generated outputs' — generator and committed output now agree.
+Remaining stale surfaces (mechanism_verdict.md, event_study synthesis) are queued for the
+exhibit-rerun landing; orchestrator handles mechanism_verdict.md if it proves hand-authored.
