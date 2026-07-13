@@ -26,9 +26,11 @@ are the source of truth; this is orientation only:
   pass-through**; mechanisms led by Medicare morbidity + broad labor exposure.
 - Active: `thesis_completion_20260704` (umbrella — essay drafts are the critical path),
   `audit_response_20260712` (claim architecture done + verified; Phase 4 parked, Phase 5
-  close-out pending). County master certified one-row-per-county-year (2026-07-13). All
-  verification gates closed and **the committee approved the three-essay structure**
-  (2026-07-13); Essay-3 framing = hybrid distribution+observability per
+  close-out pending), `code_quality_remediation_20260713` (coding-audit response — gates
+  the manuscript FREEZE, not drafting; aggregate test runner is FALSE-GREEN until its
+  Phase 1 lands — trust only individual `Rscript Code/tests/test_*.R` runs). County master
+  certified one-row-per-county-year (2026-07-13). **The committee approved the three-essay
+  structure** (2026-07-13); Essay-3 framing = hybrid distribution+observability per
   `Plans/dissertation_writing_and_framing_plan_20260712.md`. No open user gates — essay
   drafting (thesis_completion 2.4) is the critical path.
 
