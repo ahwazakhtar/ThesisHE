@@ -40,7 +40,9 @@ is binding — link, never duplicate.
 
 ## Phase 2: Analysis-source corrections (audit A3 + A4 code side)
 
-- [~] **2.1 Rebuild the RA panel from source (A3).** `run_premium_mediation.R`: build the
+- [x] **2.1 Rebuild the RA panel from source (A3).** (`aeae55b` — drought STRONG holds,
+  β 3.13/δ* $7.40; verdict invariance 6/6 across dedup + allocation rules; full-pop
+  sensitivity exactly reproduces pre-dedup, confirming the diagnosis.) `run_premium_mediation.R`: build the
   rating-area panel from `Data/premiums_county.csv` (county × Year × rating_area_id), NOT
   from the deduped master's premium columns; join county shocks/population with a
   documented allocation rule (equal-split across a county's RAs as primary — sub-county
