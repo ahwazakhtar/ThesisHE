@@ -36,8 +36,10 @@ None of the corrections reverse the abstract's thesis — they tighten it.
 - **Issue:** Income is robust (WCB/RI, DRDID −$1,451, flat two-decade pre-trend). The ~2,000-job
   employment estimate is fragile — it attenuates ~58% under DRDID and reverses sign in the
   pooled estimator — and should not carry equal billing. The income result is the 2012
-  event's effect (ITT of first onset), not a general drought-response function: the long-run
-  pooled multi-cohort average is null, though the immediate onset hit generalizes (≈−$1,050).
+  event's effect (ITT of first onset), not a general drought-response function: the pooled
+  multi-cohort average is null under the doubly-robust frontier estimator at onset (−$324,
+  SE 276) and over the long run. *(Corrected 2026-07-13: an earlier draft of this erratum
+  cited a −$1,050 onset effect from a manual aggregation with invalid SEs — coding audit A4.)*
 - **Suggested:** "… lowered per-capita income by about $1,311 relative to never-exposed
   counties, with a smaller and more fragile, event-specific employment decline alongside it,
   identifying the income channel through which drought later surfaces in household finances."

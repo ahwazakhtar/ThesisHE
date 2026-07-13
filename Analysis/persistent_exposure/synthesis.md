@@ -57,7 +57,7 @@ For **CDD → Medical_Debt_Share** the Always-vs-Never differential relative to 
 
 | Design | Treatment | What it identifies | Headline |
 |--------|-----------|--------------------|----------|
-| Onset CS-DiD (`Analysis/did/`) | first year entering shock | dynamic ATT after onset, vs never-exposed | Cold (HDD) debt +4.9 pp and employment −4,982 compounding to e=10; Drought 2012 PCPI −$1,050 |
+| Onset CS-DiD (`Analysis/did/`) | first year entering shock | dynamic ATT after onset, vs never-exposed | Cold (HDD) debt +4.9 pp and employment −4,982 compounding to e=10; Drought 2012 PCPI −$1,050 *(superseded — manual-SE aggregation; frontier `did::att_gt` e=0 = −$324, n.s.; see `Analysis/did/did_results.md` §3 banner)* |
 | **Chronic exposure (this phase)** | ≥10/13 shock-years | standing gap of always- vs never-exposed | Heat (CDD) debt +9.9 pp level gap (largest), but not widening within-design; drought not assessable (1 county) |
 
 The two are complementary. Onset DiD is the causal within-design for *transient* shocks (drought, cold spells); chronic-exposure characterizes *standing* sub-populations for *recurring* shocks (heat, AQI). Together they show the medical-debt burden of temperature stress is real both as a recurring within-county dynamic **and** as a large persistent cross-sectional gap concentrated in the chronically-hot South.

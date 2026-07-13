@@ -55,6 +55,16 @@ Phase 0's `Analysis/persistent_exposure/never_exposed_event_year.csv` reported 4
 
 ## 3. Phase 3b — Callaway-Sant'Anna event-time profiles
 
+> **⚠ DESCRIPTIVE ONLY (correction 2026-07-13, coding audit A4 / `code_quality_remediation_20260713`).**
+> The event-time SEs and p-values in this section come from a manual cohort-size-weighted
+> aggregation whose SE formula assumes independent cohort-time cells; the cells share
+> never-treated controls, so these SEs are too small and the p-values are invalid as
+> inference. The authoritative pooled/event-time estimates are the R 4.5.3 frontier
+> outputs (`Analysis/did/robustness/dr_csdid_eventtime.csv`, `did::att_gt` doubly robust).
+> Materially: the drought PCPI e=0 below (−$1,050, "p=0.002") is **−$324 (SE 276), null**
+> under the frontier estimator — the 2012 income effect is event-specific even at onset.
+> Do not cite this section's p-values in any manuscript.
+
 Cohort sizes (counties whose first event is in year g, restricted to cohorts with ≥ 30 counties):
 
 - **Drought:** 2011 (251), 2012 (139), 2013 (30), 2021 (50), 2022 (49). Note: the 2011 cohort is admissible because the panel starts in 2011; there is no pre-period observation for the 2011 cohort, so it contributes only at event_time ≥ 1.
@@ -105,7 +115,7 @@ A *visual* pre-trend check via `Analysis/plots/did/eventstudy_*.png` is the prim
 
 | Finding | LP/Event-Study (Phase 2) | DiD (Phase 3) | Verdict |
 |---------|--------------------------|---------------|---------|
-| Drought → PCPI | Exit_LP h=2 = +$1,044 (recovery rebound) | 2×2 ATT = −$1,311; CS e=0 ATT = −$1,050 | **Consistent.** The negative DiD picks up the persistent treated-vs-control gap; the positive Exit_LP picks up the within-treated recovery after the shock ends. |
+| Drought → PCPI | Exit_LP h=2 = +$1,044 (recovery rebound) | 2×2 ATT = −$1,311; CS e=0 ATT = −$1,050 *(descriptive — frontier DR e=0 = −$324, n.s.; see §3 banner)* | **Consistent.** The negative DiD picks up the persistent treated-vs-control gap; the positive Exit_LP picks up the within-treated recovery after the shock ends. |
 | Drought → Civilian_Employed | (not headline in Phase 2) | 2×2 ATT = −2,053; CS e=11 ATT = −3,915 | DiD reveals an employment effect not visible in the LP-on-changes framework. |
 | HDD → Hosp_BadDebt | Exit_LP h=0,2: negative (relief on exit) | 2×2 ATT null; CS Medical_Debt_Share +0.049 at e=10 | DiD finds *long-run* debt-share rise that the short-horizon LP can't see. |
 | Cold scarring | Phase 2 LP rejected scarring (immediate relief on exit) | DiD shows long-run cumulative damage | **Tension.** LP captures the *exit* response; DiD captures the *persistent treatment* effect. Both are correct; the design defines what's being measured. |

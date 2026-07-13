@@ -28,6 +28,14 @@ Verified 2026-07-12 before this track was created:
   drought cohorts is **−$1,050 (p=0.002)**, so the *immediate* income hit shows some
   generalization; it is the long-run pooled average that dies. Permitted language must carry
   this nuance.
+  - **AMENDED 2026-07-13 (coding audit A4, `code_quality_remediation_20260713`):** the
+    −$1,050 (p=0.002) figure came from the manual cohort aggregation in
+    `run_did_analysis.R`, whose SE formula invalidly assumes independent cohort-time cells.
+    The authoritative frontier estimator (`did::att_gt` DR,
+    `Analysis/did/robustness/dr_csdid_eventtime.csv`) gives **e=0 = −$324 (SE 276): null**.
+    The original audit's "null or reversed" reading was right after all; this spec's
+    "correction" over-corrected. Permitted language now: the 2012 income effect is
+    event-specific even at onset; do not cite the manual aggregation's p-values.
 - **One omission in the project's favor-check:** HonestDiD breakdown M̄<0.5 attaches to the
   *pooled* CS event study only (already null at e=0); it **cannot run on the 2012 cohort**
   (no in-panel pre-period). The 2012 headline's credibility rests on DRDID (−$1,451), WCB/RI

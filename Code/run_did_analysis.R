@@ -333,7 +333,21 @@ cat(sprintf("\nWrote %d ATT(g,t) estimates.\n", nrow(cs_all)))
 
 # ===========================================================================
 # Aggregate cohort-level ATTs to event-time response curves
+# *** DESCRIPTIVE ONLY — DO NOT CITE THESE SEs / p-VALUES AS INFERENCE ***
 # ===========================================================================
+# QUARANTINED 2026-07-13 (code_quality_remediation task 2.2; coding audit A4):
+# the SE formula below treats cohort-time ATT(g,t) cells as INDEPENDENT, but they
+# share never-treated controls and have nonzero covariance, so ATT_se_avg (and the
+# p_value derived from it) is generally too small. This block is also a sequence of
+# canonical 2x2 regressions, not the doubly-robust Callaway-Sant'Anna estimator.
+# AUTHORITATIVE pooled/event-time inference lives in the R 4.5.3 frontier layer:
+#   Code/did_robustness/02_doubly_robust_did.R -> did::att_gt(est_method="dr") +
+#   did::aggte() -> Analysis/did/robustness/dr_csdid_*.csv
+# (influence-function covariance carried correctly). Concretely: this block's
+# drought PCPI e=0 is -$1,050 "p=0.002", while the frontier estimator gives
+# e=0 = -$324 (SE 276) — null. Keep this aggregation only as a descriptive
+# cohort-size-weighted profile; headline prose must source the frontier values.
+#
 # Simple weighted aggregation: ATT(e) = sum_g w(g) * ATT(g, g+e)
 # with weights = cohort size, normalized within each (shock, outcome, e).
 
