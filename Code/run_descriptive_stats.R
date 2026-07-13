@@ -235,7 +235,12 @@ journal_theme <- function(base_size = 11) {
 
 run_descriptive_stats <- function(
   input_path = "Data/county_level_master.csv",
-  output_dir = "Analysis",
+  # Write to the family folder, not the Analysis/ root (CLAUDE.md convention;
+  # matches this script's own output header above). Fixed 2026-07-13 during the
+  # post-dedup exhibit refresh (code_quality_remediation Phase 4.2): the default
+  # had been "Analysis", scattering CSVs to the root while the manuscript reads
+  # from Analysis/descriptive/.
+  output_dir = "Analysis/descriptive",
   plot_dir = "Analysis/plots/descriptive",
   debt_reporting_policy = data.frame(
     State = "CO",

@@ -6,7 +6,7 @@
 **Tests:** `Code/tests/test_did_analysis.R` (5/5 pass)
 
 **Outputs:**
-- `Analysis/did/did_2x2_drought_2012.csv` — sharp 2×2 for 2012 Midwest drought
+- `Analysis/did/did_2x2_drought_2012.csv` — sharp 2×2 for the 2012 drought (extreme-PDSI first-onset cohort: GA / Mountain West / Plains — NOT "Midwest"; see `master_evidence_table.md` Row 3)
 - `Analysis/did/did_2x2_hdd_2013.csv` — sharp 2×2 for 2013 HDD onset
 - `Analysis/did/did_pretrends_event_study.csv` — event-study with leads/lags around each 2×2 event
 - `Analysis/did/did_cs_att_gt.csv` — Callaway-Sant'Anna ATT(g,t) cells (427 estimates)
@@ -17,12 +17,12 @@
 
 Implements the committee's third econometric ask: a natural-experiment diff-in-diff using never-exposed counties as controls.
 
-- **Phase 3a (sharp 2×2):** treated = counties whose *first* shock onset is the candidate event year; control = never-exposed counties. Model: `Y = α_i + γ_t + τ * (Treated × Post) | fips_code + Year`, cluster = State. Events: 2012 Midwest drought, 2013 HDD onset.
+- **Phase 3a (sharp 2×2):** treated = counties whose *first* shock onset is the candidate event year; control = never-exposed counties. Model: `Y = α_i + γ_t + τ * (Treated × Post) | fips_code + Year`, cluster = State. Events: 2012 drought, 2013 HDD onset.
 - **Phase 3b (Callaway-Sant'Anna):** Cohort-time ATTs via per-cohort 2×2 against never-treated controls; aggregated to event-time profiles weighted by cohort size. Run for Drought, HDD, CDD across 7 outcomes. AQI dropped per Phase 0 feasibility (only 3.1% never-exposed). The `did` R package failed to install on the local Windows toolchain (dependency `recipes` failed); the CS estimator is implemented manually with `fixest::feols`, which is also more CLAUDE.md-aligned.
 
 ## 2. Phase 3a — Sharp 2×2 results
 
-### Drought (2012 Midwest drought): 139 treated, 2,534 never-exposed
+### Drought (2012 drought; GA / Mountain West / Plains cohort — not "Midwest"): 139 treated, 2,534 never-exposed
 
 | Outcome | ATT | SE | p | N |
 |---------|-----|----|---|---|

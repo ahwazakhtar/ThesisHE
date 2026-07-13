@@ -98,7 +98,7 @@ Source: `Code/run_did_analysis.R` · Memo: `Analysis/did/did_results.md`. Pre-fe
 
 The committee asked whether the LP/FE results could be replicated using a sharp natural experiment with never-exposed counties as controls. The Phase 0 inventory found large never-exposed pools for Drought (78.6%), HDD (71.4%), and CDD (65.8%); AQI was dropped from the DiD scope (3.1% never-exposed too thin).
 
-- **2012 Midwest drought 2×2 DiD** (139 treated counties, 2,534 never-exposed):
+- **2012 drought 2×2 DiD** (139 treated counties, 2,534 never-exposed; extreme-PDSI first-onset cohort is GA / Mountain West / Plains — not "Midwest", per `master_evidence_table.md` Row 3):
     - **PCPI_Real ATT = −$1,311 (p=0.027)**
     - **Civilian_Employed ATT = −2,053 (p=0.0001)**
     - These are *county-level* outcomes; their state-level analogues in this summary's headline (Medical Debt) work through the income channel documented in `Text/drafts/propagation_pathways.md` §3.

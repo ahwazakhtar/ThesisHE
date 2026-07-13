@@ -14,7 +14,9 @@ finding cannot be explained by the agricultural income channel, and what else is
 
 **Agriculture is one channel, not the channel.** The reduced-form climate → health-cost
 relationships are reproduced by mechanisms that operate *independent of farm income* and, in
-several cases, **strengthen in the counties with the least agriculture**. The single strongest
+several cases, **concentrate on non-farm labor exposure** (heat×labor and heat×energy-burden
+gradients, §2; the earlier "cold-employment strengthens in the least-agricultural counties"
+claim is **superseded** — see the §2 note). The single strongest
 piece of evidence is a **morbidity/health-cost channel measured directly in Medicare
 administrative data**: heat, cold, and air pollution each raise per-beneficiary spending and ED
 visits, with no farm-income intermediary. Two further non-agricultural channels are visible in
@@ -46,9 +48,15 @@ would survive in any county with a hospital.
 ## 2. Labor exposure, not cropland
 *(Tasks 2a/2b; `ag_channel_coefs.csv`; Figs `fig_labor_vs_ag.png`, `fig_moderator_interactions.png`)*
 
-- **Cold → employment survives in low-ag counties.** `High_HDD` Lag2 → **−721 jobs** overall
+- ~~**Cold → employment survives in low-ag counties.** `High_HDD` Lag2 → **−721 jobs** overall
   (p=0.029) and **−2,011** in the *bottom* ag-dependence tercile (p=0.048). A cold-employment
-  effect that is *stronger* where there is least farming is not the agricultural channel.
+  effect that is *stronger* where there is least farming is not the agricultural channel.~~
+  **[SUPERSEDED 2026-07-13 (coding audit B1; `Plans/master_evidence_table.md` Row 11a).** The
+  struck-through cold→employment low-ag figures (−721 overall / −2,011 bottom-ag tercile) are a
+  levels/county-size artifact that **dies in logs** (overall and bottom-ag both ns, |est|<0.5
+  log-pts; commits `5c615dd`/`ddfc448`) — **do not cite**, and do not claim cold→employment
+  survives in low-ag counties. The non-agricultural labor claim now rests on the heat×labor and
+  heat×energy-burden interaction gradients (bullets 2–3 below), which are unaffected.]
 - **Heat → employment loads on the labor moderator.** The `High_CDD × ClimateExposed_NonFarm_Share`
   interaction is **−689** (p=0.009; Lag1 −705, Lag2 −511): heat employment damage concentrates
   where the climate-exposed *non-farm* employment share is high (construction, manufacturing,
@@ -127,8 +135,11 @@ resolves this: it is the **expected** result, not an anomaly.
 1. **The health-cost/utilization channel is entirely non-agricultural** and is the most cleanly
    identified result here (heat/cold/AQI → Medicare spending & ED visits, all measured in health
    data). Agriculture explains **none** of it.
-2. **The cold-employment effect is non-agricultural**: it *survives and strengthens* in the bottom
-   ag-dependence tercile, and heat-employment damage loads on climate-exposed **non-farm** labor.
+2. **The non-agricultural labor channel is carried by heat, not by low-ag cold employment.**
+   Heat-employment damage loads on climate-exposed **non-farm** labor (heat×labor interaction
+   −689, p=0.009) and on energy burden. *(The earlier "cold-employment survives/strengthens in
+   the bottom ag tercile (−2,011/−721)" statement is **superseded** — a levels/county-size
+   artifact that dies in logs; see the §2 superseded note and `master_evidence_table.md` Row 11a.)*
 3. **Where an agricultural signature is real (drought), it is event-specific and partly a
    population-selection artifact**, not a general "droughted-county" income law.
 

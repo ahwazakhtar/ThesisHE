@@ -90,7 +90,11 @@ is binding — link, never duplicate.
   dose, exposure index, persistent exposure, mechanisms as needed); stamp outputs; archive
   stale versions; B1 stale-prose cleanup (hospital synthesis body below the banner;
   latent-hardship "pre-dedup" label → certified-invariant; AQI memo superseded-by note).
-- [~] **4.3 FIPS + logging hygiene (B4, B3 scoped).** `pad_fips()` in `pipeline_utils.R`;
+- [x] **4.3 FIPS + logging hygiene (B4, B3 scoped).** (`980b1d7` — pad_fips + open_build_log
+  in pipeline_utils.R; 9/9 integrity tests incl. master/premiums/debt FIPS scans; B1 prose
+  cleanup done in the same commit — hospital §B, latent-hardship label+generator, AQI memo,
+  county synthesis. Residual for 4.2 landing: mechanism_verdict.md −2,011; event_study
+  synthesis manual-CS + Midwest.) `pad_fips()` in `pipeline_utils.R`;
   repo test scanning built intermediates for 5-char county FIPS; build-log helper used by
   scripts this track touched.
 - [ ] **Phase 4 checkpoint** — verification gate + git note.
