@@ -154,7 +154,8 @@ baseline_window_mean <- function(df, value, years, id = "fips_code",
 # row per fips x Year by first() of every column. first() is lossless here because
 # every variable used downstream (medical-debt outcomes, county-level climate-shock
 # lags, Population, State, income) is CONSTANT within a fips x Year group (verified
-# 2026-07-12). Stopgap for thesis_completion 2.2; outputs are labelled "pre-dedup".
+# 2026-07-12). Stopgap for thesis_completion 2.2; now a no-op — outputs certified
+# dedup-invariant 2026-07-13 (Analysis/county_dedup_integrity.md §4).
 dedup_county_year <- function(df, id = "fips_code", year = "Year") {
   df %>%
     dplyr::group_by(dplyr::across(dplyr::all_of(c(id, year)))) %>%
@@ -260,7 +261,7 @@ if (sys.nframe() == 0L) {
   logcon <- file(file.path(OUT, "build_logs", "run_latent_hardship.log"), open = "wt")
   sink(logcon, split = TRUE); sink(logcon, type = "message")
   on.exit({ sink(type = "message"); sink(); close(logcon) }, add = TRUE)
-  cat("=== O6 latent hardship (PRE-REGISTERED; pre-dedup) ::",
+  cat("=== O6 latent hardship (PRE-REGISTERED; certified dedup-invariant 2026-07-13) ::",
       format(Sys.time()), "===\n\n")
 
   BASELINE_YEARS <- 2011:2013
@@ -456,9 +457,11 @@ if (sys.nframe() == 0L) {
     "",
     sprintf("_Generated %s. PRE-REGISTERED design (spec.md Phase-3 pre-specification, dated 2026-07-12)._",
             format(Sys.Date())),
-    "_Outputs labelled **pre-dedup**: run before thesis_completion 2.2; the run_premium_mediation.R",
-    "dedup stopgap collapsed ~428 RA-split county-years to one row/county-year (lossless — the debt",
-    "outcomes, shock lags, and Population are constant within fips x Year). Refresh after 2.2._",
+    "_Estimates **certified dedup-invariant (2026-07-13)**: the county master is now certified unique",
+    "on (fips_code, Year) (`fca5643`), and this analysis's `first()` dedup stopgap collapsed ~428",
+    "RA-split county-years losslessly (debt outcomes, shock lags, and Population are constant within",
+    "fips x Year), so every cell here is numerically identical pre/post-dedup. See",
+    "`Analysis/county_dedup_integrity.md` §4 (run_latent_hardship.R row = \"No-op / exactly invariant\")._",
     "",
     "**Question.** Does the measured climate-shock -> medical-debt response *shrink* where hardship is",
     "least observable to financial institutions (uninsurance, rurality, hospital scarcity, low income,",
@@ -475,7 +478,7 @@ if (sys.nframe() == 0L) {
     "- **Rurality (RUCC)** — RUCC absent from the repo; bound to z(-log baseline population) [B1].",
     "- **Hospital access** — z(log1p distinct-CCN count in county, 2011-2013); absent-from-NASHP -> 0 [B2].",
     "- **SVI** — `SVI_static` (repo's time-invariant baseline SVI) [B3].",
-    "- **Baseline window** — 2011-2013 [B4]. **Dedup** — first() stopgap, pre-dedup label [B5].",
+    "- **Baseline window** — 2011-2013 [B4]. **Dedup** — first() stopgap, certified dedup-invariant 2026-07-13 [B5].",
     "",
     "## Decision rule",
     sprintf("**%s**", verdict),

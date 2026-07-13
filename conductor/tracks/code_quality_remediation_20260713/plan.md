@@ -63,7 +63,8 @@ is binding — link, never duplicate.
 
 ## Phase 3: Bad-control sensitivity (audit A5)
 
-- [~] **3.1 Same-sample control-variant comparison.** New `Code/run_control_sensitivity.R`
+- [x] **3.1 Same-sample control-variant comparison.** (`ff7049e` — no sign/significance changes
+  anywhere; debt cells re-attributed to SAMPLE fragility; 8/8 tests, verified independently.) New `Code/run_control_sensitivity.R`
   (R 4.2.2): for each headline transition/dose/county cell — cold→debt L1 (county),
   drought→debt L2 (county), drought debt onset/exit asymmetry h=2, cold cumulative-dose
   employment binned contrast — estimate three variants on the IDENTICAL estimation sample:
@@ -73,7 +74,7 @@ is binding — link, never duplicate.
   FE-purged weather shocks are quasi-random, so no-control coefficients should move
   modestly; a large collapse or amplification flags mediation and changes permitted
   language. **Test:** `testthat` — identical N across variants per cell; spec construction.
-- [ ] **3.2 Fold verdicts in (orchestrator).** Evidence-table rows for the affected
+- [x] **3.2 Fold verdicts in (orchestrator).** (`0f257c0` — Rows 4/5/16/17 + B5/B6 rules.) Evidence-table rows for the affected
   headlines updated (no-control primary for total-effect language; contemporaneous controls
   relabeled mediation/sensitivity); B6 dose-as-exposure-history framing and B5 clustering
   primacy (state primary, RA sensitivity, never select significance on RA SEs) written into
@@ -82,14 +83,14 @@ is binding — link, never duplicate.
 
 ## Phase 4: Post-dedup exhibit freshness + hygiene (audit A6, B1, B4)
 
-- [ ] **4.1 Exhibit registry.** `Plans/exhibit_registry.md`: one row per manuscript-bound
+- [~] **4.1 Exhibit registry.** `Plans/exhibit_registry.md`: one row per manuscript-bound
   exhibit (output file, generating script, R version, inputs, master-build stamp,
   post-dedup? y/n, essay/section). Seed from the writing plan §10 table/figure lists.
-- [ ] **4.2 Re-run manuscript-bound families on the certified master** (delta, cumulative
+- [~] **4.2 Re-run manuscript-bound families on the certified master** (delta, cumulative
   dose, exposure index, persistent exposure, mechanisms as needed); stamp outputs; archive
   stale versions; B1 stale-prose cleanup (hospital synthesis body below the banner;
   latent-hardship "pre-dedup" label → certified-invariant; AQI memo superseded-by note).
-- [ ] **4.3 FIPS + logging hygiene (B4, B3 scoped).** `pad_fips()` in `pipeline_utils.R`;
+- [~] **4.3 FIPS + logging hygiene (B4, B3 scoped).** `pad_fips()` in `pipeline_utils.R`;
   repo test scanning built intermediates for 5-char county FIPS; build-log helper used by
   scripts this track touched.
 - [ ] **Phase 4 checkpoint** — verification gate + git note.

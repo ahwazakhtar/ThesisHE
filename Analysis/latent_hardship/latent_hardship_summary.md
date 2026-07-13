@@ -1,9 +1,11 @@
 # Observed vs Latent Hardship — Gradient Summary (O6)
 
 _Generated 2026-07-12. PRE-REGISTERED design (spec.md Phase-3 pre-specification, dated 2026-07-12)._
-_Outputs labelled **pre-dedup**: run before thesis_completion 2.2; the run_premium_mediation.R
-dedup stopgap collapsed ~428 RA-split county-years to one row/county-year (lossless — the debt
-outcomes, shock lags, and Population are constant within fips x Year). Refresh after 2.2._
+_Estimates **certified dedup-invariant (2026-07-13)**: the county master is now certified unique
+on (fips_code, Year) (`fca5643`), and this analysis's `first()` dedup stopgap collapsed ~428
+RA-split county-years losslessly (debt outcomes, shock lags, and Population are constant within
+fips x Year), so every cell here is numerically identical pre/post-dedup. See
+`Analysis/county_dedup_integrity.md` §4 (run_latent_hardship.R row = "No-op / exactly invariant")._
 
 **Question.** Does the measured climate-shock -> medical-debt response *shrink* where hardship is
 least observable to financial institutions (uninsurance, rurality, hospital scarcity, low income,
@@ -20,7 +22,7 @@ Multiplicity: BKY (2006) sharpened q-values over the full 20-cell grid (2 shocks
 - **Rurality (RUCC)** — RUCC absent from the repo; bound to z(-log baseline population) [B1].
 - **Hospital access** — z(log1p distinct-CCN count in county, 2011-2013); absent-from-NASHP -> 0 [B2].
 - **SVI** — `SVI_static` (repo's time-invariant baseline SVI) [B3].
-- **Baseline window** — 2011-2013 [B4]. **Dedup** — first() stopgap, pre-dedup label [B5].
+- **Baseline window** — 2011-2013 [B4]. **Dedup** — first() stopgap, certified dedup-invariant 2026-07-13 [B5].
 
 ## Decision rule
 **HONEST NULL: the >=2/3-at-q<0.10 bar is NOT cleared; medical debt stays a caveat.**

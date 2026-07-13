@@ -3,6 +3,16 @@
 **Generated:** 2026-02-18
 **Scope:** All active R scripts in `Code/` (20 scripts analyzed)
 
+> **SUPERSEDED (2026-07-13, coding audit B1).** This 2026-02-18 memo is kept as a historical
+> record; several findings have since been fixed in code. In particular, **Finding 13
+> ("`process_aqi_data.R` Abandons Population-Weighting Goal")** is out of date: `process_aqi_data.R`
+> now implements **strict population weighting** of state AQI (counties with missing population
+> are dropped from `AQI_Median_Wtd`, with no fallback to a simple county mean) and computes an
+> **equal-weight robustness series** (`AQI_Median_EW`) alongside it, with weighting diagnostics
+> in `Analysis/state/state_aqi_weight_diagnostics.csv`. See `conductor/knowledge/data-pipeline.md`
+> ("State AQI aggregation") for the current rule. Do not cite Finding 13 as a live defect. The
+> body below is left unrewritten.
+
 ---
 
 ## Summary

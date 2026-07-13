@@ -104,17 +104,29 @@ rather than cleanly reversing. Temperature shocks, by contrast, are reversible �
 the financial cost is in the exposure year, consistent with the demand-side
 post-exit "relief" pattern for cold shocks.
 
-**(B) Cumulative exposure: a positive margin dose-response (survivorship /
-adaptation), not compression.** The marginal effect of an extra cumulative
-shock-year on operating margin is positive at moderate dose (+0.0023 at 5 years,
-p = 0.010), and the 10+ vs 1-3 cumulative-years contrast is +0.018 (p = 0.033).
-This is *not* evidence of margins eroding with repeated exposure; the likely
-reading is **survivorship and adaptation** — hospitals that accumulate many
-shock-years and remain in the panel are the financially sturdier ones, and/or
-have adapted. Uncompensated-care %NPR shows no significant cumulative-dose
-effect. Stated plainly: repeated climate exposure does not mechanically compound
-into margin collapse over this window; the persistence story is about
-**drought hysteresis**, not dose-driven decline.
+**(B) Cumulative-dose operating-margin result — SUPERSEDED / DO NOT CITE.**
+
+> **SUPERSEDED (2026-07-13; see the winsorization addendum at the top of this file and
+> `Plans/master_evidence_table.md` Row 23).** The positive cumulative-dose operating-margin
+> result described below **fails winsorization**: the dose@5yr coefficient goes **p = 0.010 →
+> 0.080** and the 10+ vs 1–3 contrast **p = 0.033 → 0.131** once the hospital accounts are
+> winsorized within-year at 1%/99% (the −$408M charity-care reversal and other accounting
+> outliers drove the raw estimate). **Do not cite it, and do not present a
+> "survivorship/adaptation" margin dose-response as a finding.** The persistence story rests on
+> **drought hysteresis** (part A above), which *does* survive winsorization; the cumulative-dose
+> margin channel is now a non-robust null. The original unwinsorized paragraph is preserved
+> below, struck through, only as a record of the pre-correction estimate.
+
+~~**SUPERSEDED (unwinsorized — do not cite):** Cumulative exposure looked like a positive margin
+dose-response (survivorship / adaptation), not compression. The marginal effect of an extra
+cumulative shock-year on operating margin was positive at moderate dose (+0.0023 at 5 years,
+p = 0.010), and the 10+ vs 1-3 cumulative-years contrast +0.018 (p = 0.033). This was read as
+survivorship and adaptation — hospitals that accumulate many shock-years and remain in the panel
+being the financially sturdier ones, and/or adapted. Uncompensated-care %NPR showed no
+significant cumulative-dose effect. The claim was that repeated climate exposure does not
+mechanically compound into margin collapse over this window, and that the persistence story is
+about drought hysteresis, not dose-driven decline.~~ (Superseded — fails winsorization; see the
+banner above.)
 
 ---
 
@@ -200,6 +212,8 @@ misbehave" caveats appear on both the consumer and provider ledgers.
   (dropped by the LHS-NA rule).
 - County shocks are attached at the hospital's location county; cross-county
   catchment is not modeled.
-- The cumulative-dose margin result is survivorship-prone (unbalanced panel) and
-  is framed as adaptation/survivorship, not causal protection.
+- The cumulative-dose margin result is **SUPERSEDED (2026-07-13): it fails winsorization
+  (dose@5yr p=0.010→0.080; 10+ vs 1–3 p=0.033→0.131) — do not cite** (see §B and the
+  winsorization addendum at the top of this file). It was previously framed as
+  survivorship/adaptation on the unwinsorized accounts.
 - Drought-on-uncompensated-care is a measurement-fragile channel (see Incidence).

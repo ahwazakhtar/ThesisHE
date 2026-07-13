@@ -311,3 +311,109 @@ summarize_step_results <- function(results) {
   counts <- table(statuses)
   c(list(total = length(results)), as.list(counts))
 }
+
+# =============================================================================
+# FIPS + build-log hygiene helpers (code_quality_remediation_20260713, B4/B3).
+# These are the BLESSED shared helpers for new/touched code. They are NOT a
+# retrofit of the ~137 existing scripts — existing scripts keep their in-line
+# idioms; new code should source pipeline_utils.R and call these instead of
+# re-deriving them.
+# =============================================================================
+
+#' pad_fips() — zero-pad a county/state FIPS code to 5 characters.
+#'
+#' THE SILENT-CORRUPTION TRAP THIS REPLACES (CLAUDE.md "Silent-corruption traps";
+#' conductor/knowledge/data-pipeline.md): `sprintf("%05s", x)` pads with SPACES,
+#' not zeros (the C "0" flag is ignored for the %s conversion), so a single-digit
+#' state code is space-padded — "1001" -> " 1001", not "01001". That silently
+#' drops/mis-keys the ~316 counties whose state FIPS is a single digit (AL=01,
+#' CA=06, CT=09, ...) on any downstream join. The correct idiom pads the INTEGER
+#' value with a leading-zero flag: formatC(as.integer(x), width = 5, flag = "0").
+#'
+#' Contract:
+#'   - accepts numeric OR character input (character leading zeros are tolerated,
+#'     e.g. "06037" and 6037 both -> "06037");
+#'   - NA passthrough: NA in -> NA_character_ out (formatC alone would emit the
+#'     space-padded literal "   NA");
+#'   - hard error if any non-NA value is non-numeric or wider than 5 digits
+#'     (a >5-digit FIPS signals an upstream key/scale bug, not something to pad).
+#'
+#' @param x FIPS codes (numeric or character; may contain NA).
+#' @return character vector, each non-NA element exactly 5 chars, zero-padded.
+pad_fips <- function(x) {
+  if (length(x) == 0) return(character(0))
+  xi <- suppressWarnings(as.integer(x))
+
+  # non-NA input that failed integer coercion == non-numeric junk (e.g. "abc").
+  coercion_failed <- is.na(xi) & !is.na(x)
+  if (any(coercion_failed)) {
+    stop("pad_fips(): non-numeric FIPS value(s): ",
+         paste(unique(as.character(x[coercion_failed])), collapse = ", "))
+  }
+
+  # a FIPS wider than 5 digits is an upstream bug, not something to zero-pad.
+  too_wide <- !is.na(xi) & nchar(as.character(abs(xi))) > 5
+  if (any(too_wide)) {
+    stop("pad_fips(): FIPS value(s) wider than 5 digits (likely a key/scale bug): ",
+         paste(unique(xi[too_wide]), collapse = ", "))
+  }
+
+  out <- formatC(xi, width = 5, flag = "0")
+  out[is.na(xi)] <- NA_character_          # NA passthrough (never "   NA")
+  out
+}
+
+#' open_build_log() — open a timestamped, dependency-free build log for a family.
+#'
+#' Opens a base-R sink() to Analysis/<family>/build_logs/<script_name>.log
+#' (creating the directory if needed), writes a provenance header (timestamp,
+#' R version, platform, working directory), and returns a zero-argument CLOSER.
+#' The standard for new/touched scripts is to register the closer via on.exit()
+#' immediately so the sink is released even if the script errors out:
+#'
+#'   source("Code/pipeline_utils.R")
+#'   close_log <- open_build_log("mechanism", "run_mechanism_medicare")
+#'   on.exit(close_log(), add = TRUE)
+#'   ... analysis, cat()/print() everything you want logged ...
+#'   # close_log() also runs at normal completion via on.exit; calling it twice
+#'   # is safe (idempotent).
+#'
+#' Base R only (no data.table/glue/etc.). split = TRUE mirrors output to the
+#' console so interactive runs still show progress.
+#'
+#' @param family analysis family folder under Analysis/ (e.g. "mechanism").
+#' @param script_name basename of the calling script (no extension).
+#' @param split echo to console as well as the log file (default TRUE).
+#' @return function() closer; call via on.exit(). Returns the log path invisibly.
+open_build_log <- function(family, script_name, split = TRUE) {
+  if (missing(family) || !nzchar(family)) {
+    stop("open_build_log(): 'family' is required (Analysis/<family>/build_logs/).")
+  }
+  if (missing(script_name) || !nzchar(script_name)) {
+    stop("open_build_log(): 'script_name' is required.")
+  }
+  log_dir <- file.path("Analysis", family, "build_logs")
+  dir.create(log_dir, recursive = TRUE, showWarnings = FALSE)
+  log_path <- file.path(log_dir, paste0(script_name, ".log"))
+
+  con <- file(log_path, open = "wt")
+  sink(con, split = isTRUE(split))
+  cat("=== BUILD LOG:", script_name, "===\n")
+  cat("Started :", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "\n")
+  cat("R       :", R.version.string, "\n")
+  cat("Platform:", R.version$platform, "\n")
+  cat("WD      :", getwd(), "\n")
+  cat("Log file:", normalizePath(log_path, winslash = "/", mustWork = FALSE), "\n")
+  cat(strrep("-", 60), "\n")
+
+  closed <- FALSE
+  function() {
+    if (closed) return(invisible(log_path))
+    cat(strrep("-", 60), "\n")
+    cat("Finished:", format(Sys.time(), "%Y-%m-%d %H:%M:%S"), "\n")
+    sink()
+    close(con)
+    closed <<- TRUE
+    invisible(log_path)
+  }
+}
