@@ -1,0 +1,9 @@
+Tasks: code_quality_remediation_20260713 0.2 + 2.2 (orchestrator — permitted-language change).
+Why: the audit's most material finding. The 'immediate income hit generalizes (-$1,050,
+p=0.002)' nuance had propagated from did_results.md into the evidence table, both draft
+abstracts, the submission erratum, and TWO audit documents' correction sections — all
+sourced from an SE formula that treats correlated cohort-time cells as independent. The
+frontier layer's e=0 is null (-324, SE 276), so the honest claim is stronger discipline:
+the 2012 income effect is event-specific even at onset. Lesson for econometrics.md at
+close-out: when two implementations of 'the same' estimator disagree, the one with the
+proper influence-function covariance governs, and the other gets quarantined, not averaged.
