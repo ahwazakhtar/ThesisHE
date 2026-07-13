@@ -14,8 +14,10 @@ is binding — link, never duplicate.
 
 ## Phase 0: Standup + the urgent claim correction
 
-- [ ] **0.1 Stand up the track** (spec, plan, registry, CLAUDE.md snapshot line). Commit.
-- [ ] **0.2 A4 prose correction (orchestrator — permitted-language change).** Replace the
+- [x] **0.1 Stand up the track** (spec, plan, registry, CLAUDE.md snapshot line). `a0ca6f9`
+- [x] **0.2 A4 prose correction (orchestrator — permitted-language change).** (`034e156` —
+  "onset hit generalizes (−$1,050)" retracted across 8 surfaces; frontier e=0 −$324 null
+  governs; 2012 income effect is event-specific even at onset.) Replace the
   "immediate income hit generalizes (−$1,050, p=0.002)" nuance with the frontier verdict
   (CS_dr_dynamic e=0 = −$324, SE 276, null; 2012 event-specific even at onset) in:
   evidence-table Row 1 (robustness + permitted language), Essay 1 abstract,
@@ -26,19 +28,19 @@ is binding — link, never duplicate.
 
 ## Phase 1: Truthful verification (audit A1)
 
-- [ ] **1.1 Fix the aggregate runner.** `Code/tests/testthat.R`: run every
+- [x] **1.1 Fix the aggregate runner.** (`96f26e4` — 30/30 PASS in clean processes; the old
+  runner's 36 errors were wd-drift artifacts, no hidden real failures.) `Code/tests/testthat.R`: run every
   `Code/tests/test_*.R` in a **clean R process** from the repo root (`system2` on
   R 4.2.2), capture per-file exit codes, print a summary table, exit nonzero if ANY file
   fails; emit a machine-readable report (`Analysis/test_reports/test_report.csv` +
   timestamp/R-version stamp).
-- [ ] **1.2 Runner regression test.** A deliberately failing fixture (gated so it only runs
-  when the runner tests itself, e.g. `TESTTHAT_SELFTEST=1`) proving the runner exits
-  nonzero on failure; document the invocation in the runner header.
+- [x] **1.2 Runner regression test.** (`96f26e4` — fixture + self-test both assertions pass;
+  re-verified independently by orchestrator.)
 - [ ] **Phase 1 checkpoint** — verification gate + git note.
 
 ## Phase 2: Analysis-source corrections (audit A3 + A4 code side)
 
-- [ ] **2.1 Rebuild the RA panel from source (A3).** `run_premium_mediation.R`: build the
+- [~] **2.1 Rebuild the RA panel from source (A3).** `run_premium_mediation.R`: build the
   rating-area panel from `Data/premiums_county.csv` (county × Year × rating_area_id), NOT
   from the deduped master's premium columns; join county shocks/population with a
   documented allocation rule (equal-split across a county's RAs as primary — sub-county
@@ -48,7 +50,9 @@ is binding — link, never duplicate.
   β=3.17/SE=2.57/δ*=7.40 and report whether the drought STRONG verdict and the 92–99%
   mediation corollary hold. **Test:** extend `test_premium_mediation.R` — RA panel row
   count = source panel count; split-county population never double-assigned.
-- [ ] **2.2 Quarantine the manual CS aggregation (A4 code side).** `run_did_analysis.R`:
+- [x] **2.2 Quarantine the manual CS aggregation (A4 code side).** (`034e156` — descriptive-only
+  block in `run_did_analysis.R`; §3 banner in `did_results.md`; p-value column relabel happens at
+  the Phase-4 regeneration.) `run_did_analysis.R`:
   descriptive-only header note at the aggregation block (invalid independence SEs, pointer
   to the frontier layer); drop or clearly relabel its p-value column in
   `did_cs_event_time.csv` on next regeneration; banner in `Analysis/did/did_results.md`
@@ -57,7 +61,7 @@ is binding — link, never duplicate.
 
 ## Phase 3: Bad-control sensitivity (audit A5)
 
-- [ ] **3.1 Same-sample control-variant comparison.** New `Code/run_control_sensitivity.R`
+- [~] **3.1 Same-sample control-variant comparison.** New `Code/run_control_sensitivity.R`
   (R 4.2.2): for each headline transition/dose/county cell — cold→debt L1 (county),
   drought→debt L2 (county), drought debt onset/exit asymmetry h=2, cold cumulative-dose
   employment binned contrast — estimate three variants on the IDENTICAL estimation sample:
