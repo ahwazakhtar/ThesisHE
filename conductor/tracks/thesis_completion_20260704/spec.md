@@ -95,6 +95,35 @@ machinery.
   (closure events derivable from CCN exit in the NASHP panel). Guard the reverse-causality
   direction (closures → local economy).
 
+## Wet-shock bin pre-specification (T1.6 — added 2026-07-13, BEFORE any code; reviewer-demanded)
+
+A reviewer asked whether precipitation shocks are accounted for. They are (continuous
+`Z_Precip` + lags in the county FE models; `Delta_Z_Precip` swings with a documented income
+finding; PDSI = the precipitation-deficit extreme). The one gap is a **discrete wet-extreme
+bin**. This is the committee-demand exception to the specification freeze — frozen here
+before implementation:
+
+- **Shock:** `High_Precip = 1{Z_Precip > +1.5}` — exactly symmetric to the established
+  z-based cold bin (Z < −1.5). The dry tail is NOT re-binned (drought/PDSI already owns it —
+  state this in the write-up).
+- **Panel/spec:** certified county master; the established county debt/economy spec
+  (`fixest::feols`, county + year FE, state-clustered, established weighting); shock at
+  t, t−1, t−2 (distributed lag, matching the existing shock treatment).
+- **Outcomes (frozen — headline set only):** Medical_Debt_Share, PCPI_Real,
+  Civilian_Employed, Med_HH_Income_Real. 4 outcomes × 3 lag terms = 12 cells.
+- **Controls:** NO-control spec primary (per the Jul-13 control-sensitivity lesson);
+  the established contemporaneous-control variant as labeled sensitivity.
+- **Recorded expectation:** small/null level effects — the delta analysis suggests
+  precipitation acts through year-over-year *swings* (income −$240 to −$274, h=1–3),
+  not sustained wet levels; a strong level effect would be a surprise (debug first).
+- **Multiplicity:** all 12 cells reported; BKY sharpened q over the grid; no cherry-picking.
+- **Decision rule (binding):** tier capped at **exploratory / appendix robustness**
+  regardless of significance — this answers a reviewer, it does not enter the headline
+  hazard family. Permitted language at q<0.10: "a reviewer-requested wet-extreme margin,
+  exploratory." Otherwise: the honest null, cited as evidence the hazard family is complete.
+- **Deliverables:** `Code/run_wet_shock_bin.R` (R 4.2.2) + testthat +
+  `Analysis/wet_shock/` + INDEX row + evidence-table row + reviewer-response paragraph.
+
 ## Explicitly out of scope (per the roadmap's "recommend against")
 
 - The full structural microsimulation (multi-month, high modeling risk; offer T1.3 instead).
