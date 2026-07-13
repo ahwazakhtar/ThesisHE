@@ -1,0 +1,6 @@
+Tasks: code_quality_remediation_20260713 1.1 + 1.2 (audit A1, spec O1).
+Why: the aggregate runner was FALSE-GREEN (exit 0 with 36 errors) — any 'tests pass'
+claim citing it was untrustworthy, including potential conductor verification records.
+Now: acceptance criteria §7-1 and §7-2 both demonstrated. The report CSV is gitignored
+by the whitelist (md tracked); partial runs write test_report_partial.* so a subset
+never clobbers the authoritative full-sweep report.
