@@ -28,7 +28,9 @@ new data input (Census county adjacency file). Any contingency that fires propag
   `Code/run_spillover_analysis.R`. Tests: adjacency symmetry, own-county exclusion,
   exposure ∈ [0,1], panel uniqueness. Expectation recorded in spec O1.
   Output: `Analysis/advisor_robustness/spillover_results.csv` + synthesis note.
-- [~] **1.2 AAIW clustering justification + sensitivity grid (O2).** Methods note applying
+- [x] **1.2 AAIW clustering justification + sensitivity grid (O2).** `550ea2c` *(County
+  clustering severely anticonservative as predicted; Conley 200km ≈ state; headlines
+  survive all defensible levels — drought income p=.008 even at Conley 300km.)* Methods note applying
   Abadie–Athey–Imbens–Wooldridge (QJE 2023) to this design (state = assignment-correlation
   level, nests rating areas); sensitivity grid county vs state on headline specs,
   cross-referencing the existing Conley and RA-cluster runs. No new primary inference
