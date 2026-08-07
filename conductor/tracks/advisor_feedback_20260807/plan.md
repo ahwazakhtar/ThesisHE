@@ -59,10 +59,13 @@ new data input (Census county adjacency file). Any contingency that fires propag
 
 ## Phase 2: Synthesis & propagation
 
-- [ ] **2.1 Synthesis memo.** `Analysis/advisor_robustness/synthesis.md` — one verdict per
+- [x] **2.1 Synthesis memo.** `Analysis/advisor_robustness/synthesis.md` — one verdict per
   advisor item; explicit statement of whether any headline claim needs qualification.
-  Update `Analysis/INDEX.md`.
-- [ ] **2.2 Propagation (conditional).** If any contingency fired: dated spec note here,
-  evidence-table row updates per `audit_response_20260712` conventions, pointer notes in
-  `thesis_completion_20260704` 2.4/2.5. If nothing fired: record "no propagation needed."
+  Update `Analysis/INDEX.md`. *(No demotions; every direction strengthens or refines.
+  Open item: MAD construction for employment rows flagged back to the advisor.)*
+- [x] **2.2 Propagation (conditional).** *(No contingency fired — no evidence-table row
+  changes needed; the spillover deviation note lives in this track's spec. Favorable
+  guidance propagated: advisor-robustness pointers added to `thesis_completion_20260704`
+  2.4 and 2.5 (appendix subsections, spillover qualifier language, clustering note as
+  inference paragraph, horizon refinements for Essay 2).)*
 - [ ] **Phase 2 checkpoint** — verification gate + git note.

@@ -176,6 +176,12 @@ blocked on 2.2 here; T1.3 component (a) is amended (dated note in `spec.md`).
   at once; (ii) present Medicare morbidity as *parallel direct evidence* of a channel, never as
   mediating the 2012 income result; (iii) keep the ACA null hazard-specific (drought tightly
   bounded at >50–79% of the morbidity benchmark; heat/cold only loosely).
+  **Advisor-robustness guidance (Aug 7, `advisor_feedback_20260807`):** the robustness
+  appendix has four ready subsections in `Analysis/advisor_robustness/` (spillovers,
+  AAIW inference levels, window/horizon, MAD scaling — see its `synthesis.md`); use the
+  spillover qualifier "county coefficients capture local exposure; adjacent-county
+  exposure adds a same-signed regional component the local coefficient understates";
+  the clustering note is the inference-methods paragraph (AAIW-cited).
   **Output:** `Text/essay1_incidence_draft.md` (or `.tex`).
 - [ ] **2.5 Essays 2 & 3 full drafts (T1.5).** Reuse Essay 1's data/methods sections. Essay 3's
   framing gate is **lifted (2026-07-13)**: hybrid "distribution + observability" spine per
@@ -183,6 +189,9 @@ blocked on 2.2 here; T1.3 component (a) is amended (dated note in `spec.md`).
   **Re-audit guidance (Jul 12) for Essay 2:** the cold-compounding estimator dependence
   (binned contrast + CS DiD vs the flat smooth quadratic) must be central in the headline
   table and conclusion, not only disclosed in the abstract.
+  **Advisor-robustness guidance (Aug 7):** Essay 2 persistence claims gain the horizon
+  refinements (debt scar transient by h=4; cold employment persists h=3–4, p=.009/.006;
+  too-short windows *understate* cold compounding) — `Analysis/advisor_robustness/`.
   **Outputs:** `Text/essay2_persistence_draft.md`, `Text/essay3_inequality_draft.md`.
 - [ ] **Phase 2 checkpoint** — verification gate + git note.
 
