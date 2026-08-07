@@ -14,8 +14,8 @@ new data input (Census county adjacency file). Any contingency that fires propag
 
 ## Phase 0: Standup
 
-- [~] **0.1 Stand up the track.** Write `spec.md` + `plan.md`; register in
-  `conductor/tracks.md`; add to the CLAUDE.md snapshot Active line. Commit.
+- [x] **0.1 Stand up the track.** Write `spec.md` + `plan.md`; register in
+  `conductor/tracks.md`; add to the CLAUDE.md snapshot Active line. Commit. `6f5bb0f`
 
 ## Phase 1: The four advisor items
 
