@@ -49,7 +49,9 @@ new data input (Census county adjacency file). Any contingency that fires propag
   run h_max ∈ {2,3,4,5}; table + plot of headline h=0…2 coefficients across h_max, with
   per-run estimation-sample sizes. Output:
   `Analysis/advisor_robustness/horizon_sensitivity.csv` + plot.
-- [~] **1.5 MAD impulse scaling (O4).** Within-county mean absolute deviation of each
+- [x] **1.5 MAD impulse scaling (O4).** `3b235bd` *(Debt scar h=2 = 45% of a typical
+  annual move, construction-invariant; employment raw-vs-FE scalings diverge 4.3×
+  (persistent/trending series) — flagged for advisor, lead with MAD_diff.)* Within-county mean absolute deviation of each
   headline outcome (raw year-to-year; residualized variant as secondary); impulse
   coefficients re-expressed as shares of MAD. Output:
   `Analysis/advisor_robustness/mad_scaling_table.csv` + short note; flag for advisor
