@@ -27,7 +27,9 @@ are the source of truth; this is orientation only:
 - Active: `thesis_completion_20260704` (umbrella — essay drafts are the critical path),
   `audit_response_20260712` (Phase 4 parked, Phase 5 close-out pending),
   `code_quality_remediation_20260713` (all phases implemented; §7 defense gate MET —
-  awaiting final user sign-off). The aggregate test runner (`Code/tests/testthat.R`) is now
+  awaiting final user sign-off), `advisor_feedback_20260807` (Aug advisor meeting:
+  spillovers, AAIW clustering justification, window/horizon robustness, MAD impulse
+  scaling — land before essay claims freeze). The aggregate test runner (`Code/tests/testthat.R`) is now
   truthful (clean process per file, nonzero on failure). Empirical package is
   **FROZEN-READY**: masters rebuild byte-identically, 32/32 suites pass, 13/13 headline
   rows match `Plans/master_evidence_table.md` (`Analysis/reproduction_certificate.md`);
