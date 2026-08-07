@@ -36,7 +36,9 @@ new data input (Census county adjacency file). Any contingency that fires propag
   cross-referencing the existing Conley and RA-cluster runs. No new primary inference
   level. Output: `Analysis/advisor_robustness/clustering_sensitivity.csv` +
   `clustering_justification.md`.
-- [ ] **1.3 Backward window extension, BEA outcomes (O3a).** Re-estimate drought→income
+- [x] **1.3 Backward window extension, BEA outcomes (O3a).** `pending` *(Stable: PDSI_Lag1
+  −99 to −132 across 1990/2000/2011 starts, precision improves with length; forward
+  2011–2024 bonus window included; 2011–2023 stays the primary estimand population.)* Re-estimate drought→income
   on the longest feasible pre-2011 BEA window; document regime-boundary caveats; ACS
   outcomes explicitly out of scope. Output:
   `Analysis/advisor_robustness/window_extension_results.csv` + note.
