@@ -42,7 +42,7 @@ new data input (Census county adjacency file). Any contingency that fires propag
   on the longest feasible pre-2011 BEA window; document regime-boundary caveats; ACS
   outcomes explicitly out of scope. Output:
   `Analysis/advisor_robustness/window_extension_results.csv` + note.
-- [ ] **1.4 Horizon-choice sensitivity (O3b).** Parameterize `h_max` in the event-study
+- [~] **1.4 Horizon-choice sensitivity (O3b).** Parameterize `h_max` in the event-study
   machinery (`Code/run_horizon_sensitivity.R` wrapping/extending `run_event_study.R`);
   run h_max ∈ {2,3,4,5}; table + plot of headline h=0…2 coefficients across h_max, with
   per-run estimation-sample sizes. Output:
