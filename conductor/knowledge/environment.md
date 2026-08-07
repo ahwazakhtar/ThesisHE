@@ -2,16 +2,27 @@
 
 Read this before running R scripts, installing packages, or touching `.claude/` config.
 
-## Two-R-version boundary (critical)
+## R toolchain (MIGRATED 2026-08-07 — single-version now)
 
-- **Main pipeline: R 4.2.2** (`C:/Program Files/R/R-4.2.2/bin/Rscript.exe`).
-- **Frontier DiD only: R 4.5.3** (`C:/Program Files/R/R-4.5.3/bin/Rscript.exe`) — the
-  packages `DRDID`, `did`, `HonestDiD`, `fwildclusterboot` are unavailable on CRAN for
-  4.2.2. `Code/did_robustness/` is the ONLY code that runs on 4.5.3.
-- Every frontier script header states which R it needs. Keep that convention for new scripts.
-- Install gotchas: the CRAN package is **`DRDID`** (uppercase — lowercase `drdid` is
-  silently "not available"); **`fwildclusterboot` is archived on CRAN** — install from
-  r-universe (`https://s3alfisc.r-universe.dev`).
+- **All code: R 4.5.2** (`C:/Program Files/R/R-4.5.2/bin/Rscript.exe`; user library
+  `C:/Users/ahwaz/AppData/Local/R/win-library/4.5`). Core set installed 2026-08-07:
+  `dplyr`, `tidyr`, `readr`, `fixest`, `testthat`.
+- **Migration note (2026-08-07):** the previous two-R setup — main pipeline R 4.2.2 +
+  frontier DiD R 4.5.3 — was found uninstalled (binaries and the 4.2 package library
+  gone; only R 4.1.3 and 4.5.2 present). User decision: migrate everything to 4.5.2
+  rather than reinstall 4.2.2. Consequences:
+  - `Analysis/reproduction_certificate.md` (2026-07-13) certifies the **pre-migration
+    4.2.2 environment** — it remains a valid historical record; any *re*-certification
+    must be re-run under 4.5.2 and version-stamped.
+  - The old two-R boundary is dissolved: `Code/did_robustness/` frontier packages
+    (`DRDID`, `did`, `HonestDiD`, `fwildclusterboot`) are NOT yet installed under 4.5.2 —
+    install on first need. Script headers stating "R 4.2.2"/"R 4.5.3" are historical;
+    new scripts state "R 4.5.2".
+  - First re-run of any master-building script should be compared against the committed
+    outputs before results are cited (package-version drift check).
+- Install gotchas (still true): the CRAN package is **`DRDID`** (uppercase — lowercase
+  `drdid` is silently "not available"); **`fwildclusterboot` is archived on CRAN** —
+  install from r-universe (`https://s3alfisc.r-universe.dev`).
 
 ## Run conventions
 

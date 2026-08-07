@@ -13,7 +13,8 @@ files, and state the next `[ ]` item.
 
 Academic econometrics thesis: climate shocks & air quality → health costs (HIX premiums,
 hospital finances, medical debt) and local economies (income, employment) across the US,
-~2011–2026. Entirely R-based; two R installs (see `conductor/knowledge/environment.md`).
+~2011–2026. Entirely R-based; single R install since 2026-08-07 — R 4.5.2 (see
+`conductor/knowledge/environment.md` migration note).
 
 **Snapshot (Jul 2026)** — the track registry (`conductor/tracks.md`) and each `plan.md`
 are the source of truth; this is orientation only:
@@ -67,7 +68,7 @@ there) — do not append session-numbered lists here.
 | `conductor/` | Workflow (`workflow.md`), track registry (`tracks.md`), specs/plans, `knowledge/` |
 | `.claude/` | Hooks (`session_start`, `track_edits`, `detect_wrapup`) + skills |
 
-## Script Run Order (main pipeline, R 4.2.2)
+## Script Run Order (main pipeline, R 4.5.2)
 
 1. `Code/download_*.R` — populate raw data
 2. `Code/create_state_master.R` — merge and inflation-adjust
@@ -122,8 +123,8 @@ Conventions:
 - Tests: `testthat`, plain `Rscript Code/tests/test_*.R`; >80% coverage for new code.
 - New analysis outputs go to `Analysis/<family>/` (never the `Analysis/` root); add an
   `Analysis/INDEX.md` row. Historical docs intentionally cite pre-Jul-2026 root paths.
-- R 4.2.2 for everything except `Code/did_robustness/` (R 4.5.3) — details in
-  `conductor/knowledge/environment.md`.
+- R 4.5.2 for everything (single install since the 2026-08-07 migration; the old
+  4.2.2/4.5.3 split is dissolved) — details in `conductor/knowledge/environment.md`.
 - Hooks invoke `python` (not `python3` — MS Store stub trap).
 - **File deletions require the user's approval** (enforced via `permissions.ask`); prefer
   moving debris to an `_archive/` folder. Edits/writes are pre-approved.

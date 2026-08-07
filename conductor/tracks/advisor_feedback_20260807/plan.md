@@ -19,7 +19,7 @@ new data input (Census county adjacency file). Any contingency that fires propag
 
 ## Phase 1: The four advisor items
 
-- [ ] **1.1 Spatial spillover test (O1).** Download the Census county adjacency file
+- [~] **1.1 Spatial spillover test (O1).** Download the Census county adjacency file
   (`Code/download_county_adjacency.R`); build neighbor-shock exposure (share of adjacent
   counties in shock, own excluded) in a pre-processing step; add the term to the headline
   county FE specs (drought→income, drought→debt, cold→employment) in

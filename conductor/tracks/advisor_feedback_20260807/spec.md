@@ -46,6 +46,20 @@ Census county adjacency file (item 1). Results feed the essay robustness appendi
   **Contingency:** if neighbor exposure is significant and own-effect shifts materially,
   the headline claims gain a "local net of spillover" qualifier — propagate to the
   evidence table; do not silently absorb.
+  - **Dated note (2026-08-07, deviation from the pre-registered read):** own↔neighbor
+    exposure correlations are r = 0.94–0.97 (PDSI is climate-division-level; CDD/HDD are
+    spatially smooth), so the ±25% own-coefficient stability criterion is mechanically
+    uninformative — own and neighbor terms are not separately identified and swing in
+    offsetting directions. The interpretable objects are (a) the joint neighbor-block
+    Wald test and (b) the own+neighbor **total-exposure** lincom. Result: neighbor
+    blocks jointly significant for income and employment (p ≈ 0.006); total-exposure
+    effects are same-signed and modestly LARGER than the baselines (drought→income
+    PDSI_Lag1 −157 [SE 49] vs −133; cold→employment HDD_Lag2 −1,090 [SE 344] vs −714).
+    Verdict: SUTVA violation present but **conservative in direction** — headline
+    own-shock estimates read as lower bounds on total regional exposure effects, not as
+    confounded. Qualifier propagates to essay prose as "county coefficients capture
+    local exposure; regional (neighbor) exposure adds same-signed effect," not as a
+    caveat against the headline signs.
 - **O2 — AAIW clustering justification (methods note, small sensitivity grid).**
   Write the design-based case for state clustering: shocks are assigned by nature at
   county level but spatially correlated within states; state is the coarsest level at
