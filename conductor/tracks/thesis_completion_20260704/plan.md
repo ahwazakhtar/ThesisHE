@@ -191,7 +191,12 @@ blocked on 2.2 here; T1.3 component (a) is amended (dated note in `spec.md`).
   exposure adds a same-signed regional component the local coefficient understates";
   the clustering note is the inference-methods paragraph (AAIW-cited).
   **Output:** `Text/essay1_incidence_draft.md` (or `.tex`).
-- [ ] **2.5 Essays 2 & 3 full drafts (T1.5).** Reuse Essay 1's data/methods sections. Essay 3's
+- [~] **2.5 Essays 2 & 3 full drafts (T1.5).** *(Scaffolding ready 2026-08-13:
+  `Text/final_writing/essay2_harness.html` and `essay3_harness.html` — same
+  prompts-left/suggested-prose-right harness as Essay 1, claims keyed to evidence-table
+  Tables B/C, Essay 2 honesty box + estimator-dependence-in-conclusion built in, Essay 3
+  debt-exclusion and visibility-gradient scope rules built in. Author drafting pending.
+  Draft outputs amended to `Text/final_writing/essay{2,3}_draft.md` via harness export.)* Reuse Essay 1's data/methods sections. Essay 3's
   framing gate is **lifted (2026-07-13)**: hybrid "distribution + observability" spine per
   `Plans/dissertation_writing_and_framing_plan_20260712.md` §8 (audit_response 1.3).
   **Re-audit guidance (Jul 12) for Essay 2:** the cold-compounding estimator dependence

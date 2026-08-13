@@ -50,8 +50,10 @@ structure, content requirements, and review — never draft prose for the manusc
 
 ## Order of work
 
-1. Essay 1 (`essay1_outline.md` — ready) → sections in the outline's writing order.
-2. Essay 2, then Essay 3 (outlines produced when Essay 1 drafting is underway; they reuse
-   Essay 1's data/methods spine in shortened form).
+1. Essay 1 (`essay1_outline.md` + `essay1_content.md` + `essay1_harness.html` — all ready)
+   → sections in writing order.
+2. Essay 2 and Essay 3: `essay2_harness.html` / `essay3_harness.html` are ready and embed
+   the outline + content layer directly (no separate `.md` packs); both reuse Essay 1's
+   data/methods spine in shortened form.
 3. General introduction and policy synthesis/conclusion only after all three drafts exist
    (plan §11 Stages 5–6). `Text/drafts/policy_section.md` already holds the policy content.

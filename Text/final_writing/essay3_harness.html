@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Essay 3 Writing Harness — Unequal and Unrecorded</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --panel:#ffffff; --ink:#1a1d21; --muted:#5b6470; --line:#dde2e8;
+    --accent:#3f6b3a; --accent-soft:#ecf3ea; --warn:#8a5a00; --warn-soft:#fdf3e0;
+    --ok:#1e6f45; --ok-soft:#e6f4ec; --edit:#7a3b8f;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#14171b; --panel:#1d2126; --ink:#e6e9ed; --muted:#9aa4b0; --line:#333a43;
+      --accent:#8fc487; --accent-soft:#22301f; --warn:#e3b25f; --warn-soft:#332a18;
+      --ok:#6fc596; --ok-soft:#1b2f24; --edit:#c79ad6;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.55 Georgia, 'Times New Roman', serif;background:var(--bg);color:var(--ink)}
+  header{position:sticky;top:0;z-index:10;background:var(--panel);border-bottom:1px solid var(--line);
+    padding:10px 18px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  header h1{font-size:17px;margin:0;font-weight:600}
+  header .sub{color:var(--muted);font-size:12.5px;font-family:system-ui,sans-serif}
+  header .spacer{flex:1}
+  .btn{font:13px system-ui,sans-serif;padding:6px 12px;border:1px solid var(--line);border-radius:6px;
+    background:var(--panel);color:var(--ink);cursor:pointer}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{opacity:.9;color:#fff}
+  #progress{font:12.5px system-ui,sans-serif;color:var(--muted)}
+  .layout{display:flex;max-width:1500px;margin:0 auto}
+  nav{width:230px;flex:0 0 230px;padding:16px 8px 40px 14px;position:sticky;top:54px;
+    align-self:flex-start;max-height:calc(100vh - 54px);overflow:auto;font-family:system-ui,sans-serif}
+  nav a{display:block;padding:5px 8px;border-radius:5px;color:var(--ink);text-decoration:none;font-size:13px}
+  nav a:hover{background:var(--accent-soft)}
+  nav .cnt{color:var(--muted);font-size:11px}
+  main{flex:1;min-width:0;padding:18px 22px 120px}
+  .notice{background:var(--warn-soft);border:1px solid var(--line);border-left:4px solid var(--warn);
+    border-radius:6px;padding:10px 14px;font-size:13.5px;font-family:system-ui,sans-serif;margin-bottom:18px}
+  section.essay-sec{margin:34px 0}
+  section.essay-sec > h2{font-size:19px;border-bottom:2px solid var(--line);padding-bottom:6px;margin:0 0 4px}
+  .secnote{color:var(--muted);font-size:12.5px;font-family:system-ui,sans-serif;margin-bottom:14px}
+  .para{display:grid;grid-template-columns:minmax(280px,44%) 1fr;gap:0;border:1px solid var(--line);
+    border-radius:8px;background:var(--panel);margin:16px 0;overflow:hidden}
+  @media (max-width: 980px){ .para{grid-template-columns:1fr} }
+  .prompts{padding:12px 16px;border-right:1px solid var(--line);background:var(--accent-soft)}
+  @media (max-width:980px){ .prompts{border-right:none;border-bottom:1px solid var(--line)} }
+  .prompts h3{margin:0 0 8px;font-size:14px;font-family:system-ui,sans-serif;color:var(--accent)}
+  .prompts ol{margin:0;padding-left:20px;font-size:13.5px}
+  .prompts li{margin:5px 0}
+  .flag{font-family:system-ui,sans-serif;font-size:11px;font-weight:600;border-radius:4px;padding:1px 5px}
+  .flag.decide{background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn)}
+  .flag.tk{background:var(--warn-soft);color:var(--warn)}
+  .flag.build{background:var(--ok-soft);color:var(--ok)}
+  .writing{display:flex;flex-direction:column}
+  .writing textarea{flex:1;width:100%;border:none;resize:vertical;padding:14px 16px;min-height:150px;
+    font:15px/1.65 Georgia,'Times New Roman',serif;background:var(--panel);color:var(--ink);outline:none}
+  .writing textarea:focus{background:var(--bg)}
+  .toolbar{display:flex;align-items:center;gap:10px;padding:6px 12px;border-top:1px dashed var(--line);
+    font:12px system-ui,sans-serif;color:var(--muted)}
+  .status{font-weight:600}
+  .status.suggestion{color:var(--muted)}
+  .status.edited{color:var(--edit)}
+  .toolbar .mini{margin-left:auto;background:none;border:none;color:var(--accent);cursor:pointer;font-size:12px;text-decoration:underline}
+  footer{position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);
+    padding:6px 18px;font:12px system-ui,sans-serif;color:var(--muted);display:flex;gap:16px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Essay 3 — Unequal and Unrecorded · Writing Harness</h1>
+    <div class="sub">Left: content prompts. Right: suggested write-up — <b>rewrite in your own words</b>; edits autosave in this browser.</div>
+  </div>
+  <div class="spacer"></div>
+  <span id="progress"></span>
+  <button class="btn" id="copyBtn">Copy draft</button>
+  <button class="btn primary" id="exportBtn">Export essay3_draft.md</button>
+</header>
+
+<div class="layout">
+  <nav id="nav"></nav>
+  <main id="main">
+    <div class="notice">
+      Sections appear in <b>writing order</b>; export assembles <b>document order</b>. Claims bound by
+      <i>Plans/master_evidence_table.md</i> Table C (+ Row 12). Standing rules for this essay: SVI
+      interactions are <b>heterogeneity/amplification, never causal moderation</b>; lead with income
+      and employment, <b>never debt-as-harm</b>; medical debt is <b>excluded from the amplification
+      claim</b> (it reverses) and appears only as the measurement critique; the drought×uninsurance
+      gradient is the <b>only</b> multiplicity-robust visibility cell — claim coverage/credit
+      visibility, not general access; hospital exposure is at the <b>provider's location county</b>;
+      never cite the hospital cumulative-dose margin result (dies under winsorization).
+      Flags: <span class="flag decide">DECIDE</span> · <span class="flag tk">TK</span> ·
+      <span class="flag build">BUILD</span>.
+    </div>
+    <div id="sections"></div>
+  </main>
+</div>
+
+<footer>
+  <span id="savestamp">Autosave: —</span>
+  <span>Storage key: essay3harness.v1 (per browser)</span>
+</footer>
+
+<script>
+const SECTIONS = [
+{id:'s4',doc:5,title:'§4 Real-economy heterogeneity (H5)',note:'WRITE FIRST',heading:'## 4 Real-economy heterogeneity',paras:[
+{id:'s4p1',title:'¶1 — Heat and employment: the sign flips',prompts:[
+'Marginal effect of heat at p25 SVI: +878 jobs; at p75: −184 (interaction p=0.001) — vulnerability flips a small gain into a loss.',
+'Anchor: against mean county employment of 50,113, the swing is ≈2% of employment.',
+'Exhibit E3-T2 / Figure E3-F2.',
+'→ cold and income.'],
+suggested:`Vulnerability changes the sign of heat's employment effect. At the 25th percentile of the Social Vulnerability Index, extreme heat is associated with an employment gain of 878 jobs; at the 75th percentile, with a loss of 184 (interaction p = 0.001; Table E3-T2, Figure E3-F2). Against mean county employment of 50,113, the swing from gain to loss is about two percent of employment. In the least vulnerable counties heat appears to be, on net, absorbable; in the most vulnerable it costs jobs.`},
+{id:'s4p2',title:'¶2 — Cold and income: ~8× larger, marginal interaction',prompts:[
+'Marginal effect of cold on PCPI: −$56 at p25 SVI vs −$472 at p75 — roughly 8× — ≈0.1% vs 1.0% of the $46,269 mean.',
+'Binding hedge: interaction p=0.061 post-dedup ("marginal either way") — hedge accordingly, do not claim it as solid.',
+'→ premiums.'],
+suggested:`Cold's income effect is larger in vulnerable counties by roughly a factor of eight: the marginal effect on per-capita income is −$56 at the 25th percentile of vulnerability and −$472 at the 75th — about 0.1 versus 1.0 percent of the $46,269 mean. This interaction is only marginally significant (p = 0.061), and I read it as suggestive amplification rather than a firmly established gradient.`},
+{id:'s4p3',title:'¶3 — Drought and benchmark premiums',prompts:[
+'At a two-year lag, drought moves benchmark premiums down in low-SVI counties (−$54 at p25) and up in high-SVI counties (+$16 at p75), interaction p=0.001.',
+'[TK: confirm the units (monthly vs annual) from exposure_interaction_coefs.csv before drafting the anchor.]',
+'One interpretive sentence: where Essay 1 found no coherent average pass-through, the vulnerability gradient in the response is itself the finding here.',
+'→ replication and the debt exclusion.'],
+suggested:`The premium ledger shows a vulnerability gradient of its own. At a two-year lag, drought is associated with lower benchmark premiums in the least vulnerable counties (−$54 at the 25th percentile) and higher premiums in the most vulnerable (+$16 at the 75th; interaction p = 0.001). [TK: confirm whether these are monthly or annual units before anchoring to the mean premium.] The first essay found no coherent average pass-through of climate shocks into premiums; the finding here is distributional — such response as exists tilts toward premium increases precisely where households are least able to absorb them.`},
+{id:'s4p4',title:'¶4 — Replication and the debt exclusion',prompts:[
+'The income and spending interactions replicate across the state and county panels — not a county-level artifact.',
+'Binding exclusion: medical debt is EXCLUDED from the amplification claim — its interaction reverses (concentrates in less-vulnerable counties); §7 explains why.',
+'→ the composite index and exposure scale.'],
+suggested:`Two disciplining facts complete the picture. First, the income and spending interactions replicate when every estimate is mirrored at the state level, so the amplification pattern is not an artifact of county-level measurement. Second, medical debt is excluded from the amplification claim: its interaction runs the other way, concentrating measured debt responses in less-vulnerable counties. Section 7 shows why that reversal is a fact about recording rather than about hardship.`},
+{id:'s4p5',title:'¶5 — The composite index (exploratory)',prompts:[
+'CHEI (hazard × SVI composite): median household income −$435 per SD (p=0.0002); sign split — PCPI +$1,270 (p=0.007).',
+'Binding status: composite-index DESCRIPTIVE, not a causal per-SD welfare price; disclose the sign split.',
+'(Distinct object from the energy-burden margin — §5.)',
+'→ energy burden next.'],
+suggested:`A composite heat-vulnerability index — the product of thermal hazard and social vulnerability — summarizes the same terrain more coarsely: a one-standard-deviation increase is associated with median household income lower by $435 (p = 0.0002), though the sign flips for per-capita income (+$1,270, p = 0.007), a split that reflects what each income concept weights. I present the composite as a descriptive index rather than a causal per-standard-deviation price, and the mechanism evidence below does not rest on it.`}
+]},
+{id:'s5',doc:6,title:'§5 Energy burden and labor exposure',note:'',heading:'## 5 Energy burden and non-farm labor exposure',paras:[
+{id:'s5p1',title:'¶1 — Motivation: an affordability margin',prompts:[
+'Energy burden (share of income on energy, DOE LEAD) = an affordability margin conceptually distinct from social vulnerability: cooling costs, utility arrears.',
+'Question: is it a relabeling of SVI or an independent dimension?',
+'→ the results.'],
+suggested:`Beyond the vulnerability index, an affordability margin operates through energy burden — the share of income households spend on energy, from DOE LEAD data. Conceptually it is distinct from social vulnerability: it measures exposure to cooling costs and utility arrears rather than demographic and socioeconomic fragility. Whether it is empirically distinct — an independent dimension rather than a relabeling of vulnerability — is the question this section answers.`},
+{id:'s5p2',title:'¶2 — Heat employment damage concentrates in high-burden counties',prompts:[
+'Levels: heat × energy-burden z → −1,380 jobs (p<0.001) — ≈2.8% of mean county employment.',
+'Logs (the robust object): −0.0068 (p=0.019) in the joint horse-race; survives division×year FE.',
+'In the joint specification energy burden dominates SVI (SVI ns) — E3-T3.',
+'→ independence.'],
+suggested:`Heat's employment damage concentrates in high-energy-burden counties. In levels, the interaction of heat with the energy-burden z-score is associated with 1,380 fewer jobs (p < 0.001), about 2.8 percent of mean county employment; in logs — the specification robust to county size — the gradient is −0.0068 (p = 0.019) in a joint horse-race with the other moderators, and it survives division-by-year fixed effects. In that joint specification, energy burden absorbs the explanatory role: the Social Vulnerability Index interaction is no longer significant (Table E3-T3).`},
+{id:'s5p3',title:'¶3 — An independent dimension',prompts:[
+'County energy burden correlates with SVI at only r=0.11 (E3-T1) — and the horse-race gives direct evidence of independence, not just the correlation.',
+'→ what is not claimed.'],
+suggested:`Energy burden is not a relabeling of vulnerability. Its county-level correlation with the Social Vulnerability Index is only 0.11 (Table E3-T1), and the horse-race provides direct evidence: the two moderators enter jointly, and it is energy burden that carries the heat-employment gradient. It marks an independent dimension of exposure.`},
+{id:'s5p4',title:'¶4 — What is not claimed',prompts:[
+'The income margin of energy burden is NOT robust (−421→−318, p=0.15 in the joint race) — suggestive only, not claimed.',
+'→ the supply side.'],
+suggested:`One margin is deliberately left unclaimed: energy burden's interaction with income does not survive the joint horse-race (the estimate falls from −421 to −318, p = 0.15), so I treat the income margin as suggestive only. The energy-burden finding is about employment.`}
+]},
+{id:'s6',doc:7,title:'§6 Provider incidence and safety-net hospitals',note:'',heading:'## 6 Provider incidence and safety-net hospitals',paras:[
+{id:'s6p1',title:'¶1 — The supply side',prompts:[
+'If vulnerable households bear larger costs, the providers serving them should feel it too.',
+'Design: NASHP hospital panel, 5,119 hospitals, CCN-year, 2011–2023; CCN+year FE, state-clustered; outcome: uncompensated care as % of net patient revenue; shock at the hospital’s location county.',
+'→ the result.'],
+suggested:`If vulnerable households bear larger costs, the providers who serve them should feel it too. I test this in a panel of 5,119 hospitals over 2011–2023, with hospital and year fixed effects and state-clustered errors, asking whether climate shocks raise uncompensated care — charity care and bad debt as a share of net patient revenue — and whether the response concentrates at safety-net hospitals. Exposure is measured at the hospital's location county.`},
+{id:'s6p2',title:'¶2 — Heat strain concentrates at safety-net hospitals',prompts:[
+'Heat × safety-net interaction on uncompensated care: p=0.021; robust to within-year 1%/99% winsorization of the hospital accounts (coefficient 0.0209, p=0.013); survives sharpened q<0.05 — E3-T4, Figure E3-F4.',
+'Frame: the supply-side twin of the household-level amplification.',
+'→ caveats.'],
+suggested:`Extreme heat raises uncompensated care most at safety-net hospitals (interaction p = 0.021), and the result is robust to winsorizing the underlying hospital accounts at the first and ninety-ninth percentiles within year (coefficient 0.0209, p = 0.013); it also survives a sharpened multiple-testing correction (Table E3-T4, Figure E3-F4). The strain of heat, like its household costs, concentrates where the least-resourced patients are served — the supply-side twin of the amplification results above.`},
+{id:'s6p3',title:'¶3 — Caveats, co-located',prompts:[
+'The cold interaction runs the other way (loads on non-safety-net hospitals) — say so.',
+'Exposure is at the provider’s location county, not its patient catchment.',
+'(Never cite the hospital cumulative-dose margin result — demoted under winsorization.)',
+'→ the dollar magnitude.'],
+suggested:`Two caveats sit beside this result. The cold interaction runs the other way, loading on non-safety-net hospitals, so the concentration finding is heat-specific. And exposure is assigned at the hospital's location county rather than its patient catchment, so hospitals drawing patients from distant exposed areas are measured with error — a conservative force if anything, but a real one.`},
+{id:'s6p4',title:'¶4 — Dollar magnitude (drought)',prompts:[
+'Drought → hospital uncompensated-care dollars: cumulative −$3.88M per hospital (winsorized; p<0.001) — report the winsorized magnitude.',
+'One sentence linking to Essay 1’s ledger logic: hospital accounts are another ledger where climate costs surface.',
+'→ the debt critique.'],
+suggested:`Drought also moves hospital accounts in dollar terms: the cumulative effect on uncompensated care is −$3.88 million per hospital in the winsorized specification (p < 0.001). Hospital accounting is thus another ledger on which climate-related strain surfaces — one kept by providers rather than households, and read alongside the household ledgers of the first essay.`}
+]},
+{id:'s7',doc:8,title:'§7 Credit-bureau debt as a selective measure',note:'The measurement-critique section',heading:'## 7 Credit-bureau debt as a selective measure',paras:[
+{id:'s7p1',title:'¶1 — The anomaly',prompts:[
+'County level: drought debt response concentrates in LESS-vulnerable counties (+0.0061 low-SVI vs −0.0035 high-SVI, p=0.05).',
+'State level: cold→debt amplifies in MORE-vulnerable states (+0.067, p=0.03) — the response flips sign across geographic scales.',
+'Set up: this is the one ledger that contradicts the amplification pattern.',
+'→ the explanation.'],
+suggested:`Credit-bureau medical debt is the one ledger that contradicts the amplification pattern. At the county level, drought's debt response concentrates in less-vulnerable counties (+0.0061 at low vulnerability versus −0.0035 at high, p = 0.05); at the state level, cold's debt response amplifies in more-vulnerable states (+0.067, p = 0.03). The same outcome flips sign across geographic scales — behavior none of the real-economy outcomes exhibit.`},
+{id:'s7p2',title:'¶2 — The explanation: three filters',prompts:[
+'Bureau debt requires an insurance relationship, a billed encounter, and a credit file.',
+'Where coverage and credit access are thin, hardship exists but the record does not — measured debt understates hardship exactly where vulnerability is high.',
+'→ the direct test.'],
+suggested:`The behavior has a mechanical explanation. A medical bill reaches a credit bureau only after three filters: an insurance relationship, a billed encounter, and a credit file. In places where coverage and credit access are thin, hardship can be widespread while the record is not. Measured debt should therefore understate hardship exactly where vulnerability is high — which is what the sign flips suggest.`},
+{id:'s7p3',title:'¶3 — The direct test: uninsurance gradients',prompts:[
+'SAHIE interaction: greater county uninsurance → SMALLER measured debt response (drought ≈ −0.005/SD, p<0.03; heat −0.006 at L1, p=0.01).',
+'Binding reading: supports the measurement critique — it does NOT validate debt as a welfare outcome.',
+'→ the pre-registered extension.'],
+suggested:`The filters can be tested directly. Interacting shocks with county uninsurance rates from SAHIE, greater uninsurance predicts a smaller measured debt response — about −0.005 per standard deviation for drought (p < 0.03) and −0.006 for heat at a one-year lag (p = 0.01). Where fewer people are insured, fewer bills are generated and recorded, and the ledger goes quiet. This supports the measurement critique; it does not rehabilitate debt as a welfare outcome.`},
+{id:'s7p4',title:'¶4 — The pre-registered gradient analysis',prompts:[
+'Latent-hardship analysis (pre-registered rule): all 6 primary cells attenuate in the predicted direction (0 contradictions), but only drought×uninsurance clears q<0.10 (−0.00547, q=0.012; replicates on debt-median with SVI/income gradients) — E3-T5.',
+'Binding scope: claim the COVERAGE/CREDIT-VISIBILITY gradient only; rurality and hospital-access moderators are underpowered — no general access gradient.',
+'→ the takeaway.'],
+suggested:`A pre-registered gradient analysis fixes the scope of this claim. All six primary cells attenuate in the direction the visibility story predicts, with no contradictions, but only the drought-by-uninsurance cell survives multiple-testing correction (−0.00547, q = 0.012), replicating on median debt with consistent vulnerability and income gradients (Table E3-T5). The rurality and hospital-access moderators are underpowered. I therefore claim a coverage and credit-visibility gradient — and only that — rather than a general access gradient.`},
+{id:'s7p5',title:'¶5 — Takeaway',prompts:[
+'Bureau debt is least informative about hardship precisely where insurance coverage and credit visibility are weakest.',
+'This is why debt is excluded from the amplification headline — a recording artifact, not evidence against unequal harm.',
+'→ how much burden sits where: concentration.'],
+suggested:`The takeaway is a caution for anyone using bureau debt to measure climate hardship: the ledger is least informative precisely where insurance coverage and credit visibility are weakest. This is why debt is excluded from the amplification result — its reversal is a recording artifact, and it is evidence about measurement rather than evidence against unequal harm.`}
+]},
+{id:'s8',doc:9,title:'§8 Burden concentration',note:'Descriptive accounting',heading:'## 8 Burden concentration',paras:[
+{id:'s8p1',title:'¶1 — The scale of exposure',prompts:[
+'Lancet-style descriptive metric: 70–105 million person-years of extreme-heat exposure per year, 3–5× the cold burden.',
+'Binding status: descriptive exposure metric, not a causal burden.',
+'→ where it sits.'],
+suggested:`How much exposure is there to distribute? As a descriptive metric in the style of the Lancet Countdown, the country absorbs on the order of 70 to 105 million person-years of extreme-heat exposure each year — three to five times the cold burden. This is an exposure count, not a causal damage estimate, but it sets the scale on which the heterogeneity above operates.`},
+{id:'s8p2',title:'¶2 — The concentration curve',prompts:[
+'[BUILD: E3-T6 / Figure E3-F6 — concentration curve: population share vs burden share, exposure × population × vulnerability weighting; generate at drafting.]',
+'Report: share of measured burden in the top vulnerability deciles [TK: numbers from the built exhibit].',
+'→ status of the calculation.'],
+suggested:`Combining exposure, population, and the estimated vulnerability gradients yields a concentration curve: the share of measured burden against the share of population, ordered by vulnerability (Table E3-T6, Figure E3-F6). [TK: report the top-decile and top-quintile burden shares once the exhibit is built.] The curve makes the distributional finding quantitative — the burden is not spread in proportion to population.`},
+{id:'s8p3',title:'¶3 — Status of the calculation',prompts:[
+'Binding: descriptive concentration accounting — NOT causal welfare weights; coefficients from heterogeneity estimates, exposure from counts.',
+'Hand-off: the dissertation’s policy synthesis uses these shares in scenario form.',
+'→ interpretation.'],
+suggested:`The concentration curve is descriptive accounting: it combines heterogeneity coefficients with exposure counts, and it carries no causal welfare weights. Its role is to say where the measured burden sits, and the dissertation's policy synthesis takes it up in explicit scenario form rather than as a national welfare total.`}
+]},
+{id:'s2',doc:3,title:'§2 Vulnerability measures and data',note:'Short spine — reuse Essay 1 §3',heading:'## 2 Baseline vulnerability measures and data',paras:[
+{id:'s2p1',title:'¶1 — Spine recap (short)',prompts:[
+'Panel, shocks, FE, clustering follow Essay 1 §3 — 3–4 sentences, no copied prose.',
+'County panel 2011–2023; four shock bins vs own baselines; county+year FE; state clustering (AAIW-justified).',
+'→ the moderators.'],
+suggested:`The panel, shock definitions, and estimation conventions follow the first essay: a county-year panel over 2011–2023, four binary shock bins defined against each county's own historical baseline, county and year fixed effects, and state-clustered standard errors on Abadie-Athey-Imbens-Wooldridge grounds. What is new here is the cross-sectional layer — who is exposed, and with what capacity to absorb it.`},
+{id:'s2p2',title:'¶2 — The Social Vulnerability Index',prompts:[
+'CDC SVI: composite of socioeconomic status, household composition, minority status/language, housing/transportation.',
+'Used as a time-invariant baseline; marginal effects contrasted at p25 vs p75.',
+'→ the other moderators.'],
+suggested:`The primary vulnerability measure is the CDC Social Vulnerability Index, a composite of socioeconomic status, household composition and disability, minority status and language, and housing and transportation. I use it as a time-invariant county baseline and report the marginal effect of each shock at the 25th and 75th percentiles of the index, so every interaction has a concrete less-vulnerable and more-vulnerable reading.`},
+{id:'s2p3',title:'¶3 — Energy burden, labor exposure, and correlations',prompts:[
+'DOE LEAD energy-burden z; climate-exposed non-farm labor share; agricultural dependence.',
+'Baseline correlations (E3-T1): energy burden–SVI r=0.11; energy burden–agriculture 0.32 — low correlations preview the horse-race.',
+'→ the provider panel.'],
+suggested:`Three further moderators enter: the DOE LEAD energy-burden z-score, the climate-exposed non-farm labor share, and agricultural dependence. Their baseline correlations are informative before any regression: energy burden correlates with the Social Vulnerability Index at only 0.11 and with agricultural dependence at 0.32 (Table E3-T1) — low enough that a horse-race among moderators can be decided by the data rather than by collinearity.`},
+{id:'s2p4',title:'¶4 — The provider panel and coverage data',prompts:[
+'NASHP hospital panel: 5,119 hospitals, CCN-year, 2011–2023; safety-net status; uncompensated care %NPR; exposure at location county.',
+'SAHIE county uninsurance for the visibility gradients (§7).',
+'→ design.'],
+suggested:`The supply side uses the NASHP hospital panel — 5,119 hospitals observed at the hospital-year level over 2011–2023 — with safety-net status and uncompensated care as a share of net patient revenue, and climate exposure assigned at each hospital's location county. County uninsurance rates from SAHIE support the visibility analysis of Section 7.`}
+]},
+{id:'s3',doc:4,title:'§3 The shock × vulnerability design',note:'',heading:'## 3 The shock-by-vulnerability design',paras:[
+{id:'s3p1',title:'¶1 — Specification',prompts:[
+'Interact each shock with time-invariant SVI; county+year FE absorb levels; state-clustered SEs; marginal effects at p25/p75.',
+'The county’s own average vulnerability is absorbed — identification comes from within-county shock timing crossed with baseline vulnerability.',
+'→ interpretation discipline.'],
+suggested:`The design interacts each climate shock with the time-invariant vulnerability baseline, with county and year fixed effects and state-clustered standard errors. The fixed effects absorb every level difference across counties, including vulnerability itself; identification comes from within-county shock timing, and the interaction asks whether the same shock lands harder where baseline vulnerability is higher. I report marginal effects at the 25th and 75th percentiles of the index throughout.`},
+{id:'s3p2',title:'¶2 — Interpretation discipline (binding)',prompts:[
+'SVI is not randomly assigned and bundles many attributes → interactions are HETEROGENEITY/AMPLIFICATION, never causal moderation ("the effect of vulnerability").',
+'Do not imply every administrative outcome amplifies in vulnerable places (debt will not).',
+'→ the state mirror.'],
+suggested:`Interpretation requires discipline. Vulnerability is not randomly assigned and the index bundles many attributes, so the interactions measure heterogeneity — where a shock's effects are amplified — and not the causal effect of vulnerability itself. Nor should amplification be expected in every administrative outcome: the essay's own measurement results show one ledger where the recorded response runs the other way.`},
+{id:'s3p3',title:'¶3 — The state mirror',prompts:[
+'Every county estimate is mirrored at the state level as an aggregation check; replication distinguishes real gradients from county-level noise.',
+'→ results.'],
+suggested:`As an aggregation check, every county estimate is mirrored at the state level. Gradients that survive both levels are unlikely to be artifacts of county-level measurement, and the one outcome whose gradient flips between levels — medical debt — turns out to be diagnostic rather than embarrassing.`}
+]},
+{id:'s9',doc:10,title:'§9 Interpretation and limitations',note:'',heading:'## 9 Interpretation and limitations',paras:[
+{id:'s9p1',title:'¶1 — Two halves of one question',prompts:[
+'Synthesis: climate burdens are unequal both because vulnerable places suffer larger real-economy effects AND because financial indicators observe hardship selectively.',
+'The two halves are complementary: the second explains why the first is invisible in some data.',
+'→ discipline list.'],
+suggested:`The two halves of this essay answer one question. Climate burdens are unequal, first, because structurally vulnerable places experience larger real-economy effects — the amplification results — and second, because the financial indicators commonly used to measure hardship observe it selectively — the visibility results. The halves are complementary: selective observability explains why the unequal burden can be invisible in exactly the data one might reach for first.`},
+{id:'s9p2',title:'¶2 — Interpretation discipline (recap)',prompts:[
+'One sentence each: SVI interactions = heterogeneity, not causal moderation; cold–income interaction marginal (p≈0.06); energy-burden claim is employment-only; drought×uninsurance is the narrow supported visibility gradient; rurality/hospital-access underpowered; hospital exposure at location county.',
+'→ limitations.'],
+suggested:`The claims are bounded accordingly. The vulnerability interactions are heterogeneity, not causal moderation. The cold-income interaction is marginal (p ≈ 0.06) and read as suggestive. The energy-burden finding concerns employment; its income margin is unclaimed. The supported visibility gradient is coverage and credit visibility — drought by uninsurance — while the rurality and hospital-access moderators are underpowered. And provider exposure is measured at the hospital's location county rather than its catchment.`},
+{id:'s9p3',title:'¶3 — Limitations',prompts:[
+'SVI is a composite (which component drives amplification is not identified).',
+'Moderators are time-invariant baselines — vulnerability evolving with exposure is not modeled.',
+'Bureau-debt limits per §7; burden concentration is descriptive accounting.',
+'→ conclude.'],
+suggested:`Beyond those bounds, three limitations remain. The vulnerability index is a composite, so which component drives amplification is not identified. The moderators are time-invariant baselines, so vulnerability that evolves with exposure is not modeled. And the burden-concentration calculation is descriptive accounting built from heterogeneity coefficients and exposure counts, not a welfare computation.`}
+]},
+{id:'s10',doc:11,title:'§10 Conclusion',note:'',heading:'## 10 Conclusion',paras:[
+{id:'s10p1',title:'¶1 — Findings restated',prompts:[
+'Question: who bears climate-related costs, and when do hardship measures fail to record them?',
+'Findings, one sentence each: SVI amplifies income/employment/premium harm (heat flips employment; cold ~8× marginal; drought premiums up in vulnerable counties); energy burden = independent employment margin (r=0.11); heat strain concentrates at safety-net hospitals (winsorization-robust); bureau debt reverses — visibility artifact with a multiplicity-robust uninsurance gradient.'],
+suggested:`This essay asked who bears climate-related economic and health-system costs, and when the instruments used to measure financial hardship fail to record them. Social vulnerability amplifies the real-economy harm: heat turns a small employment gain into a loss in vulnerable counties, cold's income effect is roughly eight times larger there (a marginal interaction, read as suggestive), and drought pushes benchmark premiums up rather than down where vulnerability is high. A distinct energy-burden margin, nearly orthogonal to vulnerability, concentrates heat's employment damage in high-burden counties. On the supply side, heat raises uncompensated care most at safety-net hospitals. And credit-bureau medical debt runs the other way — a recording artifact whose one multiplicity-robust gradient is coverage and credit visibility.`},
+{id:'s10p2',title:'¶2 — Policy and measurement close',prompts:[
+'Targeting: vulnerability and energy burden identify where adaptation and assistance dollars meet the largest marginal harm.',
+'Measurement caution: hardship statistics built on bureau debt will look quietest where the burden is largest.',
+'Hand-off: the dissertation’s policy synthesis carries the concentration shares into scenario form. No new numbers.'],
+suggested:`Two implications follow. For targeting, vulnerability and energy burden identify where adaptation and assistance dollars meet the largest marginal harm — and they are different maps, not one. For measurement, hardship statistics built on credit-bureau debt will look quietest where the burden is largest, a property policymakers should treat as a defect of the instrument rather than reassurance. The dissertation's concluding synthesis carries the concentration shares forward in explicit scenario form.`}
+]},
+{id:'s1',doc:2,title:'§1 Introduction',note:'WRITE LAST',heading:'## 1 Introduction',paras:[
+{id:'s1p1',title:'¶1 — Hook',prompts:[
+'The same shock need not impose the same cost everywhere; where households are already stretched, a shock can tip coping into crisis.',
+'Add the observability half in the same breath: and the data used to see hardship may look away exactly there.',
+'Idiom permitted; no numbers.'],
+suggested:`The same heat wave is not the same event everywhere. In a county where households have savings, insurance, and slack, a climate shock is absorbed; where they are already stretched, it can tip coping into crisis. And there is a second, quieter asymmetry: the administrative data used to observe financial hardship — above all, medical debt on credit reports — may look away in exactly the places where the burden is heaviest.`},
+{id:'s1p2',title:'¶2 — The gap',prompts:[
+'EJ literature documents unequal EXPOSURE [TK cite]; less is known about unequal realized economic damage, and less still about whether hardship measures record it evenly.',
+'This essay treats distribution and observability as two halves of one question.'],
+suggested:`The environmental-justice literature documents unequal exposure to climate hazards [TK: cite]. Less is known about unequal realized damage — whether the same shock costs more where vulnerability is higher — and less still about whether the measures used to detect hardship record it evenly across places. This essay treats those as two halves of one question: climate burdens can be unequal both because vulnerable places suffer more and because standard indicators observe hardship selectively.`},
+{id:'s1p3',title:'¶3 — What this paper does',prompts:[
+'County panel 2011–2023; interact shocks with CDC SVI; marginal effects at p25 vs p75; every estimate mirrored at the state level.',
+'Add: energy burden (DOE LEAD) as a distinct moderator; safety-net hospital heterogeneity on the supply side; uninsurance (SAHIE) gradients for debt visibility; a burden-concentration calculation.'],
+suggested:`Using the county panel of the previous essays, I interact each climate shock with the CDC Social Vulnerability Index and compare marginal effects in the least and most vulnerable counties, mirroring every estimate at the state level. I then push past the index in three directions: an energy-burden moderator from DOE LEAD data, capturing an affordability margin distinct from social vulnerability; provider-side heterogeneity across safety-net and other hospitals; and uninsurance gradients that test directly whether credit-bureau debt records hardship where coverage is thin. A concentration calculation aggregates the results.`},
+{id:'s1p4',title:'¶4 — Results walkthrough',prompts:[
+'Amplification: heat flips a +878 employment gain (p25 SVI) to a −184 loss (p75), int p=0.001; cold income ~8× (−$56→−$472), marginal p≈0.06; drought pushes premiums up in vulnerable counties (int p=0.001).',
+'Energy burden: independent margin (r=0.11 with SVI); heat employment −0.0068 log-points (p=0.019), dominates SVI in the horse-race; income margin unclaimed.',
+'Supply side: heat×safety-net uncompensated care p=0.013 winsorized.',
+'Debt: reverses across scales; SAHIE — more uninsurance, smaller measured response; drought×uninsurance q=0.012 the one multiplicity-robust gradient.'],
+suggested:`Structural vulnerability amplifies the real-economy harm of climate. Extreme heat turns a small employment gain of 878 jobs in the least vulnerable counties into a loss of 184 in the most vulnerable (interaction p = 0.001); cold's per-capita income effect is roughly eight times larger at high vulnerability (−$56 versus −$472), though that interaction is marginal (p ≈ 0.06); and drought at a two-year lag pushes benchmark premiums up in vulnerable counties rather than down (interaction p = 0.001). A distinct affordability margin operates through energy burden, which is nearly uncorrelated with vulnerability (r = 0.11): heat's employment damage concentrates in high-burden counties and survives a joint horse-race in which the vulnerability index does not. The same unequal incidence appears on the supply side, where heat raises uncompensated care most at safety-net hospitals, robust to winsorizing the hospital accounts (p = 0.013). Credit-bureau medical debt is the exception: its response concentrates in less-vulnerable, better-insured places and flips sign across geographic scales, and greater uninsurance predicts a smaller measured response — with the drought-by-uninsurance gradient the one cell that survives multiple-testing correction (q = 0.012).`},
+{id:'s1p5',title:'¶5 — Contribution',prompts:[
+'To climate/EJ economics: realized-damage heterogeneity (not just exposure), with income/employment/premiums leading.',
+'To household finance/measurement: debt reversal as a visibility artifact — bureau debt least informative where coverage and credit visibility are weakest.',
+'One-sentence caution for hardship measurement in policy.'],
+suggested:`The essay contributes on both halves. To the climate and environmental-justice literatures, it adds heterogeneity in realized economic damage — income, employment, and premiums, not only exposure — with an affordability margin that is distinct from social vulnerability. To household finance and the economics of measurement, it shows that the one contrary ledger is contrary for mechanical reasons: bureau debt requires insurance, a billed encounter, and a credit file, so it is least informative about hardship precisely where coverage and credit visibility are weakest. Hardship statistics built on such ledgers will understate the climate burden of the most vulnerable places.`},
+{id:'s1p6',title:'¶6 — Roadmap',prompts:['One or two sentences.'],
+suggested:`Section 2 describes the vulnerability measures and data; Section 3 the interaction design. Section 4 reports the real-economy heterogeneity, Section 5 the energy-burden margin, Section 6 the provider side, and Section 7 the debt-visibility results. Section 8 aggregates into burden concentration; Sections 9 and 10 interpret and conclude.`}
+]},
+{id:'abstract',doc:1,title:'Abstract',note:'WRITE VERY LAST · 180–250 words',heading:'## Abstract',paras:[
+{id:'abs1',title:'The abstract (one paragraph)',prompts:[
+'(1) Question — who bears climate costs, and when do hardship measures fail to record them?',
+'(2) Design — shock × SVI on the county panel, marginal effects p25 vs p75, state mirror.',
+'(3) Amplification sentence (heat employment sign flip p=0.001; cold ~8× marginal; drought premiums up).',
+'(4) Energy-burden sentence (independent margin, r=0.11, employment-only).',
+'(5) Supply-side sentence (safety-net uncompensated care, winsorization-robust).',
+'(6) Debt sentence (reverses across scales; uninsurance gradient q=0.012; measurement artifact — excluded from amplification).',
+'(7) Takeaway: vulnerability is a first-order margin; debt least informative where coverage/credit visibility weakest.'],
+suggested:`The same climate shock need not impose the same cost everywhere, and the data used to measure hardship need not record it evenly. Using a U.S. county panel from 2011 to 2023, I interact climate shocks with the CDC Social Vulnerability Index, compare marginal effects in the least and most vulnerable counties, and mirror every estimate at the state level. Structural vulnerability amplifies real-economy harm: extreme heat turns a small employment gain into a loss in vulnerable counties (interaction p = 0.001); cold's per-capita income effect is roughly eight times larger there, though that interaction is marginal (p = 0.06); and drought at a two-year lag pushes benchmark premiums up in vulnerable counties. A distinct affordability margin operates through energy burden, which correlates with vulnerability at only 0.11: heat's employment damage concentrates in high-energy-burden counties and survives a joint horse-race in which the vulnerability index does not. On the supply side, heat raises uncompensated care most at safety-net hospitals, robust to winsorizing the hospital accounts. Credit-bureau medical debt is the exception — it concentrates in less-vulnerable, better-insured places and flips sign across geographic scales, and greater uninsurance predicts a smaller measured response — a recording artifact rather than evidence against unequal harm. Social vulnerability is a first-order margin in the real-economy cost of climate, and bureau debt is least informative about hardship precisely where coverage and credit visibility are weakest.`}
+]}
+];
+
+const KEY = 'essay3harness.v1.';
+const EXPORT_NAME = 'essay3_draft.md';
+const EXPORT_TITLE = '# Essay 3 — Unequal and Unrecorded: The Distribution of Climate-Related Economic and Health-System Costs';
+
+const $ = s => document.querySelector(s);
+function stored(id){ try{ return localStorage.getItem(KEY+id); }catch(e){ return null; } }
+function store(id, v){ try{ localStorage.setItem(KEY+id, v); }catch(e){} }
+function unstore(id){ try{ localStorage.removeItem(KEY+id); }catch(e){} }
+function currentText(p){ const s = stored(p.id); return s === null ? p.suggested : s; }
+function isEdited(p){ const s = stored(p.id); return s !== null && s.trim() !== p.suggested.trim(); }
+function wc(t){ t = t.trim(); return t ? t.split(/\s+/).length : 0; }
+function decorate(text){
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/\[DECIDE[^\]]*\]/g, m => '<span class="flag decide">'+m.slice(1,-1)+'</span>')
+    .replace(/\[TK[^\]]*\]/g, m => '<span class="flag tk">'+m.slice(1,-1)+'</span>')
+    .replace(/\[BUILD[^\]]*\]/g, m => '<span class="flag build">'+m.slice(1,-1)+'</span>');
+}
+function render(){
+  const nav = $('#nav'), root = $('#sections');
+  SECTIONS.forEach(sec => {
+    const a = document.createElement('a');
+    a.href = '#sec-'+sec.id; a.id = 'nav-'+sec.id;
+    nav.appendChild(a);
+    const s = document.createElement('section');
+    s.className = 'essay-sec'; s.id = 'sec-'+sec.id;
+    s.innerHTML = '<h2>'+sec.title+'</h2><div class="secnote">'+(sec.note||'')+'</div>';
+    sec.paras.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'para'; card.id = 'card-'+p.id;
+      const prompts = p.prompts.map(x => '<li>'+decorate(x)+'</li>').join('');
+      card.innerHTML =
+        '<div class="prompts"><h3>'+p.title+'</h3><ol>'+prompts+'</ol></div>'+
+        '<div class="writing"><textarea spellcheck="true"></textarea>'+
+        '<div class="toolbar"><span class="status"></span><span class="words"></span>'+
+        '<button class="mini" title="Discard your edits and restore the suggested text">Restore suggestion</button></div></div>';
+      const ta = card.querySelector('textarea');
+      ta.value = currentText(p);
+      autosize(ta);
+      ta.addEventListener('input', () => {
+        store(p.id, ta.value); autosize(ta); refreshCard(p, card); refreshHeader();
+        $('#savestamp').textContent = 'Autosave: ' + new Date().toLocaleTimeString();
+      });
+      card.querySelector('.mini').addEventListener('click', () => {
+        if(isEdited(p) && !confirm('Discard your edits to '+p.title+' and restore the suggestion?')) return;
+        unstore(p.id); ta.value = p.suggested; autosize(ta); refreshCard(p, card); refreshHeader();
+      });
+      refreshCard(p, card);
+      s.appendChild(card);
+    });
+    root.appendChild(s);
+  });
+  refreshHeader();
+}
+function autosize(ta){ ta.style.height = 'auto'; ta.style.height = Math.max(150, ta.scrollHeight + 4) + 'px'; }
+function refreshCard(p, card){
+  const st = card.querySelector('.status'), w = card.querySelector('.words');
+  const edited = isEdited(p);
+  st.textContent = edited ? 'edited — your words' : 'suggestion (unedited)';
+  st.className = 'status ' + (edited ? 'edited' : 'suggestion');
+  w.textContent = wc(currentText(p)) + ' words';
+}
+function refreshHeader(){
+  let edited = 0, total = 0, words = 0;
+  SECTIONS.forEach(sec => sec.paras.forEach(p => { total++; if(isEdited(p)) edited++; words += wc(currentText(p)); }));
+  $('#progress').textContent = edited + '/' + total + ' ¶ in your words · ' + words.toLocaleString() + ' words';
+  SECTIONS.forEach(sec => {
+    const e = sec.paras.filter(isEdited).length;
+    $('#nav-'+sec.id).innerHTML = sec.title + ' <span class="cnt">' + e + '/' + sec.paras.length + '</span>';
+  });
+}
+function assemble(){
+  const parts = [EXPORT_TITLE, '',
+    '<!-- Assembled from essay3_harness.html on ' + new Date().toISOString().slice(0,10) +
+    '. Unedited paragraphs still carry the SUGGESTED text - rewrite before freezing. -->', ''];
+  [...SECTIONS].sort((a,b) => a.doc - b.doc).forEach(sec => {
+    parts.push(sec.heading, '');
+    sec.paras.forEach(p => {
+      const t = currentText(p).trim();
+      if(t){ parts.push((isEdited(p) ? '' : '<!-- UNEDITED SUGGESTION -->\n') + t, ''); }
+    });
+  });
+  return parts.join('\n');
+}
+$('#exportBtn').addEventListener('click', () => {
+  const blob = new Blob([assemble()], {type:'text/markdown'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = EXPORT_NAME;
+  a.click(); URL.revokeObjectURL(a.href);
+});
+$('#copyBtn').addEventListener('click', async () => {
+  try{ await navigator.clipboard.writeText(assemble()); $('#copyBtn').textContent = 'Copied ✓';
+    setTimeout(() => $('#copyBtn').textContent = 'Copy draft', 1500);
+  }catch(e){ alert('Clipboard blocked — use Export instead.'); }
+});
+render();
+</script>
+</body>
+</html>

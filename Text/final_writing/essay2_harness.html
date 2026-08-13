@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Essay 2 Writing Harness — Scarring and Compounding</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --panel:#ffffff; --ink:#1a1d21; --muted:#5b6470; --line:#dde2e8;
+    --accent:#7a4a1f; --accent-soft:#f7efe6; --warn:#8a5a00; --warn-soft:#fdf3e0;
+    --ok:#1e6f45; --ok-soft:#e6f4ec; --edit:#7a3b8f;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#14171b; --panel:#1d2126; --ink:#e6e9ed; --muted:#9aa4b0; --line:#333a43;
+      --accent:#d8a86f; --accent-soft:#33291d; --warn:#e3b25f; --warn-soft:#332a18;
+      --ok:#6fc596; --ok-soft:#1b2f24; --edit:#c79ad6;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.55 Georgia, 'Times New Roman', serif;background:var(--bg);color:var(--ink)}
+  header{position:sticky;top:0;z-index:10;background:var(--panel);border-bottom:1px solid var(--line);
+    padding:10px 18px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  header h1{font-size:17px;margin:0;font-weight:600}
+  header .sub{color:var(--muted);font-size:12.5px;font-family:system-ui,sans-serif}
+  header .spacer{flex:1}
+  .btn{font:13px system-ui,sans-serif;padding:6px 12px;border:1px solid var(--line);border-radius:6px;
+    background:var(--panel);color:var(--ink);cursor:pointer}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{opacity:.9;color:#fff}
+  #progress{font:12.5px system-ui,sans-serif;color:var(--muted)}
+  .layout{display:flex;max-width:1500px;margin:0 auto}
+  nav{width:230px;flex:0 0 230px;padding:16px 8px 40px 14px;position:sticky;top:54px;
+    align-self:flex-start;max-height:calc(100vh - 54px);overflow:auto;font-family:system-ui,sans-serif}
+  nav a{display:block;padding:5px 8px;border-radius:5px;color:var(--ink);text-decoration:none;font-size:13px}
+  nav a:hover{background:var(--accent-soft)}
+  nav .cnt{color:var(--muted);font-size:11px}
+  main{flex:1;min-width:0;padding:18px 22px 120px}
+  .notice{background:var(--warn-soft);border:1px solid var(--line);border-left:4px solid var(--warn);
+    border-radius:6px;padding:10px 14px;font-size:13.5px;font-family:system-ui,sans-serif;margin-bottom:18px}
+  section.essay-sec{margin:34px 0}
+  section.essay-sec > h2{font-size:19px;border-bottom:2px solid var(--line);padding-bottom:6px;margin:0 0 4px}
+  .secnote{color:var(--muted);font-size:12.5px;font-family:system-ui,sans-serif;margin-bottom:14px}
+  .para{display:grid;grid-template-columns:minmax(280px,44%) 1fr;gap:0;border:1px solid var(--line);
+    border-radius:8px;background:var(--panel);margin:16px 0;overflow:hidden}
+  @media (max-width: 980px){ .para{grid-template-columns:1fr} }
+  .prompts{padding:12px 16px;border-right:1px solid var(--line);background:var(--accent-soft)}
+  @media (max-width:980px){ .prompts{border-right:none;border-bottom:1px solid var(--line)} }
+  .prompts h3{margin:0 0 8px;font-size:14px;font-family:system-ui,sans-serif;color:var(--accent)}
+  .prompts ol{margin:0;padding-left:20px;font-size:13.5px}
+  .prompts li{margin:5px 0}
+  .flag{font-family:system-ui,sans-serif;font-size:11px;font-weight:600;border-radius:4px;padding:1px 5px}
+  .flag.decide{background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn)}
+  .flag.tk{background:var(--warn-soft);color:var(--warn)}
+  .flag.build{background:var(--ok-soft);color:var(--ok)}
+  .writing{display:flex;flex-direction:column}
+  .writing textarea{flex:1;width:100%;border:none;resize:vertical;padding:14px 16px;min-height:150px;
+    font:15px/1.65 Georgia,'Times New Roman',serif;background:var(--panel);color:var(--ink);outline:none}
+  .writing textarea:focus{background:var(--bg)}
+  .toolbar{display:flex;align-items:center;gap:10px;padding:6px 12px;border-top:1px dashed var(--line);
+    font:12px system-ui,sans-serif;color:var(--muted)}
+  .status{font-weight:600}
+  .status.suggestion{color:var(--muted)}
+  .status.edited{color:var(--edit)}
+  .toolbar .mini{margin-left:auto;background:none;border:none;color:var(--accent);cursor:pointer;font-size:12px;text-decoration:underline}
+  footer{position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);
+    padding:6px 18px;font:12px system-ui,sans-serif;color:var(--muted);display:flex;gap:16px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Essay 2 — Scarring and Compounding · Writing Harness</h1>
+    <div class="sub">Left: content prompts. Right: suggested write-up — <b>rewrite in your own words</b>; edits autosave in this browser.</div>
+  </div>
+  <div class="spacer"></div>
+  <span id="progress"></span>
+  <button class="btn" id="copyBtn">Copy draft</button>
+  <button class="btn primary" id="exportBtn">Export essay2_draft.md</button>
+</header>
+
+<div class="layout">
+  <nav id="nav"></nav>
+  <main id="main">
+    <div class="notice">
+      Sections appear in <b>writing order</b>; export assembles <b>document order</b>. Claims bound by
+      <i>Plans/master_evidence_table.md</i> Table B. Standing rules for this essay: cite the <b>binned
+      contrast / CS DiD</b> for cold compounding, never the flat smooth quadratic; describe cumulative
+      dose as a <b>within-county exposure-history contrast</b>, not an exogenously assigned treatment;
+      the estimator dependence goes in the <b>headline and conclusion</b>, not only a disclosure; debt
+      is measurement-fragile throughout. Flags: <span class="flag decide">DECIDE</span> ·
+      <span class="flag tk">TK</span> · <span class="flag build">BUILD</span>.
+    </div>
+    <div id="sections"></div>
+  </main>
+</div>
+
+<footer>
+  <span id="savestamp">Autosave: —</span>
+  <span>Storage key: essay2harness.v1 (per browser)</span>
+</footer>
+
+<script>
+const SECTIONS = [
+{id:'s5',doc:6,title:'§5 Onset–exit symmetry results',note:'WRITE FIRST',heading:'## 5 Onset–exit symmetry results',paras:[
+{id:'s5p1',title:'¶1 — The drought debt scar',prompts:[
+'Entering a drought raises the debt share; exiting does not lower it back.',
+'Asymmetry (onset + exit) at h=2: +0.019 (+0.01874, p=0.00073) — Table E2-T3.',
+'Survives sharpened q<0.05; unchanged under no/lagged/contemporaneous controls on the identical sample (p<0.001 each — total-effect language licensed); ~99% survives premium adjustment.',
+'→ how big is that?'],
+suggested:`Entering a drought raises the county medical-debt share; leaving it does not lower the share back. At a two-year horizon the onset and exit coefficients fail to offset one another: their sum — the asymmetry — is +0.019 (p = 0.00073; Table E2-T3). The debt accrued during a drought remains on household credit files after the drought ends. The asymmetry survives a sharpened multiple-testing correction at q < 0.05, is unchanged under no, lagged, and contemporaneous control sets estimated on the identical sample (p < 0.001 in each), and 99 percent of it survives premium adjustment.`},
+{id:'s5p2',title:'¶2 — Magnitude (MAD scaling)',prompts:[
+'Deviation-units anchor (advisor 1.5): the scar ≈ 45% of a typical annual move in the debt share (mean absolute deviation of year-to-year changes).',
+'[TK] also anchor to the mean debt-share level from the descriptive table.',
+'→ how long does it last?'],
+suggested:`The scar is large relative to how much the series normally moves. Scaled by the mean absolute deviation of year-to-year changes in the county debt share, the two-year asymmetry equals about 45 percent of a typical annual movement. [TK: add the level anchor — the mean debt share — from the descriptive table.]`},
+{id:'s5p3',title:'¶3 — Horizon refinement: transient, not permanent',prompts:[
+'Advisor 1.4: extending the local-projection horizon shows the asymmetry fading by h=4.',
+'Frame: a multi-year scar, not a durable divergence.',
+'Standing caveat co-located: the outcome is credit-bureau debt — the scar is a fact about recorded debt (Essay 1 §9 filters apply).',
+'→ the rest of the symmetry grid.'],
+suggested:`The scar is persistent but not permanent. Extending the local-projection horizon shows the asymmetry fading by the fourth year after exit: the drought-debt scar is a multi-year mark rather than a durable divergence. And because the outcome is credit-bureau debt, the measurement caveats developed in the first essay apply throughout — the scar is a fact about recorded debt, observed through the insurance, billing, and credit-file filters that bureau data impose.`},
+{id:'s5p4',title:'¶4 — The full symmetry grid',prompts:[
+'Table E2-T3 reports symmetry tests across hazards and outcomes.',
+'The drought–debt cell is the asymmetry that survives multiple-testing correction; treat the remaining cells as descriptive support.',
+'→ from single episodes to accumulated exposure.'],
+suggested:`Table E2-T3 reports symmetry tests for the full grid of hazards and outcomes. The drought-debt cell is the asymmetry that survives multiple-testing correction, and it is the one this essay treats as a finding; I report the remaining cells for completeness and read them as descriptive. Symmetry, however, only asks whether a single episode unwinds. The next question is what happens as episodes accumulate.`}
+]},
+{id:'s6',doc:7,title:'§6 Cumulative-dose results',note:'Estimator dependence goes in the headline',heading:'## 6 Cumulative-dose results',paras:[
+{id:'s6p1',title:'¶1 — Design',prompts:[
+'Different question from symmetry: does the marginal cold year hurt more as exposure history accumulates?',
+'Count accumulated cold-shock-years per county; binned contrast (10+ vs 1–3 cumulative years) and a smooth quadratic dose term; county+year FE.',
+'Binding framing (audit B6): within-county exposure-history contrasts, NOT the marginal causal effect of exogenously assigned shock-years.',
+'→ the headline contrast.'],
+suggested:`Cumulative dose asks a different question from symmetry: not whether a single episode unwinds, but whether the marginal cold year hurts more as a county's exposure history accumulates. I count the cold-shock years each county has accumulated over the panel and compare outcomes across accumulated doses, using a binned contrast — ten or more cumulative cold-years versus one to three — and a smooth quadratic dose term, with county and year fixed effects throughout. Accumulated exposure is a history, not an assigned treatment, and I describe these estimates as within-county exposure-history contrasts rather than the marginal causal effect of exogenously assigned shock-years.`},
+{id:'s6p2',title:'¶2 — The headline contrast',prompts:[
+'Unweighted binned contrast: employment 5,522 lower at 10+ vs 1–3 cumulative cold-years (SE 1,196, p=3.9e-6) — ≈11% of mean county employment (50,113).',
+'Population-weighted contrast: −42,453 (p=0.006) — the weight of large counties.',
+'→ the estimator dependence, stated in the headline.'],
+suggested:`In the unweighted binned contrast, a county at ten or more cumulative cold-years has employment 5,522 lower than a county at one to three (SE 1,196, p = 3.9×10⁻⁶) — about 11 percent of mean county employment of 50,113. The population-weighted contrast is far larger (−42,453, p = 0.006), reflecting the weight of large counties in levels-based outcomes.`},
+{id:'s6p3',title:'¶3 — Estimator dependence (headline, not footnote)',prompts:[
+'Smooth quadratic dose term: marginal-effect difference between 10th and 1st year = +435, flat/insignificant.',
+'The compounding claim rests on the binned contrast and the staggered event-study estimates (§7) — name the estimator whenever the ~5,500 figure is cited.',
+'Re-audit guidance: this dependence is central to the headline table and conclusion.',
+'→ robustness.'],
+suggested:`The estimator dependence belongs in the headline rather than in a footnote. The smooth quadratic dose term implies a marginal-effect difference between the tenth and first cold-year of +435 — flat and insignificant. The compounding conclusion therefore rests on the binned contrast and on the staggered event-study estimates of the next section, and whenever the roughly 5,500-job figure appears in this essay, the estimator behind it is named.`},
+{id:'s6p4',title:'¶4 — Robustness',prompts:[
+'Survives: humidity adjustment; population-aging adjustment; stricter p90 cold definition; all three control variants on the identical sample (p<1e-5).',
+'→ the long-run event-study complement.'],
+suggested:`Within its estimator, the contrast is stable. It survives humidity adjustment, an adjustment for population aging, the stricter 90th-percentile definition of extreme cold, and all three control variants estimated on the identical sample (p < 10⁻⁵ in each).`}
+]},
+{id:'s7',doc:8,title:'§7 Long-run and recurring-treatment comparisons',note:'Includes the required honesty box',heading:'## 7 Long-run and recurring-treatment comparisons',paras:[
+{id:'s7p1',title:'¶1 — Staggered event-study estimates',prompts:[
+'CS DiD in event time: employment −4,982 a decade after cold onset (e=10, p=0.003); medical-debt share +4.9 pp at e=10 (p=0.0002).',
+'The gap widens with time since onset rather than closing — the event-study signature of compounding.',
+'Cite the frontier dr_csdid values for inference (A4 rule).',
+'→ do horizon and window choices drive this?'],
+suggested:`A staggered difference-in-differences in the Callaway-Sant'Anna framework traces the gap in event time. Employment in cold-treated counties is 4,982 lower a decade after onset (p = 0.003), and the medical-debt share is 4.9 percentage points higher (p = 0.0002). The gaps widen with time since onset rather than closing — the event-study signature of compounding, from an estimator built for staggered adoption.`},
+{id:'s7p2',title:'¶2 — Horizon and window robustness (advisor 1.4/1.3)',prompts:[
+'Extending horizons moves h=0–2 estimates by <1 SE; cold employment losses persist at h=3–4 in local projections (p=0.009, 0.006).',
+'Only shortening matters: truncating at K=2 understates cold compounding.',
+'Honest caveat carried: the DL h=2 cell loses significance at lag order ≥4 via mechanical SE inflation — the claim does not rest on that cell.',
+'→ heat behaves differently.'],
+suggested:`Horizon choices do not drive these verdicts. Extending estimation horizons moves the short-horizon estimates by less than one standard error, and cold employment losses persist at three- and four-year horizons in local projections (p = 0.009 and 0.006). Only shortening matters: truncating the horizon at two years understates cold compounding. One caveat is worth stating plainly: the distributed-lag estimate at the two-year cell loses significance when the lag order rises to four or more, through mechanical standard-error inflation, and the compounding claim does not rest on that cell.`},
+{id:'s7p3',title:'¶3 — Heat saturates; drought is episodic',prompts:[
+'Chronic-heat counties show the largest debt gap as a LEVEL that does not widen with additional exposure — saturation (Figure E2-F4 [BUILD]).',
+'Chronic extreme drought too rare to estimate dose — drought is episodic.',
+'→ the honesty box.'],
+suggested:`Heat behaves differently. Continuously exposed counties show the largest debt gap as a level difference that does not widen with additional exposure — saturation rather than compounding (Figure E2-F4). Chronic extreme drought, by contrast, is too rare in the panel to estimate a dose response at all; drought in these data is episodic, which is why its dynamics were examined through onset and exit rather than accumulation.`},
+{id:'s7p4',title:'¶4 — Honesty box: “What identifies compounding?”',prompts:[
+'Set as a titled subsection (writing plan §7 requirement). State explicitly:',
+'(i) binned contrast + long-run event-study support compounding; (ii) the smooth quadratic is flat; (iii) levels-based employment outcomes are sensitive to county size; (iv) migration and sample composition can contribute to long-run gaps; (v) a pattern supported by particular estimators, not an estimator-invariant law.',
+'→ migration and composition next.'],
+suggested:`What identifies compounding? Four facts bound the claim. The binned cumulative-dose contrast and the long-run event-study estimates support it. The smooth quadratic dose term is flat. Levels-based employment outcomes are sensitive to county size, which is why the unweighted and population-weighted contrasts differ so widely. And migration and changing sample composition can contribute to gaps measured a decade after onset. Compounding is therefore a pattern supported by particular estimators rather than an estimator-invariant law, and the tables are organized so a reader can see which estimator delivers which conclusion.`}
+]},
+{id:'s8',doc:9,title:'§8 Migration, composition, and survivorship',note:'',heading:'## 8 Migration, composition, and survivorship',paras:[
+{id:'s8p1',title:'¶1 — Drought raises out-migration',prompts:[
+'IRS county-to-county flows: drought raises net out-migration the following year (−0.0021, p=0.047 — "suggestive" after multiple-testing adjustment).',
+'→ what this does to the scar.'],
+suggested:`Some of the persistence has a demographic component. IRS county-to-county migration flows show drought raising net out-migration the following year (−0.0021, p = 0.047) — an estimate I treat as suggestive after multiple-testing adjustment.`},
+{id:'s8p2',title:'¶2 — Composition and the scar',prompts:[
+'Part of the persistent debt gap is composition rather than same-population loss: leavers take their finances with them; stayers differ from leavers.',
+'Frame: out-migration is a bounded, suggestive contributor — NOT a decomposition; the scar is a lower bound on same-population loss.',
+'→ same logic for the cold gaps.'],
+suggested:`Part of the persistent debt gap may therefore be composition rather than same-population loss: households that leave take their finances with them, and those who remain differ from those who left. I frame out-migration as a bounded, suggestive contributor to the scar rather than as a decomposition, and I read the scar itself as consistent with persistence, migration, or changing composition — a lower bound on same-population loss.`},
+{id:'s8p3',title:'¶3 — Survivorship in the long-run gaps',prompts:[
+'Same logic for cold: levels-based employment outcomes are sensitive to county size; composition can contribute to gaps a decade out.',
+'The honesty box carries this caveat into the headline.',
+'→ interpretation by hazard.'],
+suggested:`The same logic applies to the long-run cold gaps. Levels-based employment outcomes are sensitive to county size, and the composition of treated counties can drift over a decade of event time. The honesty box of Section 7 carries this caveat into the headline rather than leaving it here.`}
+]},
+{id:'s3',doc:4,title:'§3 Transition framework and estimands',note:'',heading:'## 3 Transition framework and estimands',paras:[
+{id:'s3p1',title:'¶1 — Four adjustment regimes',prompts:[
+'Define: reversal (exit offsets onset); scarring (exit fails to offset onset); saturation (persists at a level, does not grow with dose); compounding (marginal harm grows with repeated exposure).',
+'Conceptual diagram Figure E2-F1 [BUILD].',
+'→ map regimes to estimands.'],
+suggested:`Four adjustment regimes are economically distinct. Under reversal, exit offsets onset and the shock leaves no lasting mark. Under scarring, exit fails to offset onset and a gap remains after the shock ends. Under saturation, effects persist at a level but do not grow with additional exposure. Under compounding, the marginal harm grows as exposure recurs. Figure E2-F1 illustrates the four paths, and the essay's estimands are built to distinguish them.`},
+{id:'s3p2',title:'¶2 — Transition estimands and symmetry',prompts:[
+'Decompose each hazard into onset, persistence, exit indicators (county+year FE).',
+'Symmetry test — do onset and exit coefficients sum to zero? — is the operational definition of reversibility.',
+'Local projections trace the post-exit path.',
+'→ dose estimands.'],
+suggested:`The transition framework maps regimes to estimands. I decompose each hazard into onset, persistence, and exit indicators and test symmetry — whether the onset and exit coefficients sum to zero — as the operational definition of reversibility. A rejected symmetry test with a same-signed sum is scarring. Local projections then trace the post-exit path, which is what distinguishes a transient scar from a permanent one.`},
+{id:'s3p3',title:'¶3 — Cumulative-dose estimands',prompts:[
+'Saturation vs compounding: binned contrasts across accumulated shock-years + a smooth quadratic in dose.',
+'Binding framing: exposure history, not assigned treatment; interpret contrasts accordingly (audit B6).',
+'→ recurring-treatment estimands.'],
+suggested:`Cumulative-dose estimands separate saturation from compounding: binned contrasts across accumulated shock-years and a smooth quadratic in dose. If effects saturate, high-dose and mid-dose counties look alike; if they compound, the gap grows with accumulated years. Because accumulated exposure is a history rather than an assigned treatment, I interpret these as within-county exposure-history contrasts throughout.`},
+{id:'s3p4',title:'¶4 — Recurring-treatment estimands',prompts:[
+'Staggered event-study (Callaway–Sant’Anna): treated cohorts vs not-yet/never-treated over a decade of event time — the long-run complement.',
+'→ data.'],
+suggested:`Finally, staggered event-study estimates in the Callaway-Sant'Anna framework compare treated cohorts with not-yet-treated and never-treated counties over a decade of event time. These provide the long-run complement to the transition estimates and an estimator, built for staggered adoption, against which the dose results can be checked.`}
+]},
+{id:'s4',doc:5,title:'§4 Data and recurring exposure',note:'Short spine — reuse Essay 1 §3',heading:'## 4 Data and recurring exposure',paras:[
+{id:'s4p1',title:'¶1 — Spine recap (short)',prompts:[
+'Panel, shock bins, FE, and clustering follow Essay 1’s data section — summarize in 3–4 sentences, do not copy prose.',
+'County panel 2011–2023 (~3,100 counties); four shock bins vs own historical baselines; county+year FE; state clustering (AAIW-justified).',
+'→ transition support.'],
+suggested:`The panel, shock definitions, and estimation conventions follow the first essay. Briefly: a county-year panel over 2011–2023 covering roughly 3,100 counties; four binary shock bins — heat, cold, extreme drought, poor air quality — defined against each county's own historical baseline; county and year fixed effects; and state-clustered standard errors, a choice defended there on Abadie-Athey-Imbens-Wooldridge grounds.`},
+{id:'s4p2',title:'¶2 — Transition frequencies and support',prompts:[
+'Table E2-T1: transition counts. [TK: pull the onset/exit/persistence counts from delta_transition_summary.csv when drafting.]',
+'Drought episodes common enough to estimate onset and exit; chronic extreme drought rare.',
+'Cold and heat recur → wide support in accumulated shock-years (the variation the dose estimates use).',
+'→ results.'],
+suggested:`Table E2-T1 reports the transition support. [TK: insert the onset, persistence, and exit counts from the transition summary.] Drought episodes are frequent enough to estimate onset and exit responses, but chronic extreme drought is rare — a fact that shapes the essay's conclusion that drought is episodic. Cold and heat recur, generating wide support in accumulated shock-years; that recurrence is the variation the cumulative-dose estimates use.`}
+]},
+{id:'s2',doc:3,title:'§2 Why persistence matters',note:'',heading:'## 2 Why persistence matters',paras:[
+{id:'s2p1',title:'¶1 — Welfare',prompts:[
+'A loss that reverses within a year and an equal-sized loss that persists have very different discounted burdens.',
+'Persistence, not the impact coefficient, determines whether a temporary shock creates a durable loss.',
+'→ adaptation.'],
+suggested:`The welfare cost of a climate shock depends on what happens after it ends. A loss that reverses within a year and an equal-sized loss that persists have very different discounted burdens, and a shock whose marginal harm grows with recurrence is a different policy object from one whose harm arrives once. The impact coefficient alone cannot distinguish these cases; the adjustment path can.`},
+{id:'s2p2',title:'¶2 — Adaptation policy',prompts:[
+'If repeated exposure compounds, recurring-hazard counties face rising marginal damages — a stronger case for adaptation investment there.',
+'If effects saturate, the gap is fixed and one-time transfers or insurance look different.',
+'→ measurement.'],
+suggested:`The regimes also rank adaptation investments differently. If repeated exposure compounds, counties facing recurring hazards face rising marginal damages, and adaptation capital there pays a growing dividend. If effects saturate, the gap is a fixed level difference, and the policy question shifts toward transfers and insurance for the exposed stock rather than protection against the next marginal year.`},
+{id:'s2p3',title:'¶3 — Measurement',prompts:[
+'Contemporaneous exposure metrics understate hazards whose harm accumulates.',
+'Preview: the burden of recurring cold is understated by any single-year measure — an implication the results will support.',
+'→ framework.'],
+suggested:`Persistence also matters for measurement. Contemporaneous exposure metrics — this year's shock against this year's outcome — understate hazards whose harm accumulates across years. The results below imply that the burden of recurring cold is understated by any single-year measure, which is itself a finding about how climate costs should be counted.`}
+]},
+{id:'s9',doc:10,title:'§9 Interpretation by hazard',note:'',heading:'## 9 Interpretation by hazard',paras:[
+{id:'s9p1',title:'¶1 — The taxonomy applied',prompts:[
+'Drought: episodic, with a transient recorded-debt scar (h=2, fading by h=4), partly compositional.',
+'Cold: compounding — under the binned contrast and event-study estimators; flat in the smooth quadratic.',
+'Heat: saturating into a level difference.',
+'→ policy horizon.'],
+suggested:`The dynamics are hazard-specific. Drought is episodic: its recorded-debt scar is real at a two-year horizon, fades by the fourth year, and is partly compositional. Cold compounds — under the binned cumulative-dose contrast and the staggered event-study estimator, though not in the smooth quadratic — with employment gaps that widen a decade after onset. Heat saturates into a level difference that does not grow with additional exposure.`},
+{id:'s9p2',title:'¶2 — The policy horizon is hazard-specific',prompts:[
+'One-size exposure windows misstate burdens: single-year measures understate recurring cold; multi-year averages dilute episodic drought.',
+'Adaptation targeting differs by regime (compounding → protect recurring-exposure counties; saturation → support the exposed stock).',
+'→ limits.'],
+suggested:`It follows that the policy-relevant horizon is itself hazard-specific. Single-year exposure measures understate the burden of recurring cold, while long averages dilute the episodic sharpness of drought. Adaptation targeting inherits the same logic: compounding favors protecting counties with recurring exposure before the next marginal year arrives, while saturation favors supporting the already-exposed stock.`},
+{id:'s9p3',title:'¶3 — Limits',prompts:[
+'Recorded debt is a selective ledger (Essay 1/Essay 3).',
+'Exposure history is not exogenous; contrasts are exposure-history contrasts.',
+'Migration and composition contribute to long-run gaps; the scar is a lower bound on same-population loss.',
+'→ conclude.'],
+suggested:`Three limits carry through. The debt scar lives in a selective ledger, with the recording filters documented in the first essay. Exposure histories are not exogenously assigned, so the dose results are exposure-history contrasts rather than causal dose-response parameters. And migration and composition contribute to long-run gaps, which is why the scar is read as a lower bound on same-population loss.`}
+]},
+{id:'s10',doc:11,title:'§10 Conclusion',note:'',heading:'## 10 Conclusion',paras:[
+{id:'s10p1',title:'¶1 — Findings restated',prompts:[
+'Question: when a shock ends or recurs, do effects reverse, scar, saturate, or compound?',
+'Answers with headline numbers, one sentence each: drought debt scars (+0.019 at h=2, ~45% of a typical annual move, fading by h=4); cold compounds (−5,522 binned; −4,982 at e=10); heat saturates.',
+'→ the estimator sentence.'],
+suggested:`This essay asked what happens when a climate shock ends or recurs: whether its economic effects reverse, scar, saturate, or compound. The answers are hazard-specific. Drought debt scars — a two-year onset-exit asymmetry of +0.019, about 45 percent of a typical annual movement in the debt share, fading by the fourth year after exit. Cold employment compounds, with a binned cumulative-dose gap of roughly 5,500 jobs and an event-study gap of roughly 5,000 a decade after onset. Heat saturates into a level difference.`},
+{id:'s10p2',title:'¶2 — The estimator sentence (required here)',prompts:[
+'Re-audit guidance: estimator dependence central in the conclusion, not only disclosed earlier.',
+'The compounding conclusion rests on the binned contrast and event-study estimator; the smooth quadratic is flat; the essay reports the dependence rather than resolving it.',
+'→ close.'],
+suggested:`The compounding conclusion is estimator-dependent, and this essay reports that dependence rather than resolving it: the binned contrast and the staggered event-study estimator support compounding, while the smooth quadratic dose term is flat. Readers who weight the smooth specification heavily should read the cold result as persistence without acceleration; the tables are built so that choice is visible.`},
+{id:'s10p3',title:'¶3 — Close',prompts:[
+'Measurement implication: single-year exposure understates recurring cold; the horizon over which climate raises costs is itself hazard-specific.',
+'Forward: working-age utilization data and longer panels would tighten the persistence bounds; Essay 3 asks who bears these costs.',
+'No new numbers.'],
+suggested:`The broader implication is about counting. Because the horizon over which climate raises costs is hazard-specific, exposure measures that stop at the current year systematically understate recurring hazards. Longer panels and working-age administrative data would tighten the persistence bounds reported here. The next essay turns from when the costs arrive to who bears them — and to when the ledgers used to measure hardship fail to record them.`}
+]},
+{id:'s1',doc:2,title:'§1 Introduction',note:'WRITE LAST',heading:'## 1 Introduction',paras:[
+{id:'s1p1',title:'¶1 — Hook',prompts:[
+'Whether a changing climate raises long-run costs depends on what happens once a shock ends: reverse, scar, or compound as shocks recur.',
+'Idiom permitted; no numbers.'],
+suggested:`Whether a changing climate raises health and economic costs over the long run depends less on any single bad year than on what happens after it. When the drought breaks or the cold season ends, the damage may reverse, it may leave a scar, or — as shocks recur — it may compound. These are different economic objects with different policy implications, and they cannot be told apart from an impact coefficient.`},
+{id:'s1p2',title:'¶2 — The gap',prompts:[
+'Literature measures contemporaneous and short-lag effects well [TK cite: Dell–Jones–Olken; Deryugina; Hsiang–Jina-style persistence work]; systematic adjustment-regime evidence across hazards in one panel is scarce.',
+'→ what I do.'],
+suggested:`A large literature measures the contemporaneous and short-lag effects of temperature and drought on output and health [TK: cite Dell, Jones, and Olken; Deryugina; Hsiang and Jina on persistence]. Much less is known about adjustment: whether the same shock's effects unwind on exit, and whether recurrence raises the marginal harm. This essay provides that evidence for four hazards in one county panel, under one set of estimation conventions.`},
+{id:'s1p3',title:'¶3 — What this paper does',prompts:[
+'County panel 2011–2023; decompose each hazard into onset/persistence/exit; symmetry tests as the operational definition of reversibility; cumulative-dose responses; staggered (CS) event-study comparisons.',
+'Define the four regimes: reversal, scarring, saturation, compounding.'],
+suggested:`Using a U.S. county panel from 2011 to 2023, I decompose each climate shock into its onset, its persistence, and its exit; test whether entering and leaving a shock offset one another, which I take as the operational definition of reversibility; estimate how outcomes respond to the cumulative number of shock-years a county has accumulated; and check the dose results against a staggered event-study estimator. The estimands are built to distinguish four adjustment regimes: reversal, scarring, saturation, and compounding.`},
+{id:'s1p4',title:'¶4 — Results walkthrough',prompts:[
+'Drought debt scars: +0.019 asymmetry at h=2 (p<0.001), ≈45% of a typical annual move; fades by h=4; partly migration (suggestive); measurement-fragile ledger.',
+'Cold compounds: binned 10+ vs 1–3 = −5,522 jobs (≈11% of mean employment); CS DiD −4,982 at e=10; smooth quadratic flat — estimator dependence disclosed up front.',
+'Heat saturates; chronic extreme drought too rare — episodic.'],
+suggested:`The dynamics are shock-specific. Drought debt scars: the debt accrued during a drought does not unwind when it ends — a two-year onset-exit asymmetry of +0.019 (p < 0.001), about 45 percent of a typical annual movement in the debt share — though the scar fades by the fourth year after exit, part of it reflects out-migration, and it is measured in a selective credit-bureau ledger. Cold compounds: a county at ten or more cumulative cold-years has employment roughly 5,500 lower than a county at one to three — about 11 percent of the mean — and a staggered event study shows the gap near 5,000 jobs a decade after onset; the smooth quadratic dose term is flat, so the claim rests on the binned and event-study estimators, a dependence this essay keeps in the foreground. Heat saturates into a level difference, and chronic extreme drought is too rare to dose — drought is episodic.`},
+{id:'s1p5',title:'¶5 — Contribution',prompts:[
+'A regime taxonomy with operational estimands (symmetry, dose, event-study) applied across hazards in one panel.',
+'Estimator-honest persistence evidence: reporting where conclusions are estimator-dependent.',
+'Policy: the relevant exposure horizon is hazard-specific; single-year measures understate recurring cold.'],
+suggested:`The essay makes three contributions. It turns the informal language of scarring and compounding into operational estimands — symmetry tests, dose contrasts, and event-study gaps — applied uniformly across hazards in one panel. It reports where the conclusions are estimator-dependent instead of averaging the disagreement away. And it shows that the policy-relevant exposure horizon is itself hazard-specific: single-year exposure measures understate the burden of recurring cold.`},
+{id:'s1p6',title:'¶6 — Roadmap',prompts:['One or two sentences.'],
+suggested:`Section 2 explains why persistence matters; Section 3 sets out the transition framework and estimands; Section 4 summarizes the data and exposure support. Sections 5 through 7 report the symmetry, cumulative-dose, and long-run results; Section 8 examines migration and composition; Section 9 interprets the results by hazard; Section 10 concludes.`}
+]},
+{id:'abstract',doc:1,title:'Abstract',note:'WRITE VERY LAST · 180–250 words',heading:'## Abstract',paras:[
+{id:'abs1',title:'The abstract (one paragraph)',prompts:[
+'(1) Question — when a shock ends or recurs, do effects reverse, scar, saturate, or compound?',
+'(2) Design — county panel 2011–2023; onset/persistence/exit decomposition; symmetry tests; cumulative dose; staggered event study.',
+'(3) Drought scar sentence (+0.019 at h=2; fades by h=4; partly migration; bureau-debt caveat).',
+'(4) Cold compounding sentence (−5,500 binned; ~5,000 at e=10; smooth quadratic flat — estimator dependence named).',
+'(5) Heat saturation / drought episodic sentence.',
+'(6) Takeaway: the horizon is hazard-specific; single-year exposure understates recurring cold.'],
+suggested:`Whether a changing climate raises costs over the long run depends on what happens once a shock ends: whether the damage reverses, leaves a scar, or compounds as shocks recur. Using a U.S. county panel from 2011 to 2023, I decompose each climate shock into onset, persistence, and exit; test whether entering and leaving a shock offset one another; and estimate how outcomes respond to accumulated shock-years, checking the results against a staggered event-study estimator. The dynamics are shock-specific. Drought debt scars: the two-year onset-exit asymmetry in the medical-debt share is +0.019 (p < 0.001), about 45 percent of a typical annual movement — a scar that fades by the fourth year after exit, partly reflects out-migration, and is recorded in a selective credit-bureau ledger. Cold compounds: counties at ten or more cumulative cold-years have employment roughly 5,500 lower than counties at one to three, and the gap approaches 5,000 jobs a decade after onset in the event study; the smooth quadratic dose term is flat, so the conclusion rests on the binned and event-study estimators. Heat saturates into a level difference, and chronic extreme drought is too rare to dose. The horizon over which climate raises costs is itself hazard-specific, so single-year exposure measures understate the burden of recurring cold.`}
+]}
+];
+
+const KEY = 'essay2harness.v1.';
+const EXPORT_NAME = 'essay2_draft.md';
+const EXPORT_TITLE = '# Essay 2 — Scarring and Compounding: The Dynamic Economic Costs of Recurring Climate Exposure';
+
+const $ = s => document.querySelector(s);
+function stored(id){ try{ return localStorage.getItem(KEY+id); }catch(e){ return null; } }
+function store(id, v){ try{ localStorage.setItem(KEY+id, v); }catch(e){} }
+function unstore(id){ try{ localStorage.removeItem(KEY+id); }catch(e){} }
+function currentText(p){ const s = stored(p.id); return s === null ? p.suggested : s; }
+function isEdited(p){ const s = stored(p.id); return s !== null && s.trim() !== p.suggested.trim(); }
+function wc(t){ t = t.trim(); return t ? t.split(/\s+/).length : 0; }
+function decorate(text){
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/\[DECIDE[^\]]*\]/g, m => '<span class="flag decide">'+m.slice(1,-1)+'</span>')
+    .replace(/\[TK[^\]]*\]/g, m => '<span class="flag tk">'+m.slice(1,-1)+'</span>')
+    .replace(/\[BUILD[^\]]*\]/g, m => '<span class="flag build">'+m.slice(1,-1)+'</span>');
+}
+function render(){
+  const nav = $('#nav'), root = $('#sections');
+  SECTIONS.forEach(sec => {
+    const a = document.createElement('a');
+    a.href = '#sec-'+sec.id; a.id = 'nav-'+sec.id;
+    nav.appendChild(a);
+    const s = document.createElement('section');
+    s.className = 'essay-sec'; s.id = 'sec-'+sec.id;
+    s.innerHTML = '<h2>'+sec.title+'</h2><div class="secnote">'+(sec.note||'')+'</div>';
+    sec.paras.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'para'; card.id = 'card-'+p.id;
+      const prompts = p.prompts.map(x => '<li>'+decorate(x)+'</li>').join('');
+      card.innerHTML =
+        '<div class="prompts"><h3>'+p.title+'</h3><ol>'+prompts+'</ol></div>'+
+        '<div class="writing"><textarea spellcheck="true"></textarea>'+
+        '<div class="toolbar"><span class="status"></span><span class="words"></span>'+
+        '<button class="mini" title="Discard your edits and restore the suggested text">Restore suggestion</button></div></div>';
+      const ta = card.querySelector('textarea');
+      ta.value = currentText(p);
+      autosize(ta);
+      ta.addEventListener('input', () => {
+        store(p.id, ta.value); autosize(ta); refreshCard(p, card); refreshHeader();
+        $('#savestamp').textContent = 'Autosave: ' + new Date().toLocaleTimeString();
+      });
+      card.querySelector('.mini').addEventListener('click', () => {
+        if(isEdited(p) && !confirm('Discard your edits to '+p.title+' and restore the suggestion?')) return;
+        unstore(p.id); ta.value = p.suggested; autosize(ta); refreshCard(p, card); refreshHeader();
+      });
+      refreshCard(p, card);
+      s.appendChild(card);
+    });
+    root.appendChild(s);
+  });
+  refreshHeader();
+}
+function autosize(ta){ ta.style.height = 'auto'; ta.style.height = Math.max(150, ta.scrollHeight + 4) + 'px'; }
+function refreshCard(p, card){
+  const st = card.querySelector('.status'), w = card.querySelector('.words');
+  const edited = isEdited(p);
+  st.textContent = edited ? 'edited — your words' : 'suggestion (unedited)';
+  st.className = 'status ' + (edited ? 'edited' : 'suggestion');
+  w.textContent = wc(currentText(p)) + ' words';
+}
+function refreshHeader(){
+  let edited = 0, total = 0, words = 0;
+  SECTIONS.forEach(sec => sec.paras.forEach(p => { total++; if(isEdited(p)) edited++; words += wc(currentText(p)); }));
+  $('#progress').textContent = edited + '/' + total + ' ¶ in your words · ' + words.toLocaleString() + ' words';
+  SECTIONS.forEach(sec => {
+    const e = sec.paras.filter(isEdited).length;
+    $('#nav-'+sec.id).innerHTML = sec.title + ' <span class="cnt">' + e + '/' + sec.paras.length + '</span>';
+  });
+}
+function assemble(){
+  const parts = [EXPORT_TITLE, '',
+    '<!-- Assembled from essay2_harness.html on ' + new Date().toISOString().slice(0,10) +
+    '. Unedited paragraphs still carry the SUGGESTED text - rewrite before freezing. -->', ''];
+  [...SECTIONS].sort((a,b) => a.doc - b.doc).forEach(sec => {
+    parts.push(sec.heading, '');
+    sec.paras.forEach(p => {
+      const t = currentText(p).trim();
+      if(t){ parts.push((isEdited(p) ? '' : '<!-- UNEDITED SUGGESTION -->\n') + t, ''); }
+    });
+  });
+  return parts.join('\n');
+}
+$('#exportBtn').addEventListener('click', () => {
+  const blob = new Blob([assemble()], {type:'text/markdown'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = EXPORT_NAME;
+  a.click(); URL.revokeObjectURL(a.href);
+});
+$('#copyBtn').addEventListener('click', async () => {
+  try{ await navigator.clipboard.writeText(assemble()); $('#copyBtn').textContent = 'Copied ✓';
+    setTimeout(() => $('#copyBtn').textContent = 'Copy draft', 1500);
+  }catch(e){ alert('Clipboard blocked — use Export instead.'); }
+});
+render();
+</script>
+</body>
+</html>
