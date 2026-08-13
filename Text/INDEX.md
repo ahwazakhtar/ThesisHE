@@ -6,6 +6,7 @@ One folder per document family. **New files go into the matching folder, never t
 
 | Folder | Contents | Notes |
 |---|---|---|
+| `final_writing/` | The final essay-drafting workspace (thesis_completion 2.4–2.5): paragraph-level outlines (Claude), author-written drafts, fresh-eyes agent reviews in `reviews/` | Process: `WORKFLOW.md` + `review_protocol.md`. `essay1_outline.md` is the live spec; drafts are **author-owned** — Claude never edits prose unasked. Claims bound by `Plans/master_evidence_table.md`. |
 | `drafts/` | Thesis-bound prose: three-essay abstracts, mechanisms §6, premium-mediation write-up, pathway notes, policy synthesis | `thesis_paper_abstracts.md` is the current abstracts doc (`_structured.md` is the Jun 15 variant). `policy_section.md` (2026-07-13) is the sufficient-statistics policy synthesis for the general conclusion (thesis_completion 2.3). The three essay drafts (tasks 2.4–2.5) will live here. |
 | `technical_note/` | The empirical-framework note: `.tex`/`.html` sources + rendered PDFs (Long, short) + LaTeX artifacts | The `.tex`/`.html` are the sources of truth; PDFs are dated exports. |
 | `correspondence/` | Feedback received + responses sent (external reader, second reviewer, committee) | `reviewer_response_mechanisms_nber.md` **supersedes** the plain `reviewer_response_mechanisms.md`; `_email.md` is the short form. Second-reviewer thread: `second_reviewer_feedback_mechanisms.md` (received) → `response_to_second_reviewer.md` (reply). `committee_memo_ch3_structure.md` is drafted, awaiting the author to send. |

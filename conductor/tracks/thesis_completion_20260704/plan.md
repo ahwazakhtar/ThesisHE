@@ -165,7 +165,15 @@ blocked on 2.2 here; T1.3 component (a) is amended (dated note in `spec.md`).
     - **Outputs:** `Analysis/policy/sufficient_stats.csv`; `Text/policy_section.md` (NBER style).
     - **Test:** `testthat` — aggregation sums reconcile to per-unit estimates; error bands
       propagate the coefficient SEs.
-- [ ] **2.4 Essay 1 full draft (T1.4).** **Gated on `audit_response_20260712` 1.1–1.2** (the
+- [~] **2.4 Essay 1 full draft (T1.4).** *(Started 2026-08-13: stood up `Text/final_writing/`
+  — drafting workflow (`WORKFLOW.md`), fresh-eyes review protocol (`review_protocol.md`), and
+  the full paragraph-level `essay1_outline.md` (claims keyed to master-evidence-table rows,
+  exhibits to the registry, advisor-robustness additions placed). Author writes the prose in
+  their own words into `essay1_draft.md`; Claude outlines + orchestrates agent reviews only.
+  Draft output location amended: `Text/final_writing/essay1_draft.md` (supersedes the
+  `Text/essay1_incidence_draft.md` path below). Two pre-drafting author decisions flagged in
+  the outline: the untraced $18 ESI figure (drop recommended) and the drought→debt 0.7-pp
+  level choice.)* **Gated on `audit_response_20260712` 1.1–1.2** (the
   master evidence table `Plans/master_evidence_table.md` is the claim source of truth; the
   abstracts must already be reconciled). Assemble the job-market paper from existing parts
   (`Text/drafts/thesis_paper_abstracts.md`, `technical_note_empirical_framework`, `mechanisms_section.md`,
