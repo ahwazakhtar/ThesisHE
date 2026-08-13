@@ -6,13 +6,16 @@ structure, content requirements, and review — never draft prose for the manusc
 
 ## The loop (per section)
 
-1. **Outline (Claude).** `essayN_outline.md` specifies, paragraph by paragraph: what the
-   paragraph must accomplish, the exact numbers it may cite (with the binding permitted
-   language from `Plans/master_evidence_table.md`), the caveats that must sit *beside* the
-   claim, and the exhibits to reference.
-2. **Draft (author).** You write the prose into `essayN_draft.md` in this folder, section
-   by section, in your own words. Follow the recommended *writing order* in the outline
-   (results first, introduction last), not the document order.
+1. **Outline + content (Claude).** Two layers per essay: `essayN_outline.md` is the map
+   (section/paragraph structure, evidence-table row keys, exhibits, prohibitions);
+   `essayN_content.md` pre-fills every paragraph with its content units in narrative
+   order — claim, number with baseline, interpretation, co-located caveat, transition —
+   as telegraphic fragments, not prose.
+2. **Draft (author).** You string the content units into sentences in your own words,
+   writing into `essayN_draft.md`, section by section. Follow the recommended *writing
+   order* (results first, introduction last, abstract very last), not the document order.
+   `[DECIDE]`/`[CITE]`/`[BUILD]` flags in the content file mark author decisions, missing
+   citations, and exhibits still to generate.
 3. **Review (fresh-eyes agent).** When a section (or batch of sections) is ready, say
    "review essay 1 §5" (or similar). Claude launches a reviewer agent per
    `review_protocol.md` — the agent reads only the draft, the outline, the evidence
