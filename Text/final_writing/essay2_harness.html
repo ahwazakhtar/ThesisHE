@@ -112,9 +112,9 @@ const SECTIONS = [
 suggested:`Entering a drought raises the county medical-debt share; leaving it does not lower the share back. At a two-year horizon the onset and exit coefficients fail to offset one another: their sum — the asymmetry — is +0.019 (p = 0.00073; Table E2-T3). The debt accrued during a drought remains on household credit files after the drought ends. The asymmetry survives a sharpened multiple-testing correction at q < 0.05, is unchanged under no, lagged, and contemporaneous control sets estimated on the identical sample (p < 0.001 in each), and 99 percent of it survives premium adjustment.`},
 {id:'s5p2',title:'¶2 — Magnitude (MAD scaling)',prompts:[
 'Deviation-units anchor (advisor 1.5): the scar ≈ 45% of a typical annual move in the debt share (mean absolute deviation of year-to-year changes).',
-'[TK] also anchor to the mean debt-share level from the descriptive table.',
+'Level anchor: mean debt share ≈0.19 → the +0.019 asymmetry ≈ a tenth of the level.',
 '→ how long does it last?'],
-suggested:`The scar is large relative to how much the series normally moves. Scaled by the mean absolute deviation of year-to-year changes in the county debt share, the two-year asymmetry equals about 45 percent of a typical annual movement. [TK: add the level anchor — the mean debt share — from the descriptive table.]`},
+suggested:`The scar is large relative to how much the series normally moves. Scaled by the mean absolute deviation of year-to-year changes in the county debt share, the two-year asymmetry equals about 45 percent of a typical annual movement. Against the mean debt share of roughly 19 percent, it is also about a tenth of the level.`},
 {id:'s5p3',title:'¶3 — Horizon refinement: transient, not permanent',prompts:[
 'Advisor 1.4: extending the local-projection horizon shows the asymmetry fading by h=4.',
 'Frame: a multi-year scar, not a durable divergence.',
@@ -135,10 +135,10 @@ suggested:`Table E2-T3 reports symmetry tests for the full grid of hazards and o
 '→ the headline contrast.'],
 suggested:`Cumulative dose asks a different question from symmetry: not whether a single episode unwinds, but whether the marginal cold year hurts more as a county's exposure history accumulates. I count the cold-shock years each county has accumulated over the panel and compare outcomes across accumulated doses, using a binned contrast — ten or more cumulative cold-years versus one to three — and a smooth quadratic dose term, with county and year fixed effects throughout. Accumulated exposure is a history, not an assigned treatment, and I describe these estimates as within-county exposure-history contrasts rather than the marginal causal effect of exogenously assigned shock-years.`},
 {id:'s6p2',title:'¶2 — The headline contrast',prompts:[
-'Unweighted binned contrast: employment 5,522 lower at 10+ vs 1–3 cumulative cold-years (SE 1,196, p=3.9e-6) — ≈11% of mean county employment (50,113).',
+'Unweighted binned contrast: employment 5,522 lower at 10+ vs 1–3 cumulative cold-years (SE 1,196, p=3.9e-6) — ≈11% of mean county employment (48,068, E1-T1).',
 'Population-weighted contrast: −42,453 (p=0.006) — the weight of large counties.',
 '→ the estimator dependence, stated in the headline.'],
-suggested:`In the unweighted binned contrast, a county at ten or more cumulative cold-years has employment 5,522 lower than a county at one to three (SE 1,196, p = 3.9×10⁻⁶) — about 11 percent of mean county employment of 50,113. The population-weighted contrast is far larger (−42,453, p = 0.006), reflecting the weight of large counties in levels-based outcomes.`},
+suggested:`In the unweighted binned contrast, a county at ten or more cumulative cold-years has employment 5,522 lower than a county at one to three (SE 1,196, p = 3.9×10⁻⁶) — about 11 percent of mean county employment of 48,068. The population-weighted contrast is far larger (−42,453, p = 0.006), reflecting the weight of large counties in levels-based outcomes.`},
 {id:'s6p3',title:'¶3 — Estimator dependence (headline, not footnote)',prompts:[
 'Smooth quadratic dose term: marginal-effect difference between 10th and 1st year = +435, flat/insignificant.',
 'The compounding claim rests on the binned contrast and the staggered event-study estimates (§7) — name the estimator whenever the ~5,500 figure is cited.',
@@ -156,7 +156,7 @@ suggested:`Within its estimator, the contrast is stable. It survives humidity ad
 'The gap widens with time since onset rather than closing — the event-study signature of compounding.',
 'Cite the frontier dr_csdid values for inference (A4 rule).',
 '→ do horizon and window choices drive this?'],
-suggested:`A staggered difference-in-differences in the Callaway-Sant'Anna framework traces the gap in event time. Employment in cold-treated counties is 4,982 lower a decade after onset (p = 0.003), and the medical-debt share is 4.9 percentage points higher (p = 0.0002). The gaps widen with time since onset rather than closing — the event-study signature of compounding, from an estimator built for staggered adoption.`},
+suggested:`A staggered difference-in-differences in the Callaway and Sant'Anna (2021) framework traces the gap in event time. Employment in cold-treated counties is 4,982 lower a decade after onset (p = 0.003), and the medical-debt share is 4.9 percentage points higher (p = 0.0002). The gaps widen with time since onset rather than closing — the event-study signature of compounding, from an estimator built for staggered adoption.`},
 {id:'s7p2',title:'¶2 — Horizon and window robustness (advisor 1.4/1.3)',prompts:[
 'Extending horizons moves h=0–2 estimates by <1 SE; cold employment losses persist at h=3–4 in local projections (p=0.009, 0.006).',
 'Only shortening matters: truncating at K=2 understates cold compounding.',
@@ -219,11 +219,12 @@ suggested:`Finally, staggered event-study estimates in the Callaway-Sant'Anna fr
 '→ transition support.'],
 suggested:`The panel, shock definitions, and estimation conventions follow the first essay. Briefly: a county-year panel over 2011–2023 covering roughly 3,100 counties; four binary shock bins — heat, cold, extreme drought, poor air quality — defined against each county's own historical baseline; county and year fixed effects; and state-clustered standard errors, a choice defended there on Abadie-Athey-Imbens-Wooldridge grounds.`},
 {id:'s4p2',title:'¶2 — Transition frequencies and support',prompts:[
-'Table E2-T1: transition counts. [TK: pull the onset/exit/persistence counts from delta_transition_summary.csv when drafting.]',
-'Drought episodes common enough to estimate onset and exit; chronic extreme drought rare.',
+'Table E2-T1: transition support. Incidence (descriptive table): extreme drought 2.3% of county-years; extreme heat 24.3%; extreme cold 17.4%. Transition regressions run on ≈27,000–34,000 county-years.',
+'Drought episodes common enough to estimate onset and exit; chronic extreme drought rare (2.3% incidence) — episodic by construction.',
 'Cold and heat recur → wide support in accumulated shock-years (the variation the dose estimates use).',
+'(Exact episode counts for E2-T1 still to generate at drafting — TK_resolutions.md §E3.)',
 '→ results.'],
-suggested:`Table E2-T1 reports the transition support. [TK: insert the onset, persistence, and exit counts from the transition summary.] Drought episodes are frequent enough to estimate onset and exit responses, but chronic extreme drought is rare — a fact that shapes the essay's conclusion that drought is episodic. Cold and heat recur, generating wide support in accumulated shock-years; that recurrence is the variation the cumulative-dose estimates use.`}
+suggested:`Table E2-T1 reports the transition support. Extreme drought marks 2.3 percent of county-years, so drought episodes are frequent enough to estimate onset and exit responses while chronic extreme drought is rare — a fact that shapes the essay's conclusion that drought is episodic. Extreme heat and cold are far more common, marking 24 and 17 percent of county-years respectively; that recurrence generates wide support in accumulated shock-years, the variation the cumulative-dose estimates use. The transition regressions run on roughly 27,000 to 34,000 county-years, depending on outcome and horizon.`}
 ]},
 {id:'s2',doc:3,title:'§2 Why persistence matters',note:'',heading:'## 2 Why persistence matters',paras:[
 {id:'s2p1',title:'¶1 — Welfare',prompts:[
@@ -284,9 +285,9 @@ suggested:`The broader implication is about counting. Because the horizon over w
 'Idiom permitted; no numbers.'],
 suggested:`Whether a changing climate raises health and economic costs over the long run depends less on any single bad year than on what happens after it. When the drought breaks or the cold season ends, the damage may reverse, it may leave a scar, or — as shocks recur — it may compound. These are different economic objects with different policy implications, and they cannot be told apart from an impact coefficient.`},
 {id:'s1p2',title:'¶2 — The gap',prompts:[
-'Literature measures contemporaneous and short-lag effects well [TK cite: Dell–Jones–Olken; Deryugina; Hsiang–Jina-style persistence work]; systematic adjustment-regime evidence across hazards in one panel is scarce.',
+'Literature: contemporaneous/short-lag effects well measured (Dell–Jones–Olken 2014); persistence strand (Hsiang–Jina 2014; Deryugina–Kawano–Levitt 2018); systematic adjustment-regime evidence across hazards in one panel is scarce.',
 '→ what I do.'],
-suggested:`A large literature measures the contemporaneous and short-lag effects of temperature and drought on output and health [TK: cite Dell, Jones, and Olken; Deryugina; Hsiang and Jina on persistence]. Much less is known about adjustment: whether the same shock's effects unwind on exit, and whether recurrence raises the marginal harm. This essay provides that evidence for four hazards in one county panel, under one set of estimation conventions.`},
+suggested:`A large literature measures the contemporaneous and short-lag effects of temperature and drought on output and health (Dell, Jones, and Olken, 2014), with a smaller strand on the persistence of local shocks (Hsiang and Jina, 2014; Deryugina, Kawano, and Levitt, 2018). Much less is known about adjustment: whether the same shock's effects unwind on exit, and whether recurrence raises the marginal harm. This essay provides that evidence for four hazards in one county panel, under one set of estimation conventions.`},
 {id:'s1p3',title:'¶3 — What this paper does',prompts:[
 'County panel 2011–2023; decompose each hazard into onset/persistence/exit; symmetry tests as the operational definition of reversibility; cumulative-dose responses; staggered (CS) event-study comparisons.',
 'Define the four regimes: reversal, scarring, saturation, compounding.'],

@@ -7,9 +7,18 @@ Flags: **[DECIDE]** author choice needed · **[CITE]** literature reference for 
 **[BUILD]** exhibit not yet generated. Companion map: `essay1_outline.md` (row/exhibit keys
 live there; numbers here are already permitted-language-compliant).
 
-Baselines used throughout: mean county PCPI **$46,269**; mean county employment **50,113**;
-Medicare standardized spending **$10,359/beneficiary**; ED visits **629 per 1,000**;
-mean RA silver premium **≈$366/month**.
+Baselines used throughout (**updated 2026-08-13 to the registry exhibit E1-T1, post-dedup**
+— see `TK_resolutions.md` §B): mean county PCPI **$53,145** (2023 USD) → −$1,311 ≈ **2.5%**;
+mean county employment **48,068**; mean medical-debt share **0.19**; Medicare standardized
+spending **$10,359/beneficiary**; ED visits **629 per 1,000**; mean benchmark premium
+**≈$374/month** county-master / **≈$366/month** RA panel (both monthly, 2023 USD). All
+dollars = **2023 dollars**. Treated-cohort anchors: median 2012 population **12,817**;
+cohort total **5.29M** residents.
+
+> **Note (2026-08-13):** the `[TK]` items below were resolved in the *harness*
+> (`essay1_harness.html`), which is the working surface — see `TK_resolutions.md` for
+> every value, source, and confidence level. This file keeps the original marks as the
+> audit trail of what needed resolving.
 
 ---
 
