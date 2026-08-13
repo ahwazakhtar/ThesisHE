@@ -1,0 +1,611 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Essay 1 Writing Harness — Deferred Costs</title>
+<style>
+  :root{
+    --bg:#f6f7f9; --panel:#ffffff; --ink:#1a1d21; --muted:#5b6470; --line:#dde2e8;
+    --accent:#1f5f8b; --accent-soft:#e8f1f7; --warn:#8a5a00; --warn-soft:#fdf3e0;
+    --ok:#1e6f45; --ok-soft:#e6f4ec; --edit:#7a3b8f;
+  }
+  @media (prefers-color-scheme: dark){
+    :root{
+      --bg:#14171b; --panel:#1d2126; --ink:#e6e9ed; --muted:#9aa4b0; --line:#333a43;
+      --accent:#6fb1d8; --accent-soft:#20303c; --warn:#e3b25f; --warn-soft:#332a18;
+      --ok:#6fc596; --ok-soft:#1b2f24; --edit:#c79ad6;
+    }
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font:15px/1.55 Georgia, 'Times New Roman', serif;background:var(--bg);color:var(--ink)}
+  header{position:sticky;top:0;z-index:10;background:var(--panel);border-bottom:1px solid var(--line);
+    padding:10px 18px;display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+  header h1{font-size:17px;margin:0;font-weight:600}
+  header .sub{color:var(--muted);font-size:12.5px;font-family:system-ui,sans-serif}
+  header .spacer{flex:1}
+  .btn{font:13px system-ui,sans-serif;padding:6px 12px;border:1px solid var(--line);border-radius:6px;
+    background:var(--panel);color:var(--ink);cursor:pointer}
+  .btn:hover{border-color:var(--accent);color:var(--accent)}
+  .btn.primary{background:var(--accent);border-color:var(--accent);color:#fff}
+  .btn.primary:hover{opacity:.9;color:#fff}
+  #progress{font:12.5px system-ui,sans-serif;color:var(--muted)}
+  .layout{display:flex;max-width:1500px;margin:0 auto}
+  nav{width:230px;flex:0 0 230px;padding:16px 8px 40px 14px;position:sticky;top:54px;
+    align-self:flex-start;max-height:calc(100vh - 54px);overflow:auto;font-family:system-ui,sans-serif}
+  nav a{display:block;padding:5px 8px;border-radius:5px;color:var(--ink);text-decoration:none;font-size:13px}
+  nav a:hover{background:var(--accent-soft)}
+  nav .cnt{color:var(--muted);font-size:11px}
+  main{flex:1;min-width:0;padding:18px 22px 120px}
+  .notice{background:var(--warn-soft);border:1px solid var(--line);border-left:4px solid var(--warn);
+    border-radius:6px;padding:10px 14px;font-size:13.5px;font-family:system-ui,sans-serif;margin-bottom:18px}
+  section.essay-sec{margin:34px 0}
+  section.essay-sec > h2{font-size:19px;border-bottom:2px solid var(--line);padding-bottom:6px;margin:0 0 4px}
+  .secnote{color:var(--muted);font-size:12.5px;font-family:system-ui,sans-serif;margin-bottom:14px}
+  .para{display:grid;grid-template-columns:minmax(280px,44%) 1fr;gap:0;border:1px solid var(--line);
+    border-radius:8px;background:var(--panel);margin:16px 0;overflow:hidden}
+  @media (max-width: 980px){ .para{grid-template-columns:1fr} }
+  .prompts{padding:12px 16px;border-right:1px solid var(--line);background:var(--accent-soft)}
+  @media (max-width:980px){ .prompts{border-right:none;border-bottom:1px solid var(--line)} }
+  .prompts h3{margin:0 0 8px;font-size:14px;font-family:system-ui,sans-serif;color:var(--accent)}
+  .prompts ol{margin:0;padding-left:20px;font-size:13.5px}
+  .prompts li{margin:5px 0}
+  .prompts .arrow{margin-top:9px;font-size:12.5px;color:var(--muted);font-style:italic}
+  .flag{font-family:system-ui,sans-serif;font-size:11px;font-weight:600;border-radius:4px;padding:1px 5px}
+  .flag.decide{background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn)}
+  .flag.tk{background:var(--warn-soft);color:var(--warn)}
+  .flag.build{background:var(--ok-soft);color:var(--ok)}
+  .writing{display:flex;flex-direction:column}
+  .writing textarea{flex:1;width:100%;border:none;resize:vertical;padding:14px 16px;min-height:150px;
+    font:15px/1.65 Georgia,'Times New Roman',serif;background:var(--panel);color:var(--ink);outline:none}
+  .writing textarea:focus{background:var(--bg)}
+  .toolbar{display:flex;align-items:center;gap:10px;padding:6px 12px;border-top:1px dashed var(--line);
+    font:12px system-ui,sans-serif;color:var(--muted)}
+  .status{font-weight:600}
+  .status.suggestion{color:var(--muted)}
+  .status.edited{color:var(--edit)}
+  .toolbar .mini{margin-left:auto;background:none;border:none;color:var(--accent);cursor:pointer;font-size:12px;text-decoration:underline}
+  footer{position:fixed;bottom:0;left:0;right:0;background:var(--panel);border-top:1px solid var(--line);
+    padding:6px 18px;font:12px system-ui,sans-serif;color:var(--muted);display:flex;gap:16px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>Essay 1 — Deferred Costs · Writing Harness</h1>
+    <div class="sub">Left: content prompts (what the paragraph must do). Right: suggested write-up — <b>rewrite it in your own words</b>; edits autosave in this browser.</div>
+  </div>
+  <div class="spacer"></div>
+  <span id="progress"></span>
+  <button class="btn" id="copyBtn">Copy draft</button>
+  <button class="btn primary" id="exportBtn">Export essay1_draft.md</button>
+</header>
+
+<div class="layout">
+  <nav id="nav"></nav>
+  <main id="main">
+    <div class="notice">
+      Sections appear in <b>writing order</b> (results first, introduction last); export assembles
+      <b>document order</b>. Suggested text follows the binding permitted language in
+      <i>Plans/master_evidence_table.md</i> — if you change a number or a qualifier, keep it inside
+      the permitted language. Flags: <span class="flag decide">DECIDE</span> author choice ·
+      <span class="flag tk">TK</span> fill in / cite · <span class="flag build">BUILD</span> exhibit to generate.
+      Your edits live in this browser's localStorage; use Export regularly to save the draft into the repo.
+    </div>
+    <div id="sections"></div>
+  </main>
+</div>
+
+<footer>
+  <span id="savestamp">Autosave: —</span>
+  <span>Storage key: essay1harness.v1 (per browser)</span>
+</footer>
+
+<script>
+// ---------- content ----------
+const SECTIONS = [
+{id:'s5',doc:6,title:'§5 Main income result',note:'WRITE FIRST',heading:'## 5 Main income result',paras:[
+{id:'s5p1',title:'¶1 — The estimate',prompts:[
+'Design recap in one clause: 139 first-onset counties vs 2,534 never-exposed, county+year FE, ITT of the 2012 onset.',
+'Headline: real per-capita income fell $1,311 (analytic p=0.027).',
+'Anchor: mean county PCPI $46,269 → ≈2.8%.',
+'Population anchor: residents of the 139 treated counties (Georgia, Mountain West, Plains) — event- and geography-specific ATT.',
+'→ with 17 treated states, analytic p-values are not the yardstick — inference next.'],
+suggested:`I estimate the effect of the 2012 drought on real per-capita income by comparing the 139 counties that experienced their first extreme-drought onset in 2012 with the 2,534 counties never exposed over the panel, in a two-by-two difference-in-differences design with county and year fixed effects. Per-capita income in treated counties fell by $1,311 relative to never-exposed controls (analytic p = 0.027). From a mean county per-capita income of $46,269, this is a decline of roughly 2.8 percent. The estimate is an intention-to-treat effect of the 2012 event for the treated geography — Georgia, the Mountain West, and the Plains — and I defer the question of generalization to other droughts to Section 7.`},
+{id:'s5p2',title:'¶2 — Robust inference',prompts:[
+'Few-cluster problem: treated counties sit in 17 states.',
+'Wild-cluster bootstrap (Webb): p=0.036, CI [−$2,911, −$138].',
+'Randomization inference: p=0.0075.',
+'Ties back to the §3 AAIW clustering paragraph.',
+'→ inference is one threat; composition is another.'],
+suggested:`Because the treated counties fall in just 17 states, conventional cluster-robust inference can overstate precision. I therefore report two procedures designed for a small number of treated clusters. A wild-cluster bootstrap with Webb weights yields p = 0.036, with a confidence interval of [−$2,911, −$138] that excludes zero, and randomization inference yields p = 0.0075. The income result therefore survives the inference procedures built for exactly this cluster structure, consistent with the clustering discussion in Section 3.`},
+{id:'s5p3',title:'¶3 — Doubly-robust check',prompts:[
+'Concern: treated counties more rural/agricultural → composition loading.',
+'DRDID: −$1,451 (SE 515, CI [−2,461, −441]).',
+'Reading: conditioning on composition strengthens the estimate — the raw 2×2 is conservative.',
+'→ what does the response look like over event time?'],
+suggested:`Treated counties are more rural and more agricultural than the average never-exposed county, raising the concern that the simple two-by-two comparison loads differences in composition. A doubly-robust estimator that conditions on observable county characteristics strengthens the estimate to −$1,451 (SE 515; confidence interval [−$2,461, −$441]). Adjusting for composition thus moves the estimate away from zero, indicating that the unadjusted comparison is, if anything, conservative.`},
+{id:'s5p4',title:'¶4 — Dynamics',prompts:[
+'Event-time profile from the frontier doubly-robust event study (E1-F3): describe onset, trough, post-event path as the figure shows.',
+'No pre-event divergence visible (full two-decade test in §6).',
+'One sentence: reversal vs scarring vs compounding → Essay 2; this essay establishes incidence.',
+'→ how big is this in context?'],
+suggested:`Figure E1-F3 traces the response in event time using the doubly-robust event-study estimates. [TK: describe the profile the figure shows — the timing of the trough and the post-event path.] No divergence is visible before the onset; Section 6 formalizes this with a two-decade pre-trend test. Whether the loss ultimately reverses, scars, or compounds as exposure recurs is the subject of the second essay; the task here is to establish its incidence.`},
+{id:'s5p5',title:'¶5 — Magnitude in context',prompts:[
+'Per-county scale: −$1,311 × county population (compute for median treated county or leave as reader arithmetic).',
+'Literature yardstick [TK cite: Deschênes–Greenstone; Deryugina–Hsiang-style estimates].',
+'Window robustness (advisor 1.3): PDSI lag-1 coefficient −$99 to −$132 across 1990/2000/2011 starts; full window makes the contemporaneous term significant (−$149, p=5e-6); 2024 adds nothing.',
+'Takeaway: 2011–2023 is a conservative window choice.',
+'→ the identification case in full.'],
+suggested:`The magnitude is economically meaningful. A decline of $1,311 per resident implies a county-level income loss of [TK: $1,311 × median treated-county population] for the median treated county, and the estimate is of the same order as event-based income effects in the climate-economy literature [TK: cite Deschênes and Greenstone; Deryugina and Hsiang]. Nor is it an artifact of the sample window: extending the panel back to 1990 leaves the distributed-lag drought–income relationship stable, with coefficients between −$99 and −$132 across start years of 1990, 2000, and 2011 and precision improving in the longer windows; in the full window even the contemporaneous term becomes significant (−$149, p = 5×10⁻⁶). The 2011–2023 primary window is thus a conservative choice, and adding 2024 changes nothing.`}
+]},
+{id:'s6',doc:7,title:'§6 Identification and falsification',note:'',heading:'## 6 Identification and falsification',paras:[
+{id:'s6p1',title:'¶1 — Two-decade pre-trend',prompts:[
+'BEA county income 1990–2011: 21 pre-periods; all 139 treated + 2,483/2,534 controls covered.',
+'Differential linear pre-trend: −$69/yr (SE 89, p=0.44) — flat.',
+'Honest disclosure: joint Wald rejects (F=6.9, p<0.001) = rural-vs-urban business-cycle wiggle; exactly what DRDID conditions on (which strengthens the effect).',
+'Why no HonestDiD: 2012 cohort has no in-panel pre-period; BEA test substitutes and covers the future-shocks falsification.',
+'→ any single treated state driving it?'],
+suggested:`The identifying assumption is that treated and never-exposed counties would have trended in parallel absent the 2012 onset. BEA county income data allow an unusually long test: all 139 treated counties and 2,483 of the 2,534 controls report per-capita income in every year from 1990 to 2011, giving 21 pre-periods. The differential linear pre-trend is −$69 per year (SE 89, p = 0.44) — flat over two decades. An event-study joint Wald test does reject (F = 6.9, p < 0.001); the rejection reflects business-cycle differences between rural and urban counties rather than secular drift, and it is precisely the composition the doubly-robust estimator conditions on — doing so strengthens the estimate to −$1,451. Because the 2012 cohort has no in-panel pre-period, HonestDiD-style sensitivity analysis cannot run on it; the two-decade BEA test substitutes for it, and it also covers the falsification that future shocks should not predict past outcomes.`},
+{id:'s6p2',title:'¶2 — Leave-one-treated-state-out',prompts:[
+'Drop each of 17 treated states: ATT envelope [−$1,687, −$914].',
+'Envelope never exits the WCB confidence interval.',
+'CO/NE drops lift analytic p to 0.075/0.057 — the few-cluster sensitivity WCB already handles (design working as intended).',
+'→ from geography to timing.'],
+suggested:`The result is not driven by any single treated state. Dropping each of the 17 treated states in turn produces an ATT envelope of [−$1,687, −$914], which never exits the wild-cluster bootstrap confidence interval. Dropping Colorado or Nebraska lifts the analytic p-value to 0.075 and 0.057 respectively; this is the few-treated-cluster sensitivity that motivated the bootstrap in the first place, and the bootstrap p-value already accounts for it.`},
+{id:'s6p3',title:'¶3 — Placebo onsets',prompts:[
+'Randomly reassign the onset year, B=1,000 draws.',
+'Placebo distribution centered on zero; actual estimate in the far tail; two-sided p=0.009.',
+'→ from timing to space: spillovers.'],
+suggested:`Placebo onsets tell the same story. Randomly reassigning the onset year across the panel in 1,000 draws produces a placebo distribution centered on zero; the estimated effect sits in its far tail, with a two-sided p-value of 0.009.`},
+{id:'s6p4',title:'¶4 — Spatial robustness (spillovers + Conley)',prompts:[
+'SUTVA concern: drought in county A depresses income in adjacent county B.',
+'Own-vs-neighbor split unidentified: exposure correlation r=0.94–0.97 — do not over-claim the split.',
+'Identified: neighbor block jointly significant (p≈0.006); own+neighbor totals exceed own-only (income −157 vs −133; employment −1,090 vs −714).',
+'Standing qualifier: county coefficients capture local exposure; adjacent-county exposure adds a same-signed regional component the local coefficient understates → headline is a lower bound on regional exposure.',
+'Conley to 300 km: income worst case p=0.008 (200 km ≈ state clustering, 0.0029 vs 0.0026).',
+'→ remaining checks, briefly.'],
+suggested:`Drought in one county may depress income in its neighbors through shared labor and product markets, which would violate the no-interference assumption if control counties absorb part of the treatment. An own-versus-neighbor decomposition cannot separate the two here — own and adjacent-county exposure correlate at 0.94 to 0.97 — but two facts are identified. The neighbor-exposure block is jointly significant (p ≈ 0.006), and specifications adding neighbor exposure exceed the own-only baseline (income −157 versus −133 per unit of exposure; employment −1,090 versus −714). County coefficients therefore capture local exposure, and adjacent-county exposure adds a same-signed regional component that the local coefficient understates: spillovers amplify the estimate rather than confound it, and the headline is a lower bound on regional exposure. Spatial dependence in the errors is likewise handled: Conley standard errors with kernels out to 300 km leave the income result significant (worst case p = 0.008), and at 200 km the Conley and state-clustered p-values essentially coincide (0.0029 versus 0.0026).`},
+{id:'s6p5',title:'¶5 — Specification roll-up',prompts:[
+'Humidity (PRISM dew-point): headline coefficients essentially unchanged (cold–debt 0.01363→0.01368).',
+'Demographics (ACS aging/tenure/in-migration): 94–104% of each effect intact; ACS smoothing caveat.',
+'Threshold sensitivity (p90 definitions): conclusions unchanged; full grids Appendix D.',
+'→ close by drawing the boundary of the claim.'],
+suggested:`The remaining specification checks are summarized in Table E1-T4 and reported in full in Appendix D. Adding PRISM dew-point humidity leaves the headline coefficients essentially unchanged — the cold–debt coefficient, the most sensitive candidate, moves from 0.01363 to 0.01368 — so the temperature and drought bins are not proxying humidity. Controls for aging, housing tenure, and in-migration from the ACS leave 94 to 104 percent of each effect intact, closing two demographic confounding channels, though ACS smoothing limits the ability to detect fast demographic responses. Stricter 90th-percentile shock definitions leave the conclusions unchanged.`},
+{id:'s6p6',title:'¶6 — What this design does not establish',prompts:[
+'Estimand: ITT of the 2012 first onset for the treated geography — event-specific by construction.',
+'No mechanism identification inside the DiD (agriculture, labor demand, local demand all consistent); direct health-channel evidence comes in §8.',
+'Generalization is an empirical question → §7.'],
+suggested:`These tests defend a specific estimand: the intention-to-treat effect of the 2012 first onset for the treated geography. The design does not identify the mechanism — agricultural losses, labor-demand contractions, and local-demand responses are all consistent with the reduced form — and direct evidence on a health channel comes separately in Section 8. Whether the estimate generalizes to other droughts is an empirical question, taken up next.`}
+]},
+{id:'s7',doc:8,title:'§7 External validity and pooled cohorts',note:'',heading:'## 7 External validity and pooled cohorts',paras:[
+{id:'s7p1',title:'¶1 — The question and the tool',prompts:[
+'Question: is 2012 a window onto droughts generally?',
+'Tool: pool all first-onset cohorts; doubly-robust frontier estimator (Callaway–Sant’Anna aggregation) [TK cite].',
+'→ the pooled answer.'],
+suggested:`Is the 2012 estimate a window onto droughts generally, or the fingerprint of one event? The panel contains later first-onset cohorts, so the question can be answered with estimates rather than assertion: I pool all first-onset cohorts in a staggered design and aggregate with the doubly-robust estimator of Callaway and Sant'Anna [TK: cite].`},
+{id:'s7p2',title:'¶2 — The pooled answer',prompts:[
+'Pooled onset (e=0): −$324 (SE 276) — null.',
+'Pooled long-run simple ATT: +$350 (SE 585) — null/reversed.',
+'Plain conclusion: event-specific even at onset; the paper claims the event and separates the estimands.',
+'(Never resurrect the manual −$1,050/p=0.002 — invalid SEs; manual layer descriptive only.)',
+'→ why would 2012 differ?'],
+suggested:`The pooled onset effect is −$324 (SE 276) — a null — and the pooled long-run average is +$350 (SE 585). The 2012 income effect is event-specific even at onset. I therefore claim the 2012 event, and keep the event estimand and the pooled estimand explicitly separate throughout rather than averaging them.`},
+{id:'s7p3',title:'¶3 — Why 2012 differs (hedged)',prompts:[
+'Candidates, one sentence each, all "consistent with": severity (extreme of extremes); first-onset sharpness vs partially adapted later cohorts; agricultural-calendar timing; control-group composition across cohorts.',
+'Do not adjudicate — the data cannot.',
+'→ same discipline applied to employment.'],
+suggested:`Several features of 2012 are consistent with the difference. The 2012 drought was an extreme event even among extremes; a first onset falls on counties with no recent adaptation experience, while later cohorts may be partially adapted; the onset's timing within the agricultural calendar was unusually damaging; and the composition of comparison groups differs across cohorts. The data cannot adjudicate among these explanations, and I do not attempt to.`},
+{id:'s7p4',title:'¶4 — Employment: the fragile secondary',prompts:[
+'2012 employment ATT ≈ −2,000 jobs (analytic p=0.0001; ≈4% of mean county employment 50,113).',
+'Clears the few-cluster bar: WCB p=0.003, RI p=0.037; LOO envelope [−2,156, −1,854] never flips.',
+'Equal prominence: attenuates ~58% under DRDID (−871, SE 433, CI barely excludes 0); reverses sign in the pooled estimator (+2,609, SE 2,245) with positive pre-trends.',
+'Verdict: fragility is conditioning/generalization, not cluster count; event-specific, secondary, not a co-headline.',
+'→ real costs established; now the direct health channel.'],
+suggested:`The 2012 event also reduced employment — by roughly 2,000 jobs per treated county (analytic p = 0.0001), about 4 percent of mean county employment of 50,113 — but this estimate is fragile in a way the income estimate is not. The fragility is not about inference: it clears the few-cluster bar (wild-cluster bootstrap p = 0.003; randomization inference p = 0.037), and its leave-one-state-out envelope of [−2,156, −1,854] never flips significance. Rather, it attenuates by about 58 percent under the doubly-robust estimator (−871, SE 433, with a confidence interval that barely excludes zero) and reverses sign in the pooled estimator (+2,609, SE 2,245) alongside positive pre-trends. I therefore report the employment decline as event-specific and secondary to the income result.`}
+]},
+{id:'s3',doc:4,title:'§3 Data and construction of shocks',note:'SHARED SPINE — reused in Essays 2–3',heading:'## 3 Data and construction of shocks',paras:[
+{id:'s3p1',title:'¶1 — Panel scope',prompts:[
+'County panel 2011–2023, ~3,100 counties in estimation samples; master 118,732 rows × 3,232 counties, certified unique on county×year with build-time assertions.',
+'State panel ~1996–2025 carries the longer debt/premium series.',
+'[TK] dollar base year (from create_state_master.R).',
+'→ shocks.'],
+suggested:`The primary dataset is a county-year panel covering 2011 to 2023, with roughly 3,100 counties entering the estimation samples; the underlying master file contains 118,732 county-year rows for 3,232 counties and is certified unique on county-by-year with build-time assertions. A companion state panel extending back to roughly 1996 carries the longer medical-debt and premium series. All dollar values are deflated to [TK: base year] dollars.`},
+{id:'s3p2',title:'¶2 — Climate data and shock definitions',prompts:[
+'Inputs: NOAA temperature/degree-days, PDSI; PRISM humidity (robustness); EPA AQI.',
+'Four bins vs county’s own historical baseline: High_CDD, High_HDD, extreme drought (PDSI<−4), High_AQI; [TK: state z-threshold + baseline window precisely from analysis_pre_processing.R].',
+'Continuous precipitation z in all county models; wet-extreme bin (z>+1.5): 0/12 cells at BKY q<0.10 — hazard family complete (Appendix J).',
+'→ outcomes.'],
+suggested:`Climate exposure comes from NOAA temperature and degree-day records and the Palmer Drought Severity Index, supplemented by PRISM dew-point humidity for robustness and EPA air-quality data for pollution shocks. I define four binary shock bins against each county's own historical baseline: extreme heat (High_CDD), extreme cold (High_HDD), extreme drought (a Palmer index below −4), and poor air quality (High_AQI), using [TK: state the z-threshold and baseline window from the pre-processing code]. Continuous precipitation z-scores enter all county models; a reviewer-requested wet-extreme bin (z > +1.5) produces no coherent level effects — none of twelve outcome-lag cells survives a Benjamini-Krieger-Yekutieli correction at q < 0.10 — so the hazard family is complete (Appendix J).`},
+{id:'s3p3',title:'¶3 — Outcomes by ledger (Table E1-T1)',prompts:[
+'Five ledgers: BEA PCPI; civilian employment; Urban Institute credit-bureau medical-debt share; ACA benchmark premiums (rating-area, 2014–2025); CMS Medicare spending/utilization (65+/disabled, 2014–2023).',
+'Table does the definitional work; prose highlights that windows and populations differ BY DESIGN — the ledger logic.',
+'→ moderators.'],
+suggested:`Outcomes are drawn from five ledgers, each observing a different population under different rules: BEA per-capita personal income; civilian employment; the Urban Institute's credit-bureau medical-debt share; ACA benchmark premiums at the rating-area level (2014–2025); and CMS Geographic Variation files for Medicare spending and utilization among the 65-plus and disabled population (2014–2023). Table E1-T1 reports definitions, populations, and observation windows. These windows and populations differ by design: the differences across recording institutions are the variation this essay exploits.`},
+{id:'s3p4',title:'¶4 — Moderators used in this essay',prompts:[
+'Climate-exposed non-farm labor share; DOE LEAD energy-burden z.',
+'SVI + hospital moderators → Essay 3 (one cross-reference sentence only).',
+'→ estimation conventions.'],
+suggested:`Two county moderators enter this essay's mechanism analysis: the climate-exposed non-farm labor share and the DOE LEAD energy-burden z-score. The Social Vulnerability Index and the hospital-side moderators are the subject of the third essay and appear here only in passing.`},
+{id:'s3p5',title:'¶5 — Fixed effects and inference (the AAIW paragraph)',prompts:[
+'fixest, county+year FE (state+year in state panel), state-clustered SEs.',
+'AAIW (2023) [TK cite]: cluster at the level of treatment assignment/correlation — climate shocks correlate beyond counties.',
+'County clustering anticonservative by up to 7 orders of magnitude; Conley 200 km ≈ state (0.0029 vs 0.0026); worst case Conley 300 km: income p=0.008, employment p=0.029.',
+'Lift structure from Analysis/advisor_robustness/clustering_justification.md.',
+'→ measurement preview.'],
+suggested:`All fixed-effects models include county and year effects (state and year in the state panel), with standard errors clustered at the state level. Following Abadie, Athey, Imbens, and Wooldridge (2023), the clustering level should match the level at which treatment is effectively assigned and correlated, and climate shocks are spatially correlated well beyond county borders. The choice matters: clustering at the county level would be anticonservative by up to seven orders of magnitude on headline p-values. It is also not decisive for the results — Conley standard errors with a 200-km kernel essentially reproduce state clustering (p = 0.0029 versus 0.0026), and every defensible level leaves the headline estimates intact; in the least favorable case, a 300-km Conley kernel, the income p-value is 0.008 and employment 0.029.`},
+{id:'s3p6',title:'¶6 — Measurement limitations preview',prompts:[
+'One sentence each, full treatment deferred: debt = bureau artifact (§9); premiums = regulated price (§9); Medicare = 65+/disabled only (§8).',
+'→ design section.'],
+suggested:`Three measurement limits recur and are treated where they bind. Credit-bureau debt records hardship only after insurance, billing, and credit-file filters (Section 9); premiums are a regulated price rather than a readout of cost (Section 9); and the Medicare files cover only the 65-plus and disabled population (Section 8).`}
+]},
+{id:'s4',doc:5,title:'§4 The 2012 drought design',note:'',heading:'## 4 The 2012 drought design',paras:[
+{id:'s4p1',title:'¶1 — Why 2012, why first onset',prompts:[
+'Identification wants sharp, unanticipated, spatially delimited exposure — 2012 provides it.',
+'First-onset restriction: clean event time, no prior-treatment contamination.',
+'Never-exposed controls: avoids staggered-DiD forbidden comparisons.',
+'→ cohort.'],
+suggested:`Identification asks for an exposure that is sharp, unanticipated, and spatially delimited, and the 2012 drought onset provides all three. I restrict treatment to counties experiencing their first panel-era extreme drought in 2012, which fixes clean event time and removes contamination from prior exposure, and I restrict the comparison group to counties never exposed to extreme drought in the window, which avoids the problematic comparisons that arise in staggered designs when already-treated units serve as controls.`},
+{id:'s4p2',title:'¶2 — Cohort construction',prompts:[
+'139 treated vs 2,534 never-exposed; map E1-F1 [BUILD]; balance table E1-T2.',
+'Geography named precisely: Georgia + Mountain West + Plains (never "Midwest").',
+'Balance read: treated counties smaller/more rural → motivates DRDID + two-decade pre-trend test.',
+'→ equation.'],
+suggested:`The restriction yields 139 treated counties — in Georgia, the Mountain West, and the Plains — and 2,534 never-exposed controls; Figure E1-F1 maps the two groups and Table E1-T2 reports balance. Treated counties are smaller and more rural than the average control, which motivates both the covariate-adjusted doubly-robust estimator and the two-decade pre-trend test of Section 6.`},
+{id:'s4p3',title:'¶3 — Estimating equation',prompts:[
+'2×2 DiD: outcome on Treated×Post-2012, county FE + year FE, state-clustered.',
+'Estimand with all Gate-B elements: ITT of first onset, 139 counties (GA/Mountain West/Plains), 2011–2023, vs never-exposed, under parallel trends absent onset.',
+'→ assumptions and threats.'],
+suggested:`I estimate a two-by-two difference-in-differences of each outcome on the interaction of treatment and a post-2012 indicator, with county and year fixed effects and state-clustered standard errors. The estimand is the intention-to-treat effect of first extreme-drought onset for the 139 treated counties over 2011–2023, relative to never-exposed counties, and it is identified under the assumption that the two groups would have trended in parallel absent the onset.`},
+{id:'s4p4',title:'¶4 — Identifying assumption and threats',prompts:[
+'Assumption: parallel trends absent onset.',
+'Threat 1 — selection into drought-prone geography → two-decade BEA pre-trend (§6 ¶1).',
+'Threat 2 — single-state/regional idiosyncrasy → LOO (§6 ¶2), placebo onsets (§6 ¶3).',
+'Threat 3 — spillovers into control neighbors → adjacency analysis (§6 ¶4); same-signed, so local ATT is a lower bound on regional exposure.',
+'→ inference plan.'],
+suggested:`Three threats to that assumption structure the falsification agenda. Selection into drought-prone geography would appear as differential pre-trends, and the 1990–2011 BEA test addresses it directly. Dependence on a single state or region is addressed with leave-one-state-out estimates and placebo onsets. Finally, drought spillovers into neighboring control counties would violate the no-interference assumption; the adjacency analysis of Section 6 shows the spillover component is same-signed, so the local coefficient understates regional exposure rather than overstating the local effect.`},
+{id:'s4p5',title:'¶5 — Inference plan',prompts:[
+'17 treated states → few treated clusters.',
+'Pre-commit: analytic + WCB (Webb) + RI p-values side by side for every headline estimate (Table E1-T4).',
+'→ the result.'],
+suggested:`Because the treated counties fall in 17 states, small-cluster distortions are a first-order concern, and I pre-commit to reporting analytic, wild-cluster-bootstrap (Webb weights), and randomization-inference p-values side by side for every headline estimate (Table E1-T4).`}
+]},
+{id:'s8',doc:9,title:'§8 Direct Medicare utilization evidence',note:'Parallel direct evidence — never mediation',heading:'## 8 Direct Medicare utilization evidence',paras:[
+{id:'s8p1',title:'¶1 — Why Medicare',prompts:[
+'Income result shows economic damage, not a health channel; rather than infer one, measure one.',
+'CMS Geographic Variation: administrative, near-universal 65+/disabled, standardized payments strip price variation.',
+'Binding framing: parallel, direct evidence of a separate morbidity channel — does not mediate the income result; not extended to working-age households.',
+'→ design.'],
+suggested:`The income result establishes economic damage; it does not establish a health channel. Rather than infer one, I measure one directly. The CMS Geographic Variation files cover the Medicare population — those 65 and over and the disabled — with administrative completeness, and their standardized payments strip out price variation, so utilization responses can be observed without insurance-composition churn. Throughout, this evidence is parallel and direct: it documents a separate morbidity channel, it does not mediate the drought-income result, and I do not extend it to working-age households.`},
+{id:'s8p2',title:'¶2 — Design',prompts:[
+'Distributed-lag FE: county+year FE, state-clustered; within-county heat/cold/AQI; lags 0–2.',
+'Sample: 30,641 county-years, 3,124 counties, 2014–2023; outcomes: standardized per-beneficiary spending, ED visits/1,000 (Table E1-T6).',
+'→ heat first.'],
+suggested:`I estimate distributed-lag fixed-effects models with county and year effects and state-clustered standard errors, using within-county variation in the heat, cold, and air-quality bins at lags of zero to two years. The sample is 30,641 county-years across 3,124 counties over 2014–2023, and the outcomes are standardized per-beneficiary spending and emergency-department visits per 1,000 beneficiaries (Table E1-T6).`},
+{id:'s8p3',title:'¶3 — Heat results',prompts:[
+'Spending: +$112 (p=0.013), +$177 L1 (p=0.001), +$75 L2 (p=0.003); from a mean of $10,359 → 1.1% / 1.7% / 0.7%.',
+'ED: +7.8/1,000 (p=0.006), +9.5 L1 (p=0.0002); from a mean of 629 → 1.2% / 1.5%.',
+'Lag structure is the point: the largest response arrives the year after — the deferred-cost pattern in administrative health data.',
+'→ cold and AQI.'],
+suggested:`Extreme heat raises standardized Medicare spending by $112 per beneficiary in the shock year (p = 0.013), $177 the following year (p = 0.001), and $75 two years out (p = 0.003). From a mean of $10,359 per beneficiary, these are increases of 1.1, 1.7, and 0.7 percent. Emergency-department visits rise by 7.8 per 1,000 beneficiaries in the shock year (p = 0.006) and 9.5 the following year (p = 0.0002); from a mean of 629 per 1,000, increases of 1.2 and 1.5 percent. The lag structure is itself informative: the largest response arrives the year after exposure — the deferred-cost pattern of this paper's title, appearing in administrative health data.`},
+{id:'s8p4',title:'¶4 — Cold and AQI',prompts:[
+'Cold: +$85 spending, +9.0 ED at the two-year lag — slower than heat.',
+'AQI: ED +4.8/1,000 (p=0.0003), +3.3 L1, +2.8 L2.',
+'Figure E1-F4: dynamic profiles by hazard.',
+'→ robustness.'],
+suggested:`Cold operates more slowly: spending rises by $85 per beneficiary and emergency visits by 9.0 per 1,000 at the two-year lag. Air-quality shocks raise emergency visits by 4.8 per 1,000 contemporaneously (p = 0.0003), 3.3 at one year, and 2.8 at two. Figure E1-F4 plots the dynamic profiles by hazard.`},
+{id:'s8p5',title:'¶5 — Robustness',prompts:[
+'Anderson utilization index: heat L1 p=0.007, cold L2 p=0.002 — not outcome selection.',
+'Sharpened BKY q<0.05: heat→ED, AQI→ED survive.',
+'Conley SEs tighter; did_multiplegt_dyn confirms heat ≈ +$80 at h=2.',
+'Reproduces Deryugina et al. (2019) in-panel [TK cite].',
+'Non-agricultural: Drought×Ag null — no farm-income intermediary.',
+'→ the labor margin, same direction.'],
+suggested:`Several checks indicate these responses are not artifacts of outcome selection or inference choices. An Anderson summary index of utilization is significant where the component outcomes are (heat at one lag, p = 0.007; cold at two lags, p = 0.002); the heat and air-quality ED responses survive a sharpened Benjamini-Krieger-Yekutieli correction at q < 0.05; Conley standard errors are, if anything, tighter than state-clustered ones; and a frontier recurring-treatment estimator confirms a heat spending effect of roughly $80 at a two-year horizon. The pattern reproduces Deryugina et al. (2019) within this panel [TK: cite]. It is also non-agricultural: interacting drought with agricultural dependence yields a null, so the morbidity channel requires no farm-income intermediary.`},
+{id:'s8p6',title:'¶6 — The labor-exposure margin (mechanism-supporting)',prompts:[
+'Claim ceiling (binding): operates SUBSTANTIALLY OUTSIDE AGRICULTURE — never "primarily through".',
+'Heat × exposed non-farm labor share, log employment: −0.0052 (p=0.006); survives division×year FE (−0.0042, p=0.015), Conley (p=0.033).',
+'Heat × energy-burden z: −0.0084 (p=0.005); survives division×year FE (−0.0078, p=0.002), joint horse-race (−0.0068, p=0.019).',
+'Status: interaction gradients, not headline levels; energy-burden INCOME margin not claimed.',
+'(Forbidden: −2,011/−721 low-ag figures — die in logs.)',
+'→ scope seam before the ledgers.'],
+suggested:`The labor margin points in the same direction: the lagged burden operates substantially outside agriculture. Interacting heat with a county's climate-exposed non-farm labor share yields a log-employment gradient of −0.0052 (p = 0.006) that survives division-by-year fixed effects (−0.0042, p = 0.015) and Conley standard errors (p = 0.033). Interacting heat with the energy-burden z-score yields −0.0084 (p = 0.005), which survives division-by-year effects (−0.0078, p = 0.002) and a joint horse-race with the other moderators (−0.0068, p = 0.019). These are mechanism-supporting interaction gradients rather than headline employment levels, and I do not claim the corresponding income margin, which is not robust.`},
+{id:'s8p7',title:'¶7 — Scope discipline',prompts:[
+'Plain: the Medicare population is not the population of the income result nor of working-age bureau debt.',
+'The paper claims triangulation — real income costs and directly measured morbidity coexist after shocks — no identified chain.',
+'→ which financial ledgers record any of this? §9.'],
+suggested:`A scope note before turning to the financial ledgers: the Medicare population is not the population of the income result, nor of working-age credit-bureau debt. The essay accordingly claims triangulation — real income costs and directly measured morbidity coexist after climate shocks — and does not claim an identified chain from one to the other.`}
+]},
+{id:'s9',doc:10,title:'§9 Financial-ledger responses: debt and ACA premiums',note:'',heading:'## 9 Financial-ledger responses: debt and ACA premiums',paras:[
+{id:'s9p1',title:'¶1 — Section logic',prompts:[
+'Two ledgers, two functions: bureau debt (is harm RECORDED?) and ACA premiums (is it PRICED?).',
+'Preview: recorded partially and with lags; not priced locally in any coherent way.',
+'Exhibits: E1-T7; E1-F5 [BUILD].',
+'→ debt first, cold leading.'],
+suggested:`Which financial institutions record or price these costs? I examine two ledgers with different functions: credit-bureau medical debt, which records unpaid bills, and ACA benchmark premiums, which price expected claims. To preview the answer, the harm is recorded partially and with lags in debt, and it is not priced locally in any coherent way in premiums (Table E1-T7; Figure E1-F5).`},
+{id:'s9p2',title:'¶2 — Debt: cold',prompts:[
+'Cold → debt share +1.35 pp at L1, state panel (p=0.012); county mirror +1.2 pp (p<0.001) — always cite each figure with its level.',
+'[TK] anchor to the mean debt share (descriptive table).',
+'Status: lagged association (distributed-lag FE), not a causal 2×2.',
+'Robustness: p90 definition (+1.38 pp, p=0.003); humidity (0.01363→0.01368).',
+'Co-located caveat: county cell sample-fragile (sig full panel, null on control-observed subsample) — a measurement caveat, not bad controls.',
+'→ drought is weaker and level-dependent.'],
+suggested:`Cold shocks raise the medical-debt share by 1.35 percentage points at a one-year lag in the state panel (p = 0.012); the county-level mirror gives 1.2 points (p < 0.001). [TK: anchor to the mean debt share from the descriptive table.] These are lagged associations from distributed-lag fixed-effects models rather than causal event estimates of the kind in Section 5. The response survives a stricter 90th-percentile shock definition (1.38 points, p = 0.003) and humidity adjustment (0.01363 to 0.01368). One caveat travels with the county estimate: it is significant on the full panel but null on the subsample where all controls are observed — a sample-composition sensitivity that reflects the measurement properties of bureau debt rather than a bad-control problem.`},
+{id:'s9p3',title:'¶3 — Debt: drought  [DECIDE]',prompts:[
+'[DECIDE — recommended resolution shown] County: +0.54 pp at L2 (p<0.01); state primary: 0.72 pp, p=0.18 — NOT significant.',
+'State the level disagreement plainly; the prose must not paper over it.',
+'Forward: the robust drought→debt object is the Essay-2 onset–exit scar, not this lag level.',
+'→ why bureau debt behaves this way.'],
+suggested:`Drought's debt response is weaker and depends on the level of aggregation: the debt share rises by 0.54 percentage points at a two-year lag in the county panel (p < 0.01), while the state-level specification gives an insignificant 0.72 points (p = 0.18). I report the disagreement as it stands. The robust drought-debt object in this dissertation is dynamic — the onset-exit asymmetry documented in the second essay — and the contemporaneous lag level shown here is not the basis of any headline claim.`},
+{id:'s9p4',title:'¶4 — Debt: why fragile',prompts:[
+'Three filters between harm and record: insurance relationship → billed encounter → credit file.',
+'Reporting-rule changes over the window shift the recorded object (Appendix F).',
+'One sentence: Essay 3 develops the full measurement critique; here it suffices that debt is a selective ledger.',
+'→ from recording to pricing.'],
+suggested:`Bureau debt behaves this way because three filters stand between harm and record: an insurance relationship, a billed encounter, and a credit file. Hardship that fails any filter never enters the ledger, and reporting-rule changes over the window alter what is recorded (Appendix F). The third essay develops the full measurement critique; for present purposes it suffices that debt is a selective ledger.`},
+{id:'s9p5',title:'¶5 — Premiums: design',prompts:[
+'Institutions drive the spec: rates set at rating-area level, state review; plan-year-t rates filed ~mid-t−1 on experience through ~t−2, then locked → lagged shocks only, t−2 primary.',
+'Two levels the institutions use: RA×year primary (RA + state×year FE, pop-weighted, state-clustered); state×year secondary.',
+'County premium specs = labeled transparency trail only (≈86% of premium variance is state×year → county+year-FE spec confounded).',
+'→ results.'],
+suggested:`The premium test is specified by the institutions that set premiums. Rates are set at the rating-area level and reviewed by states; plan-year-t rates are filed around the middle of year t−1 on claims experience through roughly t−2, then locked for the plan year. Only lagged shocks can therefore be in the insurer's information set, and I take the two-year lag as primary. I estimate at the two levels the institutions themselves use — rating-area-by-year as the primary specification (rating-area and state-by-year fixed effects, population-weighted, state-clustered) and state-by-year as the secondary — and display county-level specifications only as a labeled transparency trail: roughly 86 percent of premium variance is state-by-year, so a county-plus-year-fixed-effects premium regression is confounded.`},
+{id:'s9p6',title:'¶6 — Premiums: the null',prompts:[
+'Sign instability across the institution’s own levels: cold t−2 −$15.5 (county) → +$12.6 (RA) → −$16.7 (state); heat +$19.5 → −$10.5 → +$93; drought null everywhere.',
+'Verdict: no coherent local pass-through — a stable price response keeps its sign across the levels where prices are set.',
+'Dismiss the big number: between-state heat (+$54–93/mo) ~10× too large for a claims channel; state cold mis-signed vs own Medicare result → premium-LEVEL correlate, not pricing.',
+'→ how much can the data rule out?'],
+suggested:`The results show sign instability across the institution's own levels. The cold coefficient at the two-year lag runs −$15.5 at the county level, +$12.6 at the rating-area level, and −$16.7 at the state level; heat runs +$19.5, −$10.5, and +$93; drought is null at every level. A genuine price response would keep its sign as aggregation moves through the levels at which prices are actually set, so this pattern indicates no coherent local pass-through. The one large coefficient — the between-state heat estimate of $54 to $93 per month — is roughly ten times too large for a claims channel, and the state-level cold coefficient has the wrong sign relative to this essay's own Medicare result, in which cold raises spending. Both point to a temperature correlate of premium levels rather than pricing.`},
+{id:'s9p7',title:'¶7 — Premiums: equivalence bounds',prompts:[
+'Benchmark: full pass-through of measured morbidity ≈ $9.33–$14.75 per member-month.',
+'Drought: β=3.13 (SE 2.60), δ*=$7.40 → rules out pass-through >50–79% of the benchmark (the tight, DROUGHT-ONLY sentence — binding).',
+'Heat δ*=$24.6, cold δ*=$22.0 exceed the band → equivalence with full pass-through NOT rejected; bounded only at ≈5–8% of the ~$366 mean monthly premium.',
+'No blanket "insurers leave climate costs unpriced" — hazard-specific.',
+'→ mediation corollary.'],
+suggested:`How much pass-through can the data rule out? Full pass-through of the measured morbidity costs would raise premiums by $9.33 to $14.75 per member-month. For drought, the estimated coefficient of 3.13 (SE 2.60) yields an equivalence bound of $7.40, so the data rule out pass-through larger than 50 to 79 percent of the morbidity benchmark. For heat and cold the bounds — $24.6 and $22.0 — exceed the benchmark band, so equivalence with full pass-through cannot be rejected for those hazards; their responses are bounded only at roughly 5 to 8 percent of the mean premium of about $366 per month. The tight statement is therefore drought-specific, and I do not claim that climate costs go unpriced in general.`},
+{id:'s9p8',title:'¶8 — Mediation corollary',prompts:[
+'If premiums don’t respond, shock→debt effects can’t run through premiums: 92–99% of each survives premium adjustment (drought L2 98.7%; cold L1 92.2%).',
+'Label: difference-method DECOMPOSITION, not causal mediation; RA-level premiums → mediated share is a lower bound.',
+'→ why the null makes institutional sense.'],
+suggested:`If premiums do not respond, the shock-debt effects of the previous paragraphs cannot run through premiums. Consistent with this, 92 to 99 percent of each shock-debt coefficient survives premium adjustment — 98.7 percent for drought at two lags and 92.2 percent for cold at one. This is a difference-method decomposition rather than causal mediation, and because premiums enter at the rating-area level the mediated share is a lower bound.`},
+{id:'s9p9',title:'¶9 — Institutional interpretation',prompts:[
+'The null is explained: single statewide risk pool; geographic rating factor limited to unit costs; §153 federal risk adjustment — each mutes local claims signals.',
+'Permitted framing: regulated pricing does not LOCALLY price the environmental lag structure — the institutional-null contribution. (Actuarial-repricing narrative is retired.)',
+'→ close with the spending contrast.'],
+suggested:`The null has an institutional explanation. A single statewide risk pool, a geographic rating factor limited to unit costs, and federal risk adjustment under Section 153 each mute any local claims signal before it reaches a local premium. In this sense, regulated pricing does not locally price the environmental lag structure documented in this essay — the institutional finding this section contributes.`},
+{id:'s9p10',title:'¶10 — Systemic spending null',prompts:[
+'State per-capita health spending: no robust climate signal; tracks income and unemployment (unemployment p=0.06).',
+'Function: this is WHY the paper looks in lagged household/administrative ledgers — costs are real (§5, §8) but system aggregates don’t show them.',
+'[Option: move to §2 or the intro as motivation — must appear exactly once.]',
+'→ §10.'],
+suggested:`A final contrast closes the ledger comparison. State per-capita health spending shows no robust climate signal and instead tracks income and unemployment (unemployment p = 0.06). This is why the essay looks for climate costs in lagged household and administrative ledgers: the costs are real — Sections 5 and 8 measure them — but contemporaneous system-level spending aggregates do not reveal them.`}
+]},
+{id:'s2',doc:3,title:'§2 Institutional and conceptual background',note:'Write after the results sections',heading:'## 2 Institutional and conceptual background',paras:[
+{id:'s2p1',title:'¶1 — Conceptual frame',prompts:[
+'Display the schematic: climate exposure → {health/utilization; labor productivity & local income; household liquidity; provider demand}, observed through {Medicare | employers | ACA rating areas | credit bureaus | hospitals}.',
+'One sentence per arrow, mapping to this essay’s outcome ledgers.',
+'→ why the ledgers can disagree.'],
+suggested:`A simple framework organizes the essay. Climate exposure affects households through four margins — health and healthcare utilization, labor productivity and local income, household liquidity, and provider demand — and each margin is observed through a different institution. Medicare records utilization for the 65-plus and disabled population; employer and BEA accounts record employment and income; ACA rating areas record regulated premiums; credit bureaus record unpaid medical bills; and hospitals record uncompensated care. [Reproduce the schematic from the writing plan here as a displayed figure.]`},
+{id:'s2p2',title:'¶2 — Ledgers disagree informatively',prompts:[
+'Institutions differ in eligibility (who is observed), geography (recording level), rules (what triggers a record), timing (when it appears).',
+'Identical harm can produce different — even opposite-signed — ledger responses; the pattern of recording is itself an economic object.',
+'Disarm in advance: apparent inconsistency below is measured, expected, and interpreted.',
+'→ the two institutions needing detail.'],
+suggested:`These institutions differ in eligibility, geography, recording rules, and timing, so identical underlying harm can produce different — even opposite-signed — ledger responses. The pattern of recording is therefore itself an economic object. Where the outcomes below disagree, the disagreement is measured, expected, and interpreted; averaging it away would discard exactly the information about institutional visibility that this essay is after.`},
+{id:'s2p3',title:'¶3 — ACA premium institutions',prompts:[
+'Rating-area price setting; state review; single statewide risk pool per insurer-market.',
+'Geographic rating factor: unit costs only, not local morbidity; §153 risk adjustment redistributes claims risk statewide.',
+'Rate calendar: plan-year-t rates filed ~mid-t−1 on experience through ~t−2, locked — no mid-year re-rating.',
+'Two implications used in §9: lagged shocks only in the info set; local claims signals institutionally muted.',
+'→ bureau debt.'],
+suggested:`Three features of ACA rating matter for what follows. Premiums are set at the rating-area level by insurers operating a single statewide risk pool per market, subject to state regulatory review. The geographic rating factor may reflect unit costs only — not local morbidity — and federal risk adjustment under Section 153 redistributes claims risk across insurers statewide. And the rate calendar is slow: plan-year-t rates are filed around the middle of year t−1 on claims experience through roughly t−2, and are locked before the plan year begins. Two implications follow for Section 9: only lagged shocks can be in the insurer's information set, and any local claims signal is institutionally muted before it can reach a local premium.`},
+{id:'s2p4',title:'¶4 — Credit-bureau debt institutions',prompts:[
+'The three filters: insurance relationship → billed encounter → credit file; hardship failing any filter never enters the ledger.',
+'Reporting-rule changes over the window (collection thresholds, delays) shift the recorded object (Appendix F).',
+'Cross-ref: Essay 3 shows the response is smaller where uninsurance is higher — the visibility gradient.',
+'→ the anchoring event.'],
+suggested:`Credit-bureau medical debt passes through three filters before it is recorded: an insurance relationship, a billed encounter, and a credit file. Hardship that fails any filter never appears in the ledger. Reporting rules — collection thresholds and reporting delays — also changed over the sample window, shifting the recorded object over time (Appendix F). The third essay shows the recorded response is smaller precisely where uninsurance is higher, the visibility gradient this structure predicts.`},
+{id:'s2p5',title:'¶5 — The 2012 drought event',prompts:[
+'Meteorology: among the most severe/extensive US droughts in decades [TK cite NOAA-type retrospective]; extreme drought = PDSI < −4.',
+'First-onset geography in this panel: Georgia + Mountain West + Plains (differs from the popular "Midwest" image).',
+'Treated economies range from heavily to barely agricultural — matters for §8 (burden operates substantially outside agriculture).',
+'→ data.'],
+suggested:`The 2012 drought was among the most severe and extensive U.S. droughts in decades [TK: cite a NOAA-style retrospective]. I define extreme drought as a Palmer index below −4. The counties experiencing their first panel-era extreme onset in 2012 lie in Georgia, the Mountain West, and the Plains — a geography that differs from the popular Midwest image of the event — and their economies range from heavily agricultural to barely agricultural, a range that matters when Section 8 shows the burden operates substantially outside agriculture.`}
+]},
+{id:'s10',doc:11,title:'§10 Interpretation and limitations',note:'',heading:'## 10 Interpretation and limitations',paras:[
+{id:'s10p1',title:'¶1 — What the three results jointly say',prompts:[
+'Synthesis: real local income costs exist (H1); morbidity is directly measurable in administrative data (H2); the regulated pricing institution does not coherently price either locally (H4).',
+'Connective claim: triangulation across ledgers observing different populations under different rules — explicitly no identified propagation chain.',
+'→ boundaries.'],
+suggested:`Taken together, the three results say the following: after climate shocks, real local income costs exist; morbidity is directly measurable in administrative health data; and the regulated pricing institution does not coherently price either locally. The connective claim is triangulation across ledgers that observe different populations under different rules. The essay does not identify a propagation chain from one ledger to another, and no reader should carry one away.`},
+{id:'s10p2',title:'¶2 — External validity',prompts:[
+'Income: event-specific ITT, treated geography; pooled estimator says no generalization even at onset.',
+'Medicare: 65+/disabled only, 2014–2023.',
+'Premiums: ACA individual market, 2014–2025; the tight bound is drought-only.',
+'→ measurement.'],
+suggested:`The external-validity limits are specific. The income estimate is an intention-to-treat effect of the 2012 event for its treated geography, and the pooled estimator indicates it does not generalize even at onset. The Medicare evidence covers the 65-plus and disabled population over 2014–2023. The premium results cover the ACA individual market in the marketplace era, and the tight equivalence bound applies to drought alone.`},
+{id:'s10p3',title:'¶3 — Measurement limits',prompts:[
+'Debt: bureau artifact (insurance/billing/credit-file filters) — understates hardship where coverage and credit access are thin (Essay 3’s subject).',
+'Premiums: a regulated price, not a marginal-cost readout — a null is informative about institutions, not about absent costs.',
+'ACS-smoothed moderators → fast demographic adjustment hard to detect.',
+'→ what would move the needle.'],
+suggested:`Three measurement limits qualify the results. Credit-bureau debt records hardship only after insurance, billing, and credit-file filters, so it understates hardship where coverage and credit access are thin — the subject of the third essay. Premiums are a regulated price rather than a marginal-cost readout, so a premium null is informative about institutions rather than evidence that costs are absent. And the ACS-based moderators are smoothed over time, limiting the ability to detect fast demographic adjustment.`},
+{id:'s10p4',title:'¶4 — What would change the conclusions',prompts:[
+'Working-age administrative utilization (all-payer claims) would test the morbidity channel where debt lives.',
+'Patient-flow/catchment hospital exposure would sharpen provider incidence (currently location-county).',
+'Longer post-2012 horizon would tighten persistence bounds (Essay 2 pushes as far as the panel allows).',
+'→ conclude.'],
+suggested:`Three extensions would sharpen the picture. Working-age administrative utilization data — all-payer claims — would test the morbidity channel in the population where bureau debt lives. Patient-flow measures of hospital exposure would replace the location-county assignment used on the provider side. And a longer post-2012 horizon would tighten the persistence bounds; the second essay pushes that question as far as the panel allows.`}
+]},
+{id:'s11',doc:12,title:'§11 Conclusion',note:'',heading:'## 11 Conclusion',paras:[
+{id:'s11p1',title:'¶1 — Findings restated',prompts:[
+'Question restated in one sentence (costs + which institutions record/price them).',
+'Three findings, one sentence each, each with its one-clause qualifier: −$1,311 (≈2.8% of PCPI; 2012 event; robust inference; flat two-decade pre-trend) · Medicare +$112/+$177 and +8–10 ED/1,000 (65+/disabled; direct, non-agricultural) · no coherent ACA pass-through (sign-unstable across levels; drought bounded at 50–79%).',
+'→ the lesson.'],
+suggested:`This essay asked what economic and healthcare costs follow climate shocks, and which financial institutions record or price them. Three answers emerge. The 2012 drought reduced per-capita income in first-onset counties by $1,311 — roughly 2.8 percent of the mean — an event-specific effect that survives few-cluster inference and a flat two-decade pre-trend. Medicare records show extreme heat raising standardized spending by $112 per beneficiary in the shock year and $177 the next, with emergency visits up 8 to 10 per 1,000, among the 65-plus and disabled population — direct morbidity evidence that requires no agricultural intermediary. And ACA premiums show no coherent local pass-through of any of it, with the data ruling out morbidity-scale pass-through for drought.`},
+{id:'s11p2',title:'¶2 — Institutional lesson + baton',prompts:[
+'The harm is recorded where administration is universal (Medicare, BEA income), selectively recorded where access filters intervene (bureau debt), and not locally priced where regulation pools risk statewide (ACA premiums).',
+'Hand-offs, one sentence each: persistence/compounding → Essay 2; who bears the costs and when ledgers under-record → Essay 3.',
+'→ policy close.'],
+suggested:`The institutional lesson organizes the rest of the dissertation. The harm is recorded where administration is universal — in Medicare files and BEA income accounts; it is selectively recorded where access filters intervene, as in credit-bureau debt; and it is not locally priced where regulation pools risk statewide, as in ACA premiums. Whether these costs persist or compound as exposure recurs is the question of the second essay; who bears them, and when the ledgers used to measure hardship fail to record them, is the question of the third.`},
+{id:'s11p3',title:'¶3 — Policy close',prompts:[
+'For adaptation and health-finance policy: cost estimates built from any single ledger will miss systematically; the sufficient-statistics synthesis (final chapter) aggregates only within transparent scenario bounds.',
+'No new numbers; end on the institutional point (idiom permitted here).'],
+suggested:`For adaptation and health-finance policy, the immediate implication is about measurement: cost estimates built from any single ledger will miss systematically, because no single ledger observes the whole burden. The concluding chapter aggregates these estimates only within transparent scenario bounds. What a warming climate costs American households depends, in part, on which set of books one is willing to read.`}
+]},
+{id:'s1',doc:2,title:'§1 Introduction',note:'WRITE LAST',heading:'## 1 Introduction',paras:[
+{id:'s1p1',title:'¶1 — Hook',prompts:[
+'Concrete image: the drought ends, the weather normalizes, the bills have not arrived yet — costs show up next year in county income, Medicare claims, collection accounts.',
+'The question is not only how large climate costs are but which institution’s books they show up on — and some books miss them.',
+'Idiom permitted; no numbers; citations optional.'],
+suggested:`When a drought ends, the weather normalizes long before the bills arrive. The costs of a climate shock can surface a year or more later — in a county's income accounts, in Medicare claims, in collection tradelines on a credit report — and whether anyone observes them depends on which institution keeps the books. This paper is about those delayed costs and the books they do, and do not, show up on.`},
+{id:'s1p2',title:'¶2 — The measurement problem',prompts:[
+'Why delayed incidence is hard: attribution across years; adaptation and migration muddy the treated population; every ledger observes a different population under different rules.',
+'Literature: contemporaneous mortality/output well measured [TK cite Deschênes–Greenstone; Hsiang review]; the financial after-path through household and health-market ledgers much less mapped [TK cite household-finance/medical-debt].'],
+suggested:`Delayed incidence is hard to measure for three reasons. Attribution across years is confounded by everything else that changes; adaptation and migration change the exposed population while the costs are still arriving; and every administrative ledger observes a different population under different recording rules. A large literature measures the contemporaneous mortality and output effects of temperature and drought [TK: cite Deschênes and Greenstone; Hsiang review]; the financial after-path of a shock through household and health-market ledgers is far less mapped [TK: cite household-finance and medical-debt literature].`},
+{id:'s1p3',title:'¶3 — What this paper does',prompts:[
+'Three moves in one panel: (i) sharp natural experiment for local economic incidence — 2012 drought, 139 first-onset counties (GA/Mountain West/Plains) vs 2,534 never-exposed; (ii) direct administrative morbidity measurement in Medicare; (iii) test whether two financial ledgers — bureau debt and ACA premiums — record or price any of it.',
+'Data sentence: harmonized county/state panel (~1996–2025): NOAA/PRISM/EPA exposure + BEA income, employment, bureau debt, ACA premiums, CMS Medicare.'],
+suggested:`I make three moves in one harmonized panel. First, I treat the 2012 drought as a sharp natural experiment for local economic incidence, comparing the 139 counties that experienced their first extreme-drought onset in 2012 — in Georgia, the Mountain West, and the Plains — with 2,534 counties never exposed. Second, I measure a morbidity channel directly in Medicare administrative data rather than inferring it. Third, I test whether two financial ledgers — credit-bureau medical debt and ACA benchmark premiums — record or price any of it. The panel links NOAA, PRISM, and EPA exposure data to BEA income, employment, bureau medical debt, ACA premiums, and CMS Medicare files at the county and state levels from roughly 1996 to 2025.`},
+{id:'s1p4',title:'¶4 — Result 1 (income)',prompts:[
+'−$1,311 per capita ≈ 2.8% of the $46,269 mean (analytic p=0.027; WCB p=0.036; RI p=0.0075).',
+'Robustness clause: flat 1990–2011 pre-trend (−$69/yr, p=0.44); strengthens to −$1,451 under DRDID.',
+'Same-paragraph qualifier: event-specific — pooled multi-cohort estimator null at onset (−$324, SE 276) and long-run; the paper separates these estimands explicitly.'],
+suggested:`The findings form a sequence. To begin, the 2012 drought reduced per-capita income in first-onset counties by $1,311 — about 2.8 percent of the mean of $46,269 — an estimate that survives wild-cluster bootstrap (p = 0.036) and randomization inference (p = 0.0075), sits on a flat two-decade pre-trend (−$69 per year, p = 0.44), and strengthens to −$1,451 under a doubly-robust estimator. The effect is specific to the 2012 event: pooling all drought cohorts, the doubly-robust onset estimate is −$324 (SE 276) — a null — and the long-run average is likewise null. I keep the event estimand and the pooled estimand separate throughout.`},
+{id:'s1p5',title:'¶5 — Result 2 (Medicare)',prompts:[
+'Separate and parallel — not a mediator: heat raises standardized Medicare spending $112 now, $177 next year (1.1%/1.7% of the $10,359 base) and ED visits ~8–10/1,000 (1.2–1.5% of 629); cold and AQI at lags; reproduces Deryugina et al. in-panel.',
+'Population qualifier in the same breath: 65+/disabled, 2014–2023; non-agricultural (Drought×Ag null).'],
+suggested:`Turning to health, county Medicare records provide separate, direct evidence of a morbidity channel, parallel to the income result rather than mediating it. Extreme heat raises standardized Medicare spending by $112 per beneficiary in the shock year and $177 the next — 1.1 and 1.7 percent of the $10,359 mean — and emergency-department visits by 8 to 10 per 1,000 beneficiaries, reproducing Deryugina et al. (2019) within this panel. The evidence covers the 65-plus and disabled population over 2014–2023, and it is non-agricultural: the channel requires no farm-income intermediary.`},
+{id:'s1p6',title:'¶6 — Result 3 (ledgers)',prompts:[
+'Debt: cold +1.35 pp at one-year lag (state; county +1.2 pp) — recorded, but measurement-fragile (three filters).',
+'Premiums: no coherent local pass-through — sign flips across county/RA/state; within-state ≤5–8% of the mean premium; morbidity-scale pass-through ruled out FOR DROUGHT (50–79% of benchmark); heat/cold loosely bounded.',
+'Corollary: 92–99% of the debt response survives premium adjustment.'],
+suggested:`The financial ledgers record this harm unevenly. Cold shocks raise the credit-bureau medical-debt share by 1.35 percentage points at a one-year lag in the state panel (1.2 points at the county level), but bureau debt is measurement-fragile: it records hardship only after insurance, billing, and credit-file filters. ACA premiums show no coherent local pass-through at all — coefficients flip sign across the county, rating-area, and state levels, and within-state responses are bounded below roughly 5 to 8 percent of the mean premium. For drought, the data rule out pass-through larger than 50 to 79 percent of the measured morbidity costs; the heat and cold bounds are looser. Consistent with the null first stage, 92 to 99 percent of each shock's debt response survives premium adjustment.`},
+{id:'s1p7',title:'¶7 — Contributions',prompts:[
+'Causal incidence: among the sharper event-based estimates of a drought’s local income cost — few-cluster-robust inference, two-decade pre-trend [TK cite 2–3 nearest papers].',
+'Direct morbidity: administrative utilization responses measured in the same panel as the economic outcomes.',
+'Institutional visibility: a new fact about recording — regulated ACA pricing shows no coherent local response; bureau debt records selectively; which ledger you read determines whether you see the cost.'],
+suggested:`The paper contributes to three literatures. To the climate-economy literature, it adds an event-based estimate of a drought's local income cost with few-cluster-robust inference and a two-decade pre-trend defense [TK: cite the two or three nearest papers]. To health economics, it adds administrative utilization responses measured in the same panel as the economic outcomes, so the health channel is documented by measurement rather than inference. To household finance and the economics of measurement, it adds a fact about recording: regulated ACA pricing shows no coherent local response to climate-health shocks, and credit-bureau debt records them selectively — so which ledger one reads determines whether the cost is visible at all.`},
+{id:'s1p8',title:'¶8 — Roadmap',prompts:['One or two sentences; section order.'],
+suggested:`Section 2 describes the institutions; Section 3 the data; Section 4 the 2012 design. Section 5 reports the main income result, Sections 6 and 7 its identification and external validity, Section 8 the Medicare evidence, and Section 9 the financial-ledger responses. Section 10 discusses interpretation and limits, and Section 11 concludes.`}
+]},
+{id:'abstract',doc:1,title:'Abstract',note:'WRITE VERY LAST · 180–250 words',heading:'## Abstract',paras:[
+{id:'abs1',title:'The abstract (one paragraph)',prompts:[
+'(1) Question — costs + which institutions record/price them.',
+'(2) Design — 2012 first-onset drought vs never-exposed; harmonized-panel clause.',
+'(3) Income result + inference + event-specific qualifier (one sentence, one parenthetical).',
+'(4) Medicare sentence ($112/$177; ED +8–10/1,000; 65+/disabled; direct/parallel).',
+'(5) Ledger sentence (debt lagged but measurement-fragile; premiums no coherent pass-through, drought tightly bounded).',
+'(6) Contribution sentence (locating climate costs in lagged local outcomes; identifying which ledgers record or price them).',
+'No lag enumerations, no robustness lists, no secondary outcomes.'],
+suggested:`Climate shocks impose costs that surface after the weather normalizes, and whether those costs are observed depends on which institution keeps the books. This paper asks what economic and healthcare costs follow climate shocks in the United States, and which financial institutions record or price them, using a harmonized county and state panel linking NOAA, PRISM, and EPA exposure data to income, employment, medical debt, ACA premiums, and Medicare records. Treating the 2012 drought as a sharp natural experiment — 139 first-onset counties against 2,534 never-exposed controls — I find that per-capita income fell by $1,311, about 2.8 percent of the mean, an estimate robust to wild-cluster and randomization inference and a flat two-decade pre-trend; pooled multi-cohort estimates are null, so the effect is specific to the 2012 event. Medicare records provide separate, direct evidence of a morbidity channel: extreme heat raises standardized spending by $112 per beneficiary in the shock year and $177 the next, and emergency visits by 8 to 10 per 1,000, among the 65-plus and disabled population. The financial ledgers record this harm unevenly: cold shocks raise the credit-bureau medical-debt share by 1.35 percentage points at a one-year lag, though bureau debt is measurement-fragile, and ACA premiums show no coherent local pass-through — for drought, the data rule out pass-through above 50 to 79 percent of measured morbidity costs. Locating climate costs in lagged local outcomes, and identifying which ledgers record or price them, is the paper's contribution.`}
+]}
+];
+
+// ---------- harness ----------
+const KEY = 'essay1harness.v1.';
+const $ = s => document.querySelector(s);
+const paraIndex = {};
+SECTIONS.forEach(sec => sec.paras.forEach(p => { p.sec = sec; paraIndex[p.id] = p; }));
+
+function stored(id){ try{ return localStorage.getItem(KEY+id); }catch(e){ return null; } }
+function store(id, v){ try{ localStorage.setItem(KEY+id, v); }catch(e){} }
+function unstore(id){ try{ localStorage.removeItem(KEY+id); }catch(e){} }
+function currentText(p){ const s = stored(p.id); return s === null ? p.suggested : s; }
+function isEdited(p){ const s = stored(p.id); return s !== null && s.trim() !== p.suggested.trim(); }
+function wc(t){ t = t.trim(); return t ? t.split(/\s+/).length : 0; }
+
+function decorate(text){
+  return text.replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/\[DECIDE[^\]]*\]/g, m => '<span class="flag decide">'+m.slice(1,-1)+'</span>')
+    .replace(/\[TK[^\]]*\]/g, m => '<span class="flag tk">'+m.slice(1,-1)+'</span>')
+    .replace(/\[BUILD[^\]]*\]/g, m => '<span class="flag build">'+m.slice(1,-1)+'</span>');
+}
+
+function render(){
+  const nav = $('#nav'), root = $('#sections');
+  SECTIONS.forEach(sec => {
+    const a = document.createElement('a');
+    a.href = '#sec-'+sec.id; a.id = 'nav-'+sec.id;
+    nav.appendChild(a);
+
+    const s = document.createElement('section');
+    s.className = 'essay-sec'; s.id = 'sec-'+sec.id;
+    s.innerHTML = '<h2>'+sec.title+'</h2><div class="secnote">'+(sec.note||'')+'</div>';
+    sec.paras.forEach(p => {
+      const card = document.createElement('div');
+      card.className = 'para'; card.id = 'card-'+p.id;
+      const prompts = p.prompts.map(x => '<li>'+decorate(x)+'</li>').join('');
+      card.innerHTML =
+        '<div class="prompts"><h3>'+p.title+'</h3><ol>'+prompts+'</ol></div>'+
+        '<div class="writing"><textarea spellcheck="true"></textarea>'+
+        '<div class="toolbar"><span class="status"></span><span class="words"></span>'+
+        '<button class="mini" title="Discard your edits and restore the suggested text">Restore suggestion</button></div></div>';
+      const ta = card.querySelector('textarea');
+      ta.value = currentText(p);
+      autosize(ta);
+      ta.addEventListener('input', () => {
+        store(p.id, ta.value); autosize(ta); refreshCard(p, card); refreshHeader();
+        $('#savestamp').textContent = 'Autosave: ' + new Date().toLocaleTimeString();
+      });
+      card.querySelector('.mini').addEventListener('click', () => {
+        if(isEdited(p) && !confirm('Discard your edits to '+p.title+' and restore the suggestion?')) return;
+        unstore(p.id); ta.value = p.suggested; autosize(ta); refreshCard(p, card); refreshHeader();
+      });
+      refreshCard(p, card);
+      s.appendChild(card);
+    });
+    root.appendChild(s);
+  });
+  refreshHeader();
+}
+
+function autosize(ta){ ta.style.height = 'auto'; ta.style.height = Math.max(150, ta.scrollHeight + 4) + 'px'; }
+
+function refreshCard(p, card){
+  const st = card.querySelector('.status'), w = card.querySelector('.words');
+  const edited = isEdited(p);
+  st.textContent = edited ? 'edited — your words' : 'suggestion (unedited)';
+  st.className = 'status ' + (edited ? 'edited' : 'suggestion');
+  w.textContent = wc(currentText(p)) + ' words';
+}
+
+function refreshHeader(){
+  let edited = 0, total = 0, words = 0;
+  SECTIONS.forEach(sec => sec.paras.forEach(p => { total++; if(isEdited(p)) edited++; words += wc(currentText(p)); }));
+  $('#progress').textContent = edited + '/' + total + ' ¶ in your words · ' + words.toLocaleString() + ' words';
+  SECTIONS.forEach(sec => {
+    const e = sec.paras.filter(isEdited).length;
+    $('#nav-'+sec.id).innerHTML = sec.title + ' <span class="cnt">' + e + '/' + sec.paras.length + '</span>';
+  });
+}
+
+function assemble(){
+  const parts = ['# Essay 1 — Deferred Costs: Climate Shocks, Local Economic Capacity, and Health-Market Ledgers',
+    '', '<!-- Assembled from essay1_harness.html on ' + new Date().toISOString().slice(0,10) +
+    '. Unedited paragraphs still carry the SUGGESTED text - rewrite before freezing. -->', ''];
+  [...SECTIONS].sort((a,b) => a.doc - b.doc).forEach(sec => {
+    parts.push(sec.heading, '');
+    sec.paras.forEach(p => {
+      const t = currentText(p).trim();
+      if(t){ parts.push((isEdited(p) ? '' : '<!-- UNEDITED SUGGESTION -->\n') + t, ''); }
+    });
+  });
+  return parts.join('\n');
+}
+
+$('#exportBtn').addEventListener('click', () => {
+  const blob = new Blob([assemble()], {type:'text/markdown'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = 'essay1_draft.md';
+  a.click(); URL.revokeObjectURL(a.href);
+});
+$('#copyBtn').addEventListener('click', async () => {
+  try{ await navigator.clipboard.writeText(assemble()); $('#copyBtn').textContent = 'Copied ✓';
+    setTimeout(() => $('#copyBtn').textContent = 'Copy draft', 1500);
+  }catch(e){ alert('Clipboard blocked — use Export instead.'); }
+});
+
+render();
+</script>
+</body>
+</html>
