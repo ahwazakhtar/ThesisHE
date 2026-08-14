@@ -31,7 +31,7 @@ structure, content requirements, and review — never draft prose for the manusc
 |---|---|---|
 | `essayN_outline.md` | Claude | Paragraph-level content spec (updated if results/framing change) |
 | `essayN_draft.md` | **Author** | The manuscript prose. Claude edits only on explicit request |
-| `essayN_harness.html` | Claude | Browser writing harness: prompts left, editable suggested write-up right; edits autosave to localStorage; **Export** downloads the assembled `essayN_draft.md` (unedited paragraphs are marked `<!-- UNEDITED SUGGESTION -->`) — move the export into this folder to update the draft |
+| `essayN_harness.html` | Claude | Browser writing harness: prompts left, editable suggested write-up right; edits autosave to localStorage; **Export** downloads the assembled `essayN_draft.md` (unedited paragraphs are marked `<!-- UNEDITED SUGGESTION -->`) — move the export into this folder to update the draft. Built exhibits render inline under their paragraph (relative paths into `Analysis/` — the harness must stay in this folder for images to resolve) |
 | `reviews/` | Claude (agents) | Dated review reports; append-only, never overwritten |
 | `WORKFLOW.md`, `review_protocol.md` | Claude | This process |
 

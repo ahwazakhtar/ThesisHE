@@ -54,6 +54,11 @@
   .flag.decide{background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn)}
   .flag.tk{background:var(--warn-soft);color:var(--warn)}
   .flag.build{background:var(--ok-soft);color:var(--ok)}
+  .exhibits{grid-column:1/-1;border-top:1px dashed var(--line);padding:8px 14px 12px;background:var(--bg)}
+  .exhibits summary{cursor:pointer;font:12.5px system-ui,sans-serif;color:var(--accent);font-weight:600;padding:3px 0}
+  .exhibits img{max-width:100%;height:auto;margin-top:8px;border:1px solid var(--line);border-radius:4px;background:#fff}
+  .exhibits .missing{font:12px system-ui,sans-serif;color:var(--warn);margin-top:6px}
+  .exhibits a{font:11.5px system-ui,sans-serif;color:var(--muted)}
   .writing{display:flex;flex-direction:column}
   .writing textarea{flex:1;width:100%;border:none;resize:vertical;padding:14px 16px;min-height:150px;
     font:15px/1.65 Georgia,'Times New Roman',serif;background:var(--panel);color:var(--ink);outline:none}
@@ -112,17 +117,20 @@ const SECTIONS = [
 'Anchor: against mean county employment of 50,113, the swing is ≈2% of employment.',
 'Exhibit E3-T2 / Figure E3-F2.',
 '→ cold and income.'],
+exhibits:[{src:'../../Analysis/plots/exposure_index/interaction_Civilian_Employed.png',label:'E3-F2 — Shock × SVI marginal effects: employment'}],
 suggested:`Vulnerability changes the sign of heat's employment effect. At the 25th percentile of the Social Vulnerability Index, extreme heat is associated with an employment gain of 878 jobs; at the 75th percentile, with a loss of 184 (interaction p = 0.001; Table E3-T2, Figure E3-F2). Against mean county employment of 48,068, the swing from gain to loss is about two percent of employment. In the least vulnerable counties heat appears to be, on net, absorbable; in the most vulnerable it costs jobs.`},
 {id:'s4p2',title:'¶2 — Cold and income: ~8× larger, marginal interaction',prompts:[
 'Marginal effect of cold on PCPI: −$56 at p25 SVI vs −$472 at p75 — roughly 8× — ≈0.1% vs 1.0% of the $46,269 mean.',
 'Binding hedge: interaction p=0.061 post-dedup ("marginal either way") — hedge accordingly, do not claim it as solid.',
 '→ premiums.'],
+exhibits:[{src:'../../Analysis/plots/exposure_index/interaction_PCPI_Real.png',label:'E3-F2 — Shock × SVI marginal effects: per-capita income'}],
 suggested:`Cold's income effect is larger in vulnerable counties by roughly a factor of eight: the marginal effect on per-capita income is −$56 at the 25th percentile of vulnerability and −$472 at the 75th — about 0.1 versus 0.9 percent of the $53,145 mean. This interaction is only marginally significant (p = 0.061), and I read it as suggestive amplification rather than a firmly established gradient.`},
 {id:'s4p3',title:'¶3 — Drought and benchmark premiums',prompts:[
 'At a two-year lag, drought moves benchmark premiums down in low-SVI counties (−$54 at p25) and up in high-SVI counties (+$16 at p75), interaction p=0.001.',
 'Units RESOLVED: Benchmark_Silver_Real is a monthly premium (2023 USD), county-master mean $374/mo. Post-dedup marginal effects: low-SVI −$55.1 (p=0.030), high-SVI +$14.1 (p=0.319) — high end imprecise; the claim is the gradient (int p=0.0012).',
 'One interpretive sentence: where Essay 1 found no coherent average pass-through, the vulnerability gradient in the response is itself the finding here.',
 '→ replication and the debt exclusion.'],
+exhibits:[{src:'../../Analysis/plots/exposure_index/interaction_Benchmark_Silver_Real.png',label:'E3-F2 — Shock × SVI marginal effects: benchmark premium ($/month)'}],
 suggested:`The premium ledger shows a vulnerability gradient of its own. At a two-year lag, drought is associated with lower benchmark premiums in the least vulnerable counties (−$54 at the 25th percentile) and higher premiums in the most vulnerable (+$16 at the 75th; interaction p = 0.001). These are monthly amounts against a mean benchmark premium of $374 per month, and the high-vulnerability marginal effect is itself imprecise — the finding is the gradient across vulnerability, not the endpoint estimate. The first essay found no coherent average pass-through of climate shocks into premiums; the finding here is distributional — such response as exists tilts toward premium increases precisely where households are least able to absorb them.`},
 {id:'s4p4',title:'¶4 — Replication and the debt exclusion',prompts:[
 'The income and spending interactions replicate across the state and county panels — not a county-level artifact.',
@@ -167,6 +175,7 @@ suggested:`If vulnerable households bear larger costs, the providers who serve t
 'Heat × safety-net interaction on uncompensated care: p=0.021; robust to within-year 1%/99% winsorization of the hospital accounts (coefficient 0.0209, p=0.013); survives sharpened q<0.05 — E3-T4, Figure E3-F4.',
 'Frame: the supply-side twin of the household-level amplification.',
 '→ caveats.'],
+exhibits:[{src:'../../Analysis/plots/hospital/heterogeneity_SafetyNet_Hosp_UncompCare_PctNPR.png',label:'E3-F4 — Safety-net × shock: uncompensated care (% NPR)'}],
 suggested:`Extreme heat raises uncompensated care most at safety-net hospitals (interaction p = 0.021), and the result is robust to winsorizing the underlying hospital accounts at the first and ninety-ninth percentiles within year (coefficient 0.0209, p = 0.013); it also survives a sharpened multiple-testing correction (Table E3-T4, Figure E3-F4). The strain of heat, like its household costs, concentrates where the least-resourced patients are served — the supply-side twin of the amplification results above.`},
 {id:'s6p3',title:'¶3 — Caveats, co-located',prompts:[
 'The cold interaction runs the other way (loads on non-safety-net hospitals) — say so.',
@@ -213,11 +222,13 @@ suggested:`The takeaway is a caution for anyone using bureau debt to measure cli
 'Lancet-style descriptive metric: 70–105 million person-years of extreme-heat exposure per year, 3–5× the cold burden.',
 'Binding status: descriptive exposure metric, not a causal burden.',
 '→ where it sits.'],
+exhibits:[{src:'../../Analysis/plots/exposure_index/personyears_trend.png',label:'Person-years of extreme-heat exposure (descriptive trend)'}],
 suggested:`How much exposure is there to distribute? As a descriptive metric in the style of the Lancet Countdown, the country absorbs on the order of 70 to 105 million person-years of extreme-heat exposure each year — three to five times the cold burden. This is an exposure count, not a causal damage estimate, but it sets the scale on which the heterogeneity above operates.`},
 {id:'s8p2',title:'¶2 — The concentration curve',prompts:[
 'BUILT 2026-08-13: Analysis/policy/concentration_topshares.csv + fig_concentration_lorenz.png. Top-10% most-vulnerable population bears: 19% of recurring-cold employment burden (top-20%: 36%), 15% of heat exposure person-years, 14% cold Medicare, 11% heat Medicare.',
 'CRITICAL honesty point: the 2012-income-event and drought-scar bands allocate a UNIFORM per-capita coefficient → their curves are diagonal BY CONSTRUCTION (flagged in the CSV, omitted from the figure). Never cite them as evidence of "no concentration".',
 '→ status of the calculation.'],
+exhibits:[{src:'../../Analysis/policy/fig_concentration_lorenz.png',label:'E3-F6 — Burden concentration Lorenz curves (uniform-per-capita bands omitted)'}],
 suggested:`Combining exposure, population, and the estimated vulnerability gradients yields a concentration curve: the share of measured burden against the share of population, ordered from most to least vulnerable (Table E3-T6, Figure E3-F6). The most vulnerable tenth of the population bears 19 percent of the recurring-cold employment burden — roughly twice its population share — and the most vulnerable fifth bears 36 percent; the corresponding shares are 15 percent for heat-exposure person-years and 11 to 14 percent for the Medicare cost bands. Bands built from a uniform per-capita coefficient, such as the 2012 income event, are proportional by construction and are excluded from the figure — for them the calculation is silent about concentration, not evidence against it.`},
 {id:'s8p3',title:'¶3 — Status of the calculation',prompts:[
 'Binding: descriptive concentration accounting — NOT causal welfare weights; coefficients from heterogeneity estimates, exposure from counts.',
@@ -349,6 +360,17 @@ function decorate(text){
     .replace(/\[TK[^\]]*\]/g, m => '<span class="flag tk">'+m.slice(1,-1)+'</span>')
     .replace(/\[BUILD[^\]]*\]/g, m => '<span class="flag build">'+m.slice(1,-1)+'</span>');
 }
+function exhibitsHtml(p){
+  if(!p.exhibits || !p.exhibits.length) return '';
+  return '<div class="exhibits">' + p.exhibits.map(e =>
+    '<details open><summary>&#128202; ' + e.label + '</summary>' +
+    '<img src="' + e.src + '" alt="' + e.label + '" loading="lazy" ' +
+    'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
+    '<div class="missing" style="display:none">Image not found at ' + e.src +
+    ' &mdash; regenerate via its registry script.</div>' +
+    '<div><a href="' + e.src + '" target="_blank">open image in new tab</a></div></details>').join('') + '</div>';
+}
+
 function render(){
   const nav = $('#nav'), root = $('#sections');
   SECTIONS.forEach(sec => {
@@ -366,7 +388,8 @@ function render(){
         '<div class="prompts"><h3>'+p.title+'</h3><ol>'+prompts+'</ol></div>'+
         '<div class="writing"><textarea spellcheck="true"></textarea>'+
         '<div class="toolbar"><span class="status"></span><span class="words"></span>'+
-        '<button class="mini" title="Discard your edits and restore the suggested text">Restore suggestion</button></div></div>';
+        '<button class="mini" title="Discard your edits and restore the suggested text">Restore suggestion</button></div></div>'+
+        exhibitsHtml(p);
       const ta = card.querySelector('textarea');
       ta.value = currentText(p);
       autosize(ta);

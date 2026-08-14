@@ -54,6 +54,11 @@
   .flag.decide{background:var(--warn-soft);color:var(--warn);border:1px solid var(--warn)}
   .flag.tk{background:var(--warn-soft);color:var(--warn)}
   .flag.build{background:var(--ok-soft);color:var(--ok)}
+  .exhibits{grid-column:1/-1;border-top:1px dashed var(--line);padding:8px 14px 12px;background:var(--bg)}
+  .exhibits summary{cursor:pointer;font:12.5px system-ui,sans-serif;color:var(--accent);font-weight:600;padding:3px 0}
+  .exhibits img{max-width:100%;height:auto;margin-top:8px;border:1px solid var(--line);border-radius:4px;background:#fff}
+  .exhibits .missing{font:12px system-ui,sans-serif;color:var(--warn);margin-top:6px}
+  .exhibits a{font:11.5px system-ui,sans-serif;color:var(--muted)}
   .writing{display:flex;flex-direction:column}
   .writing textarea{flex:1;width:100%;border:none;resize:vertical;padding:14px 16px;min-height:150px;
     font:15px/1.65 Georgia,'Times New Roman',serif;background:var(--panel);color:var(--ink);outline:none}
@@ -168,6 +173,7 @@ suggested:`Horizon choices do not drive these verdicts. Extending estimation hor
 'CAUTION (exhibit-build finding): the county chronic-heat DEBT-gap dynamic series is negative and WIDENS — the region-confounded CDD pattern did_results.md demotes to suggestive. Do NOT cite it as saturation evidence; the level-difference language rests on the state synthesis (Row 18).',
 'Chronic extreme drought too rare to estimate dose (175 persisting county-years) — drought is episodic.',
 '→ the honesty box.'],
+exhibits:[{src:'../../Analysis/persistent_exposure/fig_heat_saturation.png',label:'E2-F4 — HDD vs CDD cumulative-dose contrast (caption computed from data)'}],
 suggested:`Heat behaves differently. Its cumulative-dose profile shows no negative gradient — the binned ten-plus versus one-to-three contrast is +4,460 jobs (p = 0.06), against cold's −5,522 (Figure E2-F4) — so heat's persistent gap is a level difference rather than one that grows with accumulated exposure: saturation rather than compounding. Chronic extreme drought, by contrast, is too rare in the panel to estimate a dose response at all — only 175 persisting county-years against 511 onsets — so drought in these data is episodic, which is why its dynamics were examined through onset and exit rather than accumulation.`},
 {id:'s7p4',title:'¶4 — Honesty box: “What identifies compounding?”',prompts:[
 'Set as a titled subsection (writing plan §7 requirement). State explicitly:',
@@ -196,6 +202,7 @@ suggested:`The same logic applies to the long-run cold gaps. Levels-based employ
 'Define: reversal (exit offsets onset); scarring (exit fails to offset onset); saturation (persists at a level, does not grow with dose); compounding (marginal harm grows with repeated exposure).',
 'Conceptual diagram Figure E2-F1 BUILT (Analysis/plots/essay_diagrams/fig_adjustment_regimes.png).',
 '→ map regimes to estimands.'],
+exhibits:[{src:'../../Analysis/plots/essay_diagrams/fig_adjustment_regimes.png',label:'E2-F1 — Four adjustment regimes (schematic)'}],
 suggested:`Four adjustment regimes are economically distinct. Under reversal, exit offsets onset and the shock leaves no lasting mark. Under scarring, exit fails to offset onset and a gap remains after the shock ends. Under saturation, effects persist at a level but do not grow with additional exposure. Under compounding, the marginal harm grows as exposure recurs. Figure E2-F1 illustrates the four paths, and the essay's estimands are built to distinguish them.`},
 {id:'s3p2',title:'¶2 — Transition estimands and symmetry',prompts:[
 'Decompose each hazard into onset, persistence, exit indicators (county+year FE).',
@@ -335,6 +342,17 @@ function decorate(text){
     .replace(/\[TK[^\]]*\]/g, m => '<span class="flag tk">'+m.slice(1,-1)+'</span>')
     .replace(/\[BUILD[^\]]*\]/g, m => '<span class="flag build">'+m.slice(1,-1)+'</span>');
 }
+function exhibitsHtml(p){
+  if(!p.exhibits || !p.exhibits.length) return '';
+  return '<div class="exhibits">' + p.exhibits.map(e =>
+    '<details open><summary>&#128202; ' + e.label + '</summary>' +
+    '<img src="' + e.src + '" alt="' + e.label + '" loading="lazy" ' +
+    'onerror="this.style.display=\'none\';this.nextElementSibling.style.display=\'block\'">' +
+    '<div class="missing" style="display:none">Image not found at ' + e.src +
+    ' &mdash; regenerate via its registry script.</div>' +
+    '<div><a href="' + e.src + '" target="_blank">open image in new tab</a></div></details>').join('') + '</div>';
+}
+
 function render(){
   const nav = $('#nav'), root = $('#sections');
   SECTIONS.forEach(sec => {
@@ -352,7 +370,8 @@ function render(){
         '<div class="prompts"><h3>'+p.title+'</h3><ol>'+prompts+'</ol></div>'+
         '<div class="writing"><textarea spellcheck="true"></textarea>'+
         '<div class="toolbar"><span class="status"></span><span class="words"></span>'+
-        '<button class="mini" title="Discard your edits and restore the suggested text">Restore suggestion</button></div></div>';
+        '<button class="mini" title="Discard your edits and restore the suggested text">Restore suggestion</button></div></div>'+
+        exhibitsHtml(p);
       const ta = card.querySelector('textarea');
       ta.value = currentText(p);
       autosize(ta);
