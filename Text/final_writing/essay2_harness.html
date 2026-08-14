@@ -81,6 +81,9 @@
   </div>
   <div class="spacer"></div>
   <span id="progress"></span>
+  <button class="btn" id="backupBtn" title="Download your edits as JSON — save it into this folder so Dropbox syncs it to other devices">Backup edits</button>
+  <button class="btn" id="restoreBtn" title="Load an edits-backup JSON made on another device">Restore edits</button>
+  <input type="file" id="restoreFile" accept=".json" style="display:none">
   <button class="btn" id="copyBtn">Copy draft</button>
   <button class="btn primary" id="exportBtn">Export essay2_draft.md</button>
 </header>
@@ -431,6 +434,38 @@ $('#copyBtn').addEventListener('click', async () => {
     setTimeout(() => $('#copyBtn').textContent = 'Copy draft', 1500);
   }catch(e){ alert('Clipboard blocked — use Export instead.'); }
 });
+
+// Cross-device transfer: localStorage is per-browser, so Backup downloads the edits as
+// JSON (save it into this folder — Dropbox syncs it) and Restore loads it elsewhere.
+$('#backupBtn').addEventListener('click', () => {
+  const state = {};
+  SECTIONS.forEach(sec => sec.paras.forEach(p => {
+    const s = stored(p.id); if(s !== null) state[p.id] = s;
+  }));
+  const blob = new Blob([JSON.stringify({harness: KEY, saved: new Date().toISOString(), state}, null, 1)],
+    {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob); a.download = KEY.replace(/\.$/,'') + '.edits.json';
+  a.click(); URL.revokeObjectURL(a.href);
+});
+$('#restoreBtn').addEventListener('click', () => $('#restoreFile').click());
+$('#restoreFile').addEventListener('change', ev => {
+  const f = ev.target.files[0]; if(!f) return;
+  const r = new FileReader();
+  r.onload = () => {
+    try{
+      const data = JSON.parse(r.result);
+      if(data.harness !== KEY){ alert('This backup belongs to ' + data.harness + ', not this essay.'); return; }
+      const n = Object.keys(data.state || {}).length;
+      if(!confirm('Restore ' + n + ' paragraph edit(s) from ' + (data.saved || 'unknown date') +
+        '? This overwrites edits in this browser for those paragraphs.')) return;
+      Object.entries(data.state).forEach(([id, v]) => store(id, v));
+      location.reload();
+    }catch(e){ alert('Could not read that backup: ' + e.message); }
+  };
+  r.readAsText(f);
+});
+
 render();
 </script>
 </body>
