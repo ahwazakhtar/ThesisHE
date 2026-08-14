@@ -72,11 +72,39 @@ added, verify its base year first.
 | Banzhaf, Ma & Timmins 2019 | *JEP* 33(1): Environmental justice: the economics of race, place, and pollution | E3 intro |
 | de Chaisemartin & D'Haultfœuille 2024 | Difference-in-differences estimators of intertemporal treatment effects, *REStat* (volume/pages **verify** — venue less certain than the others) | E1 §8 (`did_multiplegt_dyn`) |
 
-## E. Remaining TKs (irreducible — author or build-time)
+## E. Remaining TKs
 
-1. **[BUILD] exhibits**: E1-F1 map, E1-F5 ledger figure, E2-F1 concept diagram, E2-F4 heat
-   saturation, E3-T6/F6 concentration curve (+ its top-decile shares).
-2. **[DECIDE]**: $18 ESI figure (drop recommended); drought→debt level choice (county 0.54 pp
-   recommended); anchor set (B above); MAD employment construction (advisor to confirm).
-3. Exact transition **event counts** for E2-T1 (the CSV carries regression Ns, not episode
-   counts) — generate at drafting from the master or extend `run_delta_analysis.R`.
+1. **[BUILD] exhibits — 4 of 5 BUILT 2026-08-13** by `Code/create_manuscript_exhibits.R`
+   (tests: `Code/tests/test_manuscript_exhibits.R`, all pass; registry rows updated):
+   E1-F1 map ✅, E2-F1 concept diagram ✅, E2-F4 dose-contrast panel ✅, E3-T6/F6
+   concentration table+figure ✅. **Still pending: E1-F5** institutional-ledger figure
+   (needs cross-ledger standardization design choices; debt coefficients live in narrative
+   docs, not machine-readable CSVs — build during Essay-1 §9 drafting).
+2. **[DECIDE] — RESOLVED by the author 2026-08-13**: ESI **dropped** from Essay 1 entirely;
+   drought→debt leads with the **county +0.54 pp**; anchors confirmed as the **E1-T1 values**.
+   Still open: MAD employment construction (advisor to confirm; table reports both either way).
+3. Transition **episode counts** — ✅ DONE: `Analysis/delta/transition_episode_counts.csv`
+   (drought 511 onsets / 705 exits / 175 persisting, 603 counties; heat 903/1,033/8,125;
+   cold 1,032/1,181/5,485).
+
+## F. Exhibit-build findings (2026-08-13) — read before drafting the affected paragraphs
+
+1. **Heat "saturation" exhibit re-specified.** The county chronic-heat debt-gap dynamic
+   series (`persistent_exposure_dynamic.csv`, High_CDD × Medical_Debt_Share) is **negative
+   and significantly widening** (WLS slope −0.0033/yr, p<0.001) — the region-confounded CDD
+   pattern `did_results.md` §3 demotes to suggestive. It must NOT be used as saturation
+   evidence. E2-F4 instead shows the **HDD-vs-CDD cumulative-dose contrast** (certified
+   `cumulative_dose_marginal.csv`): cold binned −5,522 (p=3.9e-6) vs heat **+4,460 (p=0.06)**
+   — no negative dose gradient for heat. Row 18's "fixed level difference" language rests on
+   the state synthesis and remains permitted; the county dynamic series is a known tension
+   to keep out of the saturation paragraph.
+2. **Correction to an earlier session claim:** the "heat binned contrast −928 (p=0.16)"
+   quoted mid-build was the **PCPI_Real** row, not employment; the employment figure is
+   +4,460 (p=0.06). The committed figure computes its caption from the data.
+3. **Concentration bands:** `drought_debt_scar` and `event_2012_income` allocate uniform
+   per-capita coefficients → Lorenz curves diagonal **by construction** (flagged in
+   `concentration_topshares.csv`, omitted from the figure). Informative bands: cold
+   employment top-10% = **19%** (top-20% = 36%), heat person-years 15%, cold/heat Medicare
+   14%/11%.
+4. **Environment:** `usmap` + `sf` (with `wk`, `classInt`, `s2`, `units`, `usmapdata`)
+   installed to the R 4.5.2 user library 2026-08-13 for the county map.

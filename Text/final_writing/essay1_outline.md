@@ -22,17 +22,16 @@ Write the introduction late enough that it describes the paper that exists.
 Employment is **confirmatory-fragile** (Row 2), debt is a **secondary/measurement ledger**
 (Rows 4–5), mechanisms are **supporting** (Rows 11b, 12). Do not promote any of them.
 
-## Two author decisions to make BEFORE drafting §9 (evidence-table "untraceable" section)
+## Author decisions — RESOLVED 2026-08-13
 
-- [ ] **The "$18 ESI premium" claim (Row 6):** no spec traces to +$18 at lag 2. Either identify
-  the exact MEPS-IC spec behind it, restate to a traced coefficient (county drought L1 +$20.70,
-  p<0.05, labeled ESI), or **drop ESI premiums from this essay** (recommended: drop — the ACA
-  pass-through result is the premium story; ESI adds an untraced number and a second premium
-  object to defend).
-- [ ] **Drought→debt "~0.7 pp" (Row 5):** the state coefficient (0.72 pp) is not significant
-  (p=0.18); the significant figure is the county 0.54 pp (p<0.01, sample-fragile). Recommended:
-  report the county 0.54 pp with its level and fragility stated, and point forward to the
-  Essay-2 scar as the robust drought→debt form.
+- [x] **The "$18 ESI premium" claim (Row 6): DROPPED.** ESI (employer-sponsored, MEPS-IC)
+  premiums are removed from Essay 1 entirely — the ACA institutional null carries the
+  premium story. Do not reintroduce the $18 or any ESI coefficient.
+- [x] **Drought→debt (Row 5): county +0.54 pp (p<0.01) leads**, with the sample-fragility
+  and the ns state primary (0.72 pp, p=0.18) disclosed beside it, and a forward pointer to
+  the Essay-2 scar as the robust drought→debt form. (Harness §9 ¶3 already implements this.)
+- [x] **Anchors: E1-T1 values** (mean PCPI $53,145 → headline ≈2.5%; mean employment
+  48,068) — confirmed over the task-1.5 candidates; see `TK_resolutions.md` §B.
 
 ---
 
