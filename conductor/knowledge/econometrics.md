@@ -80,6 +80,26 @@ them from scratch, and do not silently deviate.
   model (point estimate and cluster structure preserved).
 - **`DRDID::drdid` needs a numeric `idname`** (`as.integer(factor(fips_code))`).
 
+## Exhibit-evidence rules (from the 2026-08-13 manuscript-exhibit build)
+
+- **Concentration/Lorenz bands built from a uniform per-capita coefficient (the 2012
+  income event, the drought debt scar) are diagonal BY CONSTRUCTION** — burden share ≡
+  population share. Never cite them as evidence of "no concentration"; they are flagged
+  `uniform_per_capita` in `Analysis/policy/concentration_topshares.csv` and omitted from
+  the figure. Informative bands: cold employment top-10% = 19%, heat person-years 15%,
+  Medicare 11–14%.
+- **The county chronic-heat debt-gap dynamic series is NOT saturation evidence** — it is
+  negative and significantly *widening* (WLS slope −0.0033/yr), the region-confounded CDD
+  pattern `did_results.md` §3 demotes to suggestive. E2-F4 therefore shows the HDD-vs-CDD
+  cumulative-dose contrast (cold binned −5,522, p=3.9e-6; heat +4,460, p=0.06 — no
+  negative gradient); Row 18's "level difference" language rests on the state synthesis.
+- **Transition support quantified** (`Analysis/delta/transition_episode_counts.csv`,
+  2011–2023): drought 511 onsets / 705 exits / **175 persisting** county-years (episodic);
+  heat 903/1,033/8,125; cold 1,032/1,181/5,485 (recurring — the dose variation).
+- The `run_did_analysis.R` cohort replicates exactly only when first onsets are computed
+  **within the 2011–2023 window** (the master's 1990+ climate-baseline rows must be
+  excluded first); treated-2012 = 139 counties, median 2012 population 12,817, total 5.29M.
+
 ## Before promoting a new spec to a finding — checklist
 
 Distilled from review catches that materially changed results (the premium pass-through

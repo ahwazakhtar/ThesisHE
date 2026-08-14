@@ -23,6 +23,9 @@ Read this before running R scripts, installing packages, or touching `.claude/` 
 - Install gotchas (still true): the CRAN package is **`DRDID`** (uppercase — lowercase
   `drdid` is silently "not available"); **`fwildclusterboot` is archived on CRAN** —
   install from r-universe (`https://s3alfisc.r-universe.dev`).
+- Mapping stack installed 2026-08-13: **`usmap` + `sf`** (deps `wk`, `classInt`, `s2`,
+  `units`, `usmapdata`) — CRAN binaries, clean install; used by
+  `Code/create_manuscript_exhibits.R` for the E1-F1 county map.
 
 ## Run conventions
 

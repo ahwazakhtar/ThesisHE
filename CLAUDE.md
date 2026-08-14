@@ -37,7 +37,11 @@ are the source of truth; this is orientation only:
   exhibits registered in `Plans/exhibit_registry.md`. **The committee approved the
   three-essay structure** (2026-07-13); Essay-3 framing = hybrid distribution+observability
   per `Plans/dissertation_writing_and_framing_plan_20260712.md`. Essay drafting
-  (thesis_completion 2.4) is the critical path.
+  (thesis_completion 2.4–2.5, both `[~]`) is the critical path: the drafting workspace is
+  **`Text/final_writing/`** (browser harnesses with pre-filled permitted-language prose +
+  inline exhibits; author writes in own words; see its `WORKFLOW.md`). 4/5 pending
+  registry exhibits built 2026-08-13 (`Code/create_manuscript_exhibits.R`); only E1-F5
+  remains.
 
 ---
 
@@ -117,6 +121,10 @@ Silent-corruption traps — these produce wrong results with no error:
   dozens of errors — never trust a green aggregate run predating the fix.
 - **Medical debt is measurement-fragile** (credit-bureau artifact; aggregation-sensitive
   EJ direction). Lead claims with income/employment/premiums.
+- **Real-dollar bases can diverge across pipelines:** the county master hardcodes **2023
+  dollars**; the state master deflates to the *latest* CPI year in `us_cpi_annual.csv`
+  (2025 rows present since Feb 2026). Verify the base before any cross-panel dollar
+  comparison — details in `conductor/knowledge/data-pipeline.md`.
 
 Conventions:
 - `fixest::feols` for all FE models — no `plm`/`sandwich` in production code.

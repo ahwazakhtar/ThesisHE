@@ -2,7 +2,57 @@
 
 ---
 
-## 2026-07-13 (Session 12)
+## 2026-08-14 (Session 13)
+
+Essay-drafting infrastructure session (Aug 13–14): stood up the **`Text/final_writing/`
+workspace** — paragraph-level outlines, pre-filled content, and three **browser writing
+harnesses** (prompts left, editable NBER-styled suggested prose right, autosave +
+markdown export, inline exhibit rendering) so the author writes the essays in their own
+words against a fully specified scaffold. Resolved every open `[TK]` with sourced best
+guesses, locked **three author decisions** (ESI dropped from Essay 1; drought→debt leads
+with the county +0.54 pp; anchors = E1-T1 values → headline income loss ≈**2.5%**), and
+built **4 of 5 pending registry exhibits** with a tested script. Tasks 2.4/2.5
+(thesis_completion) moved to `[~]`.
+
+### `Text/final_writing/` (new)
+- `WORKFLOW.md` + `review_protocol.md` — the drafting loop (Claude outlines/reviews;
+  author writes; fresh-eyes agent reviews with no session context) and the reviewer spec.
+- `essay1_outline.md` + `essay1_content.md` — Essay 1 paragraph map and content units,
+  claims keyed to `Plans/master_evidence_table.md` rows; 12 standing prohibitions listed.
+- `essay{1,2,3}_harness.html` — self-contained editors; suggested prose is
+  permitted-language-bound; exports mark unedited paragraphs `<!-- UNEDITED SUGGESTION -->`;
+  built exhibits render inline via relative paths (harness must stay in this folder).
+- `TK_resolutions.md` — audit trail for every TK fill: repo-fact resolutions (2023-dollar
+  base; 1990–2000 baseline shock definitions; E1-T1 anchors; monthly premium units;
+  treated-cohort population median 12,817 / total 5.29M — cohort replication exact at
+  139), web-verified citations (**Audi et al. 2025** JHA 14(2); **Doremus, Jacqz &
+  Johnston 2022** JEEM 112; **Hoerling et al. 2014** BAMS 95(2) — 2012 drought "arrived
+  without early warning", supporting the sharp-onset design), and 🟡 memory-cited standard
+  literature for BibTeX verification.
+
+### `Code/create_manuscript_exhibits.R` (+ `Code/tests/test_manuscript_exhibits.R`, new)
+- Builds E1-F1 treated map (`usmap`/`sf` installed to the 4.5.2 library), E2-F1 regime
+  diagram, E2-F4 dose-contrast panel, E3-T6/F6 concentration table+Lorenz, and
+  `Analysis/delta/transition_episode_counts.csv` (drought **511 onsets / 705 exits / 175
+  persisting** — episodic in the data's own accounting). All from certified outputs;
+  captions computed from data; 17 test assertions pass.
+- **Two evidence findings during the build** (logged in `TK_resolutions.md` §F): (1) the
+  county chronic-heat debt-gap dynamic series is negative and **widening** (the
+  region-confounded CDD pattern) — **rejected** as the saturation exhibit; E2-F4 instead
+  shows the HDD-vs-CDD cumulative-dose contrast (cold −5,522 p=3.9e-6 vs heat **+4,460
+  p=0.06**, no negative gradient). (2) The 2012-income and drought-scar concentration
+  bands are **diagonal by construction** (uniform per-capita coefficients) — flagged and
+  omitted from the Lorenz figure; informative result: top-10% most-vulnerable population
+  bears **19%** of the recurring-cold employment burden.
+
+### `Plans/exhibit_registry.md`, `Analysis/INDEX.md`
+- Registry rows updated for the four built exhibits (provenance + honesty notes); E1-F5
+  split out as the one remaining pending exhibit (deferred to §9 drafting — needs
+  cross-ledger standardization choices). INDEX rows updated for `delta/` and `policy/`.
+
+### `conductor/tracks/thesis_completion_20260704/plan.md`
+- 2.4 and 2.5 marked `[~]` with workspace notes; draft output paths amended to
+  `Text/final_writing/essay{1,2,3}_draft.md` (harness export).
 
 The audit-response mega-session (Jul 12–13). Three external audits (strategic, re-audit,
 coding) were fact-checked, converted into conductor tracks, and executed to completion via

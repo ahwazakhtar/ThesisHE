@@ -12,7 +12,7 @@ Cross-cutting silent-corruption traps (FIPS padding, state-name joins) are in CL
 | Humidity | PRISM (Oregon State/NACSE, keyless) | Annual 4km CONUS `tdmean` → state/county via `terra` |
 | Social Vulnerability | CDC/ATSDR SVI (keyless) | County overall + 4-theme percentiles, 2014–2022 |
 | Demographics | Census ACS 5-yr | Mobility (B07001), age (B01001), tenure (B25003) |
-| Inflation | FRED | CPI (CPIAUCNS) for real-dollar conversion |
+| Inflation | FRED | CPI (CPIAUCNS) for real-dollar conversion. **Base-year divergence trap (found 2026-08-13):** the county master hardcodes **Base 2023** (`create_county_master.R:173`), but the state master targets the **latest** year in `us_cpi_annual.csv` ("Target Year: Latest Available") — and that file has carried 2025 rows since Feb 2026, so state `*_Real` series rebuilt after that date are plausibly in 2025 dollars. Verify the base before citing any cross-panel dollar comparison; essay dollar levels are county-based (2023). |
 | HIX Premiums | HIX Compare | Individual market premiums and plan details |
 | Health Spending | CMS (NHE) | Per capita spending by state (PHI, Medicare, Medicaid) |
 | Employer Insurance | AHRQ (MEPS-IC) | Employee contributions and deductibles |

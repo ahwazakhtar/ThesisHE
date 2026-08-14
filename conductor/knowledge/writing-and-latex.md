@@ -5,10 +5,15 @@ or slide deck.
 
 ## Text/ layout (reorganized Jul 2026)
 
-One folder per document family — `drafts/` (thesis-bound prose), `technical_note/`,
-`correspondence/` (feedback + responses), `presentations/` (dated decks), `submissions/`,
-`poster/`, `reference/` (proposal + style exemplar). Map with per-document status:
-`Text/INDEX.md`. Never write to the `Text/` root; new essay drafts go in `Text/drafts/`.
+One folder per document family — `final_writing/` (the essay-drafting workspace:
+outlines, browser harnesses, author-owned drafts, agent reviews — see its `WORKFLOW.md`),
+`drafts/` (earlier thesis-bound prose), `technical_note/`, `correspondence/` (feedback +
+responses), `presentations/` (dated decks), `submissions/`, `poster/`, `reference/`
+(proposal + style exemplar). Map with per-document status: `Text/INDEX.md`. Never write
+to the `Text/` root; essay drafts now land in `Text/final_writing/` (harness export;
+drafts are author-written — Claude outlines and reviews but never edits prose unasked).
+The harness HTMLs must stay in `final_writing/` (inline exhibits use relative paths
+into `Analysis/`).
 
 ## Thesis architecture
 
@@ -52,11 +57,18 @@ One folder per document family — `drafts/` (thesis-bound prose), `technical_no
 - Mechanism documents: `Text/correspondence/reviewer_response_mechanisms_nber.md` (+ `_email.md`),
   `Text/drafts/mechanisms_section.md` (§6), verdict in `Analysis/mechanism/mechanism_verdict.md`.
 - Premium mediation write-up: `Text/drafts/premium_mediation_writeup.md`.
-- **Outstanding items:** two incomplete references (Audi et al. 2024–25 — FEMA hurricane
-  risk × hospital financial ratios; Doremus et al. 2022 — energy burden/affordability
-  adaptation) and `[TK]` baseline denominators in the reviewer response — subsample
-  effects need subsample means as denominators (author to confirm; candidates computed in
-  thesis_completion plan task 1.5).
+- **References RESOLVED (2026-08-14, web-verified — full details in
+  `Text/final_writing/TK_resolutions.md` §C):** Audi, Hamadi, Capen, Tawk & Williams
+  (2025), *J. Hospital Administration* 14(2):16–23 (hurricane risk × hospital
+  cost-to-charge ratios); Doremus, Jacqz & Johnston (2022), *JEEM* 112:102609 (energy
+  spending gap). Bonus verified cite: Hoerling et al. (2014), *BAMS* 95(2) — the 2012
+  drought "arrived without early warning" (supports the sharp-onset design claim).
+- **Essay anchors settled (author decision 2026-08-13):** essays anchor to the **E1-T1
+  descriptive exhibit** values (mean PCPI $53,145 → −$1,311 ≈ **2.5%**; employment
+  48,068; debt share 0.19; all dollars 2023). The task-1.5 candidates ($46,269/50,113)
+  are superseded for essay prose; the reviewer-response subsample-denominator question
+  applies to that document only. Also settled: **ESI premiums dropped from Essay 1**
+  (the untraced $18 must not reappear); drought→debt leads with the county +0.54 pp.
 
 ## Presentations (Beamer)
 
