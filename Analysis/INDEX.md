@@ -47,6 +47,19 @@ This index is refreshed at session end.
 
 ## Notes
 
+- **Manuscript exhibit tables (`*.tex`) live beside the analysis they typeset**, not in a
+  separate folder, and are regenerated — never hand-edited. Built 2026-08-18:
+  `descriptive/{data_sources,variable_definitions,descriptive_stats_print}_table.tex`
+  (E1-T0a/T0b/T1, by `create_data_source_tables.R`); `did/cohort_balance_table.tex` +
+  `did/robustness/falsification_table.tex` (E1-T2/T4); `mechanism/medicare_table.tex`,
+  `mediation/ledger_comparison.tex` + `fig_institutional_ledgers.png` (E1-T6/T7/F5, by
+  `create_essay1_ledger_exhibits.R` — which also **re-estimates the two county debt cells**
+  and prints asserted-vs-estimated at build); `delta/{transition,symmetry}_table.tex`,
+  `mechanism/{moderator_correlations,horserace_table}.tex`,
+  `exposure_index/svi_marginal_effects.tex`, `hospital/safetynet_table.tex`,
+  `latent_hardship/visibility_gradients.tex`, `policy/concentration_table.tex` (E2/E3, by
+  `create_essay23_exhibits.R`); `descriptive/fig_conceptual_model.png` (E1-F0).
+  Inventory and provenance: `Plans/exhibit_registry.md`.
 - Several `synthesis.md` files are **script-generated** and will be overwritten on re-run:
   `event_study/` (by `synthesize_event_study.R`), `descriptive/` (by `run_descriptive_stats.R`).
   Hand-edits belong in `Text/`, not in generated files.

@@ -29,7 +29,16 @@ Read this before running R scripts, installing packages, or touching `.claude/` 
 
 ## Run conventions
 
-- R runs are **script files**, never inline `Rscript -e`.
+- R runs are **script files**, never inline `Rscript -e`. (Inline `-e` also **segfaulted**
+  on a `gsub` over backslashes, 2026-08-18 — another reason the rule exists.)
+- **Never send backslash-heavy content through a Bash heredoc.** The heredoc path in this
+  environment silently eats escapes, and the damage is invisible in a diff: LaTeX `\alpha`
+  became BEL, `\theta` a TAB, `\bar` a BACKSPACE, `\varepsilon` a VT; JS `'\\textminus{}'`
+  lost a backslash so `\t` became a literal tab; and an escaped apostrophe in `ledger\'s`
+  lost its backslash, which **broke the whole harness `<script>` block and rendered the
+  page blank**. Write such content with the Write/Edit tools, or from a `.py`/`.R` file
+  written first and then executed. After any bulk text edit, sweep for control characters:
+  `python -c "import io,re; s=io.open(F,encoding='utf-8').read(); print(len(re.findall(r'[\x00-\x08\x0b\x0c\x0e-\x1f]',s)))"`.
 - Each process/estimation script **self-logs via `sink()`** to
   `Analysis/<family>/build_logs/<script>.log`.
 - Non-interactive always; tests are plain `Rscript Code/tests/test_*.R` (testthat).
@@ -94,3 +103,18 @@ Read this before running R scripts, installing packages, or touching `.claude/` 
 - Harness→PDF scaffold renders: `node Text/final_writing/render_harness_to_tex.js` then
   `pdflatex` in `Text/final_writing/rendered/` (see `Text/final_writing/WORKFLOW.md`).
   `node` v24 is on PATH; the renderer `.js` is gitignored (whitelist has no `!*.js`).
+- **Package inventory (probed 2026-08-18).** Present: `geometry`, `graphicx`, `booktabs`,
+  `array`, `tabularx`, `longtable`, `pdflscape`, `lscape`, `textcomp`, `fancyhdr`,
+  `hyperref`, `amsmath`, `amssymb`, `times`, `mathptmx`, `xcolor`. **Absent:** `setspace`,
+  `caption`, `mathtools`, `tikz`/`pgf`, `standalone`. `tlmgr` refuses to install anything
+  until `tlmgr update --self` is run, so **assume no new packages** and write against what
+  is there: `\linespread{1.25}` in the preamble instead of `setspace`; a plain italic line
+  instead of `\caption*`; diagrams drawn in **R and exported as PNG** instead of TikZ.
+- **`mathptmx` and `newtxtext` both pull the `rsfs` script math font, which is missing** —
+  they emit "Font ... rsfs10 not loadable" and produce a damaged PDF. Use psnfss
+  **`times`** (text-only Times, leaves math at Computer Modern); it compiles clean.
+- **`pdflscape` rotates the page but does NOT change `\textwidth`.** A landscape figure or
+  table must be sized against **`\textheight`**, otherwise it is typeset at portrait width
+  on a rotated page and looks shrunken.
+- A **locked PDF** (open in a viewer) makes `pdflatex` fail with "I can't write on file".
+  Build under `-jobname=_tmp` and `mv` into place; report if the move also fails.

@@ -2,6 +2,112 @@
 
 ---
 
+## 2026-08-18 (Session 16)
+
+Drafting-and-production session. Started as NBER-style prose help on Essay 1, became the
+build of the **whole submission path**: Appendix A condensed, 13 missing exhibits built,
+a markdown-draft → LaTeX renderer, and a **single combined thesis PDF** (3 essays,
+glossary, web-verified references, 7 estimating equations). Along the way a claim
+verification found that **two county medical-debt figures in the evidence table do not
+reproduce** — corrected in the drafts and recorded against the binding rows.
+
+### Claim verification — evidence-table Rows 4 and 5 (the substantive finding)
+- **Row 4 county mirror does NOT reproduce.** The row asserts cold→debt at lag 1 of
+  **+1.2 pp (p<0.001)** at county level. No committed county output contains it: the
+  county pipeline has **no binary cold-z shock at all** (it carries continuous `Z_Temp`
+  and `High_HDD`). Estimating the county mirror of the state spec (`Z_Temp < -1.5` with
+  lags, fips+Year FE, state-clustered) gives **−0.27 pp (p=0.46)** climate-only and
+  **−0.23 pp (p=0.55)** with controls — **wrong-signed and insignificant**. The state
+  cell (0.0135, p=0.012) is unaffected and remains traceable.
+- **Row 5 partially reproduces.** County drought→debt at lag 2 re-estimates to
+  **+0.58 pp but at p=0.024, not p<0.01**, and **collapses to +0.07 pp (p=0.76)** once
+  income and uninsurance controls enter.
+- Both rows got a dated **VERIFICATION 2026-08-18** note appended (existing permitted
+  language left intact — amending a binding row is the author's call). The four affected
+  sentences were corrected in `essay1_draft.md` (two of them in **author-written §5
+  prose**, flagged explicitly) and in the harness so re-export cannot reintroduce them.
+- **Medicare baselines are beneficiary-weighted**, not unweighted: weighting by
+  `Benes_Total` reproduces the essay's $10,359 / 629 anchors exactly; an unweighted county
+  mean gives $9,951 / 646 and is the wrong convention for a per-beneficiary quantity.
+
+### `Code/create_data_source_tables.R`, `create_falsification_table.R` (new)
+- **E1-T0a / E1-T0b** — data sources (14) and variable definitions (20, in four panels).
+  Definitions are authored metadata; **every count is computed at build time** (year range
+  over non-missing rows, non-missing obs, distinct units) so the tables cannot drift.
+  Surfaced two facts now stated in §3: **AQI covers 1,194 monitored counties**, not the
+  full panel, and the **state dollar base is 2025** vs county 2023 (read from
+  `us_cpi_annual.csv`, not assumed).
+- **E1-T4** — a 7-test falsification table read from the committed robustness CSVs, which
+  is what let Appendix A.3 shed four paragraphs of "we did X, p = Y" prose. Humidity, ACS
+  demographics, threshold grids and Conley kernels are **deliberately excluded** — their
+  statistics live only in narrative docs, and transcribing them would violate the registry
+  rule.
+- Also adds the shared house number format (`sig3`, `sig_p`) and a **print-layout
+  descriptive table** (6 columns) replacing the 10-column generated one, which could only
+  be shown scaled down far enough to be hard to read.
+
+### `Code/create_essay1_ledger_exhibits.R`, `create_essay23_exhibits.R` (new)
+- Essay 1: **E1-T2** cohort balance (computed; reproduces the registered **139 / 2,534**
+  exactly, asserted at build — shows the imbalance the DRDID exists to address, norm. diff.
+  −0.31 on employment and population), **E1-T6** Medicare, **E1-T7** ledger comparison,
+  **E1-F5** the institutional-ledger figure that had been registry-*pending*. F5's
+  deferral reason (no agreed cross-ledger units) is **resolved** by plotting each response
+  as a percent of that ledger's own mean; it shares a data frame with T7 so they cannot
+  disagree.
+- Essays 2–3: **E2-T1, E2-T3, E3-T1…T6** built from committed analysis CSVs. **E3-F6 was
+  listed as not built but already existed** (`fig_concentration_lorenz.png`) and only
+  needed wiring.
+
+### `Code/create_fig_conceptual_model.R` (new) — E1-F0
+- Fills the §2 "[Reproduce the schematic]" placeholder. Redrawn in **R, not TikZ**, because
+  this TinyTeX has no pgf. Source is the author's slide **"How Climate Shocks Reach Your
+  Wallet"** (`seminar_presentation_20260406.tex`) — *not* the June deck's "Conceptual
+  Model" slide, which is a different diagram built around SVI moderation (first attempt
+  used the wrong one).
+- Extended per author request with the **direct channel**: a Medicare ledger box and a
+  heavier arc from cold/heat/AQI straight to it, bypassing the mechanism column, with
+  drought deliberately outside that bracket because its route runs through farm income.
+
+### `Text/final_writing/render_draft_to_tex.js`, `render_thesis.js` (new)
+- The existing `render_harness_to_tex.js` renders **harness suggestions**; these render the
+  **author's exported draft**, which is the manuscript path. `render_thesis.js` produces
+  the combined volume: `report` class, one `\chapter` per essay (so exhibits number 1.1,
+  2.1…), per-chapter appendix lettering, title page, contents, glossary, references.
+- Exhibits are placed after the paragraph that cites them, with a `prefer` pin (E1-T4
+  belongs in A.3, not its passing mention in A.1) and a keyword `anchor` for exhibits the
+  prose never cites by number (**E1-F6/F7 — the decomposition and event study — would
+  otherwise have been dropped entirely**). Anything cited but unbuilt renders as a visible
+  placeholder rather than vanishing.
+
+### `Text/final_writing/{glossary,references}.tex`, `references.bib` (new)
+- Glossary of 39 abbreviations; **16 references web-verified** against publisher records.
+  One flagged discrepancy: de Chaisemartin & D'Haultfœuille is cited in text as 2024 (the
+  working-paper vintage) but published **ReStat 108(4):863–880, 2026**.
+
+### `Text/final_writing/essay{1,2,3}_draft.md`, `essay1_harness.html`
+- **7 estimating equations** added (distributed-lag, premium pass-through, 2×2 DiD, event
+  study, transition/symmetry, cumulative dose, shock × vulnerability), each after the
+  paragraph that already described it in words. Both renderers pass `$$…$$` through raw and
+  number it; the harness carries the four Essay-1 equations so re-export cannot drop them.
+- Appendix A **condensed 21 ¶ → 11** (A.1 5→2, A.2 6→4, A.3+A.4 10→5, A.4 dissolved).
+  Nothing dropped — the enumerable robustness prose became E1-T4. Advisor ask #2 (does the
+  appendix still satisfy the committee's natural-experiment request) stays answerable.
+- §3 gained ¶1b/¶4b introducing the two data tables.
+
+### `Text/final_writing/essay1_outline.md`
+- Reordered the three headline findings **Medicare-first** and rewrote H1 per the Row 1
+  amendment (raw event contrast, ≈$900 farm reversion, nonfarm −$261…−$414 never
+  significant), keeping the `H1/H2/H4` labels so plan §10 cross-references still resolve.
+- Fixed the retired **$46,269 / 2.8%** anchor → **$53,145 / 2.5%**, and reordered §1 ¶3–¶6
+  to match the harness's Medicare-first introduction.
+- Abstract spec rewritten: it had instructed the writer to call the two-decade pre-trend
+  "flat" and to cite DRDID as vindication — **both forbidden by Row 1**.
+
+### `Plans/exhibit_registry.md`, `Plans/master_evidence_table.md`
+- 13 exhibit rows added or rebuilt with generator, R version, and provenance; E1-F5 moved
+  off *pending*; E1-T5's stale "Appendix A.4" section label corrected.
+- Rows 4 and 5 carry the verification notes described above.
+
 ## 2026-08-17 (Session 15)
 
 Exhibit-quality and rendering session, continuing Session 14's restructure. Rewrote the

@@ -42,9 +42,16 @@ are the source of truth; this is orientation only:
   per `Plans/dissertation_writing_and_framing_plan_20260712.md`. Essay drafting
   (thesis_completion 2.4–2.5, both `[~]`) is the critical path: the drafting workspace is
   **`Text/final_writing/`** (browser harnesses with pre-filled permitted-language prose +
-  inline exhibits; author writes in own words; see its `WORKFLOW.md`). 4/5 pending
-  registry exhibits built 2026-08-13 (`Code/create_manuscript_exhibits.R`); only E1-F5
-  remains. **Essay 1 restructured Medicare-led 2026-08-17** (2012 drought experiment +
+  inline exhibits; author writes in own words; see its `WORKFLOW.md`). **All three essay
+  drafts exported 2026-08-18** (~38 of 68 Essay-1 paragraphs author-written; the rest still
+  carry harness pre-fill and are marked as such). **Every registry exhibit now exists** —
+  13 built 2026-08-18 (`create_data_source_tables.R`, `create_falsification_table.R`,
+  `create_essay1_ledger_exhibits.R`, `create_essay23_exhibits.R`,
+  `create_fig_conceptual_model.R`), including E1-F5, which had been pending since the
+  registry was seeded. The **combined submission PDF** (`node
+  Text/final_writing/render_thesis.js` → `rendered/thesis_submission.pdf`) carries all
+  three essays, a glossary, web-verified references, and 7 estimating equations; see
+  `conductor/knowledge/writing-and-latex.md` for the three-renderer map. **Essay 1 restructured Medicare-led 2026-08-17** (2012 drought experiment +
   farm/nonfarm decomposition → Appendix A; shock-definition/horizon robustness →
   Appendix B) — **advisor sign-off pending** (`Plans/essay1_restructure_20260817.md`;
   downstream surfaces — abstracts, technical note, policy §, deck — still carry the old
@@ -136,6 +143,17 @@ Silent-corruption traps — these produce wrong results with no error:
   headlining such a cell: pooled-baseline check + year-by-year gaps + (for income in ag
   counties) farm/nonfarm decomposition. Hazardous anchors: 2011 (farm peak), 2012
   (drought year), 2023 (debt regime). Details: `conductor/knowledge/econometrics.md`.
+- **Log gradients must be translated at the MEDIAN county, not the mean:** county
+  employment is heavily right-skewed (mean 48,068, median 10,773). Multiplying a `log_emp`
+  coefficient by the mean inflates the jobs figure ~4.5× and reintroduces the county-size
+  contamination the log rescaling removed. The E1-T1 anchor 48,068 is for *descriptive*
+  statements only.
+- **A figure in the evidence table is not proof it reproduces:** two county medical-debt
+  cells (Rows 4, 5) had no committed county output behind them and, when re-estimated,
+  came back wrong-signed / weaker than asserted (verified 2026-08-18 —
+  `conductor/knowledge/econometrics.md`). Before citing a county cell, check that a
+  machine-readable output actually contains it; `Analysis/county/county_regression_coefs.csv`
+  is a LaTeX dump despite its name.
 - **Real-dollar bases can diverge across pipelines:** the county master hardcodes **2023
   dollars**; the state master deflates to the *latest* CPI year in `us_cpi_annual.csv`
   (2025 rows present since Feb 2026). Verify the base before any cross-panel dollar

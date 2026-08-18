@@ -15,6 +15,37 @@ drafts are author-written — Claude outlines and reviews but never edits prose 
 The harness HTMLs must stay in `final_writing/` (inline exhibits use relative paths
 into `Analysis/`).
 
+## Render pipeline (built 2026-08-18)
+
+Three renderers, and confusing them wastes a session:
+
+| Script | Reads | Produces |
+|---|---|---|
+| `render_harness_to_tex.js` | harness **suggested** text | drafting-aid scaffold PDFs |
+| `render_draft_to_tex.js` | `essay1_draft.md` (**author prose**) | `rendered/essay1_submission.pdf` |
+| `render_thesis.js` | all three drafts | `rendered/thesis_submission.pdf` (the volume) |
+
+- The combined build is `report` class, one `\chapter` per essay, so exhibits number
+  **per chapter** (Table 1.1, 2.1). Essay 1's appendices use per-chapter `\Alph` section
+  numbering, reset before the next chapter.
+- Exhibits are declared in an `EXHIBITS` map and placed **after the paragraph that cites
+  the token**. Two escape hatches matter: `prefer` pins an exhibit to the paragraph that
+  actually analyses it (E1-T4 is mentioned in passing in A.1 but belongs in A.3), and
+  `anchor` places by keyword for exhibits the prose never cites by number — **E1-F6/F7 had
+  no token in the draft and would have been dropped silently**. Anything cited but unbuilt
+  renders as a visible placeholder box, never vanishes.
+- Display math: `$$ … $$` blocks pass through **raw**; a trailing `%%label` becomes
+  `\label{eq:…}`. Seven estimating equations live in the drafts this way.
+- **The markdown export carries prose only.** Figures attached in the harness as
+  `exhibits:` do not survive into `essayN_draft.md` — that is why the exhibit map exists.
+- Front/back matter: `glossary.tex` (39 abbreviations) and `references.tex` (16 works,
+  web-verified 2026-08-18; also in `references.bib`). Rendered directly — **no bibtex
+  pass**, so the volume compiles in one tool.
+- **Two rendering traps found the hard way.** A regex meant for U+00A0 matched *every*
+  space and turned the document non-breaking (384 overfull boxes) — write the non-breaking space as a `\u00A0` **escape**, never as the
+  literal character, which is indistinguishable from a normal space in source. And converting the Unicode minus to `$-$` creates unbreakable inline math that
+  blocks line-breaking; use `\textminus{}`.
+
 ## Thesis architecture
 
 - **Essay 1 is Medicare-led since 2026-08-17** (advisor sign-off pending —
@@ -79,7 +110,17 @@ into `Analysis/`).
   48,068; debt share 0.19; all dollars 2023). The task-1.5 candidates ($46,269/50,113)
   are superseded for essay prose; the reviewer-response subsample-denominator question
   applies to that document only. Also settled: **ESI premiums dropped from Essay 1**
-  (the untraced $18 must not reappear); drought→debt leads with the county +0.54 pp.
+  (the untraced $18 must not reappear).
+- **County medical-debt cells CORRECTED 2026-08-18 (re-estimated; see
+  `conductor/knowledge/econometrics.md`).** Drought→debt no longer leads with "county
+  +0.54 pp (p<0.01)" — the county mirror gives **+0.58 pp at p=0.024**, and it dies under
+  income/uninsurance controls. Cold→debt has **no citable county figure at all** (the
+  mirror is −0.27 pp, p=0.46, wrong-signed); cite the **state** cell 1.35 pp (p=0.012)
+  alone.
+- **Full reference list exists** (`Text/final_writing/references.{tex,bib}`, 16 works
+  web-verified 2026-08-18) — extend that file rather than re-verifying cites ad hoc. One
+  open item: de Chaisemartin & D'Haultfœuille is cited in text as 2024 but published
+  **ReStat 108(4):863–880 (2026)**.
 
 ## Presentations (Beamer)
 

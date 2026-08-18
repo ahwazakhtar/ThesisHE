@@ -97,6 +97,40 @@ them from scratch, and do not silently deviate.
   model (point estimate and cluster structure preserved).
 - **`DRDID::drdid` needs a numeric `idname`** (`as.integer(factor(fips_code))`).
 
+## County medical-debt cells: what actually reproduces (verified 2026-08-18)
+
+Two figures the evidence table carried as county-level results were checked by
+re-estimating them, because **no committed county output contains either** — the county
+pipeline has no binary cold-z shock (only continuous `Z_Temp` and `High_HDD`) and reports
+drought through continuous `pdsi_val`. `Analysis/county/county_regression_coefs.csv` is
+**misnamed**: it is a `fixest` LaTeX dump, not a CSV, which is why the numbers were never
+machine-readable in the first place.
+
+| Cell | Asserted | Re-estimated (county mirror of the state spec) |
+|---|---|---|
+| Cold → debt, lag 1 (Row 4) | +1.2 pp (p<0.001) | **−0.27 pp (p=0.46)**; −0.23 pp (p=0.55) with controls |
+| Drought → debt, lag 2 (Row 5) | +0.54 pp (p<0.01) | **+0.58 pp (p=0.024)**; +0.07 pp (p=0.76) with controls |
+
+- **Do not cite any county figure for cold→debt.** The state cell (0.0135, p=0.012) is
+  unaffected and traceable in `Analysis/state/regression_results_summary.csv`.
+- Drought→debt may be cited at **+0.58 pp (p=0.02)** with the controlled fragility stated;
+  the "p<0.01" claim is not supported.
+- Generator: `Code/create_essay1_ledger_exhibits.R`, which prints the asserted-vs-estimated
+  comparison at build so the divergence stays visible.
+
+## Baseline conventions for anchoring (settled 2026-08-18)
+
+- **Medicare baselines are BENEFICIARY-WEIGHTED.** Weighting by `Benes_Total` reproduces
+  the essay's **$10,359 per beneficiary / 629 ED per 1,000** exactly. An unweighted county
+  mean gives $9,951 / 646 and over-weights small counties — wrong for a per-beneficiary
+  quantity. Do not "fix" the weighting.
+- **Translate a log gradient at the MEDIAN county, never the arithmetic mean.** County
+  employment is heavily right-skewed (mean 48,068, median 10,773, geometric mean 12,513),
+  so multiplying a `log_emp` coefficient by 48,068 inflates the jobs figure ~4.5× and
+  smuggles back the county-size contamination the A2 log-rescaling removed. The E1-T1
+  anchor of 48,068 is correct for *descriptive* statements and wrong as a gradient
+  multiplier.
+
 ## Exhibit-evidence rules (from the 2026-08-13 manuscript-exhibit build)
 
 - **Every manuscript exhibit must have a committed generating script** — E1-F4 was
