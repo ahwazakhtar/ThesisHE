@@ -123,7 +123,7 @@ const SECTIONS = [
 exhibits:[{src:'../../Analysis/plots/exposure_index/interaction_Civilian_Employed.png',label:'E3-F2 — Shock × SVI marginal effects: employment'}],
 suggested:`Vulnerability changes the sign of heat's employment effect. At the 25th percentile of the Social Vulnerability Index, extreme heat is associated with an employment gain of 878 jobs; at the 75th percentile, with a loss of 184 (interaction p = 0.001; Table E3-T2, Figure E3-F2). Against mean county employment of 48,068, the swing from gain to loss is about two percent of employment. In the least vulnerable counties heat appears to be, on net, absorbable; in the most vulnerable it costs jobs.`},
 {id:'s4p2',title:'¶2 — Cold and income: ~8× larger, marginal interaction',prompts:[
-'Marginal effect of cold on PCPI: −$56 at p25 SVI vs −$472 at p75 — roughly 8× — ≈0.1% vs 1.0% of the $46,269 mean.',
+'Marginal effect of cold on PCPI: −$56 at p25 SVI vs −$472 at p75 — roughly 8× — ≈0.1% vs 0.9% of the $53,145 mean (E1-T1 anchor; $46,269 superseded 2026-08-13).',
 'Binding hedge: interaction p=0.061 post-dedup ("marginal either way") — hedge accordingly, do not claim it as solid.',
 '→ premiums.'],
 exhibits:[{src:'../../Analysis/plots/exposure_index/interaction_PCPI_Real.png',label:'E3-F2 — Shock × SVI marginal effects: per-capita income'}],
@@ -241,10 +241,10 @@ suggested:`The concentration curve is descriptive accounting: it combines hetero
 ]},
 {id:'s2',doc:3,title:'§2 Vulnerability measures and data',note:'Short spine — reuse Essay 1 §3',heading:'## 2 Baseline vulnerability measures and data',paras:[
 {id:'s2p1',title:'¶1 — Spine recap (short)',prompts:[
-'Panel, shocks, FE, clustering follow Essay 1 §3 — 3–4 sentences, no copied prose.',
+'Panel, shocks, FE, clustering follow Essay 1 §3 — 3–4 sentences, no copied prose. Bins are NATIONAL p80 cutoffs (not county-own); z-scores are county-own; drought is absolute (PDSI ≤ −4). Baseline + horizon robustness: Essay 1 Appendix B.',
 'County panel 2011–2023; four shock bins vs own baselines; county+year FE; state clustering (AAIW-justified).',
 '→ the moderators.'],
-suggested:`The panel, shock definitions, and estimation conventions follow the first essay: a county-year panel over 2011–2023, four binary shock bins defined against each county's own historical baseline, county and year fixed effects, and state-clustered standard errors on Abadie-Athey-Imbens-Wooldridge grounds. What is new here is the cross-sectional layer — who is exposed, and with what capacity to absorb it.`},
+suggested:`The panel, shock definitions, and estimation conventions follow the first essay: a county-year panel over 2011–2023; four binary shock bins, with heat and cold marked by national 80th-percentile degree-day cutoffs from a 1990–2000 pre-study baseline, extreme drought by an absolute Palmer threshold, and poor air quality by the EPA exceedance level; county and year fixed effects; and state-clustered standard errors on Abadie-Athey-Imbens-Wooldridge grounds, with baseline- and horizon-robustness documented in the first essay's Appendix B. What is new here is the cross-sectional layer — who is exposed, and with what capacity to absorb it.`},
 {id:'s2p2',title:'¶2 — The Social Vulnerability Index',prompts:[
 'CDC SVI: composite of socioeconomic status, household composition, minority status/language, housing/transportation.',
 'Used as a time-invariant baseline; marginal effects contrasted at p25 vs p75.',

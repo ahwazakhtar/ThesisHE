@@ -126,7 +126,7 @@ suggested:`The scar is large relative to how much the series normally moves. Sca
 {id:'s5p3',title:'¶3 — Horizon refinement: transient, not permanent',prompts:[
 'Advisor 1.4: extending the local-projection horizon shows the asymmetry fading by h=4.',
 'Frame: a multi-year scar, not a durable divergence.',
-'Standing caveat co-located: the outcome is credit-bureau debt — the scar is a fact about recorded debt (Essay 1 §9 filters apply).',
+'Standing caveat co-located: the outcome is credit-bureau debt — the scar is a fact about recorded debt (Essay 1 §5 filters apply; renumbered in the 2026-08-17 restructure).',
 '→ the rest of the symmetry grid.'],
 suggested:`The scar is persistent but not permanent. Extending the local-projection horizon shows the asymmetry fading by the fourth year after exit: the drought-debt scar is a multi-year mark rather than a durable divergence. And because the outcome is credit-bureau debt, the measurement caveats developed in the first essay apply throughout — the scar is a fact about recorded debt, observed through the insurance, billing, and credit-file filters that bureau data impose.`},
 {id:'s5p4',title:'¶4 — The full symmetry grid',prompts:[
@@ -159,12 +159,13 @@ suggested:`The estimator dependence belongs in the headline rather than in a foo
 suggested:`Within its estimator, the contrast is stable. It survives humidity adjustment, an adjustment for population aging, the stricter 90th-percentile definition of extreme cold, and all three control variants estimated on the identical sample (p < 10⁻⁵ in each).`}
 ]},
 {id:'s7',doc:8,title:'§7 Long-run and recurring-treatment comparisons',note:'Includes the required honesty box',heading:'## 7 Long-run and recurring-treatment comparisons',paras:[
-{id:'s7p1',title:'¶1 — Staggered event-study estimates',prompts:[
-'CS DiD in event time: employment −4,982 a decade after cold onset (e=10, p=0.003); medical-debt share +4.9 pp at e=10 (p=0.0002).',
-'The gap widens with time since onset rather than closing — the event-study signature of compounding.',
+{id:'s7p1',title:'¶1 — Staggered event-study estimates (REVISED 2026-08-17: debt cell demoted)',prompts:[
+'CS DiD in event time: employment −4,982 a decade after cold onset (e=10, p=0.003). The EMPLOYMENT gap widens monotonically (−145 → −2,644 → −4,513 → −4,895) — the event-study signature of compounding.',
+'Baseline robustness (Essay-1-style check, 2026-08-17): the e=10 cell survives pooling the single 2012 pre-year to 2011–2012 (−4,894 → −4,990, p≈0.005).',
+'Debt +4.9pp at e=10 DEMOTED (evidence-table Row 17): treated-control debt gap ≈0 through 2022; the whole gap appears in 2023 — the bureau reporting-regime-change year. Footnote only, with that caveat; do NOT present as a widening gap.',
 'Cite the frontier dr_csdid values for inference (A4 rule).',
 '→ do horizon and window choices drive this?'],
-suggested:`A staggered difference-in-differences in the Callaway and Sant'Anna (2021) framework traces the gap in event time. Employment in cold-treated counties is 4,982 lower a decade after onset (p = 0.003), and the medical-debt share is 4.9 percentage points higher (p = 0.0002). The gaps widen with time since onset rather than closing — the event-study signature of compounding, from an estimator built for staggered adoption.`},
+suggested:`A staggered difference-in-differences in the Callaway and Sant'Anna (2021) framework traces the employment gap in event time. Employment in cold-treated counties is 4,982 lower a decade after onset (p = 0.003), and the gap builds with time rather than closing — from roughly 150 in the onset year to 2,600 at five years and 4,900 at ten — the event-study signature of compounding, from an estimator built for staggered adoption. The decade-out estimate rests on a single pre-year by construction; pooling the available pre-period leaves it essentially unchanged (−4,990, p = 0.005). The medical-debt share is also higher a decade after onset, but that gap is flat through 2022 and appears entirely in 2023, the year credit-bureau medical-debt reporting rules changed, so I do not read it as compounding evidence and note it only with that caveat.`},
 {id:'s7p2',title:'¶2 — Horizon and window robustness (advisor 1.4/1.3)',prompts:[
 'Extending horizons moves h=0–2 estimates by <1 SE; cold employment losses persist at h=3–4 in local projections (p=0.009, 0.006).',
 'Only shortening matters: truncating at K=2 understates cold compounding.',
@@ -225,10 +226,10 @@ suggested:`Finally, staggered event-study estimates in the Callaway-Sant'Anna fr
 ]},
 {id:'s4',doc:5,title:'§4 Data and recurring exposure',note:'Short spine — reuse Essay 1 §3',heading:'## 4 Data and recurring exposure',paras:[
 {id:'s4p1',title:'¶1 — Spine recap (short)',prompts:[
-'Panel, shock bins, FE, and clustering follow Essay 1’s data section — summarize in 3–4 sentences, do not copy prose.',
+'Panel, shock bins, FE, and clustering follow Essay 1’s data section (§3) — summarize in 3–4 sentences, do not copy prose. Bins are NATIONAL p80 cutoffs (not county-own); z-scores are county-own; drought is absolute (PDSI ≤ −4). Baseline + horizon robustness: Essay 1 Appendix B.',
 'County panel 2011–2023 (~3,100 counties); four shock bins vs own historical baselines; county+year FE; state clustering (AAIW-justified).',
 '→ transition support.'],
-suggested:`The panel, shock definitions, and estimation conventions follow the first essay. Briefly: a county-year panel over 2011–2023 covering roughly 3,100 counties; four binary shock bins — heat, cold, extreme drought, poor air quality — defined against each county's own historical baseline; county and year fixed effects; and state-clustered standard errors, a choice defended there on Abadie-Athey-Imbens-Wooldridge grounds.`},
+suggested:`The panel, shock definitions, and estimation conventions follow the first essay. Briefly: a county-year panel over 2011–2023 covering roughly 3,100 counties; four binary shock bins — heat and cold marked by national 80th-percentile degree-day cutoffs from a 1990–2000 pre-study baseline, extreme drought by an absolute Palmer threshold, and poor air quality by the EPA exceedance level; county and year fixed effects; and state-clustered standard errors, a choice defended there on Abadie-Athey-Imbens-Wooldridge grounds. The first essay's Appendix B shows the definitions are robust to longer baseline horizons and to the choice of estimation horizon.`},
 {id:'s4p2',title:'¶2 — Transition frequencies and support',prompts:[
 'Table E2-T1: transition support. Incidence (descriptive table): extreme drought 2.3% of county-years; extreme heat 24.3%; extreme cold 17.4%. Transition regressions run on ≈27,000–34,000 county-years.',
 'Drought episodes common enough to estimate onset and exit; chronic extreme drought rare (2.3% incidence) — episodic by construction.',

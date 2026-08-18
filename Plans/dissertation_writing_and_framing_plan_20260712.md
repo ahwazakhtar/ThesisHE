@@ -766,3 +766,21 @@ The dissertation is ready for committee circulation when:
 > The remaining value comes from selection, explanation, and synthesis—not from adding another regression family.
 
 The empirical repository already meets the substantive threshold for an economics dissertation. The writing should now make a smaller number of results feel inevitable, economically meaningful, and honestly bounded.
+
+---
+
+## Addendum (2026-08-17): Essay 1 centerpiece swap — pending advisor sign-off
+
+The 2026-08-17 baseline decomposition showed the 2012 drought 2x2 income ATT (-$1,311)
+is dominated by farm income reverting from the record 2011 commodity-price peak; the
+baseline-invariant nonfarm component (-$261 to -$414) is never conventionally
+significant. Author decision: Essay 1 is now **Medicare-led** — CMS Medicare morbidity
+and utilization is the primary empirical centerpiece; the 2012 drought natural
+experiment moves to **Appendix A**, reported in full and resolved by the farm/nonfarm
+decomposition; the distributed-lag drought-income relationship is retained in a compact
+main-text section (household economic capacity) so Essays 2-3 and Chapter 5 proceed
+unchanged. Full rationale, new section map, and advisor asks:
+`Plans/essay1_restructure_20260817.md`. Evidence governance:
+`Plans/master_evidence_table.md` Row 1 (AMENDED 2026-08-17). This addendum supersedes
+the "Primary empirical centerpiece" line of the Chapter 2 block above once advisor
+sign-off is obtained.

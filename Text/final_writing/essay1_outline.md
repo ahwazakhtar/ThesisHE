@@ -5,11 +5,22 @@
 `Plans/exhibit_registry.md` (E1-* exhibits), `Analysis/advisor_robustness/synthesis.md` (Aug 2026 additions).
 **Target:** ~45–60 pages + appendix. **Draft file:** `essay1_draft.md` (author-written prose).
 
-## Recommended WRITING order (≠ document order)
+> **RESTRUCTURE (2026-08-17, Medicare-led — supersedes the section map below; advisor
+> sign-off pending):** the essay is now Medicare-led with the 2012 drought natural
+> experiment demoted to Appendix A after the farm/nonfarm baseline decomposition
+> (`Plans/essay1_restructure_20260817.md`; evidence-table Row 1 AMENDED). New document
+> order: §1 Intro · §2 Background · §3 Data · **§4 Medicare (main result)** · §5 Ledgers ·
+> **§6 Household economic capacity (NEW)** · §7 Interpretation · §8 Conclusion ·
+> **Appendix A.1–A.4** (= old §4/§5/§6/§7, with A.2 now the event contrast + its
+> decomposition). The harness (`essay1_harness.html`) and `essay1_content.md` carry the
+> restructured scaffolding; the section-by-section detail below uses the OLD numbering —
+> map via the table in the restructure doc.
 
-1. §5 Main income result → 2. §6 Identification & falsification → 3. §7 External validity
-→ 4. §3 Data → 5. §4 Design → 6. §8 Medicare → 7. §9 Ledgers → 8. §2 Background
-→ 9. §10 Interpretation → 10. §11 Conclusion → 11. §1 Introduction → 12. Abstract (last).
+## Recommended WRITING order (≠ document order; post-restructure)
+
+1. §4 Medicare (main result) → 2. §5 Ledgers → 3. §6 Household capacity
+→ 4. Appendix A.1–A.4 (largely pre-written) → 5. §3 Data → 6. §2 Background
+→ 7. §7 Interpretation → 8. §8 Conclusion → 9. §1 Introduction → 10. Abstract (last).
 
 Write the introduction late enough that it describes the paper that exists.
 

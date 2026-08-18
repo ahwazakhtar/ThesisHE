@@ -49,3 +49,39 @@ deviation in the impulse context. Everything runs on existing machinery + the Ce
 MAD construction for the employment rows (raw year-to-year vs FE-residual scaling
 diverge on a persistent series) — advisor to confirm preferred lead; table reports
 both either way.
+
+---
+
+## Follow-up (2026-08-17): climate-baseline horizon sensitivity
+
+**Question (author, post-advisor-meeting):** are the shock definitions robust to a
+longer climate baseline than 1990-2000? Drought (PDSI <= -4) is an absolute threshold
+and is baseline-independent; the exposed definitions are the z-shocks (mean/SD anchor)
+and the national CDD/HDD p80 cutoffs, in both pipelines.
+
+**Method** (`Code/diagnostics/baseline_horizon_sensitivity.R` ->
+`baseline_horizon_sensitivity.csv`): rebuild Z_Temp/Z_Precip and High_CDD/High_HDD
+under 1990-2000 (validation replica), 1990-2005, and 1990-2010 (both still pre-2011 —
+no look-ahead for the county outcome window); re-run the exact headline specs.
+Validation: recomputed 1990-2000 flags match the shipped master 0/40,781 mismatches;
+Medicare and state-debt replicas reproduce the shipped coefficients to the digit.
+
+**Results — robust throughout; one quantified attenuation:**
+- Cutoffs barely move (CDD p80 1902->1943; HDD 5752->5702); 2011-23 flag shares shift <=1.1pp.
+- Medicare heat (the centerpiece): spending $112/$107/$113 (L0) and $176/$179/$180 (L1)
+  across baselines; ED 7.8/7.3/8.7 and 9.4/9.4/10.3 — stable, p-values improve slightly
+  under 1990-2010.
+- County cold employment (spec2 HDD L2): -714/-607/-613, p = .035/.039/.038 — stable.
+- State cold->debt (Row 4): lag-1 coefficient 1.35pp (p=.012) -> 1.03pp (p=.027) ->
+  0.85pp (p=.044). Sign-stable and significant at 5% under every baseline, but the
+  magnitude attenuates ~37% with the 1990-2010 anchor (warming-period baseline shifts
+  the mean up, so z<-1.5 selects milder cold years). Prose should cite the 0.85-1.35pp
+  range when a baseline-robustness qualifier is wanted, anchored to the ~19% mean share.
+- County debt cells: sign-stable, ns with controls (the documented ff7049e
+  control-subsample fragility, not a baseline effect).
+
+**Verdict:** no headline changes direction or loses significance from the baseline
+choice; the only material sensitivity is the magnitude of the state cold->debt
+coefficient, now quantified for the robustness appendix. A 1981-2010 NOAA-normals
+variant would require re-reading the raw climdiv files (the intermediate starts at
+1990) — available on request, not expected to change the verdict.
