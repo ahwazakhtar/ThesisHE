@@ -127,3 +127,63 @@ m_2x2 <- feols(PCPI_Real ~ Treated_x_Post | fips_code + Year,
 post_avg <- mean(res_full$Estimate[res_full$Year >= 2012L])
 cat(sprintf("\nPooled 2x2 ATT (2011-2023): %.1f | mean of 12 post-year gaps (full window): %.1f\n",
             coef(m_2x2)[1], post_avg))
+
+# ---------------------------------------------------------------------------
+# Combined two-panel exhibit (2026-08-17 redesign): income (full window, with
+# pre-treatment leads) beside employment (ACS starts 2011 — no pre-years exist).
+# Free scales per panel; replaces the two separate single-panel images in the
+# essay-1 harness (A.2 dynamics paragraph).
+#   + Analysis/did/did_eventstudy_full_window_drought2012_employment.csv
+#   + Analysis/plots/did/eventstudy_panels_Drought_2012.png
+# ---------------------------------------------------------------------------
+emp <- county_df %>%
+  distinct(fips_code, Year, State, Civilian_Employed) %>%
+  mutate(fips_code = if (is.numeric(fips_code)) formatC(as.integer(fips_code), width = 5, flag = "0") else fips_code) %>%
+  filter(Year >= 2011L, Year <= 2023L,
+         fips_code %in% c(treated_fips, control_fips), !is.na(Civilian_Employed)) %>%
+  mutate(Treated = as.integer(fips_code %in% treated_fips))
+m_emp <- feols(Civilian_Employed ~ i(Year, Treated, ref = 2011) | fips_code + Year,
+               data = emp, cluster = "State")
+ct_e <- as.data.frame(coeftable(m_emp))
+res_emp <- data.frame(
+  Event = "Drought_2012", Outcome = "Civilian_Employed",
+  Year = as.integer(gsub("Year::(\\d+):Treated", "\\1", rownames(ct_e))),
+  Estimate = ct_e[, 1], Std_Error = ct_e[, 2], p_value = ct_e[, 4],
+  row.names = NULL
+) %>%
+  bind_rows(data.frame(Event = "Drought_2012", Outcome = "Civilian_Employed",
+                       Year = 2011L, Estimate = 0, Std_Error = 0, p_value = NA_real_)) %>%
+  arrange(Year) %>%
+  mutate(Event_Time = Year - 2012L, Window_Start = 2011L, N = nobs(m_emp),
+         Reference_Year = 2011L, Cluster = "State")
+write_csv(res_emp, "Analysis/did/did_eventstudy_full_window_drought2012_employment.csv")
+
+panel_df <- bind_rows(
+  res_full %>% mutate(Panel = "Per-capita income (2023 USD), 1990–2023"),
+  res_emp %>% mutate(Panel = "Civilian employment (ACS), 2011–2023 — no pre-2011 data exist")
+) %>%
+  mutate(Panel = factor(Panel, levels = c("Per-capita income (2023 USD), 1990–2023",
+                                          "Civilian employment (ACS), 2011–2023 — no pre-2011 data exist")),
+         sig = !is.na(p_value) & p_value < 0.05)
+
+p2 <- ggplot(panel_df, aes(x = Year, y = Estimate, color = sig)) +
+  geom_hline(yintercept = 0, linetype = "dashed", color = "grey55", linewidth = 0.35) +
+  geom_vline(xintercept = 2011.5, linetype = "dotted", color = "grey60") +
+  geom_pointrange(aes(ymin = Estimate - 1.96 * Std_Error,
+                      ymax = Estimate + 1.96 * Std_Error),
+                  linewidth = 0.45, size = 0.25, show.legend = FALSE) +
+  scale_color_manual(values = c(`TRUE` = "#B2182B", `FALSE` = "grey55")) +
+  facet_wrap(~Panel, ncol = 2, scales = "free") +
+  labs(title = "The 2012 drought event in event time: treated–control gaps by year",
+       subtitle = "139 first-onset vs 2,534 never-exposed counties · reference year 2011 · county + year FE, state-clustered · red = p < 0.05",
+       x = "Year", y = "Coefficient (95% CI)") +
+  theme_minimal(base_size = 11) +
+  theme(plot.title = element_text(face = "bold", size = 12),
+        plot.subtitle = element_text(color = "grey30", size = 9),
+        plot.title.position = "plot",
+        strip.text = element_text(face = "bold", size = 9.5),
+        panel.spacing.x = grid::unit(1.4, "lines"),
+        panel.grid.minor = element_blank())
+ggsave("Analysis/plots/did/eventstudy_panels_Drought_2012.png", p2,
+       width = 11, height = 4.6, dpi = 150)
+cat("Wrote Analysis/plots/did/eventstudy_panels_Drought_2012.png\n")

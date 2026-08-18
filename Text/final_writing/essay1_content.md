@@ -403,6 +403,13 @@ the window-stable distributed-lag relationship. Evidence-table Row 1 amended.)**
 2. For each: population observed, geographic level, window — the table does the work; prose highlights only that the windows and populations *differ by design* (the ledger logic).
 → moderators.
 
+### §3 ¶3b — Descriptive statistics (NEW 2026-08-17, NBER-style Table 1 walkthrough)
+1. Anchor every number to E1-T1 (`Analysis/descriptive/descriptive_stats_summary.csv`, post-dedup).
+2. Shock frequencies: extreme heat **24%** of county-years; extreme cold **17%**; extreme drought rare — **2.3%** unweighted / **4.5%** population-weighted.
+3. Ledger levels: mean PCPI **$53,145** (P10–P90 ≈ $39,000–$70,000); debt share **0.19** mean, wide dispersion (P10 5%, P90 32%); benchmark premium **$374/mo**; Medicare **$10,359**/beneficiary, **629** ED/1,000.
+4. County-size skew: mean population 103,000 vs median 26,000; mean employment 48,068 vs median 10,773 → unweighted regressions describe the **typical county, not the typical resident**; population-weighted variants as robustness.
+→ moderators.
+
 ### §3 ¶4 — Moderators used in this essay
 1. Climate-exposed non-farm labor share (construction/outdoor industries) and DOE LEAD energy-burden z-score.
 2. SVI and hospital-side moderators belong to Essay 3; one cross-reference sentence only.
