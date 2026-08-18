@@ -57,3 +57,20 @@ structure, content requirements, and review — never draft prose for the manusc
    data/methods spine in shortened form.
 3. General introduction and policy synthesis/conclusion only after all three drafts exist
    (plan §11 Stages 5–6). `Text/drafts/policy_section.md` already holds the policy content.
+
+## Rendering the harnesses to PDF (added 2026-08-17)
+
+`render_harness_to_tex.js` (this folder; gitignored — no `!*.js` whitelist) extracts each
+harness's SECTIONS array in document order and emits LaTeX scaffolds with the exhibit
+figures embedded:
+
+```
+node Text/final_writing/render_harness_to_tex.js
+cd Text/final_writing/rendered
+pdflatex -interaction=nonstopmode essay1_scaffold.tex   # likewise essay2/essay3
+```
+
+Outputs land in `Text/final_writing/rendered/` (untracked; regenerable). **The render
+shows the pre-filled SUGGESTED text only** — author prose lives in the browser's
+localStorage and is only reachable via the harness Export button. After exporting your
+own draft, that markdown (not this scaffold render) becomes the manuscript source.
