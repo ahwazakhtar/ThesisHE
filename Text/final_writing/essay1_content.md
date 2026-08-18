@@ -200,12 +200,12 @@ the window-stable distributed-lag relationship. Evidence-table Row 1 amended.)**
 3. Figure E1-F4: dynamic profiles by hazard.
 → robustness.
 
-### §4 ¶5 — Robustness
-1. Anderson summary index of utilization: heat L1 p=0.007, cold L2 p=0.002 — not an artifact of outcome selection.
-2. Multiple testing: heat→ED and AQI→ED survive sharpened BKY q<0.05.
-3. Conley SEs are tighter than state-clustered; frontier recurring-treatment estimator (`did_multiplegt_dyn`) confirms heat ≈ +$80 at h=2.
-4. External anchor: reproduces Deryugina et al. (2019) in-panel **[CITE]**.
-5. Non-agricultural: Drought×Ag interaction null — the morbidity channel needs no farm-income intermediary.
+### §4 ¶5 — Robustness (REWRITTEN 2026-08-17: concern → check → result, one sentence each)
+1. Outcome selection (several utilization measures → one could be significant by chance): Anderson (2008) summary index — all outcomes collapsed into one standardized index — significant exactly where the components are (heat L1 p=0.007, cold L2 p=0.002).
+2. Multiple testing (many hazard × outcome × lag cells): sharpened Benjamini–Krieger–Yekutieli false-discovery correction; heat→ED and AQI→ED survive q<0.05.
+3. Spatial correlation (climate shocks cross state borders): Conley distance-kernel SEs are, if anything, tighter than state-clustered.
+4. Recurring treatment (counties enter/exit shock status repeatedly → TWFE lag-model contamination): de Chaisemartin–D'Haultfœuille (2024) estimator, built for that treatment path, confirms heat ≈ +$80 at h=2.
+5. Attribution: reproduces Deryugina et al. (2019) in-panel **[CITE]**; Drought×Ag-dependence interaction null — no farm-income intermediary.
 → the same "outside agriculture" point holds for the labor margin.
 
 ### §4 ¶6 — The labor-exposure margin (mechanism-supporting)
