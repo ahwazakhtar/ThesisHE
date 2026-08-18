@@ -2,7 +2,72 @@
 
 ---
 
-## 2026-08-14 (Session 13)
+## 2026-08-17 (Session 14)
+
+Pivotal evidence-and-framing session. A routine request to add pre-treatment leads to the
+Essay 1 event-study exhibit uncovered that the **2012-drought 2×2 income ATT (−$1,311) is
+baseline-fragile**: the effect exists only against the single 2011 pre-year, and a BEA
+**farm/nonfarm decomposition** showed ~$900 of it is farm income reverting from the record
+2011 commodity-price peak (treated farm income/capita $4,339 in 2011 vs $1,903–2,438 in
+2007–10); the baseline-invariant nonfarm decline is **−$261 to −$414 (≈0.5–0.8%), never
+significant**. In response (author decisions): §5 reframed, then **Essay 1 restructured
+Medicare-led** with the drought experiment demoted to Appendix A — pending advisor
+sign-off. Also ran the advisor-adjacent **climate-baseline horizon** and lag-structure
+checks (robust; one attenuation quantified), and swept Essays 2–3 for the same issues
+(cold-employment compounding survives; the **debt +4.9pp e=10 cell demoted** as
+single-year/reporting-regime-driven).
+
+### `Code/diagnostics/` (4 new scripts; outputs gitignored per convention, regenerable)
+- `eventstudy_full_window_drought2012.R` — year-by-year 2×2 gaps 1990–2023 (+2009–2023
+  variant). Proved the averaging identity (mean of 12 post gaps = pooled ATT −$1,310.7
+  exactly) and surfaced the 2008–2010 leads at ≈−$1,500.
+- `farm_nonfarm_decomposition_drought2012.R` — BEA CAINC5N farm earnings (reused from the
+  mechanism track) split the ATT: farm −$907→−$14 under pooled baselines (mean reversion);
+  nonfarm sign-stable across pre-periods 2011/2010/2009/2007/2002. Registry E1-F6/T8/F7.
+- `baseline_horizon_sensitivity.R` — shock definitions rebuilt under 1990–2005/2010
+  baselines (validation replica exact: 0/40,781 flag mismatches). Medicare heat and cold
+  employment stable; **state cold→debt attenuates 1.35→1.03→0.85pp** (sig at 5%
+  throughout) — cite as a range (evidence-table Row 4 amended). Drought (PDSI ≤ −4) is
+  baseline-independent by construction.
+- `cs_e10_baseline_check_hdd2013.R` — Essay 2's e=10 cells: employment survives pooled
+  baseline (−4,894→−4,990, p≈.005; monotonic build); **debt gap ≈0 through 2022, entirely
+  2023** (bureau reporting-regime year) → demoted (Row 17 amended).
+
+### `Text/final_writing/` (Essay 1 restructure + cross-essay fixes)
+- `essay1_harness.html` — restructured **Medicare-led**: §4 Medicare (main result, WRITE
+  FIRST) · §5 ledgers · §6 Household economic capacity (new, with decomposition exhibit) ·
+  §7/§8 interpretation/conclusion · **Appendix A.1–A.4** (old §4–§7, A.2 = event contrast
+  + decomposition) · **Appendix B** (baseline-horizon + estimation-horizon robustness).
+  Intro/abstract/conclusion reordered Medicare-first; §6 ¶1 pre-trend paragraph no longer
+  says "flat" (−$69/yr accumulates to ≈−$1,450/21yr; Wald rejects; decomposition locates
+  the drift in farm income). localStorage key bumped to `v2` (author fresh start; v1
+  drafts recoverable by reverting the key). Display = writing order; export = doc order.
+- `essay1_content.md`, `essay1_outline.md` — mirrored (banners; renumbered; new §6 +
+  Appendix B blocks).
+- `essay2_harness.html` — §7 ¶1 rewritten (employment carries compounding + pooled-baseline
+  sentence; debt cell footnote-only); Essay 1 §9→§5 cross-ref; spine ¶ corrected (bins are
+  **national** p80 cutoffs, not county-own) + Appendix B pointer.
+- `essay3_harness.html` — stale $46,269 anchor → $53,145 (prompt; prose was already
+  correct); same spine correction + Appendix B pointer.
+
+### `Plans/` (claim governance)
+- `master_evidence_table.md` — **Row 1 AMENDED** (tier "UNDER REVISION 2026-08-17";
+  permitted language now requires pairing −$1,311 with its decomposition and leading
+  drought→income with the window-stable distributed-lag relationship; WCB/RI/DRDID may
+  not be cited as vindicating the causal magnitude); Row 4 (cold→debt: cite 0.85–1.35pp
+  range under baseline robustness); Row 17 (employment e=10 pooled-baseline pass recorded;
+  debt e=10 cell barred as compounding evidence).
+- `essay1_restructure_20260817.md` (new) — decision record + advisor asks for the
+  centerpiece swap; `dissertation_writing_and_framing_plan_20260712.md` gained a dated
+  addendum (supersedes the Ch.2 centerpiece line once signed off).
+- `exhibit_registry.md` — E1-F6 (decomposition figure), E1-T8 (baseline-sensitivity
+  table), E1-F7 (full-window event study), E1-T9 (shock-definition robustness).
+
+### `Analysis/`
+- `INDEX.md` — rows for the full-window event study, decomposition, and CS e=10 check.
+- `advisor_robustness/synthesis.md` — new dated section: climate-baseline horizon
+  sensitivity verdict (no headline changes direction; state cold→debt attenuation
+  quantified for Appendix B).
 
 Essay-drafting infrastructure session (Aug 13–14): stood up the **`Text/final_writing/`
 workspace** — paragraph-level outlines, pre-filled content, and three **browser writing

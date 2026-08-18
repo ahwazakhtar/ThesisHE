@@ -17,6 +17,14 @@ into `Analysis/`).
 
 ## Thesis architecture
 
+- **Essay 1 is Medicare-led since 2026-08-17** (advisor sign-off pending —
+  `Plans/essay1_restructure_20260817.md`): §4 Medicare morbidity is the centerpiece;
+  §6 Household economic capacity keeps the distributed-lag income result; the 2012 drought
+  experiment + farm/nonfarm decomposition live in **Appendix A**; **Appendix B** carries
+  shock-definition (baseline-horizon) and estimation-horizon robustness. The essay1
+  harness localStorage key is `essay1harness.v2.` (v1 = pre-reframe author drafts,
+  recoverable by reverting the key constant); display order = writing order, export
+  sorts by `.doc` (document order).
 - The proposal (`Text/reference/v2_Akhtar_Proposal.pdf`) has a **demand/supply structure**:
   Ch.1 consumers (premiums + medical debt), Ch.2 hospitals (operating margins,
   uncompensated care, financing, provider heterogeneity), Ch.3 structural. The working
@@ -24,10 +32,13 @@ into `Analysis/`).
   the hospital supply side is woven through via `hospital_supply_side_20260615`).
   Whether the three-essay structure replaces the structural Ch.3 is an **open committee
   decision** (memo drafted: `Text/correspondence/committee_memo_ch3_structure.md`).
-- Framing rules for results (see also `knowledge/econometrics.md`): lead with **income**
-  (the robust DiD result), caveat employment; frame medical debt as a measurement outcome;
-  lead mechanisms with morbidity/utilization + labor exposure, with agriculture as the
-  tested-and-bounded hypothesis and migration as a caveat.
+- Framing rules for results (see also `knowledge/econometrics.md`): lead drought→income
+  with the **window-stable distributed-lag relationship**; the 2012 2×2 −$1,311 is a **raw
+  event contrast** that must be paired with its farm/nonfarm decomposition (≈$900 = farm
+  reversion from the 2011 commodity-price peak; nonfarm −$261…−$414 baseline-invariant but
+  never significant — evidence-table Row 1, AMENDED 2026-08-17). Caveat employment; frame
+  medical debt as a measurement outcome; lead mechanisms with morbidity/utilization + labor
+  exposure, with agriculture as the tested-and-bounded hypothesis and migration as a caveat.
 
 ## Claim discipline (binding, Jul 2026)
 

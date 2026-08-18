@@ -21,10 +21,13 @@ are the source of truth; this is orientation only:
 - Analysis layers complete with deep robustness: state + county FE, event studies,
   persistence/dose, exposure index (EJ), hospital supply side, mechanisms, DiD frontier
   robustness, premium mediation.
-- Headline findings: drought **income** losses (robust; employment fragile); drought debt
-  **scars** (h=2); **cold employment compounds** with cumulative exposure; climate harm
-  **amplified in high-SVI counties** (real-economy outcomes); **no coherent premium
-  pass-through**; mechanisms led by Medicare morbidity + broad labor exposure.
+- Headline findings (reordered 2026-08-17): **Medicare morbidity/utilization** (direct,
+  robust, baseline-invariant); **no coherent premium pass-through**; drought debt
+  **scars** (h=2); **cold employment compounds** with cumulative exposure
+  (pooled-baseline-checked); climate harm **amplified in high-SVI counties**
+  (real-economy outcomes); drought→income holds in **window-stable distributed-lag**
+  form — the 2012 2×2 −$1,311 was shown 2026-08-17 to be ~$900 farm-price reversion
+  off the 2011 baseline (nonfarm −$261…−$414, ns; evidence-table Row 1 AMENDED).
 - Active: `thesis_completion_20260704` (umbrella — essay drafts are the critical path),
   `audit_response_20260712` (Phase 4 parked, Phase 5 close-out pending),
   `code_quality_remediation_20260713` (all phases implemented; §7 defense gate MET —
@@ -41,7 +44,11 @@ are the source of truth; this is orientation only:
   **`Text/final_writing/`** (browser harnesses with pre-filled permitted-language prose +
   inline exhibits; author writes in own words; see its `WORKFLOW.md`). 4/5 pending
   registry exhibits built 2026-08-13 (`Code/create_manuscript_exhibits.R`); only E1-F5
-  remains.
+  remains. **Essay 1 restructured Medicare-led 2026-08-17** (2012 drought experiment +
+  farm/nonfarm decomposition → Appendix A; shock-definition/horizon robustness →
+  Appendix B) — **advisor sign-off pending** (`Plans/essay1_restructure_20260817.md`;
+  downstream surfaces — abstracts, technical note, policy §, deck — still carry the old
+  framing until then).
 
 ---
 
@@ -120,7 +127,15 @@ Silent-corruption traps — these produce wrong results with no error:
   rewritten 2026-07-13; exits nonzero on any failure). Its predecessor returned exit 0 with
   dozens of errors — never trust a green aggregate run predating the fix.
 - **Medical debt is measurement-fragile** (credit-bureau artifact; aggregation-sensitive
-  EJ direction). Lead claims with income/employment/premiums.
+  EJ direction; **2023 = reporting-regime change — any debt effect that appears only in
+  2023 is an artifact candidate**, e.g. the demoted HDD e=10 +4.9pp cell). Lead claims
+  with Medicare morbidity/premiums; income via the distributed-lag form.
+- **Single-pre-year DiD anchors produce confident wrong headlines**: the 2×2 (pre =
+  event−1) and every manual CS ATT(g,t) (pre = g−1) inherit the anchor year's
+  idiosyncrasy — the −$1,311 income "result" was 2011-farm-peak reversion. Before
+  headlining such a cell: pooled-baseline check + year-by-year gaps + (for income in ag
+  counties) farm/nonfarm decomposition. Hazardous anchors: 2011 (farm peak), 2012
+  (drought year), 2023 (debt regime). Details: `conductor/knowledge/econometrics.md`.
 - **Real-dollar bases can diverge across pipelines:** the county master hardcodes **2023
   dollars**; the state master deflates to the *latest* CPI year in `us_cpi_annual.csv`
   (2025 rows present since Feb 2026). Verify the base before any cross-panel dollar

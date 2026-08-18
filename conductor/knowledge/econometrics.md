@@ -66,11 +66,28 @@ them from scratch, and do not silently deviate.
   post-2012 county-years, so the ATT is "effect of first drought onset," not "effect of
   being droughted." The "2012 Midwest drought" label is a misnomer — the extreme-PDSI
   cohort is GA (45 counties) + Mountain West + Plains.
-- **Income is the robust result** (−$1,311 unconditional; DRDID −$1,451; p_wcb 0.036,
-  p_ri 0.0075; 1990–2011 BEA pre-trends flat). **Employment is fragile** (DR attenuates
-  ~58%; pooled CS-dr reverses to null/positive with positive pre-trends) — lead with
-  income, caveat employment. The 2012 effect is event-specific, not the effect of a
+- **The −$1,311 income ATT is BASELINE-FRAGILE (2026-08-17; supersedes "income is the
+  robust result").** It exists only against the single 2011 pre-year: pooled pre-periods
+  give −$515 (2010–11) / −$285 (2009–11, p=.64). The farm/nonfarm decomposition
+  (`Code/diagnostics/farm_nonfarm_decomposition_drought2012.R`) shows ~$900 is farm income
+  reverting from the record-2011 commodity-price peak (farm ATT −$907→−$14 pooled); the
+  baseline-invariant component is a **nonfarm decline of −$261…−$414 (≈0.5–0.8%), never
+  significant**. WCB/RI address cluster structure only; DRDID shares the 2011 baseline —
+  none of them vindicates the causal magnitude. The durable drought→income evidence is
+  the **window-stable distributed-lag relationship** (−$99…−$132/PDSI unit across
+  1990/2000/2011 starts). Evidence-table Row 1 AMENDED; Essay 1 restructured Medicare-led
+  with the experiment in Appendix A (`Plans/essay1_restructure_20260817.md`).
+  **Employment is fragile** (DR attenuates ~58%; pooled CS-dr reverses to null/positive
+  with positive pre-trends). The 2012 effect is event-specific, not the effect of a
   typical drought cohort.
+- **The 1990–2011 "flat" linear pre-trend (−$69/yr, p=0.44) must never be cited as
+  vindication alone**: it accumulates to ≈−$1,450 over 21 years (the size of the raw
+  contrast) and the joint Wald rejects (F=6.9); the drift is the farm component.
+- **Saturated `i(Year, Treated)` event studies are window-invariant** (each coefficient =
+  that year's treated-control gap vs the reference year, regardless of sample window) and
+  re-referencing is a pure shift — measured against 2010 instead of 2011, the 2012-drought
+  post gaps are ≈0. With a balanced panel, the pooled 2×2 ATT = the simple mean of the
+  post-year coefficients exactly (useful audit identity).
 - **HonestDiD needs ≥1 testable pre-period** — the 2012 cohort has none (panel starts
   2011 = its e=−1), so HonestDiD runs only on the pooled multi-cohort CS event-study
   (already null); it cannot vindicate the 2012 experiment. Influence-function vcov from
@@ -100,6 +117,26 @@ them from scratch, and do not silently deviate.
   **within the 2011–2023 window** (the master's 1990+ climate-baseline rows must be
   excluded first); treated-2012 = 139 counties, median 2012 population 12,817, total 5.29M.
 
+## Single-pre-year anchors and hazardous anchor years (2026-08-17)
+
+- **Any DiD cell whose baseline is one year** (the sharp 2×2 with pre = event−1; every
+  manual CS ATT(g,t), which uses pre = g−1) inherits that year's idiosyncrasy. Before
+  citing one as a headline, run the pooled-baseline check and the full year-by-year gap
+  profile (pattern: `Code/diagnostics/cs_e10_baseline_check_hdd2013.R`).
+- **Known hazardous anchor/outcome years:** **2011** = record farm-income year (treated
+  ag counties spike → any 2011-anchored income contrast conflates commodity reversion);
+  **2012** = the national drought/heat year (contaminates baselines for 2013 cohorts);
+  **2023** = bureau medical-debt reporting-regime change (single-year debt jumps at 2023
+  are artifact candidates — the +4.9pp HDD e=10 cell is flat through 2022 and entirely a
+  2023 jump; demoted, Row 17).
+- **Income event contrasts in agricultural counties must be farm/nonfarm decomposed**
+  (BEA CAINC5N LineCode 81 raw is in `Data/County_Agriculture/`, 2001–2024) before
+  attribution to climate damage.
+- **Climate-baseline horizon is settled robust** (`baseline_horizon_sensitivity.csv`):
+  1990–2005/2010 rebuilds leave Medicare heat and cold employment unchanged; drought bins
+  are baseline-independent (absolute PDSI ≤ −4); the one sensitivity is state cold→debt,
+  **cite as 0.85–1.35pp** (Row 4). Lag/horizon robustness = advisor 1.4 (h_max 2–5, <1 SE).
+
 ## Before promoting a new spec to a finding — checklist
 
 Distilled from review catches that materially changed results (the premium pass-through
@@ -115,6 +152,9 @@ correction, the 484 duplicate rows, the ≤2023 filter, a significance cherry-pi
 7. Any subsample effect: is the denominator the subsample mean, not the full-sample mean?
 8. Would the sign/magnitude survive the project's own adjacent results (e.g., a premium
    response mis-signed vs the Medicare morbidity result is suspect)?
+9. If the design anchors on a single pre-year or a single outcome year: does the effect
+   survive pooling the baseline, and is the anchor year on the hazardous list (2011 farm
+   peak / 2012 drought year / 2023 debt-reporting change)?
 
 ## Lessons from the Jul-13 code-quality remediation (audit-hardened; commits 034e156–2e22c11)
 
