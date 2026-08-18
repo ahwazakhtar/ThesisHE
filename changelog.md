@@ -2,7 +2,46 @@
 
 ---
 
-## 2026-08-17 (Session 14)
+## 2026-08-17 (Session 15)
+
+Exhibit-quality and rendering session, continuing Session 14's restructure. Rewrote the
+Medicare robustness paragraph **concern-first**, redesigned three exhibit figures into
+**hazard × outcome panel grids**, added an **NBER-style descriptive-statistics
+paragraph** to Essay 1 §3, and built a **harness → LaTeX → PDF render path** (scaffold
+drafts for all three essays). All committed and pushed in `2c26f06`…`96ec2a4`.
+
+### `Text/final_writing/essay1_harness.html` (+ `essay1_content.md`)
+- §4 ¶5 (Medicare robustness) rewritten **concern → check → result**: each of the five
+  checks now names the worry it answers and what the procedure is (Anderson index =
+  outcome-selection guard; sharpened BKY = multiple testing; Conley = spatial
+  correlation; dCDH 2024 = recurring treatment; Deryugina replication + Drought×Ag null
+  = attribution) — was bare procedure labels with p-values.
+- New §3 ¶3b: Table-1 walkthrough in NBER register anchored to
+  `descriptive_stats_summary.csv` — shock frequencies as treatment intensity (heat 24% /
+  cold 17% / drought 2.3% unweighted, 4.5% weighted), ledger levels, and the county-size
+  skew sentence ("unweighted regressions describe the typical county, not the typical
+  resident"; weighted variants as robustness).
+- A.2/A.4 exhibits swapped to the new panel figures.
+
+### Exhibit figures (all now with committed generators; house panel style)
+- **E1-F4** `Code/create_fig_medicare_morbidity.R` (new) — the old figure had **no
+  committed generating script** (ad-hoc base R: truncated title, raw variable-name
+  labels, one shared axis burying the ED responses two orders of magnitude smaller).
+  Now a 4-hazard × 2-outcome grid, free x per outcome, plain-language labels.
+- **E1-F7** — `eventstudy_panels_Drought_2012.png`: income (1990–2023, 21 leads) beside
+  employment (2011–2023; panel label states no pre-2011 data exist); employment gaps CSV
+  added to the full-window diagnostic.
+- **E1-T5 fig** `Code/create_fig_csdid_panels.R` (new) — pooled CS event-time profiles,
+  3 hazards × income/employment, **DESCRIPTIVE-ONLY (audit A4) caveat baked into the
+  figure subtitle** so it cannot be separated from the image.
+
+### `Text/final_writing/render_harness_to_tex.js` (new; gitignored — no `!*.js` rule) + `WORKFLOW.md`
+- Extracts each harness's SECTIONS in document order → LaTeX with exhibits embedded and
+  Unicode mapped for pdflatex; `[CITE]/[DECIDE]/[TK]` flags render bold. Compiled
+  scaffold PDFs (essay1 17pp / essay2 7pp / essay3 10pp) to
+  `Text/final_writing/rendered/` (untracked; regenerable). **Renders suggested text
+  only** — author prose lives in browser localStorage, reachable only via the harness
+  Export button. Render path documented in `WORKFLOW.md`.
 
 Pivotal evidence-and-framing session. A routine request to add pre-treatment leads to the
 Essay 1 event-study exhibit uncovered that the **2012-drought 2×2 income ATT (−$1,311) is

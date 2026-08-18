@@ -84,5 +84,13 @@ Read this before running R scripts, installing packages, or touching `.claude/` 
 
 ## LaTeX
 
-- `pdflatex` via MiKTeX: `C:/Users/ahwaz/AppData/Local/Programs/MiKTeX/miktex/bin/x64/`.
+- `pdflatex`/`xelatex` on PATH resolve to **TinyTeX** (`~/AppData/Roaming/TinyTeX/bin/windows/`,
+  verified 2026-08-17); a MiKTeX install also exists at
+  `C:/Users/ahwaz/AppData/Local/Programs/MiKTeX/miktex/bin/x64/`. TinyTeX ships **no
+  poppler/ghostscript** (`pdftoppm`/`pdftotext`/`gs` all absent) — PDFs cannot be
+  rendered to images for inspection; verify compiles via the `.log` (missing-files /
+  Overfull counts) instead.
 - Hyperlinked Beamer appendices need **two `pdflatex` passes** to resolve buttons.
+- Harness→PDF scaffold renders: `node Text/final_writing/render_harness_to_tex.js` then
+  `pdflatex` in `Text/final_writing/rendered/` (see `Text/final_writing/WORKFLOW.md`).
+  `node` v24 is on PATH; the renderer `.js` is gitignored (whitelist has no `!*.js`).

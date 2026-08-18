@@ -99,6 +99,15 @@ them from scratch, and do not silently deviate.
 
 ## Exhibit-evidence rules (from the 2026-08-13 manuscript-exhibit build)
 
+- **Every manuscript exhibit must have a committed generating script** — E1-F4 was
+  discovered (2026-08-17) to be an ad-hoc base-R rendering with no script in the repo
+  despite a registry row attributing it to `run_mechanism_medicare.R` (which only writes
+  the coefs CSV). When a registry row's generator doesn't actually produce the figure,
+  fix the generator gap before restyling. House figure style: hazard × outcome panel
+  grids with free scales per outcome (never one axis across outcomes that differ by
+  orders of magnitude), plain-language panel labels, red = p<0.05 with the rule stated
+  in the subtitle, caveats (e.g., DESCRIPTIVE ONLY) baked into the figure subtitle.
+
 - **Concentration/Lorenz bands built from a uniform per-capita coefficient (the 2012
   income event, the drought debt scar) are diagonal BY CONSTRUCTION** — burden share ≡
   population share. Never cite them as evidence of "no concentration"; they are flagged
