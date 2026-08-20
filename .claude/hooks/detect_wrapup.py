@@ -8,6 +8,13 @@ import sys
 import os
 import subprocess
 
+# Project root: prefer Claude Code's CLAUDE_PROJECT_DIR, else derive from this
+# file's location (.claude/hooks/<script>.py). Never trust os.getcwd() -- the
+# hook inherits whatever cwd the shell happens to be in.
+PROJECT_DIR = os.environ.get("CLAUDE_PROJECT_DIR") or os.path.abspath(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
+)
+
 WRAPUP_KEYWORDS = [
     "wrap up", "wrapup", "wrap-up",
     "end session", "we're done", "we are done",
@@ -28,7 +35,7 @@ lines = ["[HOOK: A wrap-up phrase was detected. If the user is signaling the end
          "answer normally.]\n"]
 
 # Append list of files edited this session
-log_path = os.path.join(os.getcwd(), ".claude", "session_edits.log")
+log_path = os.path.join(PROJECT_DIR, ".claude", "session_edits.log")
 if os.path.exists(log_path):
     with open(log_path) as f:
         edits = f.read().strip()
@@ -41,7 +48,7 @@ if os.path.exists(log_path):
 try:
     result = subprocess.run(
         ["git", "diff", "HEAD", "--stat"],
-        capture_output=True, text=True, cwd=os.getcwd()
+        capture_output=True, text=True, cwd=PROJECT_DIR
     )
     if result.stdout.strip():
         lines.append("Git diff --stat (uncommitted changes):")

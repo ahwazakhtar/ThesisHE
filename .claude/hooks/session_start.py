@@ -13,7 +13,14 @@ import sys
 
 sys.stdout.reconfigure(encoding="utf-8", errors="replace")
 
-ROOT = os.getcwd()
+# Project root: prefer Claude Code's CLAUDE_PROJECT_DIR, else derive from this
+# file's location (.claude/hooks/<script>.py). Never trust os.getcwd() -- the
+# hook inherits whatever cwd the shell happens to be in.
+PROJECT_DIR = os.environ.get("CLAUDE_PROJECT_DIR") or os.path.abspath(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "..")
+)
+
+ROOT = PROJECT_DIR
 TRACKS = os.path.join(ROOT, "conductor", "tracks.md")
 MAX_TASK_CHARS = 160
 
