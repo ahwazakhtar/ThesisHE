@@ -1,0 +1,173 @@
+\documentclass[a4paper,11pt]{article}
+\input{preamble.tex}
+\geometry{left=2.5cm,textwidth=16.5cm,top=1in,bottom=1in,headheight=15pt}
+\doublespacing
+\begin{document}
+\begin{titlepage}
+\linespread{1}
+\begin{center}
+\vspace*{2cm}
+% \includegraphics[width=0.35\textwidth]{logo.png}\\[1cm]
+\LARGE\textbf{Unequal and Unrecorded: The Distribution of Climate-Related Economic and Health-System Costs}
+
+\vspace{0.6cm}
+\Large Ahwaz Akhtar
+
+\vspace{0.8cm}
+\large Doctoral Dissertation --- Essay 3
+
+\vspace{0.4cm}
+\today
+
+\vspace{0.4cm}
+\hrulefill
+\vspace{0.4cm}
+
+\end{center}
+\begin{abstract}\noindent\footnotesize The same climate shock need not impose the same cost everywhere, and the data used to measure hardship might not record it evenly. Using a U.S. county panel from 2011 to 2023, I interact climate shocks with the CDC Social Vulnerability Index, compare marginal effects in the least and most vulnerable counties, and mirror every estimate at the state level. Structural vulnerability amplifies real-economy harm: extreme heat turns a small employment gain into a loss in vulnerable counties (p = 0.001); cold's per-capita income effect is roughly ten times larger there, though that interaction is marginal (p = 0.06); and drought at a two-year lag pushes benchmark premiums up in vulnerable counties. A distinct affordability margin operates through energy burden (share of household income spent on energy): heat's employment damage concentrates in high energy burden counties. On the supply side, heat raises uncompensated care most at safety-net hospitals. Credit-bureau medical debt is the exception - it concentrates in less-vulnerable, better-insured places and flips sign across county and state-level estimations. Therefore, the real-economy costs of climate shocks concentrate in places with higher social vulnerability, and bureau debt is least informative about hardship precisely because credit visibility/availability are the weakest in such places.\end{abstract}
+\noindent\hrulefill
+\end{titlepage}
+
+\section*{Glossary of Abbreviations}
+\input{../glossary.tex}
+\clearpage
+\FloatBarrier
+\section{Introduction}
+
+A heat wave of a given magnitude is not the same event everywhere. In a county where households have savings, insurance, and other social protections, a climate shock is better absorbed; where they are already stretched, it can tip households into crisis. And the data sources one looks to measure these crises, such as medical debt on credit reports, may look away in exactly the places where the burden is heaviest.
+
+The environmental-justice literature documents unequal exposure to climate hazards \citep[see][]{banzhaf2019ej}. Less is known about unequal realized damage - whether the same shock costs more where vulnerability is higher - and less still about whether the measures used to detect hardship record it evenly across places. This essay treats those as two halves of one question: climate burdens can be unequal both because vulnerable places suffer more and because standard indicators observe hardship selectively.
+
+Using the county panel of the previous essays, I interact each climate shock with the CDC Social Vulnerability Index and compare marginal effects in the least and most vulnerable counties, mirroring every county-level estimate at the state level. I then push past the index in three directions: an energy-burden moderator from DOE LEAD data, capturing an affordability margin distinct from social vulnerability; provider-side heterogeneity across safety-net and other hospitals; and uninsurance gradients that test directly whether credit-bureau debt records hardship where coverage is thin. Lastly, I create a concentration index to aggregate the results.
+
+I find that structural vulnerability amplifies the real-economy harm of climate. Extreme heat turns a small employment gain of 886 jobs in the least vulnerable counties into a loss of 169 in the most vulnerable (interaction p = 0.001); cold's per-capita income effect is roughly ten times larger at high vulnerability (\textminus{}\$46 versus \textminus{}\$459), though that interaction is marginal (p $\approx$ 0.06); and drought at a two-year lag pushes benchmark premiums up in vulnerable counties rather than down (interaction p = 0.001). A distinct affordability margin operates through energy burden, which is nearly uncorrelated with vulnerability (r = 0.11): heat's employment damage concentrates in high-burden counties. The same unequal incidence appears on the supply side, where heat raises uncompensated care most at safety-net hospitals, robust to winsorizing the hospital accounts (p = 0.013). Credit-bureau medical debt is the exception: its response concentrates in less-vulnerable, better-insured places and flips sign across geographic scales, and greater uninsurance predicts a smaller measured response - with the drought-by-uninsurance gradient the one cell that survives multiple-testing correction (q = 0.012).
+
+The essay contributes on both parts of the research question. To the climate and environmental-justice literatures, it adds heterogeneity in realized economic damage - income, employment, and premiums, not only exposure - with an affordability margin that is distinct from social vulnerability. To household finance and the economics of measurement, it shows that credit-bureau debt runs counter to the amplification pattern, for understandable reasons: bureau debt requires insurance, a billed encounter, and a credit file, so it is least informative about hardship precisely where coverage and credit visibility are weakest. Hardship statistics built on such ledgers will understate the climate burden of the most vulnerable places.
+
+In this paper, Section 2 describes the vulnerability measures and data; Section 3 the interaction design. Section 4 reports the real-economy heterogeneity, Section 5 the energy-burden margin, Section 6 the provider side, and Section 7 the debt-visibility results. Section 8 aggregates into burden concentration; Sections 9 and 10 interpret and conclude.
+
+\FloatBarrier
+\section{Baseline vulnerability measures and data}
+
+The panel, shock definitions, and estimation conventions follow the first essay: a county-year panel over 2011--2023; four binary shock bins, with heat and cold marked by national 80th-percentile degree-day cutoffs from a 1990--2000 pre-study baseline, extreme drought by an absolute Palmer threshold, and poor air quality by the EPA exceedance level; county and year fixed effects; and state-clustered standard errors on \citet{abadie2023clustering} grounds, with baseline- and horizon-robustness documented in the first essay's Appendix B. What is new here is the cross-sectional layer - who is exposed, and with what capacity to absorb it.
+
+The primary vulnerability measure is the CDC/ATSDR Social Vulnerability Index (SVI), built by the agency for emergency-response planning from percentile ranks across four themes derived from the American Community Survey (ACS) - socioeconomic status, household composition and disability, minority status and language, and housing and transportation - and combined into an overall county percentile. \citep{flanagan2011svi} I use the 2014--2022 average of the index as a time-invariant county baseline, since the components move slowly and a fixed baseline avoids conditioning on vulnerability that itself responds to exposure and report the marginal effect of each shock at the 25th and 75th percentiles of the index, so every interaction has a concrete less-vulnerable and more-vulnerable reading.
+
+I use three further moderators, each built to isolate a different exposure margin from SVI's general fragility composite. The energy-burden z-score comes from the Department of Energy's Low-Income Energy Affordability Data (LEAD) tool: a single 2022 cross-section, modeled from ACS microdata and residential energy-consumption models, of home energy costs as a share of household income - an affordability measure rather than a demographic one, and time-invariant here for the same reason SVI is. The climate-exposed non-farm labor share comes from Census ACS table C24030 (industry of employment for the civilian employed population): the county share working in construction, mining, manufacturing, transportation and warehousing, and utilities - industries with direct outdoor or thermal exposure - deliberately built to exclude agriculture, so it can carry a labor-exposure signal distinct from farm dependence. Agricultural dependence itself comes from the USDA ERS County Typology (2015 edition) farming-dependent flag, cross-checked against BEA farm earnings as a share of total county earnings averaged over 2001-2010. Their baseline correlations are informative before any regression: energy burden correlates with the Social Vulnerability Index at only 0.11 and with agricultural dependence at 0.32 (Table~\ref{tab:e3t1}) - low enough that testing among moderators can be decided by the data rather than by collinearity.
+
+\input{../../../Analysis/mechanism/moderator_correlations.tex}
+
+The supply side uses the National Academy for State Health Policy's (NASHP) Hospital Cost Tool, a public hospital-year financial panel - 5,119 hospitals observed over 2011--2023. Uncompensated care is the sum of bad debt and charity care as a share of net patient revenue; safety-net status flags hospitals in the top quartile of a combined Medicaid-plus-uncompensated-care payer-mix score, thresholded across the pooled hospital-years, so it identifies hospitals serving disproportionately Medicaid and charity/uninsured patients rather than a designation NASHP assigns itself. Climate exposure is assigned at each hospital's location county via a ZIP-to-county crosswalk (the modal county per ZIP), which is deliberately different from the residential population-split used for the consumer-side county debt measure: a hospital's exposure is where it operates, not where its patients live.
+
+County uninsurance rates come from the Census Bureau's Small Area Health Insurance Estimates (SAHIE), a model-based estimate combining the ACS with IRS tax returns, SNAP participation, Medicaid and CHIP records, and Census population estimates. I use SAHIE rather than the ACS's own uninsurance question because it covers the working-age (18-64) population where medical debt actually accrues, and which the Medicare morbidity channel of the first essay cannot study.
+
+\FloatBarrier
+\section{The shock-by-vulnerability design}
+
+\begin{equation}
+Y_{it} \;=\; \alpha_i \;+\; \gamma_t \;+\; \beta \, S_{it}
+\;+\; \lambda \,\bigl(S_{it} \times V_i\bigr) \;+\; \varepsilon_{it},
+\qquad \frac{\partial Y_{it}}{\partial S_{it}} \;=\; \beta + \lambda V_i
+\label{eq:interaction}
+\end{equation}
+
+The design interacts each climate shock with the time-invariant vulnerability baseline, with county and year fixed effects and state-clustered standard errors. The fixed effects absorb every level difference across counties, including vulnerability itself; identification comes from within-county shock timing, and the interaction asks whether the same shock lands harder where baseline vulnerability is higher. I report marginal effects at the 25th and 75th percentiles of the index throughout.
+
+I should note that vulnerability is not randomly assigned and the index bundles many attributes, so the interactions measure heterogeneity where a shock's effects are amplified, and not the causal effect of vulnerability itself. As an aggregation check, every county estimate is mirrored at the state level. Gradients that survive both levels are unlikely to be artifacts of county-level measurement.
+
+\FloatBarrier
+\section{Real-economy heterogeneity}
+
+Vulnerability changes the sign of heat's employment effect. At the 25th percentile of the Social Vulnerability Index, extreme heat is associated with an employment gain of 886 jobs; at the 75th percentile, with a loss of 169 (interaction p = 0.001; Table~\ref{tab:e3t2}, Figure~\ref{fig:e3f2}). Against mean county employment of 48,068, the swing from gain to loss is about two percent of employment. In the least vulnerable counties the point estimate is positive, which I do not read as a benefit of heat: it is more plausibly composition, since the least vulnerable counties are also the larger and more service-oriented ones. What the interaction identifies is the difference between the two ends, not the level at either.
+
+\input{../../../Analysis/exposure_index/svi_marginal_effects.tex}
+
+\begin{figure}[htbp]
+\centering
+\caption{Marginal effect of each hazard at the 25th and 75th percentiles of the social-vulnerability distribution, by outcome.}
+\label{fig:e3f2}
+\includegraphics[width=0.95\linewidth]{../../../Analysis/plots/essay3/fig_svi_marginal_effects.png}
+\end{figure}
+
+Cold's income effect is larger in vulnerable counties by roughly a factor of ten: the marginal effect on per-capita income is \textminus{}\$46 at the 25th percentile of vulnerability and \textminus{}\$459 at the 75th - about 0.1 versus 0.9 percent of the \$53,145 mean. This interaction is marginally significant (p = 0.061).
+
+The premium ledger shows a vulnerability gradient of its own: at a two-year lag, drought is associated with lower benchmark premiums in the least vulnerable counties (\textminus{}\$55 at the 25th percentile, p = 0.03) and higher premiums in the most vulnerable (+\$14 at the 75th; interaction p = 0.001). These are monthly amounts against a mean benchmark premium of \$374 per month. The first essay reports no average drought effect on premiums at any level of aggregation; that average conceals opposing margins - down \$55 per month at the 25th vulnerability percentile and up \$14 at the 75th - which is what the interaction identifies. The finding here is distributional: premiums rise precisely where households are least able to absorb them.
+
+The health-spending interaction replicates at the state level; the income interactions do not, and are insignificant for every hazard. Also, medical debt's interactions run the other way, concentrating measured debt responses in less-vulnerable counties. Section 7 shows why that reversal is a fact about recording rather than about hardship. One qualification travels with all of these gradients: entered jointly with energy burden, the vulnerability index's own interaction no longer separates from zero (Section 5). The results below therefore describe where climate harm lands, not which characteristic of a place makes it land there.
+
+An exploratory composite heat-vulnerability index (the product of thermal hazard - cooling degree days - and social vulnerability) summarizes the same terrain more coarsely: a one-standard-deviation increase is associated with median household income lower by \$435 (p = 0.0002). Per-capita income moves the other way (+\$1,270, p = 0.006), a divergence consistent with per-capita income rising mechanically where population falls; the composite is reported as a descriptive summary and is not used to price harm.
+
+\FloatBarrier
+\section{Energy burden}
+
+Beyond the vulnerability index, an affordability margin operates through energy burden - the share of income households spend on energy, from DOE LEAD data. Conceptually it is distinct from social vulnerability: it measures exposure to cooling costs and utility arrears rather than demographic and socioeconomic fragility, and poor households' energy spending is known to respond less to extreme temperatures precisely because adaptation is unaffordable \citep{doremus2022sweating}.
+
+Heat's employment damage concentrates in high-energy-burden counties. In levels, the interaction of heat with the energy-burden z-score is associated with 1,380 fewer jobs (p < 0.001), about 2.9 percent of mean county employment; in logs - the specification robust to county size - the gradient is \textminus{}0.0065 (p = 0.02). In a joint specification with other moderators, energy burden absorbs the explanatory role: the Social Vulnerability Index interaction is no longer significant (Table~\ref{tab:e3t3}). Energy burden is not a relabeling of vulnerability. Its county-level correlation with the Social Vulnerability Index is only 0.11 (Table~\ref{tab:e3t1}) and it marks an independent dimension of exposure.
+
+\input{../../../Analysis/mechanism/horserace_table.tex}
+
+\FloatBarrier
+\section{Provider incidence and safety-net hospitals}
+
+If vulnerable households bear larger costs, the providers who serve them should feel it too. I test this in a panel of 5,119 hospitals over 2011--2023, with hospital and year fixed effects and state-clustered errors, asking whether climate shocks raise uncompensated care - charity care and bad debt as a share of net patient revenue - and whether the response concentrates at safety-net hospitals. Exposure is measured at the hospital's location county. Hospital financial exposure to climate risk is itself an emerging literature \citep[e.g.,][on hurricane risk and hospital finance]{audi2025hurricane}.
+
+Extreme heat raises uncompensated care most at safety-net hospitals (interaction p = 0.021), and the result is robust to winsorizing the underlying hospital accounts at the first and ninety-ninth percentiles within year (coefficient 0.0209, p = 0.013); it also survives a sharpened multiple-testing correction (Table~\ref{tab:e3t4}, Figure~\ref{fig:e3f4}). Drought moves hospital accounts in the opposite direction: uncompensated care falls by \$3.88 million per hospital in the winsorized specification (p < 0.001), consistent with federal buffers - crop insurance and USDA disaster payments in particular - severing the chain from farm income to uncompensated care.
+
+\input{../../../Analysis/hospital/safetynet_table.tex}
+
+\begin{figure}[htbp]
+\centering
+\caption{Hospital uncompensated care and operating margin by hazard and safety-net status.}
+\label{fig:e3f4}
+\includegraphics[width=0.95\linewidth]{../../../Analysis/plots/essay3/fig_safetynet_uncompensated_care.png}
+\end{figure}
+
+The cold interaction runs the other way, loading on non-safety-net hospitals, so the concentration finding is heat-specific. And exposure is assigned at the hospital's location county rather than its patient catchment, so hospitals drawing patients from distant exposed areas are measured with error.
+
+\FloatBarrier
+\section{Credit-bureau debt as a selective measure}
+
+Credit-bureau medical debt is the one ledger that contradicts the amplification pattern. At the county level, drought's debt response concentrates in less-vulnerable counties (+0.0061 at low vulnerability versus \textminus{}0.0035 at high, p = 0.05); at the state level, cold's debt response amplifies in more-vulnerable states (+0.067, p = 0.03). The vulnerability gradient in measured debt is therefore not stable across hazards or across geographic scales.
+
+The behavior has a mechanical explanation. A medical bill reaches a credit bureau only after three filters: an insurance relationship, a billed encounter, and a credit file. In places where coverage and credit access are thin, hardship can be widespread while the record is not. Measured debt should therefore understate hardship exactly where vulnerability is high which is what the sign flips suggest.
+
+The filters can be tested directly. Interacting shocks with county uninsurance rates from SAHIE, greater uninsurance predicts a smaller measured debt response - about \textminus{}0.005 per standard deviation for drought at each lag (p < 0.03) and \textminus{}0.006 for heat at a one-year lag (p = 0.01). Those are uncorrected estimates from the full shock-by-uninsurance bridge; Table~\ref{tab:e3t5} reports the narrower pre-registered grid, where only drought-by-uninsurance survives correction for multiple testing (q = 0.012). Where fewer people are insured, fewer bills are generated and recorded, and the ledger goes quiet. This supports the measurement critique.
+
+\input{../../../Analysis/latent_hardship/visibility_gradients.tex}
+
+\FloatBarrier
+\section{Burden concentration}
+
+How much exposure is there to distribute? As a descriptive metric in the style of the Lancet Countdown, the country absorbs on the order of 70 to 105 million person-years of extreme-heat exposure each year - three to five times the cold burden. This is an exposure count, not a causal damage estimate, but it sets the scale on which the heterogeneity above operates.
+
+Combining exposure, population, and the estimated vulnerability gradients yields a concentration curve: the share of measured burden against the share of population, ordered from most to least vulnerable (Table~\ref{tab:e3t6}, Figure~\ref{fig:e3f6}). The most vulnerable tenth of the population bears 19 percent of the recurring-cold employment burden - roughly twice its population share - and the most vulnerable fifth bears 36 percent; the corresponding shares are 15 percent for heat-exposure person-years and 11 to 14 percent for the Medicare cost bands.
+
+\input{../../../Analysis/policy/concentration_table.tex}
+
+\begin{figure}[htbp]
+\centering
+\caption{Concentration curve: share of measured burden against share of population, counties ordered from most to least vulnerable.}
+\label{fig:e3f6}
+\includegraphics[width=0.95\linewidth]{../../../Analysis/policy/fig_concentration_lorenz.png}
+\end{figure}
+
+\FloatBarrier
+\section{Interpretation and limitations}
+
+The two halves of this essay answer one question. Climate burdens are unequal, first, because structurally vulnerable places experience larger real-economy effects and second, because the financial indicators commonly used to measure hardship observe it selectively. The halves are complementary: selective observability explains why the unequal burden can be invisible in exactly the data one might reach for first.
+
+Beyond this, some limitations remain. The vulnerability index is a composite, so which component drives amplification is not identified - and Section 5 gives that point its sharpest form: entered against energy burden, the index's interaction does not survive. The index marks where the burden concentrates without isolating what makes a place vulnerable. The debt sign flips compared in Section 7 are different hazards rather than one outcome, and the composite index of Section 4 reverses sign between two income measures. The moderators are time-invariant baselines, so vulnerability that evolves with exposure is not modeled.
+
+\FloatBarrier
+\section{Conclusion}
+
+This essay asked who bears climate-related economic and health-system costs, and where the instruments used to measure financial hardship fail to record them. Social vulnerability amplifies the real-economy harm: heat turns a small employment gain into a loss in vulnerable counties, cold's income effect is roughly ten times larger in high vulnerability counties, and drought pushes benchmark premiums up where vulnerability is high - though the index does not survive a joint test against energy burden, so it identifies where the burden falls rather than why. Considering energy burden, heat's employment damage is concentrated in high-burden counties. On the supply side, heat raises uncompensated care most at safety-net hospitals. Lastly, credit-bureau medical debt shows spikes in low vulnerability counties, suggesting better data coverage for those visible to the insurance and credit rating systems.
+
+For policy, when taken together, vulnerability and energy burden identify where adaptation and assistance dollars should meet the largest marginal harm. For measurement, hardship statistics built on credit-bureau debt will look quietest where the burden is largest, so a hardship statistic built on credit records will understate the burden by most in the places bearing most of it.
+
+\FloatBarrier
+\clearpage
+\bibliographystyle{apalike}
+\bibliography{../references}
+
+\end{document}

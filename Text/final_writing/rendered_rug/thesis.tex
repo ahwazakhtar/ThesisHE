@@ -1,0 +1,567 @@
+\documentclass[a4paper,11pt]{report}
+\input{preamble.tex}
+\geometry{left=2.5cm,textwidth=16.5cm,top=1in,bottom=1in,headheight=23pt}
+\doublespacing
+\usepackage{fancyhdr}
+\pagestyle{fancy}\fancyhf{}
+\fancyhead[L]{\small\itshape\leftmark}
+\fancyhead[R]{\small\thepage}
+\renewcommand{\headrulewidth}{0.4pt}
+\begin{document}
+\begin{titlepage}
+\linespread{1}
+\begin{center}
+\vspace*{2cm}
+% \includegraphics[width=0.35\textwidth]{logo.png}\\[1cm]
+\LARGE\textbf{Deferred Costs of Climate Stress in U.S. Health and Household Ledgers}
+
+\vspace{0.6cm}
+\Large Ahwaz Akhtar
+
+\vspace{0.8cm}
+\large Doctoral Dissertation
+
+\vspace{0.4cm}
+\today
+
+\vspace{0.4cm}
+\hrulefill
+\vspace{0.4cm}
+
+\end{center}
+
+\noindent\hrulefill
+\end{titlepage}
+
+\pagenumbering{roman}
+\singlespacing\tableofcontents\doublespacing
+\clearpage
+\chapter*{Glossary of Abbreviations}
+\addcontentsline{toc}{chapter}{Glossary of Abbreviations}
+\markboth{Glossary of Abbreviations}{}
+\input{../glossary.tex}
+\clearpage
+\pagenumbering{arabic}
+\chapter{Deferred Costs: Climate Shocks, Local Economic Capacity, and Health-Market Ledgers}
+
+\begingroup\small\begin{quote}
+Climate shocks impose healthcare costs that continue to emerge after the extreme event has passed. How these costs are observed depends overwhelmingly on the data sources we choose to consult. Using a harmonized county and state panel linking month-level climate data to Medicare records, credit-bureau medical debt, ACA premiums, and county income accounts, this paper explores what healthcare costs follow climate shocks in the United States, and which financial sources record these.  I find that these administrative health records measure the morbidity channel directly: as heat shocks are observed, standardized Medicare spending rises by \$112 per beneficiary in the shock year and \$176 the next, and emergency visits increase by 8-9 per 1,000, among the 65-plus and disabled population, with the largest responses arriving the year after exposure. I further find evidence of uneven financial responses to climate shocks: extreme cold raises the credit-bureau medical-debt share by 0.85 to 1.35 percentage points at a one-year lag, and ACA premiums show no coherent local pass-through. Similarly, for drought, the data rule out pass-through of measured morbidity costs to ACA premiums. I find that the unpriced costs strain household budgets: drought lowers county incomes contemporaneously through a nonfarm channel of \$261 to \$414, stable across multiple choices of estimation windows. Overall, this paper contributes to literature on measurement of deferred morbidity costs directly, and identifies which data sources record such costs for different populations.
+\end{quote}\endgroup
+
+\FloatBarrier
+\section{Introduction}
+
+When a drought or a heat wave ends, the weather normalizes long before the bills arrive. The costs of a climate shock can surface a year or more later in places such as a county's personal income accounts, in Medicare claims, or in collection lines on a credit report. This paper attempts to document which financial outcomes are sensitive to these climate shocks and the extent to which household finances and healthcare expenditure are affected by these shocks.
+
+Delayed incidence is hard to measure for a few reasons. Attribution across years is confounded by factors other than climate; adaptation and migration change the exposed population while the costs are still being realized; and every administrative data source observes a different population under different recording rules. A large literature measures the contemporaneous mortality and output effects of temperature and drought \citep{deschenes2007agricultural,dell2014weather,hsiang2016econometrics}; the financial after-path of a shock through household and health-market data sources is far less mapped \citep{dobkin2018hospital,kluender2021debt}.
+
+I take three steps to create a harmonized panel. First, I measure a morbidity (increased utilization/cost) channel directly in Medicare administrative data. Second, I test whether two financial data sources - credit-bureau medical debt and ACA benchmark premiums - record the increased morbidity-related costs. Third, I document whether the household economic capacity absorbs these additional costs. Climate and pollution exposure come from NOAA's National Centers for Environmental Information (temperature, heating and cooling degree-days, and the Palmer Drought Severity Index, all recorded at the county-climate-division level), from PRISM - Oregon State University's gridded interpolation of weather-station data, used here for dew-point humidity - and from EPA county-level air-quality monitors.
+
+First, I find that administrative health records measure the morbidity channel directly. Extreme heat raises standardized Medicare spending by \$112 per beneficiary in the shock year and \$176 the next - 1.1 and 1.7 percent of the \$10,359 mean - and emergency-department visits by 8-9 per 1,000 beneficiaries, reproducing \citet{deryugina2019mortality} within this panel; cold shocks operate at longer lags, while air quality shocks peak in the year of incidence. The largest responses arrive the year after exposure. The evidence covers the 65-plus and disabled population over 2014--2023, and the hazards that drive it - heat and air quality - reach the Medicare ledger without a farm-income intermediary.
+
+Second, the financial sources record this harm unevenly. Cold shocks raise the credit-bureau medical-debt share by 0.85 to 1.35 percentage points at a one-year lag in the state panel, an association that does not reproduce at the county level, but bureau debt is measurement-fragile: it records hardship only after insurance, billing, and credit-file filters. ACA premiums show no coherent local pass-through at all - coefficients flip sign across the county, rating-area, and state levels, and within-state responses are bounded below roughly 4 to 8 percent of the mean premium. For drought, the data rule out pass-through larger than 51 to 80 percent of the measured morbidity costs. Consistent with the null first stage, 92 to 99 percent of each shock's debt response survives premium adjustment.
+
+The third set of results documents the household capacity behind these ledgers. Drought lowers county incomes in distributed-lag models whose coefficients are stable across estimation windows reaching back to 1990 - between -\$99 and -\$132 per unit of drought severity, with a contemporaneous term of -\$149 (p = <0.01) in the longest window. An event study of the 2012 drought, reported in Appendix A, shows why I do not headline the corresponding event contrast: the raw gap of -\$1,311 survives wild-cluster bootstrap and randomization inference, but roughly \$900 of it reflects farm earnings reverting from their record 2011 commodity-price peak. Event contrasts in agricultural counties conflate the commodity-price cycle with climate damage unless the income ledger is decomposed, and the essay treats that decomposition as part of its contribution.
+
+The paper contributes to three literatures. To health economics, it adds administrative utilization responses measured in the same panel as the economic outcomes, so the health channel is documented by measurement rather than inference \citep[nearest antecedent:][]{deryugina2019mortality}. To household finance and the economics of measurement, it adds the finding that regulated ACA pricing shows no coherent local response to climate-health shocks, and credit-bureau debt records them selectively. Therefore, which source one consults determines whether the cost is visible at all. To the climate-economy literature, it adds a decomposition result: event contrasts in agricultural counties inherit the commodity-price cycle embedded in the income ledger, and separating farm from nonfarm income materially revises what such contrasts measure \citep[nearest antecedents:][]{deschenes2007agricultural,deryugina2017fiscal}.
+
+In this paper, Section 2 describes the institutions and Section 3 the data. Section 4 reports the Medicare morbidity evidence, Section 5 the financial-ledger responses, and Section 6 the household economic capacity results, with the 2012 drought natural experiment and its decomposition reported in full in Appendix A. Section 7 discusses interpretation and limits, and Section 8 concludes.
+
+\FloatBarrier
+\section{Institutional and conceptual background}
+
+A simple framework organizes the essay: climate exposure affects households through four margins - health and healthcare utilization, labor productivity and local income, household liquidity, and provider demand - and each margin is observed through a different institution. Medicare records utilization for the 65-plus and disabled population; employer and BEA accounts record employment and income; ACA rating areas record regulated premiums; credit bureaus record unpaid medical bills; and hospitals record uncompensated care. These institutions differ in eligibility, geography, recording rules, and timing, so identical underlying harm can produce different - even opposite-signed - cost responses. Figure~\ref{fig:e1f0} sets out this frame.
+
+\begin{figure}[htbp]
+\centering
+\caption{Two routes from a climate shock to a financial ledger. The mediated route runs through a health-utilisation or income mechanism. The direct route, drawn heavier, is the one this essay leads with: heat, cold, and air quality reach the Medicare ledger as a measured cost, with no intervening mechanism observed and no farm-income intermediary.}
+\label{fig:e1f0}
+\includegraphics[width=0.95\linewidth]{../../../Analysis/descriptive/fig_conceptual_model.png}
+\end{figure}
+
+Three features of ACA rating matter for our understanding. Premiums are set at the rating-area level by insurers operating a single statewide risk pool per market, subject to state regulatory review. The geographic rating factor may reflect unit costs only - not local morbidity - and federal risk adjustment under Section 153 redistributes claims risk across insurers statewide. Further, the rate calendar is slow: plan year t rates are filed around the middle of year t-1 on claims experience through roughly t-2, and are locked before the plan year begins. Therefore, only lagged shocks can be in the insurer's information set, and any local claims signal is institutionally muted before it can reach a local premium.
+
+Credit-bureau medical debt passes through three filters before it is recorded: an insurance relationship, a billed encounter, and a credit file. Hardship that fails any filter never appears in the ledger. Reporting rules - collection thresholds and reporting delays - also changed over the sample window, shifting the recorded object over time. The third essay shows the recorded response to drought is smaller where uninsurance is higher, the visibility gradient this structure predicts.
+
+Lastly, the 2012 drought was among the most severe and extensive U.S. droughts since at least 1895, and it developed suddenly in late spring, arriving without seasonal warning \citep{hoerling2014drought}. I define extreme drought as a Palmer index at or below -4. The counties experiencing their first panel-era extreme onset in 2012 lie in Georgia, the Mountain West, and the Plains, and their economies range from heavily agricultural to barely agricultural, a range that matters when Section 4 shows the burden operates substantially outside agriculture, and again when Appendix A decomposes the event contrast into farm and nonfarm income.
+
+\FloatBarrier
+\section{Data and construction of shocks}
+
+The primary dataset is a county-year panel covering 2011 to 2023, with roughly 3,100 counties entering the estimation sample. A companion state panel extending back to roughly 1996 carries the longer medical-debt and premium series. All dollar values are deflated to 2023 dollars.
+
+Table~\ref{tab:e1t0a} lists the sources that compose the panel along with their temporal coverage. The variables broadly span 4 categories. Climate and environmental exposure come from NOAA's nClimDiv county series, EPA air-quality monitors, and PRISM dew-point grids. Economic capacity comes from BEA county income accounts and the American Community Survey. The health-market ledgers come from Urban Institute credit-bureau records, HIX Compare marketplace premiums, and the CMS Geographic Variation file. The moderators used in the mechanism tests come from ACS industry composition, the DOE LEAD energy-burden data, and USDA ERS farm-dependence measures. Two coverage limits shape what follows. Air-quality monitors operate in 1,194 counties rather than the full panel, so air-quality results describe monitored, disproportionately urban, counties. PRISM grids cover the contiguous states only. The coverage reported in the table is data availability rather than the estimation sample, which is 2011 to 2023 for county outcomes, 2014 to 2023 for Medicare, and the marketplace era for premiums.
+
+\input{../../../Analysis/descriptive/data_sources_table.tex}
+
+Climate exposure comes from NOAA temperature and degree-day records and the Palmer Drought Severity Index, supplemented by PRISM dew-point humidity for robustness and EPA air-quality data for pollution shocks. I define four binary shock bins against a 1990--2000 climate baseline: extreme heat (High\_CDD) and extreme cold (High\_HDD) mark degree-day totals above the 80th percentile of the baseline-period distribution; extreme drought marks a Palmer index at or below -4; and poor air quality (High\_AQI) marks exceedances of the EPA threshold of 100 AQI. Temperature z-scores beyond $\pm$1.5 against the same baseline define the z-based shocks used in robustness. Continuous precipitation z-scores enter all county models and the entire climate hazard family is documented in Appendix B.
+
+Outcomes are drawn from five sources, each observing a different population under different rules: BEA per-capita personal income; civilian employment; the Urban Institute's credit-bureau medical-debt share; ACA benchmark premiums at the rating-area level (2014--2025); and CMS Geographic Variation files for Medicare spending and utilization among the 65-plus and disabled population (2014--2023). Table~\ref{tab:e1t0b} reports definitions, populations, and observation windows.
+
+\input{../../../Analysis/descriptive/variable_definitions_table.tex}
+
+Table~\ref{tab:e1t1} reports summary statistics for the estimation panel. The shock bins convey the treatment intensity directly: an extreme-heat year occurs in 24 percent of county-years and an extreme-cold year in 17 percent, while extreme drought - a Palmer reading at or below -4 - is rare, marking 2.3 percent of county-years unweighted and 4.5 percent when weighted by population. The outcome ledgers differ as much in level as in source. Mean county per-capita income is \$53,145 in 2023 dollars, with the middle eighty percent of counties between roughly \$39,000 and \$70,000; about 19 percent of adults in the average county have medical debt in collections, with wide dispersion across counties (5 percent at the tenth percentile, 32 percent at the ninetieth); the mean benchmark silver premium is \$374 per month; and Medicare spending averages \$10,359 per beneficiary, with 629 emergency-department visits per 1,000. County size is heavily right-skewed - mean population is about 103,000 but the median county has 26,000 residents, and median county employment is 10,800 against a mean of 48,000 - so the unweighted county regressions that follow describe the typical county, and population-weighted variants appear as robustness.
+
+\input{../../../Analysis/descriptive/descriptive_stats_print.tex}
+
+Two county-level moderators enter this essay's mechanism analysis: the climate-exposed non-farm labor share and the DOE LEAD energy-burden z-score. The Social Vulnerability Index and the hospital-side moderators are the subject of the third essay and appear here for reference.
+
+Table~\ref{tab:e1t0b} defines all variables the essay uses, grouped into shocks, outcomes, moderators, and auxiliary series. The shock measures are binary and defined against a fixed national threshold - the 80th percentile of the 1990--2000 baseline distribution - rather than a within-county quantile, so a county's shock status is comparable both over time and across counties, and counties with mild climates can go the whole panel without a shock. The two labor moderators are time-invariant and enter as z-scores, so the interaction coefficients reported later are per-standard-deviation gradients within a shock year rather than levels of employment loss. Employment enters in logs because the levels specification weights large counties heavily.
+
+All fixed-effects models include county and year effects (state and year in the state panel), with standard errors clustered at the state level. Following \citet{abadie2023clustering}, the clustering level should match the level at which treatment is effectively assigned and correlated, and climate shocks are spatially correlated well beyond county borders. The choice matters for inference but not for the point estimates: clustering at the county level would be extremely non-conservative on headline p-values, while Conley standard errors with a 200-km kernel essentially reproduce state clustering and leave the headline estimates intact (Appendix A). \citep{conley1999gmm}
+
+\FloatBarrier
+\section{Medicare morbidity and utilization}
+
+This essay's question concerns healthcare costs and therefore I looked for data sources where these costs were recorded in as much detail as possible at the population level. The CMS Geographic Variation files cover the Medicare population (those 65 and over and the disabled). These are administratively complete and their standardized payments strip out price variation, so utilization responses can be observed without churn in insurance composition. In this section, I study the morbidity channel in Medicare claims directly and do not extend it to working-age households.
+
+I estimate distributed-lag fixed-effects models with county and year effects and state-clustered standard errors, using within-county variation in the heat, cold, and air-quality bins at lags of zero to two years. The sample is 30,641 county-years across 3,124 counties over 2014-2023, and the outcomes are standardized per-beneficiary spending and emergency-department visits per 1,000 beneficiaries (Table~\ref{tab:e1t6}).
+
+\input{../../../Analysis/mechanism/medicare_table.tex}
+
+\begin{equation}
+Y_{it} \;=\; \alpha_i \;+\; \gamma_t \;+\; \sum_{\ell=0}^{2} \beta_\ell \, S_{i,t-\ell}
+\;+\; X_{it}'\delta \;+\; \varepsilon_{it}
+\label{eq:dlag}
+\end{equation}
+
+Extreme heat raises standardized Medicare spending by \$112 per beneficiary in the shock year (p = 0.013), \$176 the following year (p = 0.002), and \$75 two years out (p = 0.003). From a baseline mean of \$10,359 per beneficiary, these represent increases of 1.1, 1.7, and 0.7 percent respectively. Emergency-department visits rise by 7.8 per 1,000 beneficiaries in the shock year (p = 0.006) and 9.4 the following year (p = 0.0002); from a baseline mean of 629 per 1,000, representing increases of 1.2 and 1.5 percent. The lag structure is informative as the largest response arrives the year after exposure. This confirms that the costs of extreme weather are rarely instantaneous and reveal themselves over time.
+
+Cold, on the other hand, operates more slowly: spending rises by \$87 per beneficiary and emergency visits by 9.0 per 1,000 at the two-year lag. Air-quality shocks raise emergency visits by 5.0 per 1,000 contemporaneously (p = 0.0002), 3.6 at one year, and 2.8 at two, in the 1,194 counties with an operating monitor, which are disproportionately urban. Figure~\ref{fig:e1f4} plots the dynamic profiles by hazard.
+
+\begin{figure}[htbp]
+\centering
+\caption{Medicare spending and emergency-department responses by hazard and years since the shock.}
+\label{fig:e1f4}
+\includegraphics[width=0.95\linewidth]{../../../Analysis/mechanism/plots/fig_medicare_morbidity.png}
+\end{figure}
+
+These estimates need to be checked for robustness in five ways which I detail here. The first is outcome selection: with several utilization measures, one could appear significant by chance. Following \citet{anderson2008multiple}, I collapse the utilization outcomes into a single standardized summary index, and the index is significant at the same time lags where the component outcomes are (heat at one lag, p = 0.007; cold at two lags, p = 0.001). The second is multiple testing across the many hazard-outcome-lag cells. Under a sharpened Benjamini-Krieger-Yekutieli false-discovery correction, the heat response at one year and the contemporaneous air-quality response survive at q < 0.05. \citep{benjamini2006adaptive} The third is spatial correlation:  climate shocks do not stop at state borders and neighboring counties may be exposed to correlated shocks. The Conley standard errors, which allow correlation within a distance kernel, are tighter than the state-clustered ones. The fourth is recurring treatment: counties enter and leave shock status repeatedly, which can contaminate the control comparisons in two-way fixed-effects lag models. For robustness, I use the estimator built for this kind of treatment path \citep{dechaisemartin2026intertemporal}, which confirms a heat spending effect of approximately \$80 at a two-year horizon. The fifth is the identifying variation: absorbing state-by-year shocks leaves the heat-spending response at one lag imprecise (+\$34, p = 0.15), so that estimate rests on variation across states within a year as well as within them, though the emergency-visit responses are unaffected. The last is attribution, as the channel through which these shocks flow needs checking. The estimates reproduce \citet{deryugina2019mortality} within this panel.
+
+Turning to the labor market, the lagged burden of climate shocks operates substantially outside the agricultural mechanism. I interact the heat-shock indicator (a county-year in which cooling degree days reach the national 80th percentile of the 1990-2000 baseline distribution) with two time-invariant county characteristics that capture exposure outside the farm sector: the baseline share of employment in climate-exposed non-farm industries (construction, manufacturing, transportation, and utilities; mean 24.9 percent, standard deviation 6.1 percentage points) and household energy burden (mean 3.4 percent of income, standard deviation 1.1 percentage points). Both gradients are negative. In a heat-shock year, a county one standard deviation above the mean in exposed non-farm employment share loses an additional 0.52 percent of employment (p = 0.006), and a county one standard deviation above the mean in energy burden loses an additional 0.84 percent (p = 0.005); at the median county's 10,773 workers, these amount to roughly 56 and 90 jobs.
+
+Each gradient holds under the specification that most directly threatens it. Division-by-year fixed effects, which absorb regional shocks common to counties within a census division, leave both essentially unchanged (-0.0042, p = 0.015; -0.0078, p = 0.002). The labor-share gradient holds under Conley standard errors allowing for spatial correlation within 200 kilometers (p = 0.033), and the energy-burden gradient holds in a joint horse-race against agricultural dependence, the exposed-industry share, social vulnerability, and baseline climate (-0.0065, p = 0.020). These interactions describe how the employment response to heat varies with county exposure; they are not estimates of its average level. The analogous labor income margin is not supported by our data.
+
+A note before going deeper into the financial impacts: the Medicare population is not the population of working-age individuals represented in credit bureau debt or of the household economic outcomes in Section 6. I am aiming to triangulate by directly measuring morbidity and household costs after climate shocks where possible, which in no way claims an identified causal chain.
+
+\FloatBarrier
+\section{Financial-ledger responses: debt and ACA premiums}
+
+Which institutions record or price these climate-related costs? I examine two sources with different functions: credit-bureau medical debt, which records unpaid bills, and ACA benchmark premiums, which price expected claims. To summarize, the harm is recorded partially and with lags in debt, and it is not priced locally in any coherent way in premiums (Table~\ref{tab:e1t7}; Figure~\ref{fig:e1f5}).
+
+\input{../../../Analysis/mediation/ledger_comparison.tex}
+
+\begin{figure}[htbp]
+\centering
+\caption{Climate-shock responses across institutional ledgers, each expressed as a percent of the mean of that ledger.}
+\label{fig:e1f5}
+\includegraphics[width=0.95\linewidth]{../../../Analysis/mediation/fig_institutional_ledgers.png}
+\end{figure}
+
+Cold shocks raise the medical-debt share by 0.85 to 1.35 percentage points at a one-year lag in the state panel (p = 0.012 to 0.044 across baseline choices); the county mirror of the same specification does not reproduce it (-0.27 points, p = 0.46; Table~\ref{tab:e1t7}). From a mean of about 19 percent of adults with medical debt in collections, 1.35 points is a relative increase of roughly 7 percent. These are lagged associations from distributed-lag fixed-effects models rather than causal event estimates explored in Appendix A. The response survives a stricter 90th-percentile shock definition (1.38 points, p = 0.003) and humidity adjustment. The divergence between the two panels is itself informative about the ledger: bureau debt is recorded only after insurance, billing, and credit-file filters, and those filters differ enough across counties within a state that the association visible in state aggregates does not survive disaggregation.
+
+Drought's debt response is weaker and depends on the level of aggregation: the debt share rises by 0.58 percentage points at a two-year lag in the county panel (p = 0.02), an estimate that does not survive the sample restriction those controls impose - on the identical sample it falls to 0.09 points (p = 0.76) before any control is added, while the state-level specification gives an insignificant 0.72 points (p = 0.18). Therefore the evidence remains mixed.
+
+Bureau debt behaves this way because three filters stand between exposure and recording in data sources.  An insurance relationship has to exist, there has to be a billed encounter, and a credit file has to exist on an individual. Incidence failing these filters never enters the data source, and reporting-rule changes over the window alter what is recorded. The third essay develops the full measurement exploration; for present purposes it suffices to note that debt is a selective data source.
+
+The premium test is specified by the institutions that set premiums. Rates are set at the rating-area level and reviewed by states; plan-year-t rates are filed around the middle of year t-1 on claims experience through roughly t-2, then locked for the plan year. Only lagged shocks can therefore be in the insurer's information set, and I take the two-year lag as primary. I estimate at the two levels the institutions themselves use -- rating-area-by-year as the primary specification (rating-area and state-by-year fixed effects, population-weighted, state-clustered) and state-by-year as the secondary -- and display county-level specifications only as a sanity check. This is because roughly 86 percent of premium variance is state-by-year, so a county-plus-year-fixed-effects premium regression is confounded.
+
+\begin{equation}
+P_{rt} \;=\; \alpha_r \;+\; \gamma_{s(r),t} \;+\; \theta \, \bar{S}_{r,t-2} \;+\; \varepsilon_{rt}
+\label{eq:passthrough}
+\end{equation}
+
+The results show sign instability across the levels at which prices are actually set. The cold coefficient at the two-year lag runs +\$12.6 at the rating-area level and -\$16.7 at the state level; heat runs -\$10.5 and +\$93; drought is null at both. County-level estimates are reported as a sanity check only, since roughly 86 percent of premium variance is state-by-year. A genuine price response would keep its sign as aggregation moves through the levels at which prices are actually set, so this pattern indicates no coherent local pass-through. The one large coefficient - the between-state heat estimate of \$54 to \$93 per month - is approximately ten times too large for a claims channel, and the state-level cold coefficient has the wrong sign relative to this essay's own Medicare result, in which cold raises spending.
+
+Finding no effect can mean two very different things. It can mean premiums genuinely do not respond to climate shocks, or it can mean the response is real but too small for this panel to detect. A coefficient near zero cannot tell them apart on its own. To separate them, I ask a more demanding question: how large a premium response would the data have caught if one existed? Anything larger than that threshold can be ruled out, and anything smaller remains possible.
+
+The natural yardstick is the premium increase that insurers would have to charge if they fully priced the health costs the earlier sections measure. Working from the Medicare morbidity estimates, that figure is \$9.30 to \$14.63 per member per month. This is the benchmark for full pass-through: if climate shocks raise medical costs by this much and insurers pass all of it on, premiums should move by roughly this amount. The shock variables are measured as the share of a rating area's population exposed in a given year, so each coefficient is the premium change for an area that goes from none of its population exposed to all of it. That puts the estimates and the benchmark in the same units and makes the comparison meaningful.
+
+Drought gives a clear answer. The estimated response is \$3.13 per member-month, with a standard error of \$2.60 - small, and not statistically distinguishable from zero. More importantly, the estimate is precise enough to rule things out: the data reject any response above \$7.41 per member-month. That threshold sits below the full pass-through benchmark, at 51 to 80 percent of it depending on which end of the benchmark range one takes. Insurers therefore cannot be passing drought-related health costs into premiums at anything close to the scale those costs imply. This is a real finding about how the market prices risk.
+
+Heat and cold give no answer at all. Both estimates are far less precise than the drought estimate. The smallest response the data can rule out is \$24.61 per member-month for heat and \$22.04 for cold. Both thresholds are larger than the full pass-through benchmark itself, which means the test cannot rule out a response as large as full pass-through - but it equally cannot rule out a response of zero. For these two hazards the exercise is uninformative. It is not evidence that heat and cold costs are passed through, and it should not be read that way; it is a statement about how much we can observe in this panel. What the data do pin down for heat and cold is an upper limit: whatever the response is, it is no larger than about 6 to 7 percent of the population-weighted mean benchmark premium in the rating-area estimation sample, \$366 per month.
+
+For drought alone the data rule out a response above \$7.41 per member per month; for heat and cold the bounds are too wide to be informative in either direction.
+
+The premium null has a direct implication for the debt results above. If premiums do not move when climate shocks - specifically drought - hit, then the increase in medical debt cannot be running through premiums, because there is no price change for it to run through. The data bear this out. When I re-estimate each shock--debt relationship with premiums included as a control, nearly all of the original effect remains: 98.7 percent for drought at a two-year lag, and 92.2 percent for cold at a one-year lag. Remaining shock-by-lag estimates for other exposures are statistically non-significant and uninformative. Controlling for premiums leaves the debt results essentially unchanged.
+
+The null result can be explained institutionally. A single statewide risk pool, a geographic rating factor limited to unit costs, and federal risk adjustment under Section 153 each attenuate any local claims signal before it reaches a local premium. \citep{kautter2014hhshcc} In this sense, regulated premium-setting does not locally price the environmental lag structure documented in this essay.
+
+A final contrast closes the comparison between data sources. State per-capita health spending shows one climate-shock association, with extreme cold (+\$205, p = 0.014), and tracks unemployment (p = 0.06) but not income (p = 0.40). This is why the essay looks for climate costs in lagged household and administrative data sources: while the costs are real (Sections 4 and 6 measure them),  the contemporaneous system-level spending aggregates do not reveal them.
+
+\FloatBarrier
+\section{Household economic capacity: income and employment}
+
+The premium and debt results presuppose a financing margin: unpaid medical bills accumulate where household budgets cannot absorb them, so the recording patterns of Section 5 are most interpretable alongside direct evidence that climate shocks strain local incomes. The drought coefficient on county per-capita income is stable between -\$99 and -\$132 per unit of drought severity across estimation windows beginning in 1990, 2000, and 2011, with precision improving as the window lengthens; in the full window the contemporaneous term is also significant (-\$149, p = <0.01).
+
+The 2012 drought provides an event-based complement (Appendix A). The raw contrast between the 139 first-onset counties and 2,534 never-exposed controls is -\$1,311 - about 2.5 percent of mean income, averaged over the onset year and the eleven years that follow, and it survives wild-cluster bootstrap (p = 0.036) and randomization inference (p = 0.0075). Decomposing county income we find that treated-county farm earnings spiked to \$4,339 per resident in 2011 - the commodity-price peak - and the farm component of the contrast falls from -\$907 to -\$14 once the baseline pools 2009--2011, consistent with mean reversion rather than drought damage. The component stable under every baseline choice is a nonfarm decline of \$261 to \$414, roughly 0.5-0.8 of a percent of mean income. The decomposition shows that in agricultural counties the income sources embed the commodity-price cycle, and event contrasts need to separate farm and nonfarm income to get a fuller picture.
+
+Employment shows the same event-specific pattern with less stability: the 2012 event reduced employment by roughly 2,000 jobs per treated county - about 4 percent of mean county employment (Appendix A.3). That estimate is materially more fragile than the income one: it attenuates by about 58 percent under the doubly-robust estimator (-871, SE 433) and reverses sign in the pooled estimator (+2,609, SE 2,245). Because the employment series begins in 2011, no pre-onset leads exist either, so I report it as event-specific and secondary. Taken together, the capacity results indicate that climate shocks strain the budgets from which medical bills are paid; they support the plausibility of the debt responses in Section 5 without claiming an identified chain from income to debt.
+
+\FloatBarrier
+\section{Interpretation and limitations}
+
+Taken together, the results say the following: after climate shocks, morbidity is directly measurable in administrative health data; the regulated premium pricing does not coherently price it locally; and household economic capacity strains. The connective claim is triangulation across ledgers that observe different populations under different rules. The essay does not identify a propagation chain from one source to another.
+
+The external-validity claims we can take out of this essay are very specific. The Medicare evidence covers the 65-plus and disabled population over 2014--2023. The premium results cover the ACA individual market in the marketplace era, and the tight equivalence bound applies to drought alone. The 2012 event contrast is an intention-to-treat quantity for its treated geography; the pooled estimator indicates it does not generalize, and the decomposition of Appendix A bounds its causal component.
+
+Three measurement caveats qualify the results. Credit-bureau debt records hardship only after insurance, billing, and credit-file filters, so it understates hardship where coverage and credit access are thin - this is tackled in the third essay. Premiums are a regulated price, so a premium null is informative about institutions rather than evidence that costs are absent. And the ACS-based moderators are smoothed over time, limiting the ability to detect fast demographic adjustment.
+
+Two future extensions would sharpen our understanding of climate exposure and financial dynamics. Working-age administrative utilization data - all-payer claims - would test the morbidity channel in the same population as the credit bureau debt. Patient-flow measures of hospital exposure would replace the location-county assignment used on the provider side.
+
+\FloatBarrier
+\section{Conclusion}
+
+This essay asked what healthcare costs follow climate shocks, and which financial institutions record or price them. Three answers emerge: Medicare records show extreme heat raising standardized spending by \$112 per beneficiary in the shock year and \$176 the next, with emergency visits up 8-9 per 1,000, among the 65-plus and disabled population. ACA premiums show no coherent local pass-through of any of the climate shocks. Lastly, these unpriced costs are absorbed in strained household budgets, as drought lowers local incomes.
+
+These insights inform the second and third essays, which examine how these costs evolve - whether they persist or compound - and how they are distributed. We can only detect a full picture of climate-driven financial costs where administration is universal. Medicare and the BEA income accounts observe different populations under different rules, so no single ledger sees the whole burden. For climate adaptation and health-finance policy, the immediate implication is about measurement: no single source observes the entire cost burden, and therefore estimation and modeling choices should take this into account.
+
+\FloatBarrier
+\FloatBarrier
+\setcounter{section}{0}
+\renewcommand{\thesection}{\Alph{section}}
+\renewcommand{\theHsection}{\thechapter.appendix.\Alph{section}}
+\section{The 2012 drought natural experiment}
+
+\subsection{The 2012 drought design}
+
+Identification needs an exposure that is sharp, unanticipated, and spatially delimited, and the 2012 drought onset provides all three. I restrict treatment to counties experiencing their first panel-era extreme drought in 2012, and I restrict the comparison group to counties never exposed to extreme drought in the window, which avoids the problematic comparisons that arise in staggered designs when already-treated units serve as controls. The restriction yields 139 treated counties - in Georgia, the Mountain West, and the Plains - and 2,534 never-exposed controls; Figure~\ref{fig:e1f1} maps the two groups and Table~\ref{tab:e1t2} reports balance. Treated counties are smaller and more rural than the average control, which motivates both the covariate-adjusted doubly-robust estimator and the two-decade pre-trend test reported below.
+
+\input{../../../Analysis/did/cohort_balance_table.tex}
+
+\begin{figure}[htbp]
+\centering
+\caption{Counties with their first extreme-drought onset in 2012 (treated) against counties never exposed to extreme drought over the panel.}
+\label{fig:e1f1}
+\includegraphics[width=0.95\linewidth]{../../../Analysis/did/fig_treated_map.png}
+\end{figure}
+
+I estimate a two-by-two difference-in-differences of each outcome on the interaction of treatment and a post-2012 indicator, with county and year fixed effects and state-clustered standard errors. The estimand is the intention-to-treat effect of first extreme-drought onset for the 139 treated counties over 2011--2023, relative to never-exposed counties, identified under the assumption that the two groups would have trended in parallel absent the onset. Three threats to that assumption structure the falsification agenda reported in A.3 and summarized in Table~\ref{tab:e1t4}: selection into drought-prone geography, which would appear as differential pre-trends; dependence on a single state or region, addressed with leave-one-state-out estimates and placebo onsets; and drought spillovers into neighboring control counties, which would violate the no-interference assumption. Because the treated counties fall in only 17 states, small-cluster distortions are a first-order concern, and I report analytic, wild-cluster-bootstrap, and randomization-inference p-values side by side for every headline estimate.
+
+\begin{equation}
+Y_{it} \;=\; \alpha_i \;+\; \gamma_t \;+\; \tau \,\bigl(D_i \times \mathrm{Post}_t\bigr)
+\;+\; \varepsilon_{it}
+\label{eq:did2x2}
+\end{equation}
+
+\FloatBarrier
+\subsection{The event contrast and its decomposition}
+
+I begin with the raw event contrast. Comparing the 139 counties whose first extreme-drought onset came in 2012 with the 2,534 counties never exposed over the panel, in a two-by-two difference-in-differences design with county and year fixed effects, per-capita income in treated counties averages \$1,311 below never-exposed controls over the onset year and the eleven years that follow (analytic p = 0.028). From a mean county per-capita income of \$53,145 (2023 dollars; Table~\ref{tab:e1t1}), this is about 2.5 percent. The contrast is an intention-to-treat quantity for a specific event and geography - Georgia, the Mountain West, and the Plains. Two immediate objections do not overturn it, and Table~\ref{tab:e1t4} reports both alongside the rest of the falsification suite. Because the treated counties fall in only 17 states, conventional cluster-robust inference can overstate precision; a wild-cluster bootstrap with Webb weights yields p = 0.036 with a confidence interval of [-\$2,911, -\$139], and randomization inference yields p = 0.0075. \citep{cameron2008bootstrap,mackinnonwebb2018wildbootstrap,young2019channelingfisher} Because treated counties are more rural and more agricultural than the average control, the comparison might load observable composition; a doubly-robust estimator conditioning on county characteristics returns -\$1,451 (SE 515). One feature of the design survives both checks unchanged: like the two-by-two itself, the doubly-robust estimator measures every post-period gap against the single pre-year 2011. The rest of this section examines that baseline.
+
+The within-panel event study around the 2012 onset (Figure~\ref{fig:e1f7}) shows the income gap opening immediately - \$1,561 in the onset year (p = 0.008) and \$1,609 the year after (p < 0.001) - narrowing through 2015, and re-widening to between \$1,300 and \$1,900 in the later post years; the two-by-two contrast of -\$1,311 is the average of these twelve post-year gaps. The employment gap, by contrast, builds with time rather than fading. Extending the income series backward, however, shows that the pre-onset years resemble the post-onset years: the 2008--2010 gaps relative to 2011 are -\$1,459 to -\$1,591, statistically indistinguishable from zero (p = 0.17 to 0.32) but of the same magnitude as the treatment-era gaps. The pooled contrast is correspondingly sensitive to the pre-period: widening the baseline from 2011 alone to 2009--2011 moves it from -\$1,311 (p = 0.028) to -\$285 (p = 0.64); Table~\ref{tab:e1t8} reports the full grid of contrasts across pre-periods and income components. Two readings are possible - treated counties may have been on a different trajectory throughout, or 2011 itself may have been an unusual year for treated counties. The county income accounts distinguish these directly.
+
+\input{../../../Analysis/did/baseline_sensitivity_table.tex}
+
+\begin{figure}[htbp]
+\centering
+\caption{Event-study panels around the 2012 drought onset: per-capita income, with twenty-one pre-treatment leads, and civilian employment.}
+\label{fig:e1f7}
+\includegraphics[width=0.95\linewidth]{../../../Analysis/plots/did/eventstudy_panels_Drought_2012.png}
+\end{figure}
+
+\begin{equation}
+Y_{it} \;=\; \alpha_i \;+\; \gamma_t \;+\; \sum_{k \neq -1} \theta_k \,
+\bigl(D_i \times \mathbf{1}\{t - 2012 = k\}\bigr) \;+\; \varepsilon_{it}
+\label{eq:eventstudy}
+\end{equation}
+
+BEA county accounts separate farm earnings from other income, and the farm series identifies the source of the pattern (Figure~\ref{fig:e1f6}). Real farm earnings per treated-county resident averaged \$1,903 to \$2,438 over 2007--2010, then jumped to \$4,339 in 2011 - the year commodity prices peaked - while control-county farm income rose far less. Measured against that peak, the farm component accounts for roughly 85 percent of the 2008--2010 leads (-\$1,293 to -\$1,358 of the -\$1,459 to -\$1,591 totals). The farm component of the treatment contrast behaves accordingly: -\$907 (p = 0.13) against the 2011 baseline, and -\$14 (p = 0.95) once the baseline pools 2009--2011, consistent with mean reversion from the price peak rather than drought damage. The nonfarm component is steadier: -\$394, -\$261, -\$261, -\$286, and -\$414 across pre-periods beginning in 2011, 2010, 2009, 2007, and 2002 - sign-stable at 0.5 to 0.8 percent of mean income under every baseline choice, with onset-year gaps of -\$536 and -\$542 (p $\approx$ 0.08), though never significant at conventional levels. Taken together, the decomposition indicates that the raw contrast of -\$1,311 combines the reversion of farm income from its 2011 peak with a more modest, imprecisely estimated decline in nonfarm income. In agricultural counties the income ledger embeds the commodity-price cycle, and an event contrast inherits that cycle unless the two are separated.
+
+\begin{figure}[htbp]
+\centering
+\caption{Farm versus nonfarm decomposition of the 2012 treated-control income gap, 2001--2023.}
+\label{fig:e1f6}
+\includegraphics[width=0.95\linewidth]{../../../Analysis/plots/did/decomposition_Drought_2012_farm_nonfarm.png}
+\end{figure}
+
+Section 6 of the main text reports the durable form of the drought--income relationship - the distributed-lag specification, which is stable across estimation windows and does not depend on any single baseline year. The contribution of this appendix is to establish what the event contrast measures: a commodity-price reversion in farm income combined with a modest nonfarm decline of 0.5 to 0.8 percent, the latter within the range of income effects in the climate-economy literature \citep{deschenes2007agricultural,deryugina2017fiscal}.
+
+\FloatBarrier
+\subsection{Falsification, external validity, and employment}
+
+The identifying assumption is that treated and never-exposed counties would have trended in parallel absent the 2012 onset. Table~\ref{tab:e1t4} collects the tests of that assumption, each statistic taken from the committed robustness output rather than restated here, and three points deserve emphasis beyond what the table reports. First, the parallel-trends evidence is genuinely mixed: the differential linear pre-trend over the 21 years from 1990 to 2011 is -\$69 per year (SE 89, p = 0.44) and does not reject, but a coefficient of that size accumulates to roughly -\$1,450 over two decades - the magnitude of the raw event contrast - and an event-study joint Wald test does reject (F = 6.9, p < 0.001). A.2 locates that drift in the farm component of income, which is why this appendix reports the contrast under several baselines instead of resting on a single pre-trend statistic. Second, HonestDiD-style sensitivity analysis \citep{rambachan2023honestdid} cannot run on the 2012 cohort, which has no in-panel pre-period; run on the pooled cohorts, where a pre-period does exist, the income bounds include zero at every value of the smoothness parameter; the long BEA window and the farm/nonfarm decomposition substitute for it, and they also cover the falsification that future shocks should not predict past outcomes. Third, dropping Colorado or Nebraska lifts the analytic p-value to 0.075 and 0.057, which is the few-treated-cluster sensitivity that motivated the bootstrap rather than a separate finding. Three further checks are reported in full in the robustness suite: PRISM dew-point humidity leaves the headline coefficients essentially unchanged (the most sensitive candidate, the cold--debt coefficient, moves from 0.01363 to 0.01368), ACS controls for aging, tenure, and in-migration leave 94 to 104 percent of the debt and hospital effects intact, though the cold-income estimate retains only 58 percent, and stricter 90th-percentile shock definitions leave the conclusions unchanged.
+
+\input{../../../Analysis/did/robustness/falsification_table.tex}
+
+Drought in one county may depress income in its neighbors through shared labor and product markets, which would violate the no-interference assumption if control counties absorb part of the treatment. An own-versus-neighbor decomposition cannot separate the two here - own and adjacent-county exposure correlate at 0.94 to 0.97 - but two facts are identified. The neighbor-exposure block is jointly significant (p $\approx$ 0.006), and specifications adding neighbor exposure exceed the own-only baseline (income -157 versus -133 per unit of exposure; employment -1,090 versus -714). County coefficients therefore capture local exposure, and adjacent-county exposure adds a same-signed regional component that the local coefficient understates: spillovers amplify the estimate rather than confound it, and the headline is a lower bound on regional exposure. Spatial dependence in the errors is likewise handled: Conley standard errors with kernels out to 300 km leave the income result significant (worst case p = 0.008), and at 200 km the Conley and state-clustered p-values essentially coincide (0.0029 versus 0.0026).
+
+Is the 2012 estimate a window onto droughts generally, or the fingerprint of one event? The panel contains later first-onset cohorts, so the question can be answered with estimates: I pool all first-onset cohorts in a staggered design and aggregate with the doubly-robust estimator of \citet{callaway2021did}, in the \citet{santanna2020drdid} specification. The pooled onset effect is -\$324 (SE 276), and the pooled long-run average is +\$350 (SE 585); both are nulls. The 2012 income effect is therefore event-specific even at onset, and I keep the event estimand and the pooled estimand separate throughout rather than averaging them. Several features of 2012 are consistent with the difference: it was an extreme event even among extremes; a first onset falls on counties with no recent adaptation experience, while later cohorts may be partially adapted; its timing within the agricultural calendar was unusually damaging; and the composition of comparison groups differs across cohorts. The data cannot adjudicate among these explanations, and I do not attempt to.
+
+The 2012 event also reduced employment - by roughly 2,000 jobs per treated county (analytic p = 0.0001), about 4 percent of mean county employment of 48,068 - but this estimate is fragile in a way the income estimate is not. The fragility is not about inference: it clears the few-cluster bar (wild-cluster bootstrap p = 0.003; randomization inference p = 0.037), and its leave-one-state-out envelope of [-2,156, -1,854] never flips significance. Rather, it attenuates by about 58 percent under the doubly-robust estimator (-871, SE 433, with a confidence interval that barely excludes zero) and reverses sign in the pooled estimator (+2,609, SE 2,245) alongside positive pre-trends. I therefore report the employment decline as event-specific and secondary.
+
+These tests defend a specific estimand: the intention-to-treat effect of the 2012 first onset for the treated geography, which the pooled cohorts confirm is event-specific by construction. The design does not identify the mechanism - agricultural losses, labor-demand contractions, and local-demand responses are all consistent with the reduced form - and the direct evidence on a health channel comes from the Medicare panel in Section 4. What this appendix establishes is what the event contrast measures; the durable form of the drought--income relationship is reported in Section 6 of the main text.
+
+\FloatBarrier
+\section{Shock-definition and horizon robustness}
+
+The shock definitions anchor to a 1990--2000 pre-study climatology: temperature and precipitation z-scores use baseline means and standard deviations from that window, and the heat and cold burden indicators use national 80th-percentile degree-day cutoffs computed over it. Extreme drought is defined by an absolute threshold - a Palmer index at or below -4 - and does not depend on the baseline. To assess sensitivity to the baseline horizon, I rebuild the z-scores and degree-day cutoffs under baselines of 1990--2005 and 1990--2010, both of which end before the 2011--2023 outcome window and so introduce no look-ahead, and re-estimate the affected headline specifications; the 1990--2000 rebuild first reproduces the shipped shock flags exactly (zero mismatches in 40,781 county-years) and the published coefficients to the digit. The definitions prove insensitive to the choice. The national cutoffs move by about two percent at most, the share of county-years flagged shifts by at most 1.1 percentage points, the Medicare heat responses are stable (\$112, \$107, and \$113 per beneficiary contemporaneous and \$176, \$179, and \$180 at one lag across the three baselines, with emergency-visit responses similar), and the county cold-employment response is likewise stable (-714, -607, and -613 employed persons at the two-year lag; p = 0.035 to 0.039). The one quantifiable sensitivity is the state cold--debt coefficient, which attenuates from 1.35 percentage points (p = 0.012) under the 1990--2000 baseline to 1.03 (p = 0.027) and 0.85 (p = 0.044) as the baseline lengthens - sign-stable and significant at the five-percent level under every choice, but smaller, because a baseline that includes the warming 2000s raises the reference mean, and the z-score threshold then selects milder cold years. I therefore cite that response as a 0.85 to 1.35 percentage-point range wherever baseline robustness is at issue.
+
+The dynamic specifications are similarly insensitive to the estimation horizon. Re-running the event-study machinery with maximum horizons of two through five years leaves every headline coefficient at horizons zero through two within one standard error of its reported value, with no sign changes; the only consequential choice is truncation to a two-year horizon, which understates the cold-employment response. The longer horizons add information rather than fragility: the drought-debt response is transient by a four-year horizon, while the cold-employment response persists at three and four years (p = 0.009 and 0.006) - dynamics taken up in the second essay.
+
+\FloatBarrier
+\renewcommand{\thesection}{\thechapter.\arabic{section}}
+\renewcommand{\theHsection}{\thechapter.\arabic{section}}
+
+\chapter{Scarring and Compounding: The Dynamic Economic Costs of Recurring Climate Exposure}
+
+\begingroup\small\begin{quote}
+Whether a changing climate raises costs over the long run depends on what happens once a shock ends: whether the damage reverses, leaves a one-time scar, or compounds as shocks recur. Using a U.S. county panel from 2011 to 2023, I decompose each climate shock into onset, persistence, and exit; test whether entering and leaving a shock offset one another; and estimate how outcomes respond to accumulated shock-years, checking the results against a staggered event-study estimator. The dynamics are shock-specific. Drought debt scars: the two-year onset-exit asymmetry in the medical-debt share is +0.019 (p < 0.001), about 45 percent of a typical annual movement. This is a scar that fades by the fourth year after exit and partly reflects out-migration. Cold, on the other hand, compounds: counties at 10+ cumulative cold-years have employment roughly 5,500 lower than counties having 1-3 years of exposure, and the gap approaches 5,000 jobs a decade after onset in the event study. Heat saturates into a level difference, and chronic extreme drought is extremely rare. The horizon over which climate raises costs is itself hazard-specific, so single-year exposure measures understate the burden of recurring cold.
+\end{quote}\endgroup
+
+\FloatBarrier
+\section{Introduction}
+
+Whether a changing climate raises health and economic costs over the long run depends less on any single bad year than on what happens after it. When the drought breaks or the cold season ends, the damage may reverse, it may leave a one-time scar, or as shocks recur it may compound.
+
+A large literature measures the contemporaneous and short-lag effects of temperature and drought on output and health \citep{dell2014weather}, with a smaller strand on the persistence of local shocks \citep{hsiang2014cyclones,deryugina2018katrina}. Much less is known about adjustment: whether the same shock's effects unwind on exit, and whether recurrence raises the marginal harm. This essay provides that evidence for heat, cold, and drought.
+
+Using a U.S. county panel from 2011 to 2023, I decompose each climate shock into its onset, its persistence, and its exit; test whether entering and leaving a shock offset one another, which I take as the operational definition of reversibility; estimate how outcomes respond to the cumulative number of shock-years a county has accumulated; and check the dose results against a staggered event-study estimator. The estimands are built to distinguish four adjustment regimes: reversal, scarring, saturation, and compounding.
+
+The dynamics are shock-specific. Drought debt scars: the two-year onset-exit asymmetry in the medical-debt share is +0.019 (p < 0.001), about 45 percent of a typical annual movement. This is a scar that fades by the fourth year after exit and partly reflects out-migration. Cold, on the other hand, compounds: counties at 10+ cumulative cold-years have employment roughly 5,500 lower than counties having 1-3 years of exposure, and the gap approaches 5,000 jobs a decade after onset in the event study. Heat saturates into a level difference, and chronic extreme drought is extremely rare. The horizon over which climate raises costs is itself hazard-specific, so single-year exposure measures understate the burden of recurring cold.
+
+This essay turns the informal language of scarring and compounding into operational estimands of symmetry tests, dose contrasts, and event-study gaps, and applies it uniformly across hazards in one unified panel. Section 2 explains why persistence matters; Section 3 sets out the transition framework and estimands; Section 4 summarizes the data and exposure support. Sections 5 through 7 report the symmetry, cumulative-dose, and long-run results; Section 8 examines migration and composition; Section 9 interprets the results by hazard; Section 10 concludes.
+
+\FloatBarrier
+\section{Why persistence matters}
+
+The welfare cost of a climate shock depends on what happens after it ends. A loss that reverses within a year and an equal-sized loss that persists have very different discounted burdens, and a shock whose marginal harm grows with recurrence is a different policy object from one whose costs arrive once. Further, if repeated exposure compounds, counties facing recurring hazards face rising marginal damages, and adaptation capital there pays a growing dividend. If effects saturate, the gap is a fixed level difference, and the policy question shifts toward transfers and insurance for the exposed geographies rather than protection against the next marginal year. Lastly, persistence also matters for measurement. Contemporaneous exposure metrics - this year's shock against this year's outcome - understate hazards whose harm accumulates across years. \citep{delljonesolken2012temperature}
+
+\FloatBarrier
+\section{Transition framework and estimands}
+
+I define four different types of adjustment that take place after a climate shock. Under "reversal", exit offsets onset and the shock leaves no lasting mark. Under "scarring", exit fails to offset onset and a gap remains after the shock ends. Under "saturation", effects persist at a level but do not grow with additional exposure. Under "compounding", the marginal harm grows as exposure recurs. Figure~\ref{fig:e2f1} illustrates the four paths.
+
+\begin{figure}[htbp]
+\centering
+\caption{Four adjustment paths after a shock: reversal, scarring, saturation, and compounding.}
+\label{fig:e2f1}
+\includegraphics[width=0.95\linewidth]{../../../Analysis/plots/essay_diagrams/fig_adjustment_regimes.png}
+\end{figure}
+
+I decompose each hazard into onset, persistence, and exit indicators and test symmetry - whether the onset and exit coefficients sum to zero - as the operational definition of reversibility. A rejected symmetry test with a same-signed sum is scarring. Local projections then trace the post-exit path, which is what distinguishes a transient scar from a permanent one. \citep{jorda2005localprojections}
+
+\begin{equation}
+Y_{it} \;=\; \alpha_i \;+\; \gamma_t \;+\; \beta^{\mathrm{on}} O_{it}
+\;+\; \beta^{\mathrm{pe}} R_{it} \;+\; \beta^{\mathrm{ex}} E_{it} \;+\; \varepsilon_{it},
+\qquad H_0:\; \beta^{\mathrm{on}} + \beta^{\mathrm{ex}} = 0
+\label{eq:transition}
+\end{equation}
+
+Cumulative-dose estimands separate saturation from compounding: binned contrasts across accumulated shock-years and a smooth quadratic in dose. If effects saturate, high-dose and mid-dose counties look alike; if they compound, the gap grows with accumulated years. I interpret these as within-county exposure-history contrasts throughout.
+
+\begin{equation}
+Y_{it} \;=\; \alpha_i \;+\; \gamma_t \;+\; \sum_{b} \phi_b \,
+\mathbf{1}\{C_{it} \in b\} \;+\; \varepsilon_{it},
+\qquad C_{it} \;=\; \sum_{\tau \le t} S_{i\tau}
+\label{eq:dose}
+\end{equation}
+
+Finally, staggered event-study estimates in the \citet{callaway2021did} framework compare treated cohorts with not-yet-treated and never-treated counties over a decade of event time. These provide the long-run complement to the transition estimates, and emerge from an estimator built for staggered adoption.
+
+\FloatBarrier
+\section{Data and recurring exposure}
+
+The panel, shock definitions, and estimation conventions follow the first essay. Briefly: a county-year panel over 2011--2023 covering roughly 3,100 counties; four binary shock bins - heat and cold marked by national 80th-percentile degree-day cutoffs from a 1990--2000 pre-study baseline, extreme drought by an absolute Palmer threshold, and poor air quality by the EPA exceedance level; county and year fixed effects; and state-clustered standard errors. The first essay's Appendix B shows the definitions are robust to longer baseline horizons and to the choice of estimation horizon.
+
+Table~\ref{tab:e2t1} reports the transition support over 2011--2023. Drought is episodic in the data: 511 onset transitions and 705 exits against only 175 persisting county-years, across 603 counties ever exposed. Therefore, episodes begin and end quickly, and chronic extreme drought is rare: persisting spells are 0.5 percent of county-years, against 2.3 percent for any extreme-drought year. Heat and cold are different: 903 and 1,032 onsets sit alongside 8,125 and 5,485 persisting county-years, so exposure recurs and accumulates which is the variation the cumulative-dose estimates use. The transition regressions run on roughly 27,000 to 34,000 county-years, depending on outcome and horizon.
+
+\input{../../../Analysis/delta/transition_table.tex}
+
+\FloatBarrier
+\section{Onset--exit symmetry results}
+
+The symmetry test asks whether leaving a shock undoes what entering it did. For heat and cold employment the onset and exit coefficients offset; for drought and the credit-bureau debt share they do not. At a two-year horizon their sum - the asymmetry - is +0.019 (p < 0.001; Table~\ref{tab:e2t3}), so the recorded debt share does not return to its pre-shock path within the horizon the test reaches. What follows is a statement about a ledger rather than a welfare measure: bureau debt records hardship only after an insurance relationship, a billed encounter, and a credit file, and the third essay shows the recorded response is weakest where coverage is thinnest. Part of the persistence is compositional, since drought raises net outflows the following year, so the estimate bounds same-population persistence rather than measuring it. The asymmetry survives a sharpened multiple-testing correction at q < 0.05, remains significant under no, lagged, and contemporaneous control sets estimated on the identical sample (p < 0.001 in each), though the point estimate moves between 0.019 and 0.025, and 99 percent of the lag-2 drought-debt coefficient survives premium adjustment.
+
+The scar is large relative to how much the series normally moves. Scaled by the mean absolute deviation of year-to-year changes in the county's debt share, the two-year asymmetry equals about 72 percent of a typical annual movement. It is also approximately 10 percent of the mean debt share of \textasciitilde{}19 percent. Extending the local-projection horizon shows the drought impulse fading by the fourth year. At the three-year horizon, the furthest the symmetry test reaches, the asymmetry remains significant (+0.015, p = 0.039). Table~\ref{tab:e2t3} reports symmetry tests for the full grid of hazards and outcomes.
+
+\input{../../../Analysis/delta/symmetry_table.tex}
+
+\FloatBarrier
+\section{Cumulative-dose results}
+
+Cumulative dose asks whether the marginal cold year hurts more as a county's exposure history accumulates - a different question from whether a single episode unwinds. I count the cold-shock years each county has accumulated over the panel and compare outcomes across accumulated doses, using a binned contrast - ten or more cumulative cold-years versus one to three - and a smooth quadratic dose term, with county and year fixed effects throughout.
+
+In the unweighted binned contrast, a county at ten or more cumulative cold-years has employment 5,522 lower than a county at one to three (SE 1,196, p = <0.01) - about 11 percent of mean county employment of 48,068. The population-weighted contrast is far larger (\textminus{}41,573, p = 0.005), reflecting the weight of large counties in levels-based outcomes. The smooth quadratic dose term implies a marginal-effect difference between the tenth and first cold-year of +417 - flat and statistically insignificant. The binned estimator survives humidity adjustment, an adjustment for population aging, the stricter 90th-percentile definition of extreme cold, and all three control variants estimated on the identical sample (p < 0.001 in each).
+
+\FloatBarrier
+\section{Long-run and recurring-treatment comparisons}
+
+A staggered difference-in-differences in the \citet{callaway2021did} framework traces the employment gap in event time. Employment in cold-treated counties is 4,982 lower a decade after onset (p = 0.003), and the gap compounds  with time from roughly 150 in the onset year to 2,600 at five years and 4,900 at ten. The decade-out estimate rests on a single pre-year by construction; pooling the available pre-period leaves it essentially unchanged (\textminus{}4,990, p = 0.005). The medical-debt share is also higher a decade after onset, but that gap is flat through 2022 and appears entirely in 2023, the year credit-bureau medical-debt reporting rules changed, so I do not read it as compounding evidence and note it only with that caveat.
+
+Horizon choices do not drive these verdicts. Extending estimation horizons change the short-horizon estimates by less than one standard error, and cold employment losses persist at three- and four-year horizons in local projections (p = 0.009 and 0.006). Only shortening matters: truncating the horizon at two years understates cold compounding.
+
+Heat behaves differently. Its cumulative-dose profile shows no negative gradient - the binned ten-plus versus one-to-three contrast is +4,460 jobs (p = 0.06), against cold's \textminus{}5,522 (Figure~\ref{fig:e2f4}) - so heat's persistent gap is a level difference rather than one that grows with accumulated exposure (saturation). Chronic extreme drought, by contrast, is too rare in the panel to estimate a dose response at all - only 175 persisting county-years against 511 onsets - so drought in these data is episodic, which is why its dynamics were examined through onset and exit rather than accumulation.
+
+\begin{figure}[htbp]
+\centering
+\caption{Cumulative-exposure contrasts for cold and heat: employment falls with accumulated cold-years but not with accumulated heat-years.}
+\label{fig:e2f4}
+\includegraphics[width=0.95\linewidth]{../../../Analysis/persistent_exposure/fig_heat_saturation.png}
+\end{figure}
+
+\FloatBarrier
+\section{Migration, composition, and survivorship}
+
+Some of the persistence has a demographic component. IRS county-to-county migration flows show drought lowering the net in-migration rate by 0.21 percentage points the following year (p = 0.047) - that is, raising net outflows. I read this as a bounded, suggestive contributor to the drought scar rather than a decomposition of it. \citep{mullinsbharadwaj2021weathermigration} Part of the persistent debt gap may therefore be composition as households that remain differ in characteristics from those who left. The same logic applies to the long-run cold gaps, for two further reasons. First, the compounding estimate is not invariant to how counties are weighted, as Section 7 sets out. Second, the Callaway-Sant'Anna aggregation does not hold the treated population fixed as event time lengthens: the admissible cold-onset cohorts are 2013 (171 counties) and 2014 (59 counties), and because the panel ends in 2023, only the 2013 cohort has ten years of post-onset data to contribute an event-time-10 estimate --- a county onsetting in 2014 drops out of that average by construction.
+
+\FloatBarrier
+\section{Interpretation by hazard}
+
+The dynamics are hazard-specific. Drought is episodic: its recorded-debt scar is real at a two-year horizon, fades by the fourth year, and is partly compositional. Cold compounds under the binned cumulative-dose contrast and the staggered event-study estimator with employment gaps that widen a decade after onset. Heat saturates into a level difference that does not grow with additional exposure.
+
+It follows that the policy-relevant horizon is itself hazard-specific. Single-year exposure measures understate the burden of recurring cold, while long averages dilute the episodic sharpness of drought. Adaptation targeting inherits the same logic: compounding favors protecting counties with recurring exposure before the next marginal year arrives, while saturation favors supporting the already-exposed stock.
+
+\FloatBarrier
+\section{Conclusion}
+
+This essay asked what happens when a climate shock ends or recurs: whether its economic effects reverse, scar, saturate, or compound. The answers are hazard-specific. Drought debt scars - a two-year onset-exit asymmetry of +0.019, about 45 percent of a typical annual movement in the debt share, fading by the fourth year after exit. Cold employment compounds, with a binned cumulative-dose gap of roughly 5,500 jobs and an event-study gap of roughly 5,000 a decade after onset. Heat saturates into a level difference.
+
+The broader implication is about measurement. Because the horizon over which climate raises costs is hazard-specific, exposure measures that stop at the current year systematically understate recurring hazards. Longer panels and working-age administrative data would extend the horizons these tests can reach.
+
+\FloatBarrier
+\chapter{Unequal and Unrecorded: The Distribution of Climate-Related Economic and Health-System Costs}
+
+\begingroup\small\begin{quote}
+The same climate shock need not impose the same cost everywhere, and the data used to measure hardship might not record it evenly. Using a U.S. county panel from 2011 to 2023, I interact climate shocks with the CDC Social Vulnerability Index, compare marginal effects in the least and most vulnerable counties, and mirror every estimate at the state level. Structural vulnerability amplifies real-economy harm: extreme heat turns a small employment gain into a loss in vulnerable counties (p = 0.001); cold's per-capita income effect is roughly ten times larger there, though that interaction is marginal (p = 0.06); and drought at a two-year lag pushes benchmark premiums up in vulnerable counties. A distinct affordability margin operates through energy burden (share of household income spent on energy): heat's employment damage concentrates in high energy burden counties. On the supply side, heat raises uncompensated care most at safety-net hospitals. Credit-bureau medical debt is the exception - it concentrates in less-vulnerable, better-insured places and flips sign across county and state-level estimations. Therefore, the real-economy costs of climate shocks concentrate in places with higher social vulnerability, and bureau debt is least informative about hardship precisely because credit visibility/availability are the weakest in such places.
+\end{quote}\endgroup
+
+\FloatBarrier
+\section{Introduction}
+
+A heat wave of a given magnitude is not the same event everywhere. In a county where households have savings, insurance, and other social protections, a climate shock is better absorbed; where they are already stretched, it can tip households into crisis. And the data sources one looks to measure these crises, such as medical debt on credit reports, may look away in exactly the places where the burden is heaviest.
+
+The environmental-justice literature documents unequal exposure to climate hazards \citep[see][]{banzhaf2019ej}. Less is known about unequal realized damage - whether the same shock costs more where vulnerability is higher - and less still about whether the measures used to detect hardship record it evenly across places. This essay treats those as two halves of one question: climate burdens can be unequal both because vulnerable places suffer more and because standard indicators observe hardship selectively.
+
+Using the county panel of the previous essays, I interact each climate shock with the CDC Social Vulnerability Index and compare marginal effects in the least and most vulnerable counties, mirroring every county-level estimate at the state level. I then push past the index in three directions: an energy-burden moderator from DOE LEAD data, capturing an affordability margin distinct from social vulnerability; provider-side heterogeneity across safety-net and other hospitals; and uninsurance gradients that test directly whether credit-bureau debt records hardship where coverage is thin. Lastly, I create a concentration index to aggregate the results.
+
+I find that structural vulnerability amplifies the real-economy harm of climate. Extreme heat turns a small employment gain of 886 jobs in the least vulnerable counties into a loss of 169 in the most vulnerable (interaction p = 0.001); cold's per-capita income effect is roughly ten times larger at high vulnerability (\textminus{}\$46 versus \textminus{}\$459), though that interaction is marginal (p $\approx$ 0.06); and drought at a two-year lag pushes benchmark premiums up in vulnerable counties rather than down (interaction p = 0.001). A distinct affordability margin operates through energy burden, which is nearly uncorrelated with vulnerability (r = 0.11): heat's employment damage concentrates in high-burden counties. The same unequal incidence appears on the supply side, where heat raises uncompensated care most at safety-net hospitals, robust to winsorizing the hospital accounts (p = 0.013). Credit-bureau medical debt is the exception: its response concentrates in less-vulnerable, better-insured places and flips sign across geographic scales, and greater uninsurance predicts a smaller measured response - with the drought-by-uninsurance gradient the one cell that survives multiple-testing correction (q = 0.012).
+
+The essay contributes on both parts of the research question. To the climate and environmental-justice literatures, it adds heterogeneity in realized economic damage - income, employment, and premiums, not only exposure - with an affordability margin that is distinct from social vulnerability. To household finance and the economics of measurement, it shows that credit-bureau debt runs counter to the amplification pattern, for understandable reasons: bureau debt requires insurance, a billed encounter, and a credit file, so it is least informative about hardship precisely where coverage and credit visibility are weakest. Hardship statistics built on such ledgers will understate the climate burden of the most vulnerable places.
+
+In this paper, Section 2 describes the vulnerability measures and data; Section 3 the interaction design. Section 4 reports the real-economy heterogeneity, Section 5 the energy-burden margin, Section 6 the provider side, and Section 7 the debt-visibility results. Section 8 aggregates into burden concentration; Sections 9 and 10 interpret and conclude.
+
+\FloatBarrier
+\section{Baseline vulnerability measures and data}
+
+The panel, shock definitions, and estimation conventions follow the first essay: a county-year panel over 2011--2023; four binary shock bins, with heat and cold marked by national 80th-percentile degree-day cutoffs from a 1990--2000 pre-study baseline, extreme drought by an absolute Palmer threshold, and poor air quality by the EPA exceedance level; county and year fixed effects; and state-clustered standard errors on \citet{abadie2023clustering} grounds, with baseline- and horizon-robustness documented in the first essay's Appendix B. What is new here is the cross-sectional layer - who is exposed, and with what capacity to absorb it.
+
+The primary vulnerability measure is the CDC/ATSDR Social Vulnerability Index (SVI), built by the agency for emergency-response planning from percentile ranks across four themes derived from the American Community Survey (ACS) - socioeconomic status, household composition and disability, minority status and language, and housing and transportation - and combined into an overall county percentile. \citep{flanagan2011svi} I use the 2014--2022 average of the index as a time-invariant county baseline, since the components move slowly and a fixed baseline avoids conditioning on vulnerability that itself responds to exposure and report the marginal effect of each shock at the 25th and 75th percentiles of the index, so every interaction has a concrete less-vulnerable and more-vulnerable reading.
+
+I use three further moderators, each built to isolate a different exposure margin from SVI's general fragility composite. The energy-burden z-score comes from the Department of Energy's Low-Income Energy Affordability Data (LEAD) tool: a single 2022 cross-section, modeled from ACS microdata and residential energy-consumption models, of home energy costs as a share of household income - an affordability measure rather than a demographic one, and time-invariant here for the same reason SVI is. The climate-exposed non-farm labor share comes from Census ACS table C24030 (industry of employment for the civilian employed population): the county share working in construction, mining, manufacturing, transportation and warehousing, and utilities - industries with direct outdoor or thermal exposure - deliberately built to exclude agriculture, so it can carry a labor-exposure signal distinct from farm dependence. Agricultural dependence itself comes from the USDA ERS County Typology (2015 edition) farming-dependent flag, cross-checked against BEA farm earnings as a share of total county earnings averaged over 2001-2010. Their baseline correlations are informative before any regression: energy burden correlates with the Social Vulnerability Index at only 0.11 and with agricultural dependence at 0.32 (Table~\ref{tab:e3t1}) - low enough that testing among moderators can be decided by the data rather than by collinearity.
+
+\input{../../../Analysis/mechanism/moderator_correlations.tex}
+
+The supply side uses the National Academy for State Health Policy's (NASHP) Hospital Cost Tool, a public hospital-year financial panel - 5,119 hospitals observed over 2011--2023. Uncompensated care is the sum of bad debt and charity care as a share of net patient revenue; safety-net status flags hospitals in the top quartile of a combined Medicaid-plus-uncompensated-care payer-mix score, thresholded across the pooled hospital-years, so it identifies hospitals serving disproportionately Medicaid and charity/uninsured patients rather than a designation NASHP assigns itself. Climate exposure is assigned at each hospital's location county via a ZIP-to-county crosswalk (the modal county per ZIP), which is deliberately different from the residential population-split used for the consumer-side county debt measure: a hospital's exposure is where it operates, not where its patients live.
+
+County uninsurance rates come from the Census Bureau's Small Area Health Insurance Estimates (SAHIE), a model-based estimate combining the ACS with IRS tax returns, SNAP participation, Medicaid and CHIP records, and Census population estimates. I use SAHIE rather than the ACS's own uninsurance question because it covers the working-age (18-64) population where medical debt actually accrues, and which the Medicare morbidity channel of the first essay cannot study.
+
+\FloatBarrier
+\section{The shock-by-vulnerability design}
+
+\begin{equation}
+Y_{it} \;=\; \alpha_i \;+\; \gamma_t \;+\; \beta \, S_{it}
+\;+\; \lambda \,\bigl(S_{it} \times V_i\bigr) \;+\; \varepsilon_{it},
+\qquad \frac{\partial Y_{it}}{\partial S_{it}} \;=\; \beta + \lambda V_i
+\label{eq:interaction}
+\end{equation}
+
+The design interacts each climate shock with the time-invariant vulnerability baseline, with county and year fixed effects and state-clustered standard errors. The fixed effects absorb every level difference across counties, including vulnerability itself; identification comes from within-county shock timing, and the interaction asks whether the same shock lands harder where baseline vulnerability is higher. I report marginal effects at the 25th and 75th percentiles of the index throughout.
+
+I should note that vulnerability is not randomly assigned and the index bundles many attributes, so the interactions measure heterogeneity where a shock's effects are amplified, and not the causal effect of vulnerability itself. As an aggregation check, every county estimate is mirrored at the state level. Gradients that survive both levels are unlikely to be artifacts of county-level measurement.
+
+\FloatBarrier
+\section{Real-economy heterogeneity}
+
+Vulnerability changes the sign of heat's employment effect. At the 25th percentile of the Social Vulnerability Index, extreme heat is associated with an employment gain of 886 jobs; at the 75th percentile, with a loss of 169 (interaction p = 0.001; Table~\ref{tab:e3t2}, Figure~\ref{fig:e3f2}). Against mean county employment of 48,068, the swing from gain to loss is about two percent of employment. In the least vulnerable counties the point estimate is positive, which I do not read as a benefit of heat: it is more plausibly composition, since the least vulnerable counties are also the larger and more service-oriented ones. What the interaction identifies is the difference between the two ends, not the level at either.
+
+\input{../../../Analysis/exposure_index/svi_marginal_effects.tex}
+
+\begin{figure}[htbp]
+\centering
+\caption{Marginal effect of each hazard at the 25th and 75th percentiles of the social-vulnerability distribution, by outcome.}
+\label{fig:e3f2}
+\includegraphics[width=0.95\linewidth]{../../../Analysis/plots/essay3/fig_svi_marginal_effects.png}
+\end{figure}
+
+Cold's income effect is larger in vulnerable counties by roughly a factor of ten: the marginal effect on per-capita income is \textminus{}\$46 at the 25th percentile of vulnerability and \textminus{}\$459 at the 75th - about 0.1 versus 0.9 percent of the \$53,145 mean. This interaction is marginally significant (p = 0.061).
+
+The premium ledger shows a vulnerability gradient of its own: at a two-year lag, drought is associated with lower benchmark premiums in the least vulnerable counties (\textminus{}\$55 at the 25th percentile, p = 0.03) and higher premiums in the most vulnerable (+\$14 at the 75th; interaction p = 0.001). These are monthly amounts against a mean benchmark premium of \$374 per month. The first essay reports no average drought effect on premiums at any level of aggregation; that average conceals opposing margins - down \$55 per month at the 25th vulnerability percentile and up \$14 at the 75th - which is what the interaction identifies. The finding here is distributional: premiums rise precisely where households are least able to absorb them.
+
+The health-spending interaction replicates at the state level; the income interactions do not, and are insignificant for every hazard. Also, medical debt's interactions run the other way, concentrating measured debt responses in less-vulnerable counties. Section 7 shows why that reversal is a fact about recording rather than about hardship. One qualification travels with all of these gradients: entered jointly with energy burden, the vulnerability index's own interaction no longer separates from zero (Section 5). The results below therefore describe where climate harm lands, not which characteristic of a place makes it land there.
+
+An exploratory composite heat-vulnerability index (the product of thermal hazard - cooling degree days - and social vulnerability) summarizes the same terrain more coarsely: a one-standard-deviation increase is associated with median household income lower by \$435 (p = 0.0002). Per-capita income moves the other way (+\$1,270, p = 0.006), a divergence consistent with per-capita income rising mechanically where population falls; the composite is reported as a descriptive summary and is not used to price harm.
+
+\FloatBarrier
+\section{Energy burden}
+
+Beyond the vulnerability index, an affordability margin operates through energy burden - the share of income households spend on energy, from DOE LEAD data. Conceptually it is distinct from social vulnerability: it measures exposure to cooling costs and utility arrears rather than demographic and socioeconomic fragility, and poor households' energy spending is known to respond less to extreme temperatures precisely because adaptation is unaffordable \citep{doremus2022sweating}.
+
+Heat's employment damage concentrates in high-energy-burden counties. In levels, the interaction of heat with the energy-burden z-score is associated with 1,380 fewer jobs (p < 0.001), about 2.9 percent of mean county employment; in logs - the specification robust to county size - the gradient is \textminus{}0.0065 (p = 0.02). In a joint specification with other moderators, energy burden absorbs the explanatory role: the Social Vulnerability Index interaction is no longer significant (Table~\ref{tab:e3t3}). Energy burden is not a relabeling of vulnerability. Its county-level correlation with the Social Vulnerability Index is only 0.11 (Table~\ref{tab:e3t1}) and it marks an independent dimension of exposure.
+
+\input{../../../Analysis/mechanism/horserace_table.tex}
+
+\FloatBarrier
+\section{Provider incidence and safety-net hospitals}
+
+If vulnerable households bear larger costs, the providers who serve them should feel it too. I test this in a panel of 5,119 hospitals over 2011--2023, with hospital and year fixed effects and state-clustered errors, asking whether climate shocks raise uncompensated care - charity care and bad debt as a share of net patient revenue - and whether the response concentrates at safety-net hospitals. Exposure is measured at the hospital's location county. Hospital financial exposure to climate risk is itself an emerging literature \citep[e.g.,][on hurricane risk and hospital finance]{audi2025hurricane}.
+
+Extreme heat raises uncompensated care most at safety-net hospitals (interaction p = 0.021), and the result is robust to winsorizing the underlying hospital accounts at the first and ninety-ninth percentiles within year (coefficient 0.0209, p = 0.013); it also survives a sharpened multiple-testing correction (Table~\ref{tab:e3t4}, Figure~\ref{fig:e3f4}). Drought moves hospital accounts in the opposite direction: uncompensated care falls by \$3.88 million per hospital in the winsorized specification (p < 0.001), consistent with federal buffers - crop insurance and USDA disaster payments in particular - severing the chain from farm income to uncompensated care.
+
+\input{../../../Analysis/hospital/safetynet_table.tex}
+
+\begin{figure}[htbp]
+\centering
+\caption{Hospital uncompensated care and operating margin by hazard and safety-net status.}
+\label{fig:e3f4}
+\includegraphics[width=0.95\linewidth]{../../../Analysis/plots/essay3/fig_safetynet_uncompensated_care.png}
+\end{figure}
+
+The cold interaction runs the other way, loading on non-safety-net hospitals, so the concentration finding is heat-specific. And exposure is assigned at the hospital's location county rather than its patient catchment, so hospitals drawing patients from distant exposed areas are measured with error.
+
+\FloatBarrier
+\section{Credit-bureau debt as a selective measure}
+
+Credit-bureau medical debt is the one ledger that contradicts the amplification pattern. At the county level, drought's debt response concentrates in less-vulnerable counties (+0.0061 at low vulnerability versus \textminus{}0.0035 at high, p = 0.05); at the state level, cold's debt response amplifies in more-vulnerable states (+0.067, p = 0.03). The vulnerability gradient in measured debt is therefore not stable across hazards or across geographic scales.
+
+The behavior has a mechanical explanation. A medical bill reaches a credit bureau only after three filters: an insurance relationship, a billed encounter, and a credit file. In places where coverage and credit access are thin, hardship can be widespread while the record is not. Measured debt should therefore understate hardship exactly where vulnerability is high which is what the sign flips suggest.
+
+The filters can be tested directly. Interacting shocks with county uninsurance rates from SAHIE, greater uninsurance predicts a smaller measured debt response - about \textminus{}0.005 per standard deviation for drought at each lag (p < 0.03) and \textminus{}0.006 for heat at a one-year lag (p = 0.01). Those are uncorrected estimates from the full shock-by-uninsurance bridge; Table~\ref{tab:e3t5} reports the narrower pre-registered grid, where only drought-by-uninsurance survives correction for multiple testing (q = 0.012). Where fewer people are insured, fewer bills are generated and recorded, and the ledger goes quiet. This supports the measurement critique.
+
+\input{../../../Analysis/latent_hardship/visibility_gradients.tex}
+
+\FloatBarrier
+\section{Burden concentration}
+
+How much exposure is there to distribute? As a descriptive metric in the style of the Lancet Countdown, the country absorbs on the order of 70 to 105 million person-years of extreme-heat exposure each year - three to five times the cold burden. This is an exposure count, not a causal damage estimate, but it sets the scale on which the heterogeneity above operates.
+
+Combining exposure, population, and the estimated vulnerability gradients yields a concentration curve: the share of measured burden against the share of population, ordered from most to least vulnerable (Table~\ref{tab:e3t6}, Figure~\ref{fig:e3f6}). The most vulnerable tenth of the population bears 19 percent of the recurring-cold employment burden - roughly twice its population share - and the most vulnerable fifth bears 36 percent; the corresponding shares are 15 percent for heat-exposure person-years and 11 to 14 percent for the Medicare cost bands.
+
+\input{../../../Analysis/policy/concentration_table.tex}
+
+\begin{figure}[htbp]
+\centering
+\caption{Concentration curve: share of measured burden against share of population, counties ordered from most to least vulnerable.}
+\label{fig:e3f6}
+\includegraphics[width=0.95\linewidth]{../../../Analysis/policy/fig_concentration_lorenz.png}
+\end{figure}
+
+\FloatBarrier
+\section{Interpretation and limitations}
+
+The two halves of this essay answer one question. Climate burdens are unequal, first, because structurally vulnerable places experience larger real-economy effects and second, because the financial indicators commonly used to measure hardship observe it selectively. The halves are complementary: selective observability explains why the unequal burden can be invisible in exactly the data one might reach for first.
+
+Beyond this, some limitations remain. The vulnerability index is a composite, so which component drives amplification is not identified - and Section 5 gives that point its sharpest form: entered against energy burden, the index's interaction does not survive. The index marks where the burden concentrates without isolating what makes a place vulnerable. The debt sign flips compared in Section 7 are different hazards rather than one outcome, and the composite index of Section 4 reverses sign between two income measures. The moderators are time-invariant baselines, so vulnerability that evolves with exposure is not modeled.
+
+\FloatBarrier
+\section{Conclusion}
+
+This essay asked who bears climate-related economic and health-system costs, and where the instruments used to measure financial hardship fail to record them. Social vulnerability amplifies the real-economy harm: heat turns a small employment gain into a loss in vulnerable counties, cold's income effect is roughly ten times larger in high vulnerability counties, and drought pushes benchmark premiums up where vulnerability is high - though the index does not survive a joint test against energy burden, so it identifies where the burden falls rather than why. Considering energy burden, heat's employment damage is concentrated in high-burden counties. On the supply side, heat raises uncompensated care most at safety-net hospitals. Lastly, credit-bureau medical debt shows spikes in low vulnerability counties, suggesting better data coverage for those visible to the insurance and credit rating systems.
+
+For policy, when taken together, vulnerability and energy burden identify where adaptation and assistance dollars should meet the largest marginal harm. For measurement, hardship statistics built on credit-bureau debt will look quietest where the burden is largest, so a hardship statistic built on credit records will understate the burden by most in the places bearing most of it.
+
+\FloatBarrier
+\clearpage
+\bibliographystyle{apalike}
+\bibliography{../references}
+\end{document}
