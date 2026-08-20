@@ -1,0 +1,51 @@
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\sloppy
+\caption{Marginal effect of each hazard at low and high social vulnerability}
+\label{tab:e3t2}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X r r r r r}
+\toprule
+Outcome & Less vulnerable (25th pct.) & p & More vulnerable (75th pct.) & p  & Difference, p \\
+\midrule
+\multicolumn{6}{l}{\textit{Extreme heat}} \\
+Benchmark premium & 0.738 & 0.949 & -2.28 & 0.819 & 0.692 \\
+Civilian employment & 886 & 0.030 & -169 & 0.364 & 0.001 \\
+Median household income & -283 & 0.032 & -259 & 0.003 & 0.827 \\
+Medical debt share & 0.00124 & 0.695 & -0.00394 & 0.259 & 0.314 \\
+Per-capita income & 825 & 0.141 & 438 & 0.068 & 0.345 \\
+\addlinespace
+\multicolumn{6}{l}{\textit{Extreme cold}} \\
+Benchmark premium & 30.4 & 0.004 & 22.7 & \textless{}0.001 & 0.455 \\
+Civilian employment & -277 & 0.152 & -259 & 0.393 & 0.932 \\
+Median household income & 98.6 & 0.233 & 109 & 0.313 & 0.928 \\
+Medical debt share & 0.00288 & 0.081 & 0.00293 & 0.092 & 0.979 \\
+Per-capita income & -45.6 & 0.872 & -459 & 0.028 & 0.061 \\
+\addlinespace
+\multicolumn{6}{l}{\textit{Cumulative cold-years}} \\
+Benchmark premium & -4.66 & 0.220 & -2.93 & 0.415 & 0.494 \\
+Civilian employment & -690 & \textless{}0.001 & -704 & \textless{}0.001 & 0.812 \\
+Median household income & 70.6 & 0.125 & 0.113 & 0.998 & 0.316 \\
+Medical debt share & 0.00214 & 0.025 & -0.00104 & 0.502 & 0.004 \\
+Per-capita income & 215 & 0.123 & -50.7 & 0.599 & 0.147 \\
+\addlinespace
+\multicolumn{6}{l}{\textit{Extreme drought}} \\
+Benchmark premium & 6.43 & 0.640 & 29.5 & 0.034 & 0.017 \\
+Civilian employment & -968 & 0.085 & -777 & 0.517 & 0.837 \\
+Median household income & -323 & 0.324 & 166 & 0.230 & 0.171 \\
+Medical debt share & 0.00603 & 0.067 & -0.00361 & 0.385 & 0.050 \\
+Per-capita income & -99.4 & 0.854 & -109 & 0.628 & 0.985 \\
+\addlinespace
+\multicolumn{6}{l}{\textit{Extreme drought (2-year lag)}} \\
+Benchmark premium & -55.1 & 0.030 & 14.1 & 0.319 & 0.001 \\
+Civilian employment & -357 & 0.734 & 731 & 0.222 & 0.083 \\
+Median household income & -73.8 & 0.839 & -19.0 & 0.903 & 0.870 \\
+Medical debt share & 0.00371 & 0.318 & 0.000077 & 0.978 & 0.412 \\
+Per-capita income & 769 & 0.211 & 237 & 0.459 & 0.413 \\
+\bottomrule
+\end{tabularx}
+\begin{minipage}{\textwidth}\vspace{0.5em}\footnotesize
+Each cell is the effect of the hazard on the outcome, evaluated at the 25th percentile of the county social-vulnerability distribution (less vulnerable) and at the 75th (more vulnerable); the final column gives the p-value on the shock-by-vulnerability interaction, which tests whether the two differ. Units follow the outcome: dollars per year for per-capita and median household income, dollars per month for the benchmark premium, persons for employment, and share of adults for medical debt. County and year fixed effects throughout, with standard errors clustered by state. Medical debt runs opposite to the other ledgers; it is read as a statement about what the credit-bureau record captures, not about where hardship falls.
+\end{minipage}
+\end{table}

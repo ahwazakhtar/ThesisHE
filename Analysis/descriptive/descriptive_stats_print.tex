@@ -1,0 +1,48 @@
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\sloppy
+\begin{longtable}{>{\raggedright\arraybackslash}p{9.40cm} r >{\raggedright\arraybackslash}p{2.6cm} r >{\raggedright\arraybackslash}p{2.7cm} r}
+\caption{Descriptive statistics, county panel 2011--2023}
+\label{tab:e1t1}\\
+\toprule
+Variable & N & Mean (SD) & Median & P10--P90 & Missing \\
+\midrule
+\endfirsthead
+\multicolumn{6}{l}{\textit{Table \thetable{} (continued)}} \\
+\toprule
+Variable & N & Mean (SD) & Median & P10--P90 & Missing \\
+\midrule
+\endhead
+\midrule \multicolumn{6}{r}{\textit{continued on the next page}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\multicolumn{6}{l}{\textit{Climate exposure}} \\
+Temperature, standard deviations from the county's 1990--2000 mean & 40,781 & 0.886 (1.07) & 1.02 & -0.743--2.15 & 2.58\% \\
+Precipitation, standard deviations from the county's 1990--2000 mean & 40,781 & 0.178 (1.36) & 0.0977 & -1.39--1.90 & 2.58\% \\
+Extreme heat (cooling degree days above the national 80th percentile) & 40,781 & 0.243 (0.429) & 0.00 & 0.00--1.00 & 2.58\% \\
+Extreme cold (heating degree days above the national 80th percentile) & 40,781 & 0.174 (0.379) & 0.00 & 0.00--1.00 & 2.58\% \\
+Palmer Drought Severity Index, annual mean & 40,391 & 0.320 (2.17) & 0.196 & -2.51--3.15 & 3.52\% \\
+Extreme drought (Palmer index at or below -4) & 40,781 & 0.0230 (0.150) & 0.00 & 0.00--0.00 & 2.58\% \\
+\addlinespace
+\multicolumn{6}{l}{\textit{Health and financial outcomes}} \\
+Share of adults with medical debt in collections & 38,810 & 0.188 (0.0996) & 0.185 & 0.0540--0.322 & 7.29\% \\
+Median medical debt in collections (2023 USD) & 26,618 & 955 (389) & 892 & 521--1,464 & 36.4\% \\
+Benchmark silver premium, monthly (2023 USD) & 30,690 & 374 (119) & 346 & 247--534 & 26.7\% \\
+Lowest bronze premium, monthly (2023 USD) & 30,690 & 300 (87.7) & 283 & 204--411 & 26.7\% \\
+Hospital bad debt, annual total (2023 USD) & 31,437 & 6,808,145 (21,670,523) & 1,710,004 & 272,891--13,877,415 & 24.9\% \\
+Hospital charity care, annual total (2023 USD) & 31,437 & 10,059,331 (48,847,670) & 936,409 & 0.00--20,387,260 & 24.9\% \\
+Uninsured share of the under-65 population & 34,543 & 0.118 (0.0577) & 0.110 & 0.0530--0.193 & 17.5\% \\
+\addlinespace
+\multicolumn{6}{l}{\textit{Household and local economy}} \\
+Per-capita personal income (2023 USD) & 40,937 & 53,145 (16,735) & 50,565 & 39,087--70,051 & 2.21\% \\
+Median household income (2023 USD) & 40,148 & 62,433 (16,327) & 60,255 & 44,721--82,113 & 4.10\% \\
+Civilian employment (persons) & 40,154 & 48,068 (157,164) & 10,773 & 2,092--98,364 & 4.08\% \\
+Household income, credit-bureau file (2023 USD) & 37,681 & 81,313 (20,231) & 77,720 & 61,037--104,661 & 9.99\% \\
+County population & 40,840 & 103,466 (329,584) & 25,776 & 5,019--210,582 & 2.44\% \\
+\end{longtable}
+\vspace{-0.6em}\begin{minipage}{\textwidth}\footnotesize
+One row per variable, pooled over county-years in the estimation panel. N counts county-years with a value and `Missing' the share of panel rows without one; `P10--P90' brackets the middle eighty percent of counties. The two shock indicators take the value 1 in a shock year and 0 otherwise, so their means are the share of county-years flagged. Means and standard deviations are given to three significant figures and dollar series are in 2023 dollars. County size is heavily right-skewed -- the mean county has about four times the employment of the median -- so these unweighted means describe the typical county rather than the typical resident.
+\end{minipage}
+\endgroup

@@ -1,0 +1,24 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\sloppy
+\caption{Inference and falsification tests, 2012 drought event contrast (per-capita income)}
+\label{tab:e1t4}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3.1cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{4.2cm} >{\raggedright\arraybackslash}p{3.4cm}}
+\toprule
+Test & What it addresses & Statistic & Verdict \\
+\midrule
+Parallel pre-trends (BEA, 1990--2011) & Treated and control counties on different trajectories before 2012 & -\$69/yr (SE 89), p = 0.441; joint Wald F = 6.9, p \textless{}0.001 & Slope does not reject; joint test does. Drift is located in the farm component (A.2), not treated as settled by this test. \\
+Wild-cluster bootstrap (Webb) & Only 17 treated states; analytic clustering overstates precision & p = 0.036; CI [-\$2,911, -\$139] & Survives; the bootstrap interval is the one cited in the text. \\
+Randomization inference & Same, without asymptotic approximation & p = 0.007 & Survives. \\
+Doubly-robust estimator & Treated counties differ in observable composition & -\$1,451 (SE 515); CI [-\$2,461, -\$441] & Survives; conditioning on observables does not erode the contrast. \\
+Leave-one-treated-state-out & One influential treated state drives the result & ATT envelope [-\$1,687, -\$914] over 17 drops & Envelope stays inside the bootstrap interval; analytic significance flips on 2 drops (CO, NE). \\
+Placebo onset years & The contrast would arise at any onset year & two-sided p = 0.009 (B = 1,000) & Estimate sits in the far tail of the placebo distribution. \\
+Pre-window sensitivity & The estimate depends on the single 2011 pre-year & pre = 2011: -\$1,311 (p = 0.028); pre = 2009--2011: -\$286 (p = 0.636) & Not robust: the contrast is a function of the baseline year (see A.2). \\
+\bottomrule
+\end{tabularx}
+\begin{minipage}{\textwidth}\vspace{0.5em}\footnotesize
+All statistics are drawn from the robustness suite. The estimand throughout is the intention-to-treat effect of first extreme-drought onset in 2012 for the 139 treated counties, against 2,534 never-exposed counties, with county and year fixed effects and state-clustered standard errors. Further checks are reported in the text and appendices -- humidity, ACS demographic controls, threshold grids, and Conley spatial kernels. 
+\end{minipage}
+\end{table}

@@ -1,0 +1,32 @@
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\sloppy
+\caption{Does measured medical debt respond less where hardship is least visible?}
+\label{tab:e3t5}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.1cm} r r r r r}
+\toprule
+Moderator & Weighting & Debt response & p & Per SD of moderator & p  & q \\
+\midrule
+\multicolumn{7}{l}{\textit{Extreme cold, 1-year lag}} \\
+Hospital access & Population & 0.00429 & 0.013 & 0.000228 & 0.844 & 1.000 \\
+Hospital access & Unweighted & 0.00531 & 0.015 & 0.00102 & 0.337 & 0.898 \\
+Rurality & Population & 0.00406 & 0.014 & -0.000348 & 0.824 & 1.000 \\
+Rurality & Unweighted & 0.00547 & 0.010 & 0.00107 & 0.543 & 0.906 \\
+Uninsured share & Population & 0.00296 & 0.043 & -0.00149 & 0.527 & 1.000 \\
+Uninsured share & Unweighted & 0.00435 & 0.093 & -0.00142 & 0.507 & 0.906 \\
+\addlinespace
+\multicolumn{7}{l}{\textit{Extreme drought, 2-year lag}} \\
+Hospital access & Population & 0.00699 & 0.018 & 0.000011 & 0.983 & 1.000 \\
+Hospital access & Unweighted & 0.00568 & 0.026 & 0.000632 & 0.646 & 1.000 \\
+Rurality & Population & 0.00635 & 0.075 & -0.000251 & 0.788 & 1.000 \\
+Rurality & Unweighted & 0.00574 & 0.027 & -0.000612 & 0.729 & 1.000 \\
+Uninsured share & Population & 0.0106 & \textless{}0.001 & -0.00547 & 0.002 & 0.012 \\
+Uninsured share & Unweighted & 0.00914 & 0.003 & -0.00490 & 0.054 & 0.159 \\
+\bottomrule
+\end{tabularx}
+\begin{minipage}{\textwidth}\vspace{0.5em}\footnotesize
+The outcome is the share of adults with medical debt in collections on a credit record. `Debt response' is the effect of the hazard at the average county; `Per SD of moderator' is how much that response changes for each standard deviation increase in the moderator. A negative value there means the measured response is SMALLER where the moderator is higher -- the pattern predicted if a bill reaches a credit bureau only after passing an insurance, a billing and a credit-file filter. Each pair of rows reports the same specification population-weighted and unweighted. The q column is a false-discovery rate adjusted for testing the whole grid at once; only the drought-by-uninsurance cell clears it. Attenuation in the predicted direction is necessary but not sufficient evidence for that reading.
+\end{minipage}
+\end{table}

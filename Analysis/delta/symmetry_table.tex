@@ -1,0 +1,35 @@
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\sloppy
+\caption{Onset--exit symmetry tests at a two-year horizon}
+\label{tab:e2t3}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{2.4cm} >{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.1cm} r r r r r}
+\toprule
+Hazard & Outcome & Weighting & Onset & Exit & Asymmetry & p & Rejected \\
+\midrule
+Extreme drought & Civilian employment & Population & 2,392 & 23,022 & 25,414 & 0.382 & no \\
+Extreme drought & Civilian employment & Unweighted & 157 & 713 & 870 & 0.377 & no \\
+Extreme drought & Medical debt share & Population & 0.00796 & 0.00542 & 0.0134 & \textless{}0.001 & yes \\
+Extreme drought & Medical debt share & Unweighted & 0.0137 & 0.00503 & 0.0187 & \textless{}0.001 & yes \\
+Extreme drought & Per-capita income & Population & 293 & 971 & 1,264 & 0.248 & no \\
+Extreme drought & Per-capita income & Unweighted & 476 & 1,147 & 1,623 & 0.002 & yes \\
+Extreme heat & Civilian employment & Population & -1,327 & 805 & -522 & 0.912 & no \\
+Extreme cold & Civilian employment & Population & 4,758 & 1,103 & 5,861 & 0.382 & no \\
+Extreme heat & Civilian employment & Unweighted & 1,010 & 1,407 & 2,417 & 0.006 & yes \\
+Extreme cold & Civilian employment & Unweighted & 192 & -158 & 34.4 & 0.955 & no \\
+Extreme heat & Medical debt share & Population & 0.00364 & 0.00873 & 0.0124 & 0.088 & no \\
+Extreme cold & Medical debt share & Population & -0.00127 & 0.000874 & -0.000398 & 0.964 & no \\
+Extreme heat & Medical debt share & Unweighted & 0.00304 & 0.00759 & 0.0106 & 0.048 & yes \\
+Extreme cold & Medical debt share & Unweighted & -0.00829 & -0.00336 & -0.0117 & 0.118 & no \\
+Extreme heat & Per-capita income & Population & 131 & 481 & 612 & 0.289 & no \\
+Extreme cold & Per-capita income & Population & 151 & 60.4 & 212 & 0.717 & no \\
+Extreme heat & Per-capita income & Unweighted & 256 & 193 & 448 & 0.114 & no \\
+Extreme cold & Per-capita income & Unweighted & 651 & 396 & 1,047 & 0.005 & yes \\
+\bottomrule
+\end{tabularx}
+\begin{minipage}{\textwidth}\vspace{0.5em}\footnotesize
+Symmetry requires that the effect of entering a shock state and the effect of leaving it offset one another, so that their sum is zero. The asymmetry column reports that sum; a value reliably different from zero means the outcome does not return to its pre-shock path when the shock ends. Estimates at other horizons and for the remaining outcomes are reported in the analysis output.
+\end{minipage}
+\end{table}

@@ -1,0 +1,23 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\sloppy
+\caption{Institutional ledgers compared: response, baseline, and response as a share of baseline}
+\label{tab:e1t7}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}p{3cm} >{\raggedright\arraybackslash}X r r r r}
+\toprule
+Ledger & Response & Estimate & p & Baseline & Percent of baseline \\
+\midrule
+Medicare (administrative) & Standardized spending per beneficiary, heat at 1-year lag & \$176 & 0.002 & \$10,359 & 1.69\% \\
+Medicare (administrative) & Emergency visits per 1,000, heat at 1-year lag & 9.44 & \textless{}0.001 & 629 & 1.50\% \\
+Credit bureau (state) & Medical debt share, cold at 1-year lag & 1.35 pp & 0.012 & 18.8\% & 7.19\% \\
+Credit bureau (county) & Medical debt share, cold at 1-year lag & -0.272 pp & 0.463 & 18.8\% & -1.44\% \\
+Credit bureau (county) & Medical debt share, drought at 2-year lag & 0.581 pp & 0.024 & 18.8\% & 3.09\% \\
+ACA premiums (rating area) & Benchmark silver premium, drought at 2-year lag & \$3.13/mo & 0.236 & \$366/mo & 0.855\% \\
+\bottomrule
+\end{tabularx}
+\begin{minipage}{\textwidth}\vspace{0.5em}\footnotesize
+Each ledger records a different population under different rules, so responses are expressed as a percentage of that ledger's own mean to make them comparable. Medicare estimates cover 2014--2023 for the 65-plus and disabled population; the ACA cell is estimated on the rating-area pass-through panel. The two county debt cells are estimated as the county mirror of the state specification, because the county pipeline carries no binary cold-z shock and reports drought through a continuous index -- no committed county output contains them. Their values differ from figures quoted in earlier drafts and supersede them. All specifications use county (or state) and year fixed effects with state-clustered standard errors.
+\end{minipage}
+\end{table}

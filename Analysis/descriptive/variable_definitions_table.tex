@@ -1,0 +1,52 @@
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\sloppy
+\begin{longtable}{>{\raggedright\arraybackslash}p{2.7cm} >{\raggedright\arraybackslash}p{5.00cm} >{\raggedright\arraybackslash}p{2.1cm} >{\raggedright\arraybackslash}p{2.7cm} >{\raggedright\arraybackslash}p{2.5cm}}
+\caption{Variable definitions, sources, and coverage}
+\label{tab:e1t0b}\\
+\toprule
+Variable & Definition & Source & Coverage & Used in \\
+\midrule
+\endfirsthead
+\multicolumn{5}{l}{\textit{Table \thetable{} (continued)}} \\
+\toprule
+Variable & Definition & Source & Coverage & Used in \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\textit{continued on the next page}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+\multicolumn{5}{l}{\textit{Climate shocks}} \\
+Heat shock & 1 if annual cooling degree days are at or above the national 80th percentile of the 1990--2000 baseline distribution (Binary) & NOAA NCEI & 1990--2026; 116,039 obs. & Main Medicare models; labor-exposure interactions \\
+Cold shock & 1 if annual heating degree days are at or above the national 80th percentile of the 1990--2000 baseline distribution (Binary) & NOAA NCEI & 1990--2026; 116,039 obs. & Medicare models; debt ledger \\
+Extreme drought & 1 if the annual mean Palmer Drought Severity Index is at or below -4 (Binary) & NOAA NCEI & 1990--2026; 116,039 obs. & Debt ledger; premium pass-through; Appendix A event \\
+Air-quality shock & Annual maximum AQI; the shock indicator is Max AQI above 100 (EPA `unhealthy' threshold) (AQI index) & EPA AQS & 2008--2025; 18,554 obs. & Medicare ED-visit models \\
+Temperature z-score & Annual mean temperature standardized to each county's own 1990--2000 mean and standard deviation (SD) & NOAA NCEI & 1990--2025; 112,932 obs. & Continuous-dose robustness \\
+\addlinespace
+\multicolumn{5}{l}{\textit{Outcomes}} \\
+Medicare standardized spending & Standardized Medicare payment per beneficiary, price-adjusted by CMS to remove geographic payment-rate variation (USD per beneficiary) & CMS Geographic Variation & 2014--2023; 31,429 obs. & Main result \\
+Medicare ED visits & Emergency department visits per 1,000 Medicare beneficiaries (Visits per 1,000) & CMS Geographic Variation & 2014--2023; 31,409 obs. & Main result \\
+Per-capita personal income & BEA per-capita personal income, CPI-deflated (2023 USD) & BEA CAINC1 & 1990--2024; 110,215 obs. & Household economic capacity; Appendix A \\
+Civilian employment & Count of employed civilians; estimated in logs so effects are proportional rather than county-size driven (Persons (log)) & ACS B23025 & 2011--2023; 40,154 obs. & Employment margin; labor-exposure interactions \\
+Medical debt share & Share of credit records with medical debt in collections (Share) & Urban Institute & 2011--2023; 38,870 obs. & Debt ledger (measurement-fragile) \\
+Benchmark silver premium & Second-lowest-cost silver marketplace premium, CPI-deflated; aggregated to rating-area by population-weighted mean for estimation (2023 USD per month) & HIX Compare & 2014--2025; 36,974 obs. & Pass-through null and equivalence bounds \\
+Lowest bronze premium & Lowest-cost bronze marketplace premium, CPI-deflated (2023 USD per month) & HIX Compare & 2014--2025; 36,974 obs. & Pass-through robustness \\
+Health spending per capita & State personal health-care expenditure per capita, CPI-deflated (2025 USD) & CMS NHE & 1996--2020; 1,275 obs. & Systemic-spending null \\
+\addlinespace
+\multicolumn{5}{l}{\textit{Moderators}} \\
+Climate-exposed non-farm share & Baseline share of employment in construction, manufacturing, transportation and warehousing, and utilities; held fixed at its baseline value and entered as a z-score (Share (z-scored)) & ACS C24030 & 3,221 counties & Labor-exposure mechanism \\
+Household energy burden & Household-weighted energy expenditure as a percentage of income; time-invariant, entered as a z-score (Percent of income (z-scored)) & DOE LEAD 2022 & 3,144 counties & Energy-burden mechanism \\
+Farm earnings share & Farm earnings as a share of total county earnings over the baseline period; time-invariant, entered as a z-score (Share (z-scored)) & BEA CAINC5N / USDA ERS & 3,116 counties & Agricultural-channel tests (Appendix A) \\
+\addlinespace
+\multicolumn{5}{l}{\textit{Auxiliary}} \\
+County population & Census population; used for population weights in rating-area aggregation and per-capita denominators (Persons) & Census & 1996--2023; 87,919 obs. & Weighting and aggregation \\
+Net migration rate & Net IRS filer migration as a share of non-migrant filers (Rate) & IRS SOI & 2012--2020; 27,899 obs. & Selection bound (Appendix A) \\
+Dew-point temperature & Annual mean dew-point temperature from 4km PRISM grids aggregated to counties (Degrees F) & PRISM & 2009--2023; 46,620 obs. & Humidity robustness \\
+Uninsured rate & Share of the under-65 population without health insurance (Share) & Census SAHIE & 2012--2022; 34,543 obs. & Debt measurement critique \\
+\end{longtable}
+\vspace{-0.6em}\begin{minipage}{\textwidth}\footnotesize
+Coverage columns are computed from the delivered panels: `Years' spans non-missing observations, `Obs.' counts them, and `Counties' is the number of distinct counties (states, for the state panel) with at least one non-missing value. Time-invariant moderators report a single county count and no year range. County dollar series are in 2023 USD; state dollar series are in 2025 USD. Shock indicators use a fixed national 80th-percentile threshold from the 1990--2000 baseline, so a county's shock status is comparable over time. The machine-readable CSV carries an additional `Column' field giving the exact variable name in the delivered panel.
+\end{minipage}
+\endgroup

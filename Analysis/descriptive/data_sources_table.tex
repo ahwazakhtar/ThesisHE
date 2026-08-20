@@ -1,0 +1,39 @@
+\begingroup
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\sloppy
+\begin{longtable}{>{\raggedright\arraybackslash}p{1.8cm} >{\raggedright\arraybackslash}p{4.30cm} >{\raggedright\arraybackslash}p{2.9cm} >{\raggedright\arraybackslash}p{2.9cm} >{\raggedright\arraybackslash}p{3.1cm}}
+\caption{Data sources, coverage, and role in Essay 1}
+\label{tab:e1t0a}\\
+\toprule
+Domain & Source & Unit and geography & Coverage & Role in Essay 1 \\
+\midrule
+\endfirsthead
+\multicolumn{5}{l}{\textit{Table \thetable{} (continued)}} \\
+\toprule
+Domain & Source & Unit and geography & Coverage & Role in Essay 1 \\
+\midrule
+\endhead
+\midrule \multicolumn{5}{r}{\textit{continued on the next page}} \\
+\endfoot
+\bottomrule
+\endlastfoot
+Climate & NOAA NCEI (nClimDiv) & County-year; US counties & 1990--2025; 111,852 obs.; 3,107 units & Heat, cold, and drought shock construction \\
+Air quality & EPA AQS annual AQI & County-year; Monitored counties & 2008--2025; 18,554 obs.; 1,194 units & Air-quality shock in the Medicare models \\
+Humidity & PRISM (Oregon State / NACSE) & County-year; CONUS counties & 2009--2023; 46,620 obs.; 3,108 units & Humidity robustness check only \\
+Income & BEA CAINC1 / CAINC5N & County-year; US counties & 1990--2024; 110,215 obs.; 3,149 units & Per-capita income outcome; farm/nonfarm split in Appendix A \\
+Employment & Census ACS 5-year (B23025) & County-year; US counties & 2011--2023; 40,154 obs.; 3,100 units & Employment outcome and labor-exposure moderator \\
+Medical debt & Urban Institute (credit-bureau, Aug snapshots) & County-year; US counties & 2011--2023; 38,870 obs.; 3,078 units & Debt-ledger outcome; treated as measurement-fragile \\
+ACA premiums & HIX Compare individual market & County-year (rating-area price); Marketplace rating areas & 2014--2025; 36,974 obs.; 3,144 units & Pass-through outcome; estimated at the rating-area level \\
+Medicare & CMS Geographic Variation PUF & County-year; US counties, 65+/disabled & 2014--2023; 31,429 obs.; 3,156 units & Main result: standardized spending and ED visits \\
+Industry mix & Census ACS C24030 & County-year; US counties & 2011--2023; 41,868 obs.; 3,234 units & Climate-exposed non-farm share moderator \\
+Energy burden & DOE LEAD 2022 & County (time-invariant); US counties & 3,144 counties & Energy-burden moderator \\
+Ag dependence & USDA ERS Typology + BEA CAINC5N & County (time-invariant); US counties & 3,116 counties & Agricultural-channel tests in Appendix A \\
+Migration & IRS SOI county-to-county flows & County-year; US counties & 2012--2020; 27,899 obs.; 3,143 units & Selection bound on the drought scar (Appendix A) \\
+Health spending & CMS National Health Expenditure Accounts & State-year; US states & 1996--2020; 1,275 obs.; 51 units & Systemic-spending null (contrast motivating household ledgers) \\
+Macro controls & BLS / BEA via FRED & State-year; US states & 1996--2025; 1,500 obs.; 50 units & State-panel controls and debt-series context \\
+\end{longtable}
+\vspace{-0.6em}\begin{minipage}{\textwidth}\footnotesize
+Coverage is computed from the delivered files at build time: `Years' is the range over non-missing observations, `Obs.' the count of non-missing observations, and `Units' the number of distinct counties or states with at least one non-missing value. Counts therefore reflect data availability, not the estimation sample, which is 2011--2023 for county outcomes, 2014--2023 for Medicare, and the marketplace era for premiums. County dollar series are in 2023 USD; state dollar series are in 2025 USD.
+\end{minipage}
+\endgroup

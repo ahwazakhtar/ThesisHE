@@ -1,0 +1,31 @@
+\begin{table}[htbp]
+\centering
+\small
+\setlength{\tabcolsep}{4pt}
+\sloppy
+\caption{Which county characteristic carries the heat--employment gradient?}
+\label{tab:e3t3}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X r r r r}
+\toprule
+Interaction & Estimate & Std. error & p & N \\
+\midrule
+\multicolumn{5}{l}{\textit{All moderators jointly}} \\
+Heat x energy burden & -0.00647 & 0.00267 & 0.020 & 33,516 \\
+Heat x exposed non-farm share & -0.00403 & 0.00208 & 0.058 & 33,516 \\
+Heat x farm earnings share & -0.00370 & 0.00212 & 0.088 & 33,516 \\
+Heat x social vulnerability & 0.000893 & 0.00201 & 0.658 & 33,516 \\
+Heat x baseline climate & -0.00450 & 0.00784 & 0.568 & 33,516 \\
+\addlinespace
+\multicolumn{5}{l}{\textit{Energy burden vs vulnerability and climate}} \\
+Heat x energy burden & -0.00898 & 0.00227 & \textless{}0.001 & 33,524 \\
+Heat x social vulnerability & 0.00185 & 0.00223 & 0.412 & 33,524 \\
+Heat x baseline climate & -0.00279 & 0.00800 & 0.729 & 33,524 \\
+\addlinespace
+\multicolumn{5}{l}{\textit{Energy burden alone}} \\
+Heat x energy burden & -0.00831 & 0.00264 & 0.003 & 33,835 \\
+\bottomrule
+\end{tabularx}
+\begin{minipage}{\textwidth}\vspace{0.5em}\footnotesize
+Outcome is log employment; each moderator is a z-score, so a coefficient is the change in the heat response per standard deviation of that moderator within a shock year. Running the moderators against one another asks which survives when the others are allowed to compete for the same variation.
+\end{minipage}
+\end{table}

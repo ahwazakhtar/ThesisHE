@@ -1,0 +1,22 @@
+\begin{table}[htbp]
+\centering
+\footnotesize
+\setlength{\tabcolsep}{4pt}
+\sloppy
+\caption{Pre-treatment (2011) balance: 2012 first-onset counties versus never-exposed counties}
+\label{tab:e1t2}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X r r r r}
+\toprule
+Variable & Treated (139) & Never-exposed (2,534) & Difference & Norm. diff. \\
+\midrule
+Per-capita income (2023 USD) & 48,488 & 49,297 & -809 & -0.064 \\
+Civilian employment & 16,641 & 44,456 & -27,815 & -0.314 \\
+Population & 37,812 & 96,741 & -58,929 & -0.309 \\
+Medical debt share & 0.231 & 0.212 & 0.020 & 0.199 \\
+Median household income (2023 USD) & 74,362 & 78,751 & -4,389 & -0.250 \\
+\bottomrule
+\end{tabularx}
+\begin{minipage}{\textwidth}\vspace{0.5em}\footnotesize
+Treated counties are the 139 whose first extreme-drought year (PDSI at or below -4) in the 2011--2023 panel is 2012; never-exposed counties are the 2,534 with no extreme-drought year in the window. Means are taken in 2011, the single pre-period of the two-by-two design. The normalized difference is the treated-control gap divided by the square root of the average of the two group variances; values above 0.25 in absolute terms are conventionally treated as substantial imbalance, and motivate the doubly-robust estimator reported alongside the raw contrast.
+\end{minipage}
+\end{table}

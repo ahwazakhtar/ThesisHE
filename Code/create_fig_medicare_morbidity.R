@@ -14,12 +14,15 @@ suppressPackageStartupMessages({ library(dplyr); library(ggplot2) })
 
 coefs <- read.csv("Analysis/mechanism/medicare_channel_coefs.csv")
 
-hazard_labels <- c(CDD = "Extreme heat (CDD > baseline p80)",
-                   HDD = "Extreme cold (HDD > baseline p80)",
-                   AQI = "Poor air quality (max AQI > 100)",
-                   Drought = "Extreme drought (PDSI ≤ −4)")
-outcome_labels <- c(Mdcr_Std_Payment_PC = "Standardized spending ($ per beneficiary)",
-                    ER_Visits_per1000 = "ED visits (per 1,000 beneficiaries)")
+# Panel labels are read by someone meeting this figure with no prior exposure
+# to the pipeline, so they spell the hazard definitions out; the degree-day and
+# Palmer acronyms stay in the data appendix.
+hazard_labels <- c(CDD = "Extreme heat: cooling degree days above the national 80th percentile",
+                   HDD = "Extreme cold: heating degree days above the national 80th percentile",
+                   AQI = "Poor air quality: peak air-quality index above 100",
+                   Drought = "Extreme drought: Palmer index at or below −4")
+outcome_labels <- c(Mdcr_Std_Payment_PC = "Standardized spending, $ per beneficiary",
+                    ER_Visits_per1000 = "Emergency department visits per 1,000 beneficiaries")
 
 d <- coefs %>%
   filter(spec == "overall",
@@ -43,10 +46,15 @@ p <- ggplot(d, aes(x = estimate, y = lag_label, color = sig)) +
                   show.legend = FALSE) +
   scale_color_manual(values = c(`TRUE` = "#B2182B", `FALSE` = "grey55")) +
   facet_grid(hazard ~ outcome_f, scales = "free_x",
-             labeller = labeller(hazard = label_wrap_gen(24))) +
+             labeller = labeller(hazard = label_wrap_gen(32))) +
   labs(title = "Medicare morbidity responses to climate and air-quality shocks",
-       subtitle = "Coefficient with 95% CI by years since shock · county + year FE, state-clustered · 65+/disabled, 2014–2023 · red = p < 0.05",
-       x = "Coefficient (95% CI)", y = NULL) +
+       subtitle = paste0("Change in the outcome by years since the shock, with 95% confidence intervals; ",
+                         "estimates are drawn in red where they are
+distinguishable from zero at the 5% level. ",
+                         "Medicare beneficiaries aged 65 and over and disabled beneficiaries, 2014–2023, with
+",
+                         "county and year fixed effects and standard errors clustered by state."),
+       x = "Change in the outcome (95% confidence interval)", y = NULL) +
   theme_minimal(base_size = 11) +
   theme(plot.title = element_text(face = "bold", size = 12),
         plot.subtitle = element_text(color = "grey30", size = 9),
@@ -60,5 +68,7 @@ p <- ggplot(d, aes(x = estimate, y = lag_label, color = sig)) +
 
 dir.create("Analysis/mechanism/plots", showWarnings = FALSE, recursive = TRUE)
 ggsave("Analysis/mechanism/plots/fig_medicare_morbidity.png", p,
-       width = 9, height = 6, dpi = 150)
+       # Wider than before: the panel strips now carry full-sentence hazard
+       # definitions rather than four-letter codes.
+       width = 11, height = 6.6, dpi = 200)
 cat("Wrote Analysis/mechanism/plots/fig_medicare_morbidity.png\n")

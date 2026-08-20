@@ -1,0 +1,29 @@
+\begin{table}[htbp]
+\centering
+\scriptsize
+\setlength{\tabcolsep}{4pt}
+\sloppy
+\caption{Hospital responses by safety-net status}
+\label{tab:e3t4}
+\begin{tabularx}{\textwidth}{>{\raggedright\arraybackslash}X >{\raggedright\arraybackslash}p{2.4cm} >{\raggedright\arraybackslash}p{2.5cm} r r r}
+\toprule
+Outcome & Hazard & Status & Estimate & p & Int. p \\
+\midrule
+Operating margin & Extreme heat & Other hospitals & 0.00304 & 0.633 & 0.331 \\
+Operating margin & Extreme heat & Safety net & -0.00987 & 0.283 & 0.331 \\
+Operating margin & Extreme cold & Other hospitals & 0.00311 & 0.392 & 0.392 \\
+Operating margin & Extreme cold & Safety net & 0.0120 & 0.298 & 0.392 \\
+Operating margin & Extreme drought & Other hospitals & 0.00576 & 0.433 & 0.035 \\
+Operating margin & Extreme drought & Safety net & 0.0125 & 0.068 & 0.035 \\
+Uncompensated care (\% of net patient revenue) & Extreme heat & Other hospitals & -0.00517 & 0.135 & 0.021 \\
+Uncompensated care (\% of net patient revenue) & Extreme heat & Safety net & 0.0294 & 0.019 & 0.021 \\
+Uncompensated care (\% of net patient revenue) & Extreme cold & Other hospitals & 0.00447 & 0.002 & 0.011 \\
+Uncompensated care (\% of net patient revenue) & Extreme cold & Safety net & -0.0162 & 0.033 & 0.011 \\
+Uncompensated care (\% of net patient revenue) & Extreme drought & Other hospitals & -0.00838 & 0.267 & 0.610 \\
+Uncompensated care (\% of net patient revenue) & Extreme drought & Safety net & -0.000864 & 0.910 & 0.610 \\
+\bottomrule
+\end{tabularx}
+\begin{minipage}{\textwidth}\vspace{0.5em}\footnotesize
+Hospital-year panel with hospital and year fixed effects and state-clustered standard errors. Safety-net status is a top-quartile flag on Medicaid and uncompensated payer mix. Exposure is measured at the location of the hospital rather than the residence of its patients, which understates exposure for hospitals drawing from a wide catchment.
+\end{minipage}
+\end{table}
