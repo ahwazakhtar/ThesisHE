@@ -1,0 +1,92 @@
+
+
+%\resizebox{\textwidth}{!}{
+\resizebox{\textwidth}{!}{
+    %    \begin{tabular}{lcccccccc}
+    \begin{tabular}{l*{8}{c}}
+    \toprule % is needed for table structure [see a1]
+    \toprule %\hline\hline
+    % & (1) & (2) & (3) & (4) & (5) \\
+    &\multicolumn{1}{c}{(1)}&\multicolumn{1}{c}{(2)}&\multicolumn{1}{c}{(3)}&\multicolumn{1}{c}{(4)}&\multicolumn{1}{c}{(5)}&\multicolumn{1}{c}{(6)}&\multicolumn{1}{c}{(7)}%&\multicolumn{1}{c}{(8)}
+    \\
+    %%%
+    %\hline
+    \midrule
+    %        \def\myvar{CESD} if want to define dependent variable on top of each column
+    Panel A: CESD 
+    & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}&\multicolumn{1}{c}{}&\multicolumn{1}{c}{}%&\multicolumn{1}{c}{} 
+    \\
+    \midrule
+    %    \hline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% here 1
+$nrps_{ct}Xage60_{it}$ 
+&     -0.0660***&     -0.0624** &     -0.0958***&      -0.108***&      -0.101***&               &               \\
+&    (0.0241)   &    (0.0240)   &    (0.0241)   &    (0.0249)   &    (0.0277)   &               &               \\
+[1em]
+%nrps_{ct}Xage60_{it} %% for cs results
+&               &               &               &               &               &     -0.0976***&     -0.0964***\\
+                    &               &               &               &               &               &    (0.0268)   &    (0.0259)   \\
+
+
+
+
+    %%%
+    \midrule
+    Panel B: Receive Public Pension 
+    &  \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}&\multicolumn{1}{c}{}&\multicolumn{1}{c}{}%&\multicolumn{1}{c}{}  
+    \\
+    \midrule
+    %    \hline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% here 2
+$nrps_{ct}Xage60_{it}$ 
+&       0.599***&       0.600***&       0.632***&       0.638***&       0.623***&               &               \\
+&    (0.0326)   &    (0.0326)   &    (0.0356)   &    (0.0365)   &    (0.0385)   &               &               \\
+[1em]
+%nrps_{ct}Xage60_{it} %% for cs results
+&               &               &               &               &               &       0.642***&       0.639***\\
+                    &               &               &               &               &               &    (0.0261)   &    (0.0260)   \\
+ 
+    %%%
+    \midrule
+    Panel C: Total public pension income p/m 
+    & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{} & \multicolumn{1}{c}{}&\multicolumn{1}{c}{}&\multicolumn{1}{c}{}%&\multicolumn{1}{c}{} 
+    \\
+    \midrule
+     %   \hline %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%% here 4
+$nrps_{ct}Xage60_{it}$ 
+&       67.16***&       67.03***&       62.77***&       61.70***&       60.27***&               &               \\
+&     (5.401)   &     (5.381)   &     (5.469)   &     (5.280)   &     (6.987)   &               &               \\
+[1em]
+%nrps_{ct}Xage60_{it} %% for cs results
+&               &               &               &               &               &       71.68***&       70.88***\\
+                    &               &               &               &               &               &     (5.997)   &     (5.992)   \\
+
+
+
+
+ 
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    \midrule %\hline
+    %%%
+N                   &       45370   &       45370   &       45370   &       42321   &       26012   &       23424   &       23424   \\
+r2                  &       0.156   &       0.157   &       0.508   &       0.534   &       0.459   &               &               \\
+N\_clust             &       149.0   &       149.0   &       149.0   &       149.0   &       142.0   &       142.0   &       142.0   \\
+fe\_t                &         yes   &         yes   &         yes   &         yes   &         yes   &         yes   &         yes   \\
+fe\_c                &         yes   &         yes   &               &               &               &               &               \\
+ fe\_i                &               &               &         yes   &         yes   &         yes   &               &               \\
+% fe\_coh              &               &               &               &               &               &               &               \\
+% fe\_c\_coh            &               &               &               &               &               &               &               \\
+% fe\_c\_t              &               &               &               &               &               &               &               \\
+% fe\_i\_t              &               &               &               &               &               &               &               \\
+fe\_i\_age60          &               &               &               &         yes   &               &               &               \\
+controls            &               &         yes   &         yes   &         yes   &         yes   &               &               \\
+balanced\_sample     &               &               &               &               &         yes   &         yes   &         yes   \\
+csdid               &               &               &               &               &               &         yes   &         yes   \\
+notyet\_treated               &               &               &               &               &               &         &         yes   \\
+
+%\hline   
+    \bottomrule\bottomrule
+    Standard errors clustered at the county level &       &       &       &       &  \\
+    *** $p<0.01$, ** $p<0.05$, * $p<0.1$ &       &       &       &       &  \\
+    \end{tabular}
+}
+
+% [a1] https://tex.stackexchange.com/questions/156122/booktabs-what-is-the-difference-between-toprule-and-hline

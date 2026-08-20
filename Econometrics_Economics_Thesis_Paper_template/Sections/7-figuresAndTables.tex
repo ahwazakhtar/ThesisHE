@@ -1,0 +1,152 @@
+\newpage
+\section*{Figures and Tables}
+\FloatBarrier % keeps floating graphs above before next subsection
+%%%%%%%%%%%%%%%%%%%%%%%% Figures %%%%%%%%%%%%
+            %\subsection{Figures}
+%%%%%%%%%%%%%%%%%%%%%%%% Figures %%%%%%%%%%%%
+
+
+
+
+
+
+\begin{figure}[ht] % CESD                  
+    \centering
+\caption{Distribution of CESD}
+    \begin{subfigure}{.5\textwidth}
+\centering
+\includegraphics[width=\textwidth]{files/fig/main/g_hist_cesd10a4.pdf} %\caption{cesd-10}
+\end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+\centering
+\includegraphics[width=\textwidth]{files/fig/main/g_hist_cesd10a4std.pdf} %\caption{cesd-10}
+\end{subfigure}\\
+\caption*{Notes: \protect \input{files/fig/descr/descriptionhist} ... and this is a note particular to the figure (this part will be different in the appendix table
+}
+\label{fig:hist} 
+\end{figure}
+
+
+
+\begin{figure}[ht]
+\centering
+\caption{Mean CESD by age-group}
+\includegraphics[width=.8\linewidth]{files/fig/main/g_byage-nrps_late_cesd10a4std.pdf}
+\caption*{Notes:}
+\label{fig:cesdages}
+\end{figure}
+
+
+
+
+
+
+
+
+%%% event studies (CS) %%%
+\begin{figure}[ht]                           
+    \centering
+    \caption{CS Event Studies excl. (left) and incl. (right) not yet treated observations}
+  % \par\medskip
+          \textbf{Panel A: CESD (std)} 
+    \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{files/fig/csdid/g_csplotfelig_ict_sbalanced_cesd10a4std_.pdf} %\caption{cesd-10}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{files/fig/csdid/g_csplotfelig_ict_sbalanced_cesd10a4std_notyet.pdf} %\caption{cesd-10}
+    \end{subfigure}\\
+        \textbf{Panel B: Public Pension} 
+    \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{files/fig/csdid/g_csplotfelig_ict_sbalanced_pubpenr_.pdf} %\caption{NRPS}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{files/fig/csdid/g_csplotfelig_ict_sbalanced_pubpenr_notyet.pdf} %\caption{NRPS}
+    \end{subfigure} \\
+        \textbf{Panel C: Pension Amount} 
+    \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{files/fig/csdid/g_csplotfelig_ict_sbalanced_ipubpenrPM_.pdf} %\caption{Pension Income}
+    \end{subfigure}%
+    \begin{subfigure}{.5\textwidth}
+    \centering
+    \includegraphics[width=\textwidth]{files/fig/csdid/g_csplotfelig_ict_sbalanced_ipubpenrPM_notyet.pdf} %\caption{Pension Income}
+    \end{subfigure} \\
+\caption*{Notes: Best is to upload subplots separately rather than merging them before uploading}
+\label{fig:csdidplotrural}
+\end{figure}
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%% Tables %%%%%%%%%%%%
+\FloatBarrier
+%\subsection{Tables}
+
+% \includetable is not a standard latex but was added due to some referencing. This does not recognize the file paths. Use \includetable similar to \input.
+% \input and \include are very similar. # The difference between them is that \include does a \clearpage before and after \input, together with some magic to switch to another .aux file, and omits the inclusion at all if you have an \includeonly without the filename in the argument. Hence, use \include only for sections, \input for files to input. 
+% use \protect before input if the text disappears in description
+
+%%% SUMMARY STATISTICS %%%
+\begin{landscape}
+\thispagestyle{empty}
+\begin{table}[ht]
+\centering 
+\caption{Summary statistics by $nrps_{late}$ status}
+\resizebox{1.45\textwidth}{!}{
+\input{files/tab/sumstats/o_sum_stwfeddrsALL.tex}}
+\caption*{Notes: ...}
+\label{tab:sumstats_ddrall}
+\end{table}
+\end{landscape}
+
+
+%%% REGRESSION OUTPUT %%%
+
+\begin{table}[ht]
+\centering
+\caption{Fixed Effect TWFE regressions using \emph{rural} sample}
+%\par\medskip
+%\scalebox{0.9} % scales the table
+%{
+\input{files/tab/main/t_twfe}
+%}
+\caption*{Notes:}
+\label{tab:twfe}
+\end{table}
+
+
+
+
+
+
+
+
+
+%%%%%%%%%%%%%%%%%%%%%% Notes on graphs
+\begin{comment}
+%%% options
+\includegraphics[scale=1.5]{overleaf-logo}
+\includegraphics[width=5cm, height=4cm]{overleaf-logo}
+\includegraphics[width=5cm, height=4cm]{overleaf-logo}
+\begin{figure}[h]
+\includegraphics[width=8cm]{Plot}
+\end{figure}
+h	Place the float here, i.e., approximately at the same point it occurs in the source text (however, not exactly at the spot)
+t	Position at the top of the page.
+b	Position at the bottom of the page.
+p	Put on a special page for floats only.
+!	Override internal parameters LaTeX uses for determining "good" float positions.
+H	Places the float at precisely the location in the LATEX code. Requires the float package, though may cause problems occasionally. This is somewhat equivalent to h!
+%https://www.overleaf.com/learn/latex/Inserting_Images
+
+% https://www.overleaf.com/latex/examples/understanding-floats/qkjpvqptqrwd.pdf
+
+\end{comment}
+
+

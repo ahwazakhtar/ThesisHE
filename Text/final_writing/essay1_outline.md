@@ -11,27 +11,51 @@
 > (`Plans/essay1_restructure_20260817.md`; evidence-table Row 1 AMENDED). New document
 > order: §1 Intro · §2 Background · §3 Data · **§4 Medicare (main result)** · §5 Ledgers ·
 > **§6 Household economic capacity (NEW)** · §7 Interpretation · §8 Conclusion ·
-> **Appendix A.1–A.4** (= old §4/§5/§6/§7, with A.2 now the event contrast + its
-> decomposition). The harness (`essay1_harness.html`) and `essay1_content.md` carry the
-> restructured scaffolding; the section-by-section detail below uses the OLD numbering —
+> **Appendix A.1–A.3** · Appendix B.
+>
+> **CONDENSED 2026-08-18:** Appendix A is rewritten below under its own heading (11 ¶
+> across A.1–A.3, down from 21 across A.1–A.4; former A.4 dissolved into A.3), and §3 gains
+> **¶1b/¶4b** for the two new generated data tables (E1-T0a/E1-T0b). Those sections now use
+> the NEW numbering. §8–§11 further down still use the OLD numbering (= new §4/§5/§7/§8) —
 > map via the table in the restructure doc.
 
 ## Recommended WRITING order (≠ document order; post-restructure)
 
 1. §4 Medicare (main result) → 2. §5 Ledgers → 3. §6 Household capacity
-→ 4. Appendix A.1–A.4 (largely pre-written) → 5. §3 Data → 6. §2 Background
+→ 4. Appendix A.1–A.3 (largely pre-written; condensed 2026-08-18) → 5. §3 Data → 6. §2 Background
 → 7. §7 Interpretation → 8. §8 Conclusion → 9. §1 Introduction → 10. Abstract (last).
 
 Write the introduction late enough that it describes the paper that exists.
 
 ## The three headline findings of this essay (never more — writing plan §10)
 
-- **H1 (Row 1):** the 2012 drought event lowered per-capita income by ~$1,311 in first-onset counties.
-- **H2 (Row 10):** direct Medicare morbidity/utilization responses to heat, cold, and AQI.
-- **H4 (Row 8):** no coherent ACA local pass-through, with hazard-specific bounds.
+**Reordered Medicare-first 2026-08-17** to match the restructure. The `H` labels are the
+writing plan's hypothesis ids, not a ranking — they are kept unchanged so cross-references
+to plan §10 still resolve; the *list order* is the essay's order of prominence.
+
+- **H2 (Row 10) — the centerpiece.** Direct Medicare morbidity and utilization responses to
+  heat, cold, and air quality (65+/disabled, 2014–2023): heat raises standardized spending
+  $112/beneficiary contemporaneously and $177 at one lag, ED visits ~8–10 per 1,000.
+  Directly measured, non-agricultural, reproduces Deryugina et al. (2019) in-panel.
+- **H4 (Row 8).** No coherent ACA local pass-through — coefficients flip sign across
+  county/rating-area/state; within-state responses bounded below ≈5–8% of the mean premium.
+  The tight "rules out morbidity-scale pass-through" sentence is **drought-only**.
+- **H1 (Row 1 — AMENDED 2026-08-17).** Climate stress reduces household economic capacity.
+  **Lead this with the window-stable distributed-lag relationship** (−$99 to −$132 per PDSI
+  unit across 1990/2000/2011 window starts). The 2012 figure of −$1,311 is a **raw event
+  contrast, not a robust causal income loss**: ≈$900 of it is farm income reverting from the
+  record 2011 commodity-price peak, and the baseline-invariant nonfarm component is −$261 to
+  −$414 (≈0.5–0.8% of mean PCPI), sign-stable across every pre-period but never
+  conventionally significant. Full treatment in **Appendix A**; the compact main-text
+  version is **§6**.
 
 Employment is **confirmatory-fragile** (Row 2), debt is a **secondary/measurement ledger**
 (Rows 4–5), mechanisms are **supporting** (Rows 11b, 12). Do not promote any of them.
+
+**Standing prohibitions attached to H1** (Row 1 permitted language): do not cite WCB/RI or
+DRDID as vindicating the causal *magnitude* (DRDID shares the 2011 baseline); do not report
+the two-decade trend as "flat" without its 21-year accumulation (≈−$1,450) and the joint
+Wald rejection; do not cite the $6.9B aggregate arithmetic; never "Midwest" (Row 3).
 
 ## Author decisions — RESOLVED 2026-08-13
 
@@ -48,24 +72,34 @@ Employment is **confirmatory-fragile** (Row 2), debt is a **secondary/measuremen
 
 # Abstract (write LAST; 180–250 words)
 
-One paragraph containing exactly: (i) the question — what economic and healthcare costs
-follow climate shocks, and which financial institutions record or price them; (ii) the primary
-design — 2012 drought first-onset counties vs never-exposed controls; (iii) the headline income
-estimate with one robustness clause (−$1,311; WCB/RI; flat two-decade pre-trend; strengthens
-under DRDID) and the event-specific qualifier; (iv) one sentence on Medicare direct evidence
-($112 now / $177 next year per beneficiary; ED +8–10/1,000; 65+/disabled); (v) one sentence
-on ledgers (debt lagged but measurement-fragile; no coherent ACA pass-through, tight bound
-for drought only); (vi) one contribution sentence (locating the cost in lagged local outcomes
-and identifying which institutional ledgers record it). **Do not** enumerate lags, robustness
-methods, or secondary outcomes. The current abstract in `Text/drafts/thesis_paper_abstracts.md`
-is claim-accurate but dense — unpack, don't copy.
+**REORDERED 2026-08-17** — Medicare leads; the drought event is no longer the design
+sentence. One paragraph containing exactly: (i) the question — what economic and healthcare
+costs follow climate shocks, and which financial institutions record or price them; (ii) the
+design in one clause — a US county panel, 2011–2023, with distributed-lag fixed-effects
+estimates and a first-onset event study; (iii) **the headline result: direct Medicare
+morbidity and utilization** ($112 now / $177 next year per beneficiary; ED +8–10 per 1,000;
+65+/disabled, reproducing Deryugina et al. in-panel); (iv) one sentence on the ledgers (debt
+lagged but measurement-fragile; no coherent ACA pass-through, with the tight bound for
+drought only); (v) one sentence on household capacity — the **distributed-lag** income
+relationship, with the 2012 event named as an event contrast whose farm component reverts
+from the 2011 price peak; (vi) one contribution sentence (locating the cost in lagged local
+outcomes and identifying which institutional ledgers record it).
+
+**Do not** enumerate lags, robustness methods, or secondary outcomes. **Do not** cite
+WCB/RI/DRDID in the abstract at all, and never describe the two-decade pre-trend as "flat"
+(Row 1 forbids both — the trend must travel with its 21-year accumulation and the joint Wald
+rejection wherever it appears). The abstract in `Text/drafts/thesis_paper_abstracts.md`
+still carries the **pre-restructure** framing — it is a downstream surface awaiting advisor
+sign-off (restructure doc §"Downstream surfaces"), so do not copy from it.
 
 ---
 
 # §1 Introduction (~5–7 pp; write LAST)
 
-**Flow (writing plan):** delayed costs are hard to observe → 2012 drought as a sharp event →
-Medicare as separate direct evidence → ledgers respond unevenly → contributions.
+**Flow (REORDERED 2026-08-17 to match the harness `s1p3`–`s1p6`):** delayed costs are hard
+to observe → what the paper does → **Medicare as the direct, administrative result** →
+ledgers record unevenly → household capacity, paired with its decomposition → contributions.
+The pre-restructure flow led with the 2012 drought event; it no longer does.
 
 - **¶1 Hook (economic problem, no results yet).** Climate damages are usually measured in
   contemporaneous mortality or output; but for households, costs can surface *after* the
@@ -76,26 +110,32 @@ Medicare as separate direct evidence → ledgers respond unevenly → contributi
   time, endogenous adaptation/migration, and the fact that each administrative ledger
   (credit bureaus, insurers, Medicare, employers) observes a different population under
   different rules. This paragraph plants the "ledger" vocabulary the whole dissertation uses.
-- **¶3 What this paper does (design sentence 1).** The 2012 drought as a sharp natural
-  experiment: 139 counties experiencing their *first* extreme-drought onset in 2012
-  (Georgia, the Mountain West, and the Plains — **never "Midwest"**, Row 3) vs 2,534
-  never-exposed counties; ITT of first onset on per-capita income.
-- **¶4 Headline result 1.** Income fell ~$1,311 per capita (anchor: mean county PCPI
-  ≈ $46,269 → ≈2.8%); robust to wild-cluster bootstrap (p=0.036) and randomization
-  inference (p=0.0075), a flat 1990–2011 pre-trend, and strengthens to −$1,451 under a
-  doubly-robust estimator. **In the same paragraph:** this is the effect of the 2012 event,
-  not a general drought-response function — the pooled multi-cohort average is null at
-  onset (−$324, SE 276) and long-run (Row 1 permitted language).
-- **¶5 Headline result 2 (Medicare).** Separate, *parallel* direct evidence of a morbidity
-  channel — never "mediates" (re-audit item ii): heat raises standardized Medicare spending
-  $112/beneficiary contemporaneously and $177 the next year (baselines: $10,359/beneficiary
-  → 1.1% and 1.7%) and ED visits by ~8–10 per 1,000 (baseline 629 → 1.2–1.5%); reproduces
-  Deryugina et al. (2019) in-panel; non-agricultural; 65+/disabled population only.
-- **¶6 Headline result 3 (ledgers).** The financial ledgers record this harm unevenly: cold
+- **¶3 What this paper does** [`s1p3`]. The county panel and the question — what healthcare
+  and economic costs follow climate shocks, and which institutions record or price them.
+  Name the four ledgers and the two designs in one sentence each: a distributed-lag
+  fixed-effects panel for the recurring shocks, and the 2012 first-onset event (139
+  counties — Georgia, the Mountain West, and the Plains, **never "Midwest"**, Row 3 — vs
+  2,534 never-exposed) reported in Appendix A. Do **not** open on the drought experiment.
+- **¶4 Result 1 — Medicare** [`s1p4`]. The direct, administratively-measured result: heat
+  raises standardized Medicare spending $112/beneficiary contemporaneously and $177 the next
+  year (baseline $10,359 → 1.1% and 1.7%) and ED visits by ~8–10 per 1,000 (baseline 629 →
+  1.2–1.5%); cold and air quality likewise. Reproduces Deryugina et al. (2019) in-panel;
+  non-agricultural; 65+/disabled population only. Never "mediates" (re-audit item ii) — this
+  is parallel direct evidence, not a link in a chain.
+- **¶5 Result 2 — ledgers** [`s1p5`]. The financial ledgers record the harm unevenly: cold
   raises the medical-debt share 1.35 pp at a one-year lag but debt is measurement-fragile;
   ACA benchmark premiums show **no coherent local pass-through** — coefficients flip sign
   across county/rating-area/state, within-state responses bounded below ≈5–8% of the mean
   premium, and the data rule out morbidity-scale pass-through **for drought only** (Row 8).
+- **¶6 Result 3 — household capacity, with its decomposition** [`s1p6`]. Lead with the
+  **window-stable distributed-lag** relationship (−$99 to −$132 per PDSI unit across
+  1990/2000/2011 window starts). Then the 2012 event **in the same paragraph as its
+  resolution** (Row 1 AMENDED — the two must never appear apart): the raw contrast is
+  −$1,311, about **2.5% of mean county PCPI of $53,145** (E1-T1 anchor, 2023 USD — the
+  $46,269/2.8% pair is **superseded**, see `TK_resolutions.md` §B), of which ≈$900 is farm
+  income reverting from the record 2011 commodity-price peak; the baseline-invariant nonfarm
+  component is −$261 to −$414 (≈0.5–0.8% of mean PCPI) and never conventionally significant.
+  Event-specific: the pooled multi-cohort average is null at onset (−$324, SE 276).
 - **¶7 Contributions (3, mapped to literatures).** (i) causal incidence: a defended event
   estimate of local income cost (climate-econ literature: Deschênes–Greenstone, Deryugina,
   Hsiang); (ii) direct administrative morbidity evidence in the same panel (health econ);
@@ -138,6 +178,19 @@ final hedging paragraph. No "X, not Y" epigram constructions anywhere.
 - **¶1 Panel scope.** County panel 2011–2023, ~3,100 counties (master: 118,732 rows ×
   3,232 counties, certified unique on fips×year — Row 27); state panel ~1996–2025 for the
   longer debt/premium series; all dollar values inflation-adjusted (state the base year).
+- **¶1b Data sources and coverage — Table E1-T0a** (NEW 2026-08-18, author request).
+  `Analysis/descriptive/data_sources_table.tex`, 14 sources, generated by
+  `Code/create_data_source_tables.R`. **Every count in it is computed at build time** (year
+  range over non-missing rows, non-missing obs, distinct units), so the table cannot drift
+  from the delivered panel. Walk the reader down it **by group, not row by row**: climate
+  and environment (NOAA nClimDiv, EPA AQS, PRISM) · economic ledgers (BEA, ACS) ·
+  health-market ledgers (Urban Institute, HIX Compare, CMS) · moderators (ACS C24030, DOE
+  LEAD, USDA ERS/BEA). Then say the three things the table cannot: **coverage ≠ estimation
+  sample** (county outcomes 2011–2023, Medicare 2014–2023, premiums marketplace-era); AQI
+  covers **1,194 monitored counties**, an urban-selection caveat that travels with every
+  air-quality result; PRISM is CONUS only. One clause on the **real-dollar base
+  divergence** — county series 2023 USD, state series 2025 USD (read from
+  `us_cpi_annual.csv` at build time) — never move a dollar figure between panels.
 - **¶2 Climate data & shock definitions.** NOAA/PRISM inputs; the four binary shock bins
   (High_CDD heat, High_HDD cold, extreme drought PDSI<−4, High_AQI) + z-score construction;
   historical-baseline windows; humidity (PRISM tdmean) held for robustness. Note the
@@ -148,6 +201,19 @@ final hedging paragraph. No "X, not Y" epigram constructions anywhere.
   window stated in one table — **E1-T1** (`Analysis/descriptive/descriptive_stats_table_main`).
 - **¶4 Moderators used here.** Climate-exposed non-farm labor share; DOE LEAD energy-burden
   z. (SVI belongs to Essay 3 — do not introduce it here beyond a cross-reference.)
+- **¶4b Variable definitions — Table E1-T0b** (NEW 2026-08-18, author request).
+  `Analysis/descriptive/variable_definitions_table.tex`, 20 variables in four panels
+  (shocks / outcomes / moderators / auxiliary), same generator as E1-T0a; definitions are
+  authored metadata, coverage columns are computed. **Keep the prose short — the table is
+  the reference object.** Three construction facts must be stated here because later
+  sections depend on them: (a) shocks are **binary** against a **fixed national 1990–2000
+  p80 threshold**, not a within-county quantile, so shock status is comparable across
+  counties and over time; (b) both labor moderators are **time-invariant and z-scored**, so
+  their interactions are **per-SD gradients within a shock year, not employment levels** —
+  this is the sentence that stops the §4 ¶6 mechanism gradients being read as job losses;
+  (c) employment enters in **logs** (levels are county-size contaminated — the superseded
+  −2,011 low-ag figure), and any log gradient translated into jobs is evaluated at the
+  **median county's 10,773 workers, never the mean of 48,068** (the skew inflates it ~4.5×).
 - **¶5 Fixed-effects & inference conventions.** `fixest` county+year FE, state-clustered;
   **the AAIW clustering paragraph goes here** (advisor item 1.2): county clustering is
   anticonservative by up to 7 orders of magnitude; Conley 200 km ≈ state clustering
@@ -160,91 +226,90 @@ final hedging paragraph. No "X, not Y" epigram constructions anywhere.
 
 ---
 
-# §4 The 2012 drought design (~4–5 pp)
+# Appendix A — The 2012 drought natural experiment (~8–10 pp)
 
-- **¶1 Why 2012.** First-onset logic: counties whose *first* extreme-drought exposure in
-  the panel era is 2012 → clean event timing, no prior-treatment contamination; never-exposed
-  counties as controls avoids forbidden comparisons.
-- **¶2 Cohort construction.** 139 treated vs 2,534 never-exposed; geography = Georgia +
-  Mountain West + Plains (**Row 3: never "Midwest"**). Balance table — **E1-T2**. Map —
-  **E1-F1** (to be generated; add registry row when built).
-- **¶3 Estimating equation.** 2×2 DiD, fips+Year FE, ITT of first onset; define the ATT
-  estimand precisely (event-specific, treated-geography — Gate B checklist: treatment,
-  comparison, unit/period, FE, clustering, assumption, threat+test).
-- **¶4 Identifying assumption & threats.** Parallel trends absent onset; threats: selection
-  into drought geography, differential rural trends, spillovers to controls. Each threat
-  names its §6 test. **Spillover qualifier (advisor 1.1) verbatim concept:** "county
-  coefficients capture local exposure; adjacent-county exposure adds a same-signed regional
-  component the local coefficient understates" — so the local ATT is a lower bound on
-  regional exposure, not confounded by it.
-- **¶5 Inference plan.** 17 treated states → few-cluster problem; pre-commit to analytic +
-  wild-cluster bootstrap (Webb weights) + randomization inference. One sentence forward to
-  §6.
+> **CONDENSED 2026-08-18** (author request). Appendix A ran to 21 paragraphs across four
+> subsections (old §4/§5/§6/§7, ~16–20 pp). It is now **11 paragraphs across three**:
+> A.1 (5→2), A.2 (6→4), A.3 (former A.3 + A.4, 10→5). Nothing was dropped — the enumerable
+> per-test prose moved into **Table E1-T4**, generated by `Code/create_falsification_table.R`
+> with every statistic read from the committed robustness CSVs. This keeps advisor ask #2
+> ("does the appendix satisfy the committee's natural-experiment ask?") answerable: the
+> committee still sees every test, in a form a referee can scan. Harness ids in brackets.
 
----
+## A.1 The 2012 drought design (~2 pp)
 
-# §5 Main income result (~4–5 pp) — WRITE THIS FIRST
+- **¶1 Why 2012, first onset, and the cohort** [`s4p1`] — *merged from old ¶1+¶2.*
+  First-onset logic: counties whose *first* panel-era extreme drought is 2012 → clean event
+  timing, no prior-treatment contamination; never-exposed controls avoid forbidden
+  comparisons. 139 treated vs 2,534 never-exposed; geography = Georgia + Mountain West +
+  Plains (**Row 3: never "Midwest"**). Balance **E1-T2**; map **E1-F1**. Treated counties
+  smaller/more rural → motivates DRDID and the two-decade pre-trend test.
+- **¶2 Equation, identifying assumption, and inference** [`s4p2`] — *merged from old
+  ¶3+¶4+¶5.* 2×2 DiD, fips+Year FE, state-clustered; ITT of first onset, 139 counties,
+  2011–2023, vs never-exposed, under parallel trends absent onset (Gate-B checklist in one
+  sentence). Three threats, each mapped to a row of **E1-T4**: selection into drought
+  geography; single-state idiosyncrasy; spillovers to controls. **Spillover qualifier
+  (advisor 1.1):** county coefficients capture local exposure; adjacent-county exposure adds
+  a same-signed regional component the local coefficient understates — the local ATT is a
+  lower bound on regional exposure. 17 treated states → pre-commit to analytic + WCB (Webb)
+  + RI side by side.
 
-- **¶1 The estimate.** ATT on real PCPI = **−$1,311** (analytic p=0.027) — **E1-T3**.
-  Anchor immediately: mean county PCPI ≈ $46,269 → ≈2.8% of per-capita income; also express
-  as dollars per county-resident-year. State population it applies to (139 treated
-  counties' residents).
-- **¶2 Robust inference.** WCB (Webb) p=0.036, CI [−2,911, −138]; RI p=0.0075 —
-  **E1-T4**. One-sentence explanation of *why* WCB/RI are the right tools with 17 treated
-  clusters (points back to §3 ¶5 / AAIW note).
-- **¶3 Doubly-robust check.** DRDID **−$1,451** (SE 515, CI [−2,461, −441]) — conditioning
-  on composition *strengthens* the effect; interpret (rural/urban covariate balance).
-- **¶4 Dynamics.** Event-time profile — **E1-F3** (`dr_csdid_eventtime.csv`, frontier
-  values only). Describe onset timing and persistence within this panel; hand the
-  *persistence question itself* to Essay 2 in one sentence (one-result-one-home).
-- **¶5 Magnitude in context.** Compare to drought-agriculture literature estimates and to
-  the county income base; note advisor item 1.3: the effect is stable extending the window
-  back to 1990 (PDSI_Lag1 −$99 to −$132 across 1990/2000/2011 starts) with improving
-  precision — the 2011–2023 window is a conservative choice, not a cherry-pick.
+## A.2 The event contrast and its decomposition (~3–4 pp)
 
----
+- **¶1 The raw contrast, its inference, and composition** [`s5p1`] — *merged from old
+  ¶1+¶2+¶3; per-test detail now in E1-T4.* ATT on real PCPI **−$1,311** (analytic p=0.028)
+  — **E1-T3** — anchored to mean county PCPI **$53,145** (E1-T1, 2023 USD) ≈ **2.5%**.
+  Event- and geography-specific ITT. WCB p=0.036, CI [−$2,911, −$139]; RI p=0.0075. DRDID
+  **−$1,451** (SE 515). Close on the caveat that sets up ¶2: DRDID shares the single 2011
+  pre-year baseline.
+- **¶2 Dynamics and the baseline question** [`s5p2`] — event study around 2012; pooled
+  −$1,311 = mean of the twelve post-year gaps exactly; 2008–2010 leads −$1,459…−$1,591
+  (ns, p=0.17–0.32) are the *same magnitude* as the post gaps; baseline sensitivity
+  −$1,311 (pre=2011) → −$285 (pre=2009–2011) — **E1-T8**, fig **E1-F7**. Set up the two
+  readings (differential trajectory vs treated-specific 2011 spike).
+- **¶3 Farm and nonfarm decomposition** [`s5p3`] — **the payload; do not compress.**
+  Treated farm income/capita $1,903–2,438 (2007–10) → **$4,339 in 2011**; 2008–10 leads
+  ≈85% farm; farm ATT −$907 (p=0.13) vs 2011, −$14 (p=0.95) vs pooled 2009–2011; nonfarm
+  baseline-invariant −$261…−$414 (≈0.5–0.8% of mean PCPI), never conventionally
+  significant — **E1-F6**. Row 1 AMENDED.
+- **¶4 Closer: hand-back to the main text** [`s5p4`] — the durable drought–income form is
+  the window-stable distributed lag in **§6**; literature yardstick Deschênes–Greenstone
+  (2007), Deryugina (2017). Do **not** cite the retired $6.9B aggregate arithmetic.
 
-# §6 Identification and falsification (~5–6 pp)
+## A.3 Falsification, external validity, and employment (~3–4 pp)
 
-- **¶1 Two-decade pre-trend.** BEA income 1990–2011: differential trend **−$69/yr (p=0.44)**
-  — flat — **E1-F2**. State explicitly that this substitutes for HonestDiD (which cannot
-  run on the 2012 cohort — no in-panel pre-period) and covers the "future shocks predict
-  past outcomes" falsification (Row 26). The event-study joint Wald rejection (F=6.9) is
-  business-cycle wiggle, not secular drift — say so and note DRDID conditions on it.
-- **¶2 Leave-one-treated-state-out.** ATT envelope [−1,687, −914]; never exits the WCB CI;
-  CO/NE drops lift analytic p to 0.075/0.057 — exactly the few-cluster sensitivity WCB
-  already handles (frame as *why* WCB is primary, not as a weakness discovered).
-- **¶3 Placebo onsets.** B=1,000 placebo distribution centered on zero; two-sided p=0.009.
-- **¶4 Spatial robustness (advisor package).** Spillover analysis: own-vs-neighbor split
-  unidentified (neighbor exposure correlation r=0.94–0.97) but the neighbor block is
-  jointly significant and own+neighbor total exceeds own-only — **headline is a lower
-  bound on regional exposure** (lift from `spillover_synthesis.md`). Conley SEs to 300 km:
-  income worst case p=0.008.
-- **¶5 Specification robustness roll-up.** Humidity, demographics (Row 25 clean nulls),
-  threshold sensitivity — one summary paragraph + table **E1-T4**; full grids to appendix.
-- **¶6 What this design does NOT establish.** Event-specific ITT; treated-geography
-  external validity limits; no mechanism identification inside the DiD. Two sentences,
-  forward pointer to §7 and §10.
-
----
-
-# §7 External validity and pooled cohorts (~3–4 pp)
-
-- **¶1 The question.** Is 2012 a window onto droughts generally? Answer via estimands, not
-  hope: pooled multi-cohort frontier estimator (`did::att_gt`, doubly-robust).
-- **¶2 The pooled answer.** Onset (e=0) = **−$324 (SE 276): null**; long-run simple ATT
-  **+$350 (SE 585): null/reversed**. **NEVER cite the manual aggregation's −$1,050/p=0.002**
-  (invalid independence SEs — coding audit A4; manual-CS output is descriptive only,
-  E1-T5 note). The 2012 effect is event-specific *even at onset*.
-- **¶3 Why 2012 differs (interpretation, hedged).** Candidate explanations: severity,
-  first-onset sharpness, agricultural-cycle timing, control-group composition across
-  cohorts. Graded hedging — "consistent with", no adjudication.
-- **¶4 Employment (the fragile secondary — Row 2).** The ~2,000-job decline clears WCB
-  (p=0.003) and RI (p=0.037) but attenuates ~58% under DRDID (−871, SE 433, barely
-  excludes 0) and **reverses sign** in the pooled estimator (+2,609, SE 2,245). Report
-  with fragility given equal prominence to the estimate; explicitly not a co-headline;
-  event-specific. LOO envelope [−2,156, −1,854] shows the fragility is conditioning, not
-  geography.
+- **¶1 Falsification suite (roll-up to Table E1-T4)** [`s6p1`] — *merged from old A.3
+  ¶1+¶2+¶3+¶5.* **Report the table; in prose keep only the three judgements a table cannot
+  make:** (a) parallel-trends evidence is genuinely mixed — slope −$69/yr (SE 89, p=0.44)
+  does not reject, but accumulates to ≈−$1,450 over 21 years and the joint Wald **does**
+  reject (F=6.9, p<0.001), with A.2 locating the drift in the farm component; (b) HonestDiD
+  cannot run (no in-panel pre-period) — the 21-year BEA window plus the decomposition
+  substitute and cover the future-shocks falsification (Row 26); (c) CO/NE drops lift
+  analytic p to 0.075/0.057 — the few-cluster sensitivity WCB already prices in. Humidity,
+  ACS demographics (Row 25 clean nulls), and p90 threshold grids get one sentence with a
+  pointer to Appendix D — their statistics live only in narrative docs and are deliberately
+  **not** transcribed into E1-T4.
+- **¶2 Spatial robustness (advisor package)** [`s6p2`] — kept as its own paragraph because
+  it carries a standing qualifier. Own-vs-neighbor split unidentified (r=0.94–0.97); the
+  neighbor block is jointly significant (p≈0.006) and own+neighbor exceeds own-only →
+  **headline is a lower bound on regional exposure**. Conley to 300 km: income worst case
+  p=0.008; at 200 km Conley ≈ state clustering (0.0029 vs 0.0026).
+- **¶3 External validity: pooled cohorts, and why 2012 differs** [`s6p3`] — *merged from
+  old A.4 ¶1+¶2+¶3.* Pooled onset (e=0) **−$324 (SE 276): null**; long-run simple ATT
+  **+$350 (SE 585)**. **NEVER cite the manual aggregation's −$1,050/p=0.002** (invalid
+  independence SEs — audit A4; manual-CS is descriptive only, E1-T5 note). Fig **E1-F5**
+  (csdid panels, descriptive-only subtitle). Then the hedged candidates in one sentence —
+  severity, first-onset sharpness, agricultural-calendar timing, cross-cohort control
+  composition — with no adjudication.
+- **¶4 Employment: the fragile secondary (Row 2)** [`s6p4`] — ~2,000-job decline (analytic
+  p=0.0001, ≈4% of mean county employment 48,068) clears WCB (p=0.003) and RI (p=0.037),
+  LOO envelope [−2,156, −1,854] never flips; but attenuates ~58% under DRDID (−871, SE 433)
+  and **reverses sign** pooled (+2,609, SE 2,245). Fragility is conditioning/generalization,
+  not cluster count. Equal prominence; explicitly not a co-headline.
+- **¶5 What this design does not establish** [`s6p5`] — *moved from old A.3 ¶6 to close the
+  appendix.* Event-specific ITT for the treated geography (¶3 confirms); no mechanism
+  identification inside the DiD; direct health-channel evidence is **§4 (Medicare)**; the
+  durable income relationship is **§6**.
 
 ---
 

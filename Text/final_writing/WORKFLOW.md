@@ -58,19 +58,54 @@ structure, content requirements, and review — never draft prose for the manusc
 3. General introduction and policy synthesis/conclusion only after all three drafts exist
    (plan §11 Stages 5–6). `Text/drafts/policy_section.md` already holds the policy content.
 
-## Rendering the harnesses to PDF (added 2026-08-17)
+## Rendering to PDF (rewritten 2026-08-19)
 
-`render_harness_to_tex.js` (this folder; gitignored — no `!*.js` whitelist) extracts each
-harness's SECTIONS array in document order and emits LaTeX scaffolds with the exhibit
-figures embedded:
+`render_rug.js` is the current render path. It reads the three author drafts and
+emits four documents into `rendered_rug/` (untracked; regenerable), styled after
+`Econometrics_Economics_Thesis_Paper_template/`:
 
 ```
-node Text/final_writing/render_harness_to_tex.js
-cd Text/final_writing/rendered
-pdflatex -interaction=nonstopmode essay1_scaffold.tex   # likewise essay2/essay3
+node Text/final_writing/render_rug.js
+cd Text/final_writing/rendered_rug
+for f in essay1 essay2 essay3 thesis; do
+  pdflatex -interaction=nonstopmode $f && bibtex $f &&   pdflatex -interaction=nonstopmode $f && pdflatex -interaction=nonstopmode $f
+done
 ```
 
-Outputs land in `Text/final_writing/rendered/` (untracked; regenerable). **The render
-shows the pre-filled SUGGESTED text only** — author prose lives in the browser's
-localStorage and is only reachable via the harness Export button. After exporting your
-own draft, that markdown (not this scaffold render) becomes the manuscript source.
+- `essay1.pdf` / `essay2.pdf` / `essay3.pdf` — standalone `article`-class papers,
+  each with its own title page, abstract, and reference list.
+- `thesis.pdf` — the combined `report`-class volume, one chapter per essay, with
+  contents, glossary, and a single reference list.
+
+Both targets come from the same code path (a `mode` flag), so they cannot drift.
+
+**Two conventions the drafts must follow.**
+
+1. *Cite exhibits by registry token.* Write `Table E1-T7` / `Figure E3-F2` in the
+   markdown. The renderer rewrites each into `\ref{}`, so the PDF prints a
+   sequential number and the token never reaches a reader. A token with no entry
+   in the renderer's `EXHIBITS` map is left as literal text — and the build report
+   lists any registered exhibit the prose never cites, so neither failure is
+   silent. (Before 2026-08-19 Essays 2 and 3 cited exhibits as bare "Table 1" /
+   "Figure 4", which matched nothing: both essays rendered with **zero** exhibits.)
+2. *Cite works in plain text.* The renderer maps a fixed list of citation strings
+   (`CITATIONS` in the script) onto `\citep`/`\citet` against `references.bib`.
+   A new citation needs a bib entry and one row in that list; until it has both it
+   renders as plain text rather than failing.
+
+`\FloatBarrier` is emitted at each section boundary so an inline exhibit stays in
+the section that discusses it. `setspace` and `placeins` are not in a base TinyTeX
+install; the generated `preamble.tex` falls back gracefully, but for exact
+template fidelity run `tlmgr update --self && tlmgr install setspace placeins`.
+
+The RUG crest on the template's title page is deliberately **not** reproduced.
+Drop an institutional logo into `rendered_rug/` and uncomment the
+`\includegraphics` line in `titlePage()` to restore one.
+
+### Superseded renderers
+
+`render_thesis.js`, `render_draft_to_tex.js`, and `render_harness_to_tex.js` write
+into `rendered/`. They predate the template migration and are kept only for
+comparison; `render_harness_to_tex.js` in particular renders the harness
+pre-fill, not author prose.
+
