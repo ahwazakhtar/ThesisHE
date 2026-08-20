@@ -15,36 +15,64 @@ drafts are author-written — Claude outlines and reviews but never edits prose 
 The harness HTMLs must stay in `final_writing/` (inline exhibits use relative paths
 into `Analysis/`).
 
-## Render pipeline (built 2026-08-18)
+## Render pipeline (rewritten 2026-08-20)
 
-Three renderers, and confusing them wastes a session:
+**`Text/final_writing/render_rug.js` is the current renderer.** It reads the three author
+drafts and emits four documents into `rendered_rug/`, styled after
+`Econometrics_Economics_Thesis_Paper_template/`:
 
-| Script | Reads | Produces |
+| Output | Class | What it is |
 |---|---|---|
-| `render_harness_to_tex.js` | harness **suggested** text | drafting-aid scaffold PDFs |
-| `render_draft_to_tex.js` | `essay1_draft.md` (**author prose**) | `rendered/essay1_submission.pdf` |
-| `render_thesis.js` | all three drafts | `rendered/thesis_submission.pdf` (the volume) |
+| `essay{1,2,3}.pdf` | `article` | standalone papers, own title page, abstract, glossary, references |
+| `thesis.pdf` | `report` | the volume, one `\chapter` per essay, contents + glossary + one reference list |
 
-- The combined build is `report` class, one `\chapter` per essay, so exhibits number
-  **per chapter** (Table 1.1, 2.1). Essay 1's appendices use per-chapter `\Alph` section
-  numbering, reset before the next chapter.
-- Exhibits are declared in an `EXHIBITS` map and placed **after the paragraph that cites
-  the token**. Two escape hatches matter: `prefer` pins an exhibit to the paragraph that
-  actually analyses it (E1-T4 is mentioned in passing in A.1 but belongs in A.3), and
-  `anchor` places by keyword for exhibits the prose never cites by number — **E1-F6/F7 had
-  no token in the draft and would have been dropped silently**. Anything cited but unbuilt
-  renders as a visible placeholder box, never vanishes.
-- Display math: `$$ … $$` blocks pass through **raw**; a trailing `%%label` becomes
-  `\label{eq:…}`. Seven estimating equations live in the drafts this way.
-- **The markdown export carries prose only.** Figures attached in the harness as
-  `exhibits:` do not survive into `essayN_draft.md` — that is why the exhibit map exists.
-- Front/back matter: `glossary.tex` (39 abbreviations) and `references.tex` (16 works,
-  web-verified 2026-08-18; also in `references.bib`). Rendered directly — **no bibtex
-  pass**, so the volume compiles in one tool.
-- **Two rendering traps found the hard way.** A regex meant for U+00A0 matched *every*
-  space and turned the document non-breaking (384 overfull boxes) — write the non-breaking space as a `\u00A0` **escape**, never as the
-  literal character, which is indistinguishable from a normal space in source. And converting the Unicode minus to `$-$` creates unbreakable inline math that
-  blocks line-breaking; use `\textminus{}`.
+Both targets come from the same code path (a `mode` flag), so they cannot drift. Superseded:
+`render_thesis.js`, `render_draft_to_tex.js`, `render_harness_to_tex.js` (the last renders
+harness pre-fill, not author prose) — all still write to `rendered/`.
+
+**Two conventions the drafts must follow.**
+
+1. *Cite exhibits by registry token* (`Table E1-T7`, `Figure E3-F2`). The renderer rewrites each
+   to `\ref{}`, so the PDF prints a sequential number and the token never reaches a reader. A
+   token with no entry in the `EXHIBITS` map is left as literal text, and the build report lists
+   any registered exhibit the prose never cites — neither failure is silent.
+   **This is how Essays 2 and 3 came to render with ZERO exhibits** (found 2026-08-20): they
+   cited "Table 1" / "Figure 4", which matched nothing, for the whole life of the old renderer.
+2. *Cite works in plain text.* A fixed `CITATIONS` list maps citation strings to
+   `\citep`/`\citet` against `references.bib`; bibtex/apalike generates the list. A new citation
+   needs **both** a bib entry and a row in that list, or it renders as plain text.
+
+`prefer` pins an exhibit to the paragraph that actually analyses it; `anchor` places by keyword
+for exhibits the prose never cites by number. `$$ … $$` passes through raw, with a trailing
+`%%label` becoming `\label{eq:…}`.
+
+### Rendering traps found the hard way
+
+- **A `tabularx` inside a `table` float CANNOT break across pages, and overflow is lost
+  silently.** E1-T0b overflowed by 1012pt — two whole panels, five rows and the table note never
+  reached the PDF, with only a "Float too large for page" warning. Any table taller than a page
+  must use `write_tex_table(longtable = TRUE)`, which resolves the X column to an explicit width
+  (`resolve_X()`) because `longtable` has no X column type. **Treat every "Float too large"
+  warning as lost content, not cosmetics.**
+- **`\theHsection` must be restored alongside `\thesection`.** Resetting the section counter for
+  a per-chapter appendix without it makes the appendix reuse the *hyperref anchors* of §1.1/§1.2,
+  so TOC and bookmark links jump to the wrong pages. `\ref` still resolves, so the logs stay
+  clean — check `thesis.toc` for `section.N.appendix.X` names bleeding into later chapters.
+- **A regex meant for U+00A0 matched every space** and turned the document non-breaking (384
+  overfull boxes). Write the non-breaking space as a ` ` escape, never as the literal
+  character.
+- **Converting the Unicode minus to `$-$`** creates unbreakable inline math that blocks
+  line-breaking; use `\textminus{}`.
+- Markdown export from a harness carries **prose only** — attached figures do not survive, which
+  is why the `EXHIBITS` map exists.
+
+### Review surface
+
+`Text/final_writing/draft_edits_review.html` — a side-by-side proof sheet (current text against
+suggested edit, filterable by essay/severity/kind) with editable suggestions autosaved to
+`localStorage` and a Markdown export. Regenerate the local copy by re-wrapping the artifact
+source with a doctype, reset, theme toggle and `Save .md` button; the hosted artifact sandboxes
+downloads, so it carries clipboard export only.
 
 ## Thesis architecture
 

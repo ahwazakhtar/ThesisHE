@@ -118,6 +118,65 @@ machine-readable in the first place.
 - Generator: `Code/create_essay1_ledger_exhibits.R`, which prints the asserted-vs-estimated
   comparison at build so the divergence stays visible.
 
+## Stale vintages reach the manuscript through NARRATIVE files (found 2026-08-20)
+
+The 2026-07-13 county dedup regenerated every coefficient CSV correctly. Seven manuscript
+figures were nonetheless a **pre-dedup vintage**, because the writing chain does not read those
+CSVs — it reads hand-authored markdown that has no generator and was not regenerated:
+
+```
+Analysis/mechanism/mechanism_verdict.md        -> evidence-table Rows 10, 14  (Medicare)
+Analysis/exposure_index/synthesis.md           -> evidence-table Row 20       (SVI)
+Text/drafts/mechanisms_section.md              -> evidence-table Rows 11b/12  (horse race)
+        |
+        v  master_evidence_table.md -> essayN_outline.md -> essayN_content.md
+        -> essayN_harness.html -> essayN_draft.md
+```
+
+Nothing was invented anywhere along that chain; every step transcribed its source faithfully.
+**The rule: after any master rebuild, regenerate or hand-check the narrative `.md` files, not
+just the CSVs.** Confirmed by re-estimating against
+`Data/_archive/county_level_master_prededup_20260713.csv`, which reproduced the drafts' figures
+to the digit including p-values (heat spend L1 176.572 vs the CSV's 175.577; SVI heat-employment
+878.24/−184.27 vs 885.79/−168.97). The post-dedup CSVs govern: the pre-dedup panel double-counted
+568 county-years, all inside 2014–2026.
+
+Values corrected 2026-08-20 (post-dedup governs): heat spend L1 **$176 (p=0.002)**, heat ED L1
+**9.4**, cold spend L2 **$87**, air-quality ED **5.0 / 3.6 / 2.8**; SVI heat→employment
+**+886 → −169**, cold→income **−$46 → −$459 (≈10×, not 8×)**, drought-L2→premium **−$55 → +$14**;
+horse-race energy burden **−0.0065 (p=0.020)**; cumulative dose pop-weighted **−41,573**, smooth
+quadratic **+417**.
+
+**Two gates failed.** `Analysis/reproduction_certificate.md` compared `$177` against `$175.6`
+and marked it "✓ (rounding)" — a 1.4-unit gap does not round — and never traced Row 14 at all,
+which held the largest drift. A "✓" in that certificate is not proof of agreement; read the two
+printed columns.
+
+## Derived quantities move with their inputs
+
+The premium **full-pass-through benchmark is heat Medicare spending ÷ 12**, so it moved when
+those coefficients did: **$9.33–$14.75 → $9.30–$14.63 PMPM**, and the drought bound from
+50–79% to 51–80% of it. `Code/run_passthrough_bounds.R` now **reads the two coefficients from
+`medicare_channel_coefs.csv` at build time** instead of hardcoding them. Before correcting any
+headline coefficient, grep for quantities derived from it.
+
+## Two uninsurance-gradient families — do not conflate them
+
+Both interact shocks with SAHIE uninsurance on medical debt, and they answer different questions:
+
+| | `Analysis/mechanism/sahie_bridge_coefs.csv` | `Analysis/latent_hardship/` |
+|---|---|---|
+| Built | 2026-07-06 | 2026-07-12 |
+| Hazards | HDD, drought, **CDD** — all three lags each | cold L1 + drought L2 **only** |
+| Weighting | unweighted | population-weighted primary |
+| Multiplicity | none | BKY q over a 20-cell grid |
+
+`Code/run_latent_hardship.R:25` freezes the narrower scope: "Shock cells: ONLY two." **Heat was
+excluded by pre-registered design, never dropped.** So Essay 3's heat×uninsurance cell
+(`High_CDD_Lag1:Uninsured_z` = −0.00597, p = 0.0118) is real and lives in the bridge; a 2026-08-19
+review wrongly called it unsupported by checking latent-hardship. Present bridge estimates as
+**uncorrected**; only drought×uninsurance (q = 0.012) is multiplicity-robust, per Row 24.
+
 ## Baseline conventions for anchoring (settled 2026-08-18)
 
 - **Medicare baselines are BENEFICIARY-WEIGHTED.** Weighting by `Benes_Total` reproduces

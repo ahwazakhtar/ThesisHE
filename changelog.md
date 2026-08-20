@@ -2,6 +2,121 @@
 
 ---
 
+## 2026-08-20 (Session 17)
+
+Two-day review-and-production session (2026-08-19 to 08-20). Started as "check the exhibit
+references and switch to the RUG LaTeX template"; became a **provenance investigation** that
+found seven manuscript figures were a superseded pre-dedup vintage, an **86-item adversarial
+review** across five subagents, and the discovery that the submission PDF had been **silently
+truncating tables**. 70 edits applied to the drafts; all four PDFs rebuilt clean.
+
+### `Text/final_writing/render_rug.js` (new; supersedes `render_thesis.js`)
+- Renders the three drafts into **four** documents in the house style of
+  `Econometrics_Economics_Thesis_Paper_template/`: three standalone `article` papers plus the
+  combined `report` volume, both from one code path (a `mode` flag) so they cannot drift.
+- **Exhibit tokens become real cross-references.** Drafts keep `Table E1-T7`; the renderer
+  rewrites each to `\ref{}` so the PDF prints a sequential number. The build report now also
+  lists any registered exhibit the prose never cites.
+- **Citations are generated.** A fixed `CITATIONS` map rewrites plain-text citations to
+  `\citep`/`\citet` against `references.bib`, with bibtex/apalike producing the list. Adding a
+  citation needs a bib entry plus one row in that map.
+- **The defect this replaced:** `render_thesis.js` keyed on tokens, but Essays 2 and 3 cited
+  exhibits as bare "Table 1" / "Figure 4". Both essays had been rendering with **zero exhibits**.
+
+### Render defects found and fixed (all were silent)
+- **A `tabularx` inside a `table` float cannot break across pages.** E1-T0b overflowed by
+  **1012pt** — two whole panels, five outcome rows and the table note never reached the PDF,
+  with only a "Float too large" warning to say so. E1-T0a lost its last row and its note; E1-T1
+  lost the sentence guarding the median-vs-mean trap. `write_tex_table()` now takes
+  `longtable = TRUE`, and the four oversized tables use it.
+- **Appendix A/B mis-pointed in the volume.** Resetting the section counter without
+  `\theHsection` made them reuse the hyperref anchors of §1.1/§1.2, so clicking them in the TOC
+  jumped to pages 2 and 4. Fixed, and the restore now covers `\theHsection` so the appendix
+  scheme cannot leak into later chapters.
+- **Landscape rotation was counter-productive** — inside `pdflscape`, `\textheight` resolves to
+  the *portrait* text width, so rotated figures came out at 432pt against a portrait figure's
+  446pt. Both are now portrait. This corrects the previous knowledge-base note.
+- The standalone papers had **no glossary**; the volume's running head was clipped on every page.
+
+### Pre-dedup vintage propagation (the session's main finding)
+Three subagents traced the drift, and **re-estimation against
+`Data/_archive/county_level_master_prededup_20260713.csv` reproduced the prose to the digit,
+p-values included.** The 2026-07-13 dedup regenerated every coefficient CSV, but the writing
+chain does not read those CSVs — it reads hand-authored narrative markdown that was never
+regenerated: `Analysis/mechanism/mechanism_verdict.md` (Medicare, Rows 10/14),
+`Analysis/exposure_index/synthesis.md` (SVI, Row 20), and `Text/drafts/mechanisms_section.md`
+(the horse-race gradient). All three corrected with dated notes, plus four evidence-table rows.
+Two gates should have caught it: `reproduction_certificate.md` marked `$177` against `$175.6`
+as "✓ (rounding)", and never traced Row 14 at all — a correction banner now records both.
+
+### `Code/run_passthrough_bounds.R`
+- The full-pass-through benchmark is **derived from the heat Medicare coefficients**, so it
+  moved with them: **$9.33–$14.75 → $9.30–$14.63 PMPM**. The constants are now **read from
+  `medicare_channel_coefs.csv` at build time** rather than hardcoded, and the narrative's band
+  labels are built from the live band. All verdicts unchanged (drought STRONG, heat/cold SOFTER);
+  the drought bound moves from 50–79% to 51–80% of the benchmark.
+- The script **had not been running to completion**: an anchor guard demanded exact equality at
+  three significant figures and tripped on a last-digit difference under R 4.5.2 (SE 8.64 against
+  the recorded 8.63), halting before write. Given a documented ±0.02 tolerance that prints the
+  observed deviation on every run.
+
+### Exhibit generators
+- **A third copy of the `$<$0.001` escaping bug** in `create_falsification_table.R` (after the
+  two fixed in `create_data_source_tables.R` and `create_essay1_ledger_exhibits.R`) — E1-T4 was
+  printing literal dollar signs. `sig_p()` emits a plain `<` and `tex_escape()` maps it.
+- New `usd()` puts the sign outside the currency symbol (`-$1,311`, not `$-1,311`).
+- **E3-T5 was printing six pairs of duplicate rows** — the `weighting` column had been dropped,
+  so twelve rows looked like six identical ones carrying different numbers. Column restored,
+  lag stated, `q` added, guarded by `stopifnot`.
+- Raw panel column names removed from print (E3-T2's `Drought_Lag2` / `Heat_CDD`, E3-T5's
+  `HospAccess`, E1-T1's `High CDD` / `PDSI`), with a `stopifnot` that fails the build if an
+  unmapped name reappears.
+- **E1-T8** (baseline-sensitivity grid) typeset for the first time — Appendix A.2 had been
+  asserting its result with no exhibit behind it.
+
+### `Code/create_essay3_figures.R` (new)
+E3-F2 and E3-F4 had been shipping the **raw diagnostic plots** the estimation scripts wrote for
+the analyst — axes reading `Civilian_Employed`, `Hosp_UncompCare_PctNPR`, `High_CDD`, and a
+safety-net axis that was a bare 0/1. Rebuilt as manuscript figures reading the *same* CSVs as
+E3-T2/E3-T4, so a figure and its table cannot disagree. E3-F2 encodes whether the two ends are
+distinguishable rather than a worse/better direction, because which direction counts as worse
+differs across its five outcomes.
+
+### Adversarial review — 86 findings
+Five subagents (Essay 1 numbers, Essays 2–3 numbers, claim discipline, style, exhibits); every
+severe finding verified against the files before being reported. Highlights: the
+**agricultural-null claim has no estimate behind it** (`ag_channel_coefs.csv` contains no
+Medicare outcome, and the interaction is significant at all three lags where it does exist);
+**"no robust climate signal … tracks income"** is wrong twice (cold +$205, p=0.014; income
+p=0.397); **Essay 2 leads with debt-as-harm in four places** against Row 24's verbatim
+prohibition; **Essay 3 calls a p=0.030 effect "statistically not significant"** in a sentence
+citing the table that prints 0.030. The heat→Medicare headline **does not survive state-by-year
+fixed effects** (p=0.153) and the robustness paragraph omitted it. An exhaustive grep for every
+retired claim ("Midwest", −2,011, −721, the manual −$1,050) returns **zero hits**.
+
+**One review finding was wrong and is recorded as such**: Essay 3 §7's heat×uninsurance cell
+(−0.006, p=0.01) is real — it comes from `Analysis/mechanism/sahie_bridge_coefs.csv`, not from
+the narrower pre-registered latent-hardship grid, which excludes heat **by design**.
+
+### Drafts — 70 edits applied
+Essay 1 (32), Essay 2 (17), Essay 3 (21), each asserted to match exactly once. Backups at
+`essay{1,2,3}_draft.md.bak_pre_edits_20260820`. Four structural items remain, carried in
+`Plans/outstanding_20260821.md`: Essay 2's abstract/§1/§10 reordering, its missing
+"What identifies compounding?" honesty box, Essay 1's §4 doing two jobs, and the §5 register.
+
+### Review surfaces (new)
+- `Text/final_writing/draft_edits_review.html` — 86-card side-by-side proof sheet with editable
+  suggestions autosaved to `localStorage` and Markdown export. Also published as an Artifact.
+- `Plans/draft_review_20260819.md` (§3.0 carries the pre-dedup root cause),
+  `Plans/draft_edits_20260820.md`, `Plans/outstanding_20260821.md`.
+
+### Output
+`rendered_rug/`: **thesis.pdf 67pp**, essay1 38pp, essay2 13pp, essay3 18pp — 11 figures,
+16 generated tables, 7 equations, 29 references. Zero float overflows, zero undefined references
+or citations, zero overfull boxes.
+
+---
+
 ## 2026-08-18 (Session 16)
 
 Drafting-and-production session. Started as NBER-style prose help on Essay 1, became the

@@ -48,10 +48,13 @@ are the source of truth; this is orientation only:
   13 built 2026-08-18 (`create_data_source_tables.R`, `create_falsification_table.R`,
   `create_essay1_ledger_exhibits.R`, `create_essay23_exhibits.R`,
   `create_fig_conceptual_model.R`), including E1-F5, which had been pending since the
-  registry was seeded. The **combined submission PDF** (`node
-  Text/final_writing/render_thesis.js` → `rendered/thesis_submission.pdf`) carries all
-  three essays, a glossary, web-verified references, and 7 estimating equations; see
-  `conductor/knowledge/writing-and-latex.md` for the three-renderer map. **Essay 1 restructured Medicare-led 2026-08-17** (2012 drought experiment +
+  registry was seeded; E3-F2/E3-F4 rebuilt from raw diagnostics and E1-T8 typeset
+  2026-08-20 (`create_essay3_figures.R`). The render path is now **`node
+  Text/final_writing/render_rug.js`** → `rendered_rug/{essay1,essay2,essay3,thesis}.pdf`
+  (RUG-template styling; three standalone papers + the 67pp volume; exhibit tokens become
+  `\ref`, citations become natbib) — see `conductor/knowledge/writing-and-latex.md`.
+  **70 reviewed edits applied to the drafts 2026-08-20** after an 86-item adversarial review;
+  four structural items remain in `Plans/outstanding_20260821.md`. **Essay 1 restructured Medicare-led 2026-08-17** (2012 drought experiment +
   farm/nonfarm decomposition → Appendix A; shock-definition/horizon robustness →
   Appendix B) — **advisor sign-off pending** (`Plans/essay1_restructure_20260817.md`;
   downstream surfaces — abstracts, technical note, policy §, deck — still carry the old
@@ -148,6 +151,21 @@ Silent-corruption traps — these produce wrong results with no error:
   coefficient by the mean inflates the jobs figure ~4.5× and reintroduces the county-size
   contamination the log rescaling removed. The E1-T1 anchor 48,068 is for *descriptive*
   statements only.
+- **Regenerating analysis outputs does NOT regenerate the narrative files the writing
+  pipeline reads.** The chain into the manuscript runs through hand-authored markdown with no
+  generator — `Analysis/mechanism/mechanism_verdict.md`, `Analysis/exposure_index/synthesis.md`,
+  `Text/drafts/mechanisms_section.md` — then the evidence table, outline, content pack and
+  harness. The 2026-07-13 dedup refreshed every CSV and none of those, so seven figures reached
+  the drafts as a **pre-dedup vintage** (found 2026-08-20). After any master rebuild, refresh the
+  narrative files too. `Analysis/*.csv` is gitignored, so git cannot answer "which vintage is
+  this?" — re-estimate against `Data/_archive/*_prededup_*.csv`.
+- **A "✓" in `Analysis/reproduction_certificate.md` is not proof of agreement.** It marked
+  `$177` against `$175.6` as "✓ (rounding)" and never traced the row holding the largest drift.
+  Read the two printed columns, not the tick.
+- **A `tabularx` inside a `table` float silently truncates.** It cannot break across pages, so
+  LaTeX prints it past the bottom margin and the overflow is lost with only a "Float too large
+  for page" warning — E1-T0b lost two panels and its note this way. Treat that warning as lost
+  content and use `write_tex_table(longtable = TRUE)`.
 - **A figure in the evidence table is not proof it reproduces:** two county medical-debt
   cells (Rows 4, 5) had no committed county output behind them and, when re-estimated,
   came back wrong-signed / weaker than asserted (verified 2026-08-18 —

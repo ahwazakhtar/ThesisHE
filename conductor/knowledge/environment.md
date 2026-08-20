@@ -66,6 +66,23 @@ Read this before running R scripts, installing packages, or touching `.claude/` 
   returned zero hits for a string present in dozens of `.R` files; re-running with an
   explicit `glob: *.R` found all 152. Before concluding "no references exist," re-run
   the search with an explicit glob/type filter.
+- **`Analysis/*.csv` has no git history** — the whitelist excludes it, so `git log -p` on a
+  coefficient file returns nothing and "which vintage was this?" cannot be answered from git.
+  Re-estimate against `Data/_archive/*_prededup_*.csv` instead; that reproduced a disputed
+  vintage to the digit, p-values included (2026-08-20).
+
+## Patching source files from the shell
+
+- **A heredoc through the Bash tool collapses `\\` to `\`.** Any Python patch script written
+  as `python - <<'PY'` that contains LaTeX or regex escapes will silently corrupt them —
+  `"\\n"` becomes a real newline, `"\\refitem"` becomes a carriage return. This cost several
+  failed patches on 2026-08-20. Use the **Edit tool** for anything containing backslashes, or
+  build the string with `chr(92)` / `chr(10)`, or write the replacement text to a file with
+  the Write tool first and splice it in.
+- Heredocs also break on unbalanced quotes in prose (apostrophes in a long changelog entry).
+  Same fix: Write the text to a file, then splice.
+- The Bash tool's working directory drifts between calls in this repo. **Use absolute paths**
+  or re-`cd` in each command; a bare `cd Text/final_writing` fails as often as it works.
 
 ## Claude Code configuration
 
@@ -98,7 +115,10 @@ Read this before running R scripts, installing packages, or touching `.claude/` 
   `C:/Users/ahwaz/AppData/Local/Programs/MiKTeX/miktex/bin/x64/`. TinyTeX ships **no
   poppler/ghostscript** (`pdftoppm`/`pdftotext`/`gs` all absent) — PDFs cannot be
   rendered to images for inspection; verify compiles via the `.log` (missing-files /
-  Overfull counts) instead.
+  Overfull counts) instead. **To actually see a rendered HTML page**, serve the folder with
+  `python -m http.server <port> --bind 127.0.0.1` and drive it with the Chrome tools — the
+  browser extension refuses `file://` URLs. Kill the server afterwards via
+  `Get-NetTCPConnection -LocalPort <port>` in PowerShell; `pkill` does not reach it.
 - Hyperlinked Beamer appendices need **two `pdflatex` passes** to resolve buttons.
 - Harness→PDF scaffold renders: `node Text/final_writing/render_harness_to_tex.js` then
   `pdflatex` in `Text/final_writing/rendered/` (see `Text/final_writing/WORKFLOW.md`).
@@ -113,8 +133,17 @@ Read this before running R scripts, installing packages, or touching `.claude/` 
 - **`mathptmx` and `newtxtext` both pull the `rsfs` script math font, which is missing** —
   they emit "Font ... rsfs10 not loadable" and produce a damaged PDF. Use psnfss
   **`times`** (text-only Times, leaves math at Computer Modern); it compiles clean.
-- **`pdflscape` rotates the page but does NOT change `\textwidth`.** A landscape figure or
-  table must be sized against **`\textheight`**, otherwise it is typeset at portrait width
-  on a rotated page and looks shrunken.
+- **`pdflscape`: sizing against `\textheight` does NOT work** (corrected 2026-08-20 — the
+  earlier note here said it did). Inside `landscape`, `\textheight` still resolves to the
+  *portrait* text width, so `width=0.92\textheight` produced 431.9pt against a portrait
+  figure's 446pt — narrower, plus a page turn, for nothing. Measure the rendered result before
+  rotating anything; for these exhibits, portrait at `0.95\linewidth` beat both.
+- **`setspace` and `placeins` are absent** and are what the RUG template uses for double
+  spacing and `\FloatBarrier`. `render_rug.js` guards both with `\IfFileExists` and defines
+  fallbacks, so the documents compile either way; `tlmgr update --self && tlmgr install
+  setspace placeins` gets exact template fidelity.
+- **`geometry` re-applies its layout at `\begin{document}` and overwrites a bare
+  `\setlength{\headheight}`.** Pass the height to geometry instead (`headheight=23pt` for the
+  volume's italic running head, 15pt for the papers), or fancyhdr warns on every page.
 - A **locked PDF** (open in a viewer) makes `pdflatex` fail with "I can't write on file".
   Build under `-jobname=_tmp` and `mv` into place; report if the move also fails.
