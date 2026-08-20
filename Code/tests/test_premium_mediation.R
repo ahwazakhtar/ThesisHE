@@ -54,7 +54,10 @@ test_that("mediation_decompose satisfies the additive identity and fraction", {
   n_c <- 60; yrs <- 2008:2019
   g <- expand.grid(fips_code = sprintf("%05d", 1:n_c), Year = yrs,
                    stringsAsFactors = FALSE)
-  g$State <- substr(g$fips_code, 1, 2)
+  # multiple clusters: substr(fips_code, 1, 2) is constant "00" for all
+  # n_c < 100 here (G=1), which makes fixest's cluster small-sample
+  # correction divide by (G-1)=0 and crash on a non-finite VCOV.
+  g$State <- sprintf("S%02d", (as.integer(g$fips_code) - 1L) %% 6L)
   g$shk <- rbinom(nrow(g), 1, 0.25)
   fe_c <- rnorm(n_c); names(fe_c) <- sprintf("%05d", 1:n_c)
   # DGP: shock raises the mediator, which raises the outcome; shock also has a
@@ -80,7 +83,10 @@ test_that("an unrelated mediator leaves the effect essentially intact (fraction 
   n_c <- 60; yrs <- 2008:2019
   g <- expand.grid(fips_code = sprintf("%05d", 1:n_c), Year = yrs,
                    stringsAsFactors = FALSE)
-  g$State <- substr(g$fips_code, 1, 2)
+  # multiple clusters: substr(fips_code, 1, 2) is constant "00" for all
+  # n_c < 100 here (G=1), which makes fixest's cluster small-sample
+  # correction divide by (G-1)=0 and crash on a non-finite VCOV.
+  g$State <- sprintf("S%02d", (as.integer(g$fips_code) - 1L) %% 6L)
   g$shk <- rbinom(nrow(g), 1, 0.25)
   g$M   <- rnorm(nrow(g))                       # pure noise, unrelated to shock
   g$Y   <- 2 * g$shk + rnorm(nrow(g), 0, 1)
@@ -98,7 +104,10 @@ test_that("mediation_decompose fits base and with-mediator on the SAME sample", 
   n_c <- 40; yrs <- 2010:2019
   g <- expand.grid(fips_code = sprintf("%05d", 1:n_c), Year = yrs,
                    stringsAsFactors = FALSE)
-  g$State <- substr(g$fips_code, 1, 2)
+  # multiple clusters: substr(fips_code, 1, 2) is constant "00" for all
+  # n_c < 100 here (G=1), which makes fixest's cluster small-sample
+  # correction divide by (G-1)=0 and crash on a non-finite VCOV.
+  g$State <- sprintf("S%02d", (as.integer(g$fips_code) - 1L) %% 6L)
   g$shk <- rbinom(nrow(g), 1, 0.3)
   g$M   <- 2 * g$shk + rnorm(nrow(g))
   g$Y   <- g$shk + g$M + rnorm(nrow(g))

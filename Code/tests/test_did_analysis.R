@@ -25,7 +25,10 @@ make_2x2_panel <- function(n_treated = 30, n_control = 100, event_year = 2012,
   year_fe <- setNames(seq_along(year_range) * 0.2, as.character(year_range))
   d$Y <- unit_fe[d$fips_code] + year_fe[as.character(d$Year)] +
          tau * d$Treated_x_Post + rnorm(nrow(d), 0, 0.3)
-  d$State <- "ST"
+  # 10 clusters cutting across both arms; a single constant State (G=1) makes
+  # the cluster small-sample correction divide by (G-1)=0, producing a
+  # non-finite VCOV that fixest's internal collinearity check chokes on.
+  d$State <- sprintf("S%02d", as.integer(sub("^[A-Z]", "", d$fips_code)) %% 10L)
   d
 }
 
