@@ -36,10 +36,10 @@ studies (Deryugina et al. 2019; Barreca et al. 2016). None of this passes throug
 
 | Shock | Outcome | Estimate | p |
 |---|---|---|---|
-| Heat (`High_CDD`) | Std spending / benef. | **+$112** (Lag1 **+$177**, Lag2 +$75) | 0.013 / 0.001 / 0.003 |
-| Heat (`High_CDD`) | ED visits / 1,000 | **+7.8** (Lag1 **+9.5**) | 0.006 / 0.0002 |
-| Cold (`High_HDD`) Lag2 | Std spending; ED visits | **+$85**; **+9.0** | 0.009 / 0.002 |
-| **Air quality** (`High_AQI_Max`) | ED visits / 1,000 | **+4.8** (Lag1 +3.3, Lag2 +2.8) | 0.0003 / 0.002 / 0.019 |
+| Heat (`High_CDD`) | Std spending / benef. | **+$112** (Lag1 **+$176**, Lag2 +$75) | 0.013 / 0.002 / 0.003 |
+| Heat (`High_CDD`) | ED visits / 1,000 | **+7.8** (Lag1 **+9.4**) | 0.006 / 0.0002 |
+| Cold (`High_HDD`) Lag2 | Std spending; ED visits | **+$87**; **+9.0** | 0.008 / 0.002 |
+| **Air quality** (`High_AQI_Max`) | ED visits / 1,000 | **+5.0** (Lag1 +3.6, Lag2 +2.8) | 0.0002 / 0.001 / 0.023 |
 
 This is the in-panel reproduction of the Deryugina-et-al. pollution-morbidity result and the
 temperature-utilization result — a health-cost channel that **cannot be agricultural** and that
@@ -157,3 +157,11 @@ channel as a real but narrower, event-specific, partly-selection contributor. Th
 - Medicare covers **65+/disabled** and **2014–2023** only.
 - Migration selection is **bounded, not point-identified**; treat as a caveat on the scar, not a
   decomposition.
+
+> **Post-dedup refresh, 2026-08-20.** The Medicare table above previously carried the
+> 2026-07-01 pre-dedup run. The 2026-07-13 county dedup (568 double-counted county-years,
+> all inside the 2014-2023 Medicare window) regenerated
+> `Analysis/mechanism/medicare_channel_coefs.csv`, but this hand-authored file was not
+> updated with it, and the stale figures propagated through the evidence table into the
+> essay drafts. Values above are now read from that CSV (spec `overall`). No sign or
+> verdict changed. See `Plans/draft_review_20260819.md` section 3.0.

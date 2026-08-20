@@ -10,10 +10,10 @@ Adds a *hazard × exposure × vulnerability* layer to the county analysis, inspi
 
 | Shock → outcome | Effect at low SVI (p25) | Effect at high SVI (p75) | Interaction p | Verdict |
 |---|---|---|---|---|
-| **Heat (CDD) → Civilian_Employed** | +878 | **−184** | 0.001 | harm amplified |
-| **Cold (HDD) → PCPI_Real** | −$56 | **−$472** (~8×) | 0.056 | harm amplified |
-| **Drought (lag-2) → Benchmark premium** | −$54 | **+$16** | 0.001 | harm amplified |
-| **Drought → Benchmark premium** | +$6 | **+$30** | 0.015 | harm amplified |
+| **Heat (CDD) → Civilian_Employed** | +886 | **−169** | 0.001 | harm amplified |
+| **Cold (HDD) → PCPI_Real** | −$46 | **−$459** (~10×) | 0.061 | harm amplified |
+| **Drought (lag-2) → Benchmark premium** | −$55 | **+$14** | 0.001 | harm amplified |
+| **Drought → Benchmark premium** | +$6 | **+$30** | 0.017 | harm amplified |
 
 In structurally vulnerable counties, extreme heat *costs* jobs (the sign flips negative), cold's per-capita-income hit is roughly **eight times larger**, and drought pushes ACA benchmark premiums up rather than down. This is the environmental-justice pattern the committee-style EJ literature predicts: the same climate shock lands harder where baseline vulnerability is higher.
 
@@ -37,3 +37,10 @@ Three significant interactions go the *other* way: the credit-bureau **medical-d
 
 ## Bottom line for the thesis
 Adding a vulnerability layer **sharpens** the headline findings into an EJ statement: climate shocks impose larger *income, employment, and premium* costs on structurally vulnerable counties. The lone exception — credit-bureau medical debt concentrating in *less*-vulnerable counties — is a known data-measurement artifact and is flagged as such. Cross-referenced in `Analysis/state/synthesis.md` §9.
+
+> **Post-dedup refresh, 2026-08-20.** This file previously carried the 2026-06-14
+> pre-dedup run. `exposure_interaction_coefs.csv` was regenerated in the 2026-07-13
+> refresh but this narrative was skipped, and the stale marginal effects propagated
+> through evidence-table Row 20 into Essay 3. Values above are now read from that CSV.
+> The cold-income ratio is ~10x, not ~8x. No sign or verdict changed.
+> See `Plans/draft_review_20260819.md` section 3.0.

@@ -191,3 +191,24 @@ hand-editing is house-rule-compliant):
 
 **Overall:** determinism ✅, truthful tests ✅, headline agreement ✅, gate items 1–7 met.
 Items 8–9 are the registry (already built) and the orchestrator's final refresh.
+
+---
+
+## Correction, 2026-08-20 — two rows were certified in error
+
+Row 10 was marked **"✓ (rounding)"** on a comparison of `$177` against `$175.6`. A 1.4-unit
+gap is not a rounding difference, and `9.5` against `9.44` rounds the wrong way. Row 20
+printed the stale and current marginal effects in adjacent columns and the footnote then
+described them as "unchanged"; they differ (`+878 / −184` vs `+886 / −169`, `−56 / −472` vs
+`−46 / −459`). **Row 14 (air quality) was never traced** and carries the largest drift
+(`+4.8 / +3.3` vs `+5.0 / +3.6`).
+
+In all three cases the evidence-table figure was the 2026-07-01 / 2026-06-14 **pre-dedup**
+run, confirmed by re-estimating both specifications against
+`Data/_archive/county_level_master_prededup_20260713.csv`, which reproduces the certified
+values to the digit including p-values. The committed CSVs govern. No sign, verdict, or
+qualitative claim changes.
+
+The upstream narrative files (`Analysis/mechanism/mechanism_verdict.md`,
+`Analysis/exposure_index/synthesis.md`), the evidence table, and the pass-through benchmark
+have been corrected. Full account: `Plans/draft_review_20260819.md` section 3.0.

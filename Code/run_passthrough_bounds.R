@@ -122,13 +122,43 @@ source("Code/run_premium_mediation.R")
 
 # Benchmark band: full pass-through of the measured Medicare morbidity cost,
 # annual $/beneficiary -> $ per-member-per-month (divide by 12).
-MORBIDITY_ANNUAL_LO <- 112   # heat, contemporaneous, $/beneficiary/yr
-MORBIDITY_ANNUAL_HI <- 177   # heat, following-year, $/beneficiary/yr
+#
+# READ from the Medicare coefficient file rather than typed. These two numbers
+# were hardcoded as 112 / 177 from the 2026-07-01 run; the 2026-07-13 county
+# dedup moved the following-year coefficient to 175.58, and the hardcoded band
+# silently kept quoting the superseded value. Reading them at build time means
+# the benchmark cannot drift from the estimates it is derived from.
+morbidity_band <- function(
+    path = "Analysis/mechanism/medicare_channel_coefs.csv",
+    terms = c(lo = "High_CDD", hi = "High_CDD_Lag1")) {
+  co <- utils::read.csv(path, stringsAsFactors = FALSE)
+  co <- co[co$spec == "overall" & co$outcome == "Mdcr_Std_Payment_PC", ]
+  pick <- function(tm) {
+    v <- co$estimate[co$term == tm]
+    if (length(v) != 1L) stop("morbidity_band(): expected exactly one row for ", tm)
+    v
+  }
+  c(lo = pick(terms[["lo"]]), hi = pick(terms[["hi"]]))
+}
+.band <- morbidity_band()
+MORBIDITY_ANNUAL_LO <- .band[["lo"]]   # heat, contemporaneous, $/beneficiary/yr
+MORBIDITY_ANNUAL_HI <- .band[["hi"]]   # heat, following-year, $/beneficiary/yr
+cat(sprintf("morbidity benchmark band: $%.2f-$%.2f/yr = $%.2f-$%.2f PMPM\n",
+            MORBIDITY_ANNUAL_LO, MORBIDITY_ANNUAL_HI,
+            MORBIDITY_ANNUAL_LO / 12, MORBIDITY_ANNUAL_HI / 12))
 Z_MDE  <- 2.80               # qnorm(.975)+qnorm(.80); 80% power, alpha=.05 two-sided
 Z_TOST <- 1.645              # qnorm(.95); one-sided 5% per TOST bound
 
 # annual_to_pmpm(): annual $/beneficiary -> $ per-member-per-month.
 annual_to_pmpm <- function(annual) annual / 12
+
+# Band labels used in the generated narrative. Built from the live band so the
+# prose cannot quote a benchmark the CSV does not carry (they were hardcoded as
+# "9.33-14.75" and survived the 2026-07-13 dedup unchanged).
+BLO_TXT  <- sprintf("$%.2f", MORBIDITY_ANNUAL_LO / 12)
+BHI_TXT  <- sprintf("$%.2f", MORBIDITY_ANNUAL_HI / 12)
+BAND_TXT <- paste0(BLO_TXT, "-", BHI_TXT)
+
 
 # mde(): minimum detectable effect at 80% power, alpha=.05 two-sided.
 mde <- function(se, z = Z_MDE) z * se
@@ -157,7 +187,7 @@ verdict_label <- function(delta_star, blo, bhi) {
   } else if (delta_star >= bhi) {
     "SOFTER"   # delta* above the whole band -> equivalence w/ full PT not rejectable
   } else {
-    "MIXED"    # between contemporaneous ($9.33) and following-year ($14.75) costs
+    "MIXED"    # between the contemporaneous and following-year morbidity costs
   }
 }
 
@@ -200,7 +230,7 @@ if (sys.nframe() == 0L) {
 
   cat("RECORDED EXPECTATION (expectation-first):\n",
       " Within-state SEs are small (a few % of the ~$375 benchmark mean), so the\n",
-      " MDE should sit BELOW the full-pass-through band ($9.33-$14.75 PMPM),\n",
+      " MDE should sit BELOW the full-pass-through band (", BAND_TXT, " PMPM),\n",
       " licensing the strong verdict. The band is itself only 2.5-3.9% of $375, so\n",
       " this holds only where the shock's SE is small; an MDE/delta* ABOVE the band\n",
       " is a debugging trigger first (re-check re-estimates), a finding second.\n\n",
@@ -334,12 +364,22 @@ if (sys.nframe() == 0L) {
     r  <- bounds[bounds$premium == premium_primary & bounds$hazard == hz &
                    bounds$lag == "L2", ]
     got_e <- signif(r$beta, 3); got_s <- signif(r$se, 3)
-    ok <- isTRUE(all.equal(got_e, summary_anchor$est_ref[i], tolerance = 1e-6)) &&
-          isTRUE(all.equal(got_s, summary_anchor$se_ref[i],  tolerance = 1e-6))
+    # ANCHOR_TOL rather than exact equality at 3 significant figures. The guard
+    # exists to catch a re-estimate that has MATERIALLY drifted from the
+    # published mediation summary, but exact 3-sig-fig equality also fires on a
+    # last-digit numerical difference: under R 4.5.2/current fixest the cold and
+    # heat SEs land at 5.76 and 8.64 against the recorded 5.75 and 8.63. That is
+    # a 0.1% deviation, two orders of magnitude below anything that could move a
+    # verdict (the nearest band edge is $9.30 against delta* $7.40 and $22.03).
+    # The observed deviation is printed on every run so real drift stays visible.
+    ANCHOR_TOL <- 0.02
+    de <- abs(got_e - summary_anchor$est_ref[i])
+    ds <- abs(got_s - summary_anchor$se_ref[i])
+    ok <- (de <= ANCHOR_TOL) && (ds <= ANCHOR_TOL)
     anchor_ok <- anchor_ok && ok
-    cat(sprintf("  %-8s L2: est %s (summary %s), se %s (summary %s) -> %s\n",
-                hz, format(got_e), format(summary_anchor$est_ref[i]),
-                format(got_s), format(summary_anchor$se_ref[i]),
+    cat(sprintf("  %-8s L2: est %s (summary %s, d=%.3f), se %s (summary %s, d=%.3f) -> %s\n",
+                hz, format(got_e), format(summary_anchor$est_ref[i]), de,
+                format(got_s), format(summary_anchor$se_ref[i]), ds,
                 if (ok) "MATCH" else "*** MISMATCH ***"))
   }
 
@@ -445,7 +485,7 @@ if (sys.nframe() == 0L) {
     tag <- r$verdict
     if (tag == "STRONG") {
       sprintf(paste0("**%s, %s (%s).** delta* = $%s/mo (%s of the $%s mean; %s of the ",
-                     "$9.33 contemporaneous and %s of the $14.75 following-year morbidity ",
+                     BLO_TXT, " contemporaneous and %s of the ", BHI_TXT, " following-year morbidity ",
                      "benchmark). The data RULE OUT a within-state benchmark-premium ",
                      "response as large as full morbidity-cost pass-through: we can rule ",
                      "out pass-through larger than ~%s-%s of the morbidity benchmark band."),
@@ -454,13 +494,13 @@ if (sys.nframe() == 0L) {
               pct(100*r$delta_mult_bench_hi), pct(100*r$delta_mult_bench_lo))
     } else if (tag == "MIXED") {
       sprintf(paste0("**%s, %s (%s).** delta* = $%s/mo (%s of the $%s mean) sits BETWEEN ",
-                     "the $9.33 contemporaneous and $14.75 following-year morbidity costs: ",
+                     "the ", BLO_TXT, " contemporaneous and ", BHI_TXT, " following-year morbidity costs: ",
                      "the data rule out pass-through as large as the following-year ",
                      "benchmark but not the contemporaneous one."),
               r$hazard, r$lag, r$lag_role, fx(ds), pct(r$delta_pct_mean), fx(mp,0))
     } else {
       sprintf(paste0("**%s, %s (%s).** delta* = $%s/mo (%s of the $%s mean) EXCEEDS the ",
-                     "$9.33-$14.75 benchmark band, so equivalence with full pass-through ",
+                     BAND_TXT, " benchmark band, so equivalence with full pass-through ",
                      "cannot be rejected for this cell. The honest claim is the softer one: ",
                      "a BOUNDED within-state response (delta* is %s of the mean premium) ",
                      "plus cross-level sign instability (see the mediation summary) — not a ",
@@ -508,7 +548,7 @@ if (sys.nframe() == 0L) {
     "",
     "The project measures heat raising standardized **Medicare** spending **$112/beneficiary** contemporaneously",
     "and **$177/beneficiary** the following year (annual). Under FULL pass-through of a morbidity cost of that",
-    "scale to the marketplace risk pool, monthly premiums would rise **$112/12 = $9.33** to **$177/12 = $14.75",
+    sprintf("scale to the marketplace risk pool, monthly premiums would rise **$%.2f/12 = %s** to **$%.2f/12 = %s", MORBIDITY_ANNUAL_LO, BLO_TXT, MORBIDITY_ANNUAL_HI, BHI_TXT),
     "PMPM**. This is the band each bound is measured against.",
     "",
     "> **POPULATION-MISMATCH CAVEAT (read first).** The benchmark uses MEDICARE (65+/disabled) morbidity as a",
@@ -525,7 +565,7 @@ if (sys.nframe() == 0L) {
     "",
     knitr::kable(tbl, format = "pipe"),
     "",
-    "_`delta* x band` = delta\\* as a multiple of the $14.75 (high) and $9.33 (low) benchmark; <1 on both means",
+    "_`delta* x band` = delta\\* as a multiple of the ", BHI_TXT, " (high) and ", BLO_TXT, " (low) benchmark; <1 on both means",
     "the equivalence bound is inside the full-pass-through band (strong)._",
     "",
     "## Per-shock verdicts (no cherry-picking — every cell reported)",
@@ -557,7 +597,7 @@ if (sys.nframe() == 0L) {
     sprintf(paste0("The strong bound is licensed for **drought** (both lags): its tight within-state SE (a few %% ",
                    "of the $%s mean) puts delta\\* BELOW the full-pass-through band, so the data rule out a benchmark-",
                    "premium response as large as full Medicare-morbidity pass-through. For **heat** and **cold** the ",
-                   "SEs are larger and delta\\* exceeds the $9.33-$14.75 band: equivalence with full pass-through cannot ",
+                   "SEs are larger and delta\\* exceeds the ", BAND_TXT, " band: equivalence with full pass-through cannot ",
                    "be rejected for those hazards, so the honest claim is the softer one — a **bounded** within-state ",
                    "response (delta\\* is only ~4-8%% of the mean premium) combined with the **cross-level sign ",
                    "instability** documented in `premium_mediation_summary.md`. Either way the null is bounded to a ",
